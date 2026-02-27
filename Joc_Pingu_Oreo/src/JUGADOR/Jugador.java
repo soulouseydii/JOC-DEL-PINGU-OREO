@@ -4,16 +4,15 @@ abstract class Jugador {
 	
 	/* ATRIBUTS DEL JUGADOR */
 
-	private int posicion;
-	private String nombre;
-	private String color;
+	protected int posicion;
+	protected String nombre;
+	protected String color;
 	
 	
 	/* CONSTRUCTOR DEL JUGADOR */
 	
-	public Jugador(int posicion, String nombre, String color) {
-		super();
-		this.posicion = posicion;
+	public Jugador(String nombre, String color) {
+		this.posicion = 1;
 		this.nombre = nombre;
 		this.color = color;
 	}
@@ -50,14 +49,20 @@ abstract class Jugador {
 		this.color = color;
 	}
 	
-	
-	
-	
-	
-	
-
-	
-	
-	
+	/* METODO POSICION */
+	public void moverPosicion(int p) {
+		this.posicion += p;
+		
+		//Limit de 50 caselles
+		if (this.posicion > 50) {
+			this.posicion = 50;
+		}
+		
+		//Evitar posicions negatives
+		if (this.posicion < 1) {
+			this.posicion = 1;
+		}
+		
+	}
 	
 }
