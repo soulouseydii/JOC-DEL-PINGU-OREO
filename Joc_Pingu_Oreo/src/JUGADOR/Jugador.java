@@ -64,5 +64,5 @@ abstract class Jugador {
 		}
 		
 	}
-	
+
 }
