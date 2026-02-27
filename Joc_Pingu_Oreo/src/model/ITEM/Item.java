@@ -1,5 +1,5 @@
 package model.ITEM;
 
-public class Item {
+public abstract class Item {
 
 }
