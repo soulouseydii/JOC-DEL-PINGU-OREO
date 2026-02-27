@@ -53,6 +53,21 @@ abstract class Jugador {
 	
 	
 	
+	// Funciones prueba commits
+	
+	public static void moverPosicion(int p ) {
+		
+		
+	}
+	
+	
+	public static void mostraInfo() {
+		System.out.println("=== JUGADOR ===");
+	}
+	
+	
+	
+	
 	
 	
 
