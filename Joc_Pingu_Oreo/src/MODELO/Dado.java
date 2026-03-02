@@ -1,6 +1,8 @@
 package MODELO;
+import java.util.Random;
 import java.util.random.*;
 public class Dado extends Item {
+    Random r = new Random();
 
 	// ATRIBUTOS DEL DADO
 
@@ -38,6 +40,12 @@ public class Dado extends Item {
 	
 	// MÈTODE TIRAR
 
+	public int tirar (Random r) {		   
+        return r.nextInt(max) + min;     	
+	}
+	
+	
+	
 	
 	
 	
