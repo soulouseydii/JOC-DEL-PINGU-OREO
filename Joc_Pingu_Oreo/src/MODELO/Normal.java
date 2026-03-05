@@ -1,15 +1,18 @@
 package MODELO;
 
-public class Normal {
+public class Normal extends Casilla {
 	
 	/* CONSTRUCTOR */
 
-	
-	
-	/*
-	abstract void realizarAccion() {
-		
+	public Normal (int posicion) {
+		super(posicion);
 	}
-	*/
+	
+    /* METODOS REALIZAR ACCION */
+
+    @Override
+	public void realizarAccion(Partida partida, Jugador jugador) {
+		// Casilla normal, no pasa nada
+	}
 	
 }
