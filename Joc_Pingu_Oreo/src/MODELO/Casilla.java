@@ -14,18 +14,16 @@ public abstract class Casilla {
 	
 	/* GETTERS I SETTERS HEREDADOS */
 
-	public int getposicion() {
-		return this.posicion;
+	public int getPosicion() {
+		return posicion;
 	}
 
-	public void setposicion(int posicion) {
+	public void setPosicion(int posicion) {
 		this.posicion = posicion;
 	}
 	
-	/*
-	abstract void realizarAccion(Partida partida, Jugador jugador) {
-		
-	}
-	*/
+    /* METODO ABSTRACTO */
+	
+	public abstract void realizarAccion(Partida partida, Jugador jugador);
 	
 }
