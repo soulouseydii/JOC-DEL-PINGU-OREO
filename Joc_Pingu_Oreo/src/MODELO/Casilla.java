@@ -12,7 +12,7 @@ public abstract class Casilla {
 	}
 	
 	
-	/* GETTERS I SETTERS HEREDADOS */
+	/* GETTERS I SETTERS */
 
 	public int getPosicion() {
 		return posicion;
