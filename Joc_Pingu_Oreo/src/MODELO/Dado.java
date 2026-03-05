@@ -40,14 +40,9 @@ public class Dado extends Item {
 	
 	// MÈTODE TIRAR
 
-	public int tirar (Random r) {		   
+	public int tirar () {		   
         return r.nextInt(max) + min;     	
 	}
-	
-	
-	
-	
-	
 	
 
 }
