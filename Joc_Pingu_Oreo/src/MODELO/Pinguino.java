@@ -1,7 +1,6 @@
 package MODELO;
 
-public class Pinguino extends Jugador {
-	
+public class Pinguino extends Jugador {	
 
 	/* ATRIBUTO */
 	private Inventario inv;
@@ -28,7 +27,32 @@ public class Pinguino extends Jugador {
 	/* MÉTODO USAR ITEM */
 	
 	public void usarItem (Item i) {
+		// VALIDA SI NO HAY NINGUN ITEM EN EL INVENTARIO 
 		
+		if (!inv.getlista().contains(i)) {
+			System.out.println("Este item no existe en el inventario. !!!");
+			return;
+		}
+		
+		// DETECTAR SI EL ITEM ES UN DADO Y USARLO
+		
+		if (i instanceof Dado) {
+			Dado d = (Dado) i;
+			
+			int pasos = d.tirar();			
+			this.moverPosicion(pasos);
+			
+		} else if (i instanceof bolaDeNieve) {			
+			
+			
+		} else if (i instanceof Pez) {
+			
+			
+		}
+		
+		// RESTAR 1 ITEM DEL INVENTARIO AL UTILIZARLO Y ELIMINARLO SI LLEGA A 0. 
+		
+					
 		
 	}
 	
