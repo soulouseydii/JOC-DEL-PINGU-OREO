@@ -1,15 +1,24 @@
 package MODELO;
 
-public class Trineo {
-	
-	/* CONSTRUCTOR */
+public class Trineo extends Casilla {
 
-	
-	
-	/*
-	abstract void realizarAccion() {
-		
-	}
-	*/
-	
+    /* CONSTRUCTOR */
+
+    public Trineo(int posicion) {
+        super(posicion);
+    }
+
+    /* METODO REALIZAR ACCION */
+
+    @Override
+    public void realizarAccion(Partida partida, Jugador jugador) {
+
+        int siguienteTrineo = partida.getTablero()
+                                     .buscarSiguienteTrineo(jugador.getPosicion());
+
+        if (siguienteTrineo != -1) {
+            jugador.setPosicion(siguienteTrineo);
+        }
+    }
+
 }
