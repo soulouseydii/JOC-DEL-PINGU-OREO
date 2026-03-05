@@ -1,5 +1,6 @@
 package MODELO;
 
-public class Pinguino {
+public class Pinguino extends Jugador {
+	
 
 }
