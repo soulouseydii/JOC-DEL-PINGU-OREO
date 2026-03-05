@@ -13,6 +13,7 @@ public class Trineo extends Casilla {
     @Override
     public void realizarAccion(Partida partida, Jugador jugador) {
 
+    	// A partir de la posicion buscamos un trineo proximo y lo guardamos en una variable
         int siguienteTrineo = partida.getTablero()
                                      .buscarSiguienteTrineo(jugador.getPosicion());
         
