@@ -15,7 +15,8 @@ public class Trineo extends Casilla {
 
         int siguienteTrineo = partida.getTablero()
                                      .buscarSiguienteTrineo(jugador.getPosicion());
-
+        
+        // En caso de que exista un trineo mas adelante pasara esto
         if (siguienteTrineo != -1) {
             jugador.setPosicion(siguienteTrineo);
         }
