@@ -7,6 +7,7 @@ abstract class Jugador {
 	protected int posicion;
 	protected String nombre;
 	protected String color;
+	private Inventario inventario;
 	
 	
 	/* CONSTRUCTOR DEL JUGADOR */
@@ -47,6 +48,10 @@ abstract class Jugador {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+	
+	public Inventario getInventario() {
+	    return inventario;
 	}
 	
 	/* METODO POSICION */
