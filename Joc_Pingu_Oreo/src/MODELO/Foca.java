@@ -19,4 +19,25 @@ public class Foca extends Jugador {
 		this.soborno = soborno;
 	}
 	
+	public void aplastarJugador(Pinguino p) {
+		int cantidadActual = p.getInv().getlista().size();
+		int aQuitar = cantidadActual / 2;
+		
+		System.out.println("¡La foca aplasta a " + p.getNombre() + " al pasar por su casilla!");
+		
+		for (int i = 0; i < aQuitar; i++) {
+			if (!p.getInv().getlista().isEmpty()) {
+				p.getInv().getlista().remove(0);
+			}
+		}
+		
+		System.out.println(p.getNombre() + " ha perdido " + aQuitar + " objetos de su inventario.");
+		
+	}
+	
+	public void golpearJugador(Pinguino p) {
+		
+	}
+	
+	
 }
