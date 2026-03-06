@@ -27,6 +27,7 @@ public class Pinguino extends Jugador {
 	/* MÉTODO USAR ITEM */
 	
 	public void usarItem (Item i) {
+		
 		// VALIDA SI NO HAY NINGUN ITEM EN EL INVENTARIO 
 		
 		if (!inv.getlista().contains(i)) {
@@ -42,18 +43,26 @@ public class Pinguino extends Jugador {
 			int pasos = d.tirar();			
 			this.moverPosicion(pasos);
 			
-		} else if (i instanceof bolaDeNieve) {			
+			System.out.println("Has utilizado :" + i.getNombre());
+						
+		} else if (i instanceof bolaDeNieve) {	
+			
+			
 			
 			
 		} else if (i instanceof Pez) {
 			
 			
+			
+			
 		}
 		
 		// RESTAR 1 ITEM DEL INVENTARIO AL UTILIZARLO Y ELIMINARLO SI LLEGA A 0. 
+		i.setCantidad(i.getCantidad() - 1);
 		
-					
-		
+		if (i.getCantidad() <= 0) {
+			inv.getlista().remove(i);
+		}
 	}
 	
 	/* MÉTODO AÑADIR ITEM */
@@ -61,12 +70,61 @@ public class Pinguino extends Jugador {
 	public void añadirItem (Item i) {
 		
 		
+		if (i instanceof Dado) {
+			Dado d = (Dado) i;
+
+			if (d.getCantidad() < 3) {
+				inv.getlista().add(d);
+				System.out.println(d.getNombre() + " añadido al inventario.");
+
+			} else {
+				System.out.println("Superaste el límite de dados...");
+			}
+			
+		} else if (i instanceof bolaDeNieve) {
+			bolaDeNieve bn = (bolaDeNieve) i;
+			
+			if (bn.getCantidad() < 6) {
+				inv.getlista().add(bn);
+				System.out.println(bn.getNombre() + " añadido al inventario.     ");
+			} else {
+				System.out.println("Superaste el límite de bolas de nieve...");
+			}
+			
+		} else if (i instanceof Pez) {
+			Pez p = (Pez) i;
+			
+			if (p.getCantidad() < 2) {
+				inv.getlista().add(p);
+				System.out.println(p.getNombre() + " añadido al inventario.");
+			} else {
+				System.out.println("Superaste el límite de peces...");
+			}
+			
+		}
+	
 	}
 	
 	
 	/* MÉTODO QUITAR ITEM */
 	
 	public void quitarItem (Item i) {
+		
+		// CUANDO EXISTAN ITEMS EN EL INVENTARIO, SE RESTA LA CANTIDAD.
+		if (i.getCantidad() > 0) {
+			
+			i.setCantidad(i.getCantidad() - 1);
+			System.out.println("Item eliminado. Quedan: " + i.getCantidad());
+
+			// CUANDO LA CANTIDAD SEA 0, SE ELIMINARA EL ITEM DEL INVENTARIO 
+			if (i.getCantidad() == 0) {
+				inv.getlista().remove(i);
+				System.out.println("Item eliminado del inventario.");
+			}			
+			
+		} else {
+			System.out.println("No hay items disponibles en el inventario...");
+		}
 		
 		
 	}
