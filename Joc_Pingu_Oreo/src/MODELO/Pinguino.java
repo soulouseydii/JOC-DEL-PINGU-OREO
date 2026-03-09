@@ -69,39 +69,35 @@ public class Pinguino extends Jugador {
 	
 	public void añadirItem (Item i) {
 		
-		
-		if (i instanceof Dado) {
-			Dado d = (Dado) i;
+		// BUCLE QUE RECORRERA LOS ITEMS DEL INVENTARIO 
+		for (Item item: inv.getlista()) {
+			
+			// COMPRUEBA SI EL ITEM YA EXISTE 
+			if (item.getClass() == i.getClass()) {
+				
+				// LA UNICA CONDICIÓN ES QUE LA CANTIDAD NO SUPERE AL LIMITE TOTAL DE ITEMS EN EL INVENTARIO 
+				if (item.getCantidad() < item.getLimite()) {
+					
+					// AUMENTAMOS UN ITEM, EN EL CASO DE QUE SE PUEDA AÑADIR AL INVENTARIO 
+					item.setCantidad(item.getCantidad() + 1);
+	                System.out.println(item.getNombre() + " añadido al inventario. Cantidad actual: " + item.getCantidad());
 
-			if (d.getCantidad() < 3) {
-				inv.getlista().add(d);
-				System.out.println(d.getNombre() + " añadido al inventario.");
-
-			} else {
-				System.out.println("Superaste el límite de dados...");
-			}
-			
-		} else if (i instanceof bolaDeNieve) {
-			bolaDeNieve bn = (bolaDeNieve) i;
-			
-			if (bn.getCantidad() < 6) {
-				inv.getlista().add(bn);
-				System.out.println(bn.getNombre() + " añadido al inventario.     ");
-			} else {
-				System.out.println("Superaste el límite de bolas de nieve...");
-			}
-			
-		} else if (i instanceof Pez) {
-			Pez p = (Pez) i;
-			
-			if (p.getCantidad() < 2) {
-				inv.getlista().add(p);
-				System.out.println(p.getNombre() + " añadido al inventario.");
-			} else {
-				System.out.println("Superaste el límite de peces...");
+				} else { 
+					
+					System.out.println("No puedes tener más. Llegaste al límite de " + item.getNombre());
+				}
+				
+				return;
+				
 			}
 			
 		}
+		
+		// EN EL CASO DE Q EL ITEM NO ESTUVIERA EN EL INVENTARIO. LO AÑADIMOS DESDE 0. 
+		i.setCantidad(1);
+	    inv.getlista().add(i);
+
+	    System.out.println(i.getNombre() + " añadido al inventario.");
 	
 	}
 	
@@ -111,6 +107,7 @@ public class Pinguino extends Jugador {
 	public void quitarItem (Item i) {
 		
 		// CUANDO EXISTAN ITEMS EN EL INVENTARIO, SE RESTA LA CANTIDAD.
+		
 		if (i.getCantidad() > 0) {
 			
 			i.setCantidad(i.getCantidad() - 1);
