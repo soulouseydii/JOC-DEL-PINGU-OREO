@@ -36,8 +36,12 @@ public class Foca extends Jugador {
 	}
 	
 	public void golpearJugador(Pinguino p) {
-		
+		System.out.println("¡La foca golpea a " + p.getNombre() + " con la cola!");
 	}
+	
+	public boolean esSobornado() {
+        return this.soborno;
+    }
 	
 	
 }

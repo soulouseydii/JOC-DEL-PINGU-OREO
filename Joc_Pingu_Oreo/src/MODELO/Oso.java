@@ -4,8 +4,8 @@ public class Oso extends Casilla {
 	
 	/* CONSTRUCTOR */
 	
-	public Oso (int posicion) {
-		super(posicion);
+	public Oso (int posicion, String tipo) {
+		super(posicion, tipo);
 	}
 	
     /* METODOS REALIZAR ACCION */
