@@ -4,9 +4,8 @@ public class bolaDeNieve extends Item {
 
 	/*HEREDA LOS ATRIBUTOS DE LA CLASE PADRE ITEM */
 	
-	public bolaDeNieve(String nombre, int cantidad) {
-		super(nombre, cantidad);
-		
+	public bolaDeNieve(String nombre, int cantidad, int limite) {
+        super("Bola de Nieve", 0, 6);		
 	}
 	
 	
