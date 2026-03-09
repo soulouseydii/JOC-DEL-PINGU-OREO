@@ -4,12 +4,14 @@ public class Item {
 	
 	protected String nombre;
 	protected int cantidad;
+	protected int limite;
 	
 	// CONSTRUCTOR
 	
-	public Item(String nombre, int cantidad) {
+	public Item(String nombre, int cantidad, int limite) {
 		this.nombre = nombre;
 		this.cantidad = cantidad;
+		this.limite = limite;
 	}
 
 	// GETTER Y SETTERS
@@ -29,15 +31,9 @@ public class Item {
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
+
+	public int getLimite() {
+		return limite;
+	}
+
 }
