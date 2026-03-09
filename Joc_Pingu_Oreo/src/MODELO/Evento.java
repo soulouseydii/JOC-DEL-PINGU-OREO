@@ -9,8 +9,8 @@ public class Evento extends Casilla {
 	
 	/* CONSTRUCTOR */
 
-	public Evento(int posicion) {
-        super(posicion);
+	public Evento(int posicion, String tipo) {
+        super(posicion, tipo);
     }
 	
 
