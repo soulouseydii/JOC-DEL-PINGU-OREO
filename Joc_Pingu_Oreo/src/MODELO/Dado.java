@@ -11,10 +11,11 @@ public class Dado extends Item {
 	
 	// CONSTRUCTOR DEL DADO Y LA HERENCIA
 	
-	public Dado(String nombre, int cantidad, int max, int min) {
-		super(nombre, cantidad);
+	public Dado(String nombre, int cantidad, int limite, int max, int min) {
+        super("Dado", 0, 3);
 		this.max = 6;
 		this.min = 1;
+		this.limite = 3;
 	}
 
 		
