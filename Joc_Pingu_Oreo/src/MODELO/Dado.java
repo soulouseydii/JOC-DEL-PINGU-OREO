@@ -15,7 +15,6 @@ public class Dado extends Item {
         super("Dado", 0, 3);
 		this.max = 6;
 		this.min = 1;
-		this.limite = 3;
 	}
 
 		
