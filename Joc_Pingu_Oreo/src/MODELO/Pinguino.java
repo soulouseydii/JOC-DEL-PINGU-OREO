@@ -126,14 +126,5 @@ public class Pinguino extends Jugador {
 		
 	}
 	
-	/* MÉTODO GESTIONAR BATALLA */
-	
-	public void gestionarBatalla (Pinguino p) {
-		
-		
-		
-	}
-	
-	
 	
 }
