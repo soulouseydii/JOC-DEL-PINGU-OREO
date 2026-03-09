@@ -4,8 +4,8 @@ public class Trineo extends Casilla {
 
     /* CONSTRUCTOR */
 
-    public Trineo(int posicion) {
-        super(posicion);
+    public Trineo(int posicion, String tipo) {
+        super(posicion, tipo);
     }
 
     /* METODO REALIZAR ACCION */
