@@ -4,17 +4,18 @@ public class BolaDeNieve extends Item {
 
 	/*HEREDA LOS ATRIBUTOS DE LA CLASE PADRE ITEM */
 	public BolaDeNieve(String nombre, int cantidad, int limite) {
-		super("Bola de Nieve", 0, 6);
+	super("Bola de Nieve", 0, 6);
 	}
+	
 	/* GETTERS I SETTERS HEREDADOS */
 	@Override
 	public String getNombre() {
-		return super.nombre;
+	return super.nombre;
 	}
-		
+
 	@Override
 	public void setNombre(String nombre) {
-		super.setNombre(nombre);
+	super.setNombre(nombre);
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class BolaDeNieve extends Item {
 
 	@Override
 	public void setCantidad(int cantidad) {
-		super.setCantidad(cantidad);
+	super.setCantidad(cantidad);
 
 	}
 }

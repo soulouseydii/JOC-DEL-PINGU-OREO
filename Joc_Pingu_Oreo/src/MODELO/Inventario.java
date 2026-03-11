@@ -50,7 +50,7 @@ public class Inventario {
         }
 
         for (int i = 0; i < cantidad && contador < 6; i++) {
-            lista.add(new BolaDeNieve());
+            lista.add(new bolaDeNieve());
             contador++;
         }
     }
