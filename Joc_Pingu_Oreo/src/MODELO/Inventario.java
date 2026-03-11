@@ -44,13 +44,13 @@ public class Inventario {
         int contador = 0;
 
         for (Item item : lista) {
-            if (item instanceof BolaDeNieve) {
+            if (item instanceof bolaDeNieve) {
                 contador++;
             }
         }
 
         for (int i = 0; i < cantidad && contador < 6; i++) {
-            lista.add(new BolaDeNieve());
+            lista.add(new bolaDeNieve());
             contador++;
         }
     }
