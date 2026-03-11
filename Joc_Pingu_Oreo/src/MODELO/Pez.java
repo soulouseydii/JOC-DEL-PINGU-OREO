@@ -3,9 +3,10 @@ package MODELO;
 public class Pez extends Item {
 
 	// CONSTRUCTOR
-	public Pez(String nombre, int cantidad, int limite) {
-        super("Pez", 0, 2);		
-	}
+	public Pez() {
+        super("Pez", 0, 2);
+    }
+
 	
 	// GETTER Y SETTERS
 	
