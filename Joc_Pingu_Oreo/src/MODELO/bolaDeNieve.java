@@ -1,31 +1,30 @@
 package MODELO;
 
-public class BolaDeNieve extends Item {
+public class bolaDeNieve extends Item {
 
-	/*HEREDA LOS ATRIBUTOS DE LA CLASE PADRE ITEM */
-	public BolaDeNieve(String nombre, int cantidad, int limite) {
-	super("Bola de Nieve", 0, 6);
-	}
-	
-	/* GETTERS I SETTERS HEREDADOS */
-	@Override
-	public String getNombre() {
-	return super.nombre;
-	}
+/*HEREDA LOS ATRIBUTOS DE LA CLASE PADRE ITEM */
+public bolaDeNieve(String nombre, int cantidad, int limite) {
+super("Bola de Nieve", 0, 6);
+}
+/* GETTERS I SETTERS HEREDADOS */
+@Override
+public String getNombre() {
+return super.nombre;
+}
 
-	@Override
-	public void setNombre(String nombre) {
-	super.setNombre(nombre);
-	}
+@Override
+public void setNombre(String nombre) {
+super.setNombre(nombre);
+}
 
-	@Override
-	public int getCantidad() {
-	return super.cantidad;
-	}
+@Override
+public int getCantidad() {
+return super.cantidad;
+}
 
-	@Override
-	public void setCantidad(int cantidad) {
-	super.setCantidad(cantidad);
+@Override
+public void setCantidad(int cantidad) {
+super.setCantidad(cantidad);
 
-	}
+}
 }
