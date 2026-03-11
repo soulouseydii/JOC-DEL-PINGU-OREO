@@ -21,53 +21,6 @@ public class Inventario {
     public void setLista(ArrayList<Item> lista) {
         this.lista = lista;
     }
-    
-    /* METODOS PARA AÑADIR ITEMS */
 
-    public void addPez() {
-
-        int contador = 0;
-
-        for (Item item : lista) {
-            if (item instanceof Pez) {
-                contador++;
-            }
-        }
-
-        if (contador < 2) {
-            lista.add(new Pez());
-        }
-    }
-
-    public void addBolaDeNieve(int cantidad) {
-
-        int contador = 0;
-
-        for (Item item : lista) {
-            if (item instanceof bolaDeNieve) {
-                contador++;
-            }
-        }
-
-        for (int i = 0; i < cantidad && contador < 6; i++) {
-            lista.add(new bolaDeNieve());
-            contador++;
-        }
-    }
-
-    public void addDado(String tipo) {
-
-        int contador = 0;
-
-        for (Item item : lista) {
-            if (item instanceof Dado) {
-                contador++;
-            }
-        }
-
-        if (contador < 3) {
-            lista.add(new Dado(tipo));
-        }
-    }
 }
 
