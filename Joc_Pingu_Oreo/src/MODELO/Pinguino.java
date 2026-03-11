@@ -47,14 +47,12 @@ public class Pinguino extends Jugador {
 						
 		} else if (i instanceof bolaDeNieve) {	
 			
-			
-			
-			
+			System.out.println("Has usado una bola de nieve");
+					
 		} else if (i instanceof Pez) {
 			
-			
-			
-			
+			System.out.println("Usaras un pez cuando aparezca un oso");
+						
 		}
 		
 		// RESTAR 1 ITEM DEL INVENTARIO AL UTILIZARLO Y ELIMINARLO SI LLEGA A 0. 
@@ -82,13 +80,11 @@ public class Pinguino extends Jugador {
 					item.setCantidad(item.getCantidad() + 1);
 	                System.out.println(item.getNombre() + " añadido al inventario. Cantidad actual: " + item.getCantidad());
 
-				} else { 
-					
+				} else { 				
 					System.out.println("No puedes tener más. Llegaste al límite de " + item.getNombre());
 				}
 				
-				return;
-				
+				return;				
 			}
 			
 		}
