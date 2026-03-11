@@ -19,29 +19,45 @@ public class Evento extends Casilla {
     @Override
     public void realizarAccion(Partida partida, Jugador jugador) {
 
-        Random random = new Random();
+    	//Comprobamos que es un pinguino
+    	if (jugador.getClass().getSimpleName().equals("Pinguino")) {
+    		
+    		//Lo convertimos a pinguino para que podamos acceder al inventario
+    		Pinguino p = (Pinguino) jugador;
+    		
+    		Random random = new Random();
+    		int evento = random.nextInt(4);
+    		
+    		switch (evento) {
+    		case 0:
+    			System.out.println("Evento! " + p.getNombre() + " ha enconctrado un Pez.");
+    			p.añadirItem(new Pez());
+    			break;
+    			
+    		case 1:
+    			int bolas = random.nextInt(3) + 1;
+    			System.out.println("Evento! " + p.getNombre() + " ha encontrado " + bolas + " bolas de nieve.");
+    			//Bucle para añadir las bolas de nieve
+    			for (int i = 0; i < bolas; i++) {
+    				p.añadirItem(new bolaDeNieve());
+    			}
+    			break;
+    			
+    		case 2:
+    			System.out.println("Evento! " + p.getNombre() + " ha encontrado un dado lento.");
+				p.añadirItem(new Dado("Lento"));
+    			break;
+    			
+    		case 3:
+    			System.out.println("Evento! " + p.getNombre() + " ha encontrado un dado rapido.");
+				p.añadirItem(new Dado("Rapido"));
+    			break;
 
-        int evento = random.nextInt(4); 
-        // genera 0,1,2 o 3
-
-        switch (evento) {
-
-            case 0:
-                jugador.getInventario().addPez();
-                break;
-
-            case 1:
-                int bolas = random.nextInt(3) + 1; // 1-3
-                jugador.getInventario().addBolas(bolas);
-                break;
-
-            case 2:
-                jugador.getInventario().addDadoRapido();
-                break;
-
-            case 3:
-                jugador.getInventario().addDadoLento();
-                break;
+    		}
+    	
+        } else {
+        	//Si es la foca
+        	System.out.println("La foca ha caido en la casilla evento pero ignora los objetos.");
         }
     }
 }

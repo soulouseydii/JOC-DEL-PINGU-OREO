@@ -3,7 +3,7 @@ package MODELO;
 public class bolaDeNieve extends Item {
 
 /*HEREDA LOS ATRIBUTOS DE LA CLASE PADRE ITEM */
-public bolaDeNieve(String nombre, int cantidad, int limite) {
+public bolaDeNieve() {
 super("Bola de Nieve", 0, 6);
 }
 /* GETTERS I SETTERS HEREDADOS */
