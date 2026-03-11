@@ -44,7 +44,7 @@ public class Inventario {
         int contador = 0;
 
         for (Item item : lista) {
-            if (item instanceof BolaDeNieve) {
+            if (item instanceof bolaDeNieve) {
                 contador++;
             }
         }
