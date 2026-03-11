@@ -21,7 +21,12 @@ public class SueloQuebradizo extends Casilla {
 			
 			Pinguino p = (Pinguino) jugador;
 			
-			int cantidadObjetos = p.getInventario().getlista().size();
+			int cantidadObjetos = 0;
+			
+			//Recorremos la lista del inventario y sumamos las cantidades
+			for (Item item : p.getInventario().getlista()) {
+				cantidadObjetos = cantidadObjetos + item.getCantidad();
+			}
 			
 			if (cantidadObjetos > 5) {
 				//Mas de 5 objetos cae y vuelve al inicio
