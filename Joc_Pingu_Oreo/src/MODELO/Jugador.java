@@ -12,7 +12,7 @@ abstract class Jugador {
 	
 	/* CONSTRUCTOR DEL JUGADOR */
 	
-	public Jugador(String nombre, String color) {
+	public Jugador(String nombre, String color, int posicion) {
 		this.posicion = 1;
 		this.nombre = nombre;
 		this.color = color;
