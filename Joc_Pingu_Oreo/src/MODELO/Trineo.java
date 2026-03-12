@@ -4,8 +4,8 @@ public class Trineo extends Casilla {
 
     /* CONSTRUCTOR */
 
-    public Trineo(int posicion, String tipo) {
-        super(posicion, tipo);
+    public Trineo(int posicion) {
+        super(posicion, "Trineo");
     }
 
     /* METODO REALIZAR ACCION */
@@ -18,7 +18,7 @@ public class Trineo extends Casilla {
                                      .buscarSiguienteTrineo(jugador.getPosicion());
         
         // En caso de que exista un trineo mas adelante pasara esto
-        if (siguienteTrineo != -1) {
+        if (siguienteTrineo != - 1) {
             jugador.setPosicion(siguienteTrineo);
         }
     }

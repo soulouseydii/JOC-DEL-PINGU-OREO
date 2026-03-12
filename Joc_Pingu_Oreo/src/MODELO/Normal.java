@@ -4,8 +4,8 @@ public class Normal extends Casilla {
 	
 	/* CONSTRUCTOR */
 
-	public Normal (int posicion, String tipo) {
-		super(posicion, tipo);
+	public Normal (int posicion) {
+		super(posicion, "Normal");
 	}
 	
     /* METODOS REALIZAR ACCION */

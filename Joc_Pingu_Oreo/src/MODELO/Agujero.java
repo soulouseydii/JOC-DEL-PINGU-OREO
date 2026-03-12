@@ -5,7 +5,7 @@ public class Agujero extends Casilla {
 	/* CONSTRUCTOR */
 
 	public Agujero (int posicion) {
-		super(posicion, "Hueco");
+		super(posicion, "Agujero");
 	}
 	
 	 /* METODO REALIZAR ACCION */
