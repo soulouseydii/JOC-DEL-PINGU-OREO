@@ -1,13 +1,14 @@
 package CONTROLADOR;
 
 import MODELO.Foca;
+import MODELO.Tablero;
 import MODELO.Pinguino;
 
 public class GestorPartida {
 	
 	/*Metodo interaccionFocaPinguino*/
 	 
-	  public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, GestorTablero gestorTablero) {
+	  public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, Tablero tablero) {
 		  
 		  //Comprovamos si coinciden en la misma casilla
 		  if (foca.getPosicion() == pinguino.getPosicion()) {
@@ -34,8 +35,7 @@ public class GestorPartida {
 				  foca.golpearJugador(pinguino);
 				  
 				  //GestorTablero busca donde lo tiene que enviar
-				  int nuevaPosicion = gestorTablero.buscarAgujeroAnterior(pinguino.getPosicion());
-				  
+				  int nuevaPosicion = tablero.buscarAgujeroAnterior(pinguino.getPosicion());				  
 				  //Movemos el pinguino a la posicion
 				  pinguino.setPosicion(nuevaPosicion);
 				  System.out.println(pinguino.getNombre() + " ha sido enviado al hueco de la casilla " + nuevaPosicion);
