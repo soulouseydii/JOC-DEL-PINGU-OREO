@@ -5,6 +5,8 @@ import MODELO.Tablero;
 import MODELO.Pinguino;
 import MODELO.Partida;
 import java.util.Random;
+import MODELO.Dado;
+import MODELO.Jugador;
 
 public class GestorPartida {
 	
@@ -13,6 +15,17 @@ public class GestorPartida {
     private GestorTablero gestorTablero;
     private GestorJugador gestorJugador;
     private Random random = new Random();
+    
+    /* Método en GestorPartida */
+    public int tirarDado(Jugador j, Dado dadoSeleccionado) {
+        // Si el jugador no ha elegido un dado especial, creamos uno normal
+        if (dadoSeleccionado == null) {
+            dadoSeleccionado = new Dado("Normal"); 
+        }
+        
+        // Llamamos al método tirar() que ya tienes en la clase Dado
+        return dadoSeleccionado.tirar();
+    }
 	
     /*Metodo interaccionFocaPinguino*/
     public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, Tablero tablero) {
