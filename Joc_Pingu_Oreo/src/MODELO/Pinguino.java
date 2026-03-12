@@ -7,9 +7,8 @@ public class Pinguino extends Jugador {
 	
 	
 	/* CONSTRUCTOR QUE HEREDA DE JUGADOR */
-	public Pinguino(String nombre, String color) {
-		super(nombre, color);
-		this.inv = new Inventario();
+	public Pinguino(String nombre, String color, int posicion) {
+		super(nombre, color, posicion);
 	}
 
 
