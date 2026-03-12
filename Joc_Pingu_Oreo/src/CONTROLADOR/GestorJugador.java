@@ -61,4 +61,10 @@ public class GestorJugador {
 		j.setPosicion(nuevaPosicion);
 		System.out.println(j.getNombre() + " ha caido en la casilla " + nuevaPosicion);
 	}
+	
+	public void focaInteractua(Pinguino p, Foca f, Tablero t, GestorPartida gp) {
+        System.out.println("La foca " + f.getNombre() + " se acerca peligrosamente a " + p.getNombre() + "...");
+        gp.interaccionFocaPinguino(f, p, t);
+    }
+	
 }

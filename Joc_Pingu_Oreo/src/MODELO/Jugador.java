@@ -8,6 +8,7 @@ public abstract class Jugador {
 	protected String nombre;
 	protected String color;
 	private Inventario inventario;
+	private int turnosPerdidos = 0;
 	
 	
 	/* CONSTRUCTOR DEL JUGADOR */
@@ -68,6 +69,16 @@ public abstract class Jugador {
 			this.posicion = 1;
 		}
 		
+	}
+
+
+	public int getTurnosPerdidos() {
+		return turnosPerdidos;
+	}
+
+
+	public void setTurnosPerdidos(int turnos) {
+		this.turnosPerdidos = turnos;
 	}
 	
 }
