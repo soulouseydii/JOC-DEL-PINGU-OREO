@@ -39,8 +39,9 @@ public class Dado extends Item {
 	
 	// MÈTODE TIRAR
 
-	public int tirar () {		   
-        return r.nextInt(max) + min;     	
+	public int tirar() {
+	    // Formula para max i min
+	    return r.nextInt((max - min) + 1) + min;
 	}
 	
 
