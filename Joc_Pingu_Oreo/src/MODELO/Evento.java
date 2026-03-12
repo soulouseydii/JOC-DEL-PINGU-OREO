@@ -53,19 +53,6 @@ public class Evento extends Casilla {
 				p.añadirItem(new Dado("Rapido"));
     			break;
 
-        int evento = random.nextInt(4); 
-        // genera 0,1,2 o 3
-
-        switch (evento) {
-
-            case 0:
-                jugador.getInventario().addPez();
-                break;
-
-            case 1:
-                int bolas = random.nextInt(3) + 1; // 1-3
-                jugador.getInventario().addBolaDeNieve(bolas);
-                break;
     		}
     	
         } else {
