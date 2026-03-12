@@ -1,9 +1,6 @@
 package CONTROLADOR;
 
-import MODELO.Foca;
-import MODELO.Tablero;
-import MODELO.Pinguino;
-import MODELO.Partida;
+import MODELO.*;
 import java.util.Random;
 
 public class GestorPartida {

@@ -1,7 +1,6 @@
 package CONTROLADOR;
 
-import MODELO.Tablero;
-import MODELO.Casilla;
+import MODELO.*;
 
 public class GestorTablero {
 	
