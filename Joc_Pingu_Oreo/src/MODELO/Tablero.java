@@ -4,14 +4,22 @@ import java.util.ArrayList;
 
 public class Tablero {
 	
+	// ATRIBUTOS
 	private ArrayList<Casilla> listaCasillas;
 	
+	// CONSTRUCTOR 
 	public Tablero() {
-		this.listaCasillas = new ArrayList<>();
+		this.listaCasillas = new ArrayList<Casilla>();
 	}
 	
+
+	// GETTER I SETTER
 	public ArrayList<Casilla> getListaCasillas() {
 		return listaCasillas;
+	}
+	
+	public void setListaCasillas(ArrayList<Casilla> listacasillas) {
+		this.listaCasillas = listacasillas;
 	}
 	
 	
