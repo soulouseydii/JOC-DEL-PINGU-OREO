@@ -3,11 +3,13 @@ package MODELO;
 public class Foca extends Jugador {
 
 	private boolean soborno;
-	
-	public Foca(String nombre, String color) {
-		super(nombre, color);
-		this.setSoborno(false);
+
+	// CONSTRUCTOR
+	public Foca(String nombre, String color, int posicion) {
+		super(nombre, color, posicion);
+		this.soborno = false;
 	}
+	
 	
 	//GETTERS Y SETTERS
 	
