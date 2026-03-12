@@ -1,6 +1,6 @@
 package MODELO;
 
-abstract class Jugador {
+public abstract class Jugador {
 	
 	/* ATRIBUTS DEL JUGADOR */
 
