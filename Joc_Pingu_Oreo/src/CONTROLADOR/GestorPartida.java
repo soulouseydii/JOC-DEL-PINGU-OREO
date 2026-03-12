@@ -3,48 +3,55 @@ package CONTROLADOR;
 import MODELO.Foca;
 import MODELO.Tablero;
 import MODELO.Pinguino;
+import MODELO.Partida;
+import java.util.Random;
 
 public class GestorPartida {
 	
-	/*Metodo interaccionFocaPinguino*/
-	 
-	  public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, Tablero tablero) {
-		  
-		  //Comprovamos si coinciden en la misma casilla
-		  if (foca.getPosicion() == pinguino.getPosicion()) {
-			  
-			  boolean tienePez = false;
-			  int indicePez = -1;
-			  
-			  //Buscamos si el pinguino tiene un "Pez" en su inventario
-			  for (int i = 0; i < pinguino.getInv().getlista().size(); i++) {
-				  if (pinguino.getInv().getlista().get(i).getNombre().equalsIgnoreCase("Pez")) {
-					  tienePez = true;
-					  indicePez = i;
-				  }
-			  }
-			  
-			  //Resolucion segun las reglas
-			  if (tienePez) {
-				  //le damos el pez a la foca
-				  pinguino.getInv().getlista().remove(indicePez);
-				  foca.setSoborno(true);
-				  System.out.println(pinguino.getNombre() + " ha alimentado a la foca con un pez, la foca queda bloqueada 2 turnos!");
-			  } else {
-				  //Si no tiene pez la foca lo ataca
-				  foca.golpearJugador(pinguino);
-				  
-				  //GestorTablero busca donde lo tiene que enviar
-				  int nuevaPosicion = tablero.buscarAgujeroAnterior(pinguino.getPosicion());				  
-				  //Movemos el pinguino a la posicion
-				  pinguino.setPosicion(nuevaPosicion);
-				  System.out.println(pinguino.getNombre() + " ha sido enviado al hueco de la casilla " + nuevaPosicion);
-			  }
-			  
-		  }
-		  
-	  }
-	  
-	 
+    // Atributos 
+    private Partida partida;
+    private GestorTablero gestorTablero;
+    private GestorJugador gestorJugador;
+    private Random random = new Random();
 	
+    /*Metodo interaccionFocaPinguino*/
+    public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, Tablero tablero) {
+		  
+        // Comprobamos si coinciden en la misma casilla
+        if (foca.getPosicion() == pinguino.getPosicion()) {
+			  
+            boolean tienePez = false;
+            int indicePez = -1;
+			  
+            // Buscamos si el pinguino tiene un "Pez" en su inventario
+            for (int i = 0; i < pinguino.getInv().getlista().size(); i++) {
+                if (pinguino.getInv().getlista().get(i).getNombre().equalsIgnoreCase("Pez")) {
+                    indicePez = i;
+                    tienePez = true; 
+                    break; // dejar de buscar una vez encontrado
+                }
+            }
+			  
+            // Resolución según las reglas
+            if (tienePez) {
+                // Le damos el pez a la foca
+                pinguino.getInv().getlista().remove(indicePez);
+                
+                // Aplicamos el bloqueo de 2 turnos
+                foca.setTurnosBloqueada(2); 
+                
+                System.out.println(pinguino.getNombre() + " ha alimentado a la foca con un pez, ¡la foca queda bloqueada 2 turnos!");
+            } else {
+                // Si no tiene pez la foca lo ataca
+                foca.golpearJugador(pinguino);
+				  
+                // GestorTablero busca donde lo tiene que enviar
+                int nuevaPosicion = tablero.buscarAgujeroAnterior(pinguino.getPosicion());				  
+                
+                // Movemos el pinguino a la posicion
+                pinguino.setPosicion(nuevaPosicion);
+                System.out.println(pinguino.getNombre() + " ha sido enviado al hueco de la casilla " + nuevaPosicion);
+            }
+        }
+    }
 }
