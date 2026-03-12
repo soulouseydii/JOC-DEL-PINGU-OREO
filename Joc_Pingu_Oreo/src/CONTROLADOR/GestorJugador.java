@@ -11,6 +11,10 @@ public class GestorJugador {
 	
 	//METODOS DE GESTORJUGADOR
 	
+	// ----------------
+	//  JUGADORUSAITEM
+	// ----------------
+	
 	public void jugadorUsaItem(Jugador j, String nombreItem) {
 		System.out.println(j.getNombre() + " está intentando usar: " + nombreItem);
 	
@@ -43,6 +47,10 @@ public class GestorJugador {
 	System.out.println(j.getNombre() + " no tiene ese item en el inventario.");
 	}
 	
+	// ----------------
+	//  JUGADORSEMUEVE
+	// ----------------
+	
 	public void jugadorSeMueve(Jugador j, int pasos, Tablero t) {
 		System.out.println(j.getNombre() + " avanza " + pasos + " casillas.");
 		
@@ -61,6 +69,10 @@ public class GestorJugador {
 		j.setPosicion(nuevaPosicion);
 		System.out.println(j.getNombre() + " ha caido en la casilla " + nuevaPosicion);
 	}
+	
+	// ----------------
+	//  FOCAINTERACTUA
+	// ----------------
 	
 	public void focaInteractua(Pinguino p, Foca f, Tablero t, GestorPartida gp) {
         System.out.println("La foca " + f.getNombre() + " se acerca peligrosamente a " + p.getNombre() + "...");
