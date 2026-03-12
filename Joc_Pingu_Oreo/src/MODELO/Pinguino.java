@@ -7,9 +7,11 @@ public class Pinguino extends Jugador {
 	
 	
 	/* CONSTRUCTOR QUE HEREDA DE JUGADOR */
-	public Pinguino(String nombre, String color, int posicion) {
+	public Pinguino(String nombre, String color, int posicion, Inventario inv) {
 		super(nombre, color, posicion);
+		this.inv = inv;
 	}
+
 
 
 	/* GETTERS I SETTERS DEL INVENTARIO */

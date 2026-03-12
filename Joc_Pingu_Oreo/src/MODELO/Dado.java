@@ -35,8 +35,7 @@ public class Dado extends Item {
 	public void setMin(int min) {
 		this.min = min;
 	}
-	
-	
+		
 	
 	// MÈTODE TIRAR
 
