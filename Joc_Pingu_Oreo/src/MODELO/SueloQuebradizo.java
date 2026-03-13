@@ -37,6 +37,8 @@ public class SueloQuebradizo extends Casilla {
 				//Enre 1 y 5 objetos pierde un turno
 				System.out.println(p.getNombre() + " se ha quedado atascado en el hielo (" + cantidadObjetos + " objetos). Pierde 1 turno!");
 				
+				p.setTurnosPerdidos(p.getTurnosPerdidos() + 1);
+				
 			} else {
 				//0 objetos pasa sin penalizacion
 				System.out.println(p.getNombre() + " no lleva nada en el inventario i pasa sin problema.");

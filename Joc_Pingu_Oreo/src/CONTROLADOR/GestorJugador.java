@@ -11,11 +11,12 @@ public class GestorJugador {
 	
 	//METODOS DE GESTORJUGADOR
 	
+	
 	// ----------------
 	//  JUGADORUSAITEM
 	// ----------------
 	
-	public void jugadorUsaItem(Jugador j, String nombreItem) {
+	public void jugadorUsaItem(Jugador j, String nombreItem, Tablero t) {
 		System.out.println(j.getNombre() + " está intentando usar: " + nombreItem);
 	
 	//Bucle para recorrer el inventario del jugador y buscar item
@@ -27,16 +28,18 @@ public class GestorJugador {
 			
 			//Aqui va el efecto del item
 			switch (nombreItem.toLowerCase()) {
-			case "dado rapido":
-				int avanceRapido = (int) (Math.random() * 6) + 5;
-				System.out.println(j.getNombre() + " tira el dado rapido y saca un " + avanceRapido);
-				break;
-				
-			case "dado lento":
-				int avanceLento = (int) (Math.random() * 3) + 1;
-				System.out.println(j.getNombre() + " tira el dado lento y saca un " + avanceLento);
-				break;
-			}
+				case "dado rapido":
+					int avanceRapido = (int) (Math.random() * 6) + 5;
+					System.out.println(j.getNombre() + " tira el dado rapido y saca un " + avanceRapido);
+					this.jugadorSeMueve(j, avanceRapido, t);
+					break;
+					
+				case "dado lento":
+					int avanceLento = (int) (Math.random() * 3) + 1;
+					System.out.println(j.getNombre() + " tira el dado lento y saca un " + avanceLento);
+					this.jugadorSeMueve(j, avanceLento, t);
+					break;
+				}
 			
 			
 			//Una vez usado lo elimina del inventario y se sale
@@ -69,6 +72,7 @@ public class GestorJugador {
 		j.setPosicion(nuevaPosicion);
 		System.out.println(j.getNombre() + " ha caido en la casilla " + nuevaPosicion);
 	}
+	
 	
 	// ----------------
 	//  FOCAINTERACTUA
