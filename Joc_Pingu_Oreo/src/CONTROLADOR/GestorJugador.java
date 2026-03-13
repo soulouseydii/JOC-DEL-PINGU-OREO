@@ -73,6 +73,83 @@ public class GestorJugador {
 		System.out.println(j.getNombre() + " ha caido en la casilla " + nuevaPosicion);
 	}
 	
+	// ----------------------
+	//  JUGADORFINALIZATURNO
+	// ----------------------
+	
+	public void jugadorFinalizaTurno(Jugador j) {
+		System.out.println("El truno de " + j.getNombre() + " ha terminado!");
+		
+		//QUAN CONECTEM BASE DE DADES AQUI ES GUARDARA L'INVENTARI I LA POSICIO DEL JUGADOR
+		
+	}
+	
+	// ----------------
+	//  PINGUINOFRENTE
+	// ----------------
+
+	public void pinguinoFrente(Pinguino p) {
+		//PARA JAVAFX, EL PINGUINO CUANDO SE PARA SE PONE MIRANDO DE FRENTE.
+		System.out.println(p.getNombre() + " mira al frente.");
+	}
+	
+	// ----------------
+	//  PINGUINOGOLPEA
+	// ----------------
+	
+	public void pinguinoGolpea(Pinguino p1, Pinguino p2, Tablero t) {
+		System.out.println("Gerra de bolas de nieve entre " + p1.getNombre() + " i " + p2.getNombre() + ".");
+		
+		//Contar bolas de cada uno
+		int bolasP1 = contarBolas(p1);
+		int bolasP2 = contarBolas(p1);
+		
+		System.out.println(p1.getNombre() + " tiene " + bolasP1 + " bolas.");
+        System.out.println(p2.getNombre() + " tiene " + bolasP2 + " bolas.");
+
+        // 2. Calcular la diferencia
+        int diferencia = Math.abs(bolasP1 - bolasP2);
+
+        // 3. Ver quién gana y hacer retroceder al perdedor
+        if (bolasP1 > bolasP2) {
+            System.out.println(p1.getNombre() + " gana la pelea!");
+            // p2 retrocede (enviamos la diferencia en negativo)
+            this.jugadorSeMueve(p2, -diferencia, t); 
+            
+        } else if (bolasP2 > bolasP1) {
+            System.out.println(p2.getNombre() + " gana la pelea!");
+            // p1 retrocede
+            this.jugadorSeMueve(p1, -diferencia, t);
+            
+        } else {
+            System.out.println("Empate! Nadie retrocede.");
+        }
+
+        // 4. Ambos gastan todas sus bolas de nieve al terminar
+        eliminarTodasLasBolas(p1);
+        eliminarTodasLasBolas(p2);
+    }
+	
+	//METODO CONTARBOLAS Y ELIMINARTODASLASBOLAS
+	
+	private int contarBolas(Pinguino p) {
+        int contador = 0;
+        for (int i = 0; i < p.getInventario().getlista().size(); i++) {
+            if (p.getInventario().getlista().get(i).getNombre().equalsIgnoreCase("bola de nieve")) {
+                contador++; // Suma 1 por cada bola que encuentra
+            }
+        }
+        return contador;
+    }
+
+    private void eliminarTodasLasBolas(Pinguino p) {
+        // Recorre la lista al revés para evitar errores al borrar elementos
+        for (int i = p.getInventario().getlista().size() - 1; i >= 0; i--) {
+            if (p.getInventario().getlista().get(i).getNombre().equalsIgnoreCase("bola de nieve")) {
+                p.getInventario().getlista().remove(i);
+            }
+        }
+    }
 	
 	// ----------------
 	//  FOCAINTERACTUA
