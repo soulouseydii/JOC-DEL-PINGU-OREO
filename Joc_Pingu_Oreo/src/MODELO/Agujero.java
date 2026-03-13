@@ -20,7 +20,7 @@ public class Agujero extends Casilla {
         // En caso de que exista un agujero anterior pasara esto
         if (agujeroAnterior != -1) {
             jugador.setPosicion(agujeroAnterior);
-            System.out.println("i" + jugador.getNombre() + " ha caido en un agujero y retrocede a la casilla " + agujeroAnterior + "!");
+            System.out.println(jugador.getNombre() + " ha caido en un agujero y retrocede a la casilla " + agujeroAnterior + "!");
         }
 
     }

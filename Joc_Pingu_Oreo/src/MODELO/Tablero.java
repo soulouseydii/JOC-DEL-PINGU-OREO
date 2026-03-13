@@ -32,7 +32,7 @@ public class Tablero {
 			Casilla c = this.getListaCasillas().get(i);
 			
 			//Si encuentra el agujero
-			if (c.getTipo().equals("Hueco")) {
+			if (c.getTipo().equals("Agujero")) {
 				return i + 1; //Devuelve la posicion humana
 			}
 		}
