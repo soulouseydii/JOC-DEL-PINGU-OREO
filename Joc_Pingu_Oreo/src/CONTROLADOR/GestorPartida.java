@@ -14,6 +14,33 @@ public class GestorPartida {
     private GestorJugador gestorJugador;
     private Random random = new Random();
     
+    /* Gestiona las reglas específicas según el tipo de jugador, Pingüino o Foca */
+    public void procesarTurnoJugador(Jugador j) {
+        
+        // Si el jugador es una Foca
+        if (j instanceof Foca) {
+            Foca f = (Foca) j; // Hacemos que jugador sea foca para ver sus datos, ahora se llamara f
+            
+            // Regla: Si tiene turnos de bloqueo (por el pez), los reducimos y no mueve
+            if (f.getTurnosBloqueada() > 0) {
+                System.out.println("La foca está bloqueada. Turnos restantes: " + f.getTurnosBloqueada());
+                f.reducirBloqueo(); 
+            } else {
+                // Si no esta bloqueada, la foca tira el dado y se mueve
+                int pasos = tirarDado(f, null);
+                gestorJugador.jugadorSeMueve(f, pasos, partida.getTablero());
+            }
+        } 
+        
+        // Si el jugador es un Pingüino
+        else if (j instanceof Pinguino) {
+         // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
+            int pasos = tirarDado(j, null);
+         // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
+            gestorJugador.jugadorSeMueve(j, pasos, partida.getTablero());
+        }
+    }
+    
     public void ejecutarTurnoCompleto() {
         // Para saber quien es el jugador que tiene que mover ficha
         Jugador jActual = partida.getJugadorActual();
@@ -32,7 +59,9 @@ public class GestorPartida {
         }
 
         // Para tirar el dado, ademas le pasamos null en el segundo parametor porque de momento no hay dados especiales
-        int pasos = tirarDado(jActual, null);
+      // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
+        int pasos = tirarDado(jActual, null); 
+      // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
         System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
 
         // Usamos metodo jugador se mueve de gestorJugador para actualizar la posicion
