@@ -4,7 +4,6 @@ import MODELO.*;
 
 public class GestorTablero {
 	
-	/* Metodo buscarAgujeroAnterior para GestorPartida y foca*/
 	
 	// MÈTODO EJECUTARCASILLA 
 	
@@ -21,6 +20,9 @@ public class GestorTablero {
 		c.realizarAccion(partida, p);
 		
 	}
+	
+	
+	
 	
 	
 	
