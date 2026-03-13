@@ -27,7 +27,7 @@ public class Foca extends Jugador {
         }
     }
 
-    // Logica aplastar jugador
+    // Aplastar jugador
     public void aplastarJugador(Pinguino p) {
         int cantidadActual = p.getInv().getlista().size();
         int aQuitar = cantidadActual / 2;
@@ -47,8 +47,9 @@ public class Foca extends Jugador {
         System.out.println("¡La foca golpea a " + p.getNombre() + " con la cola!");
     }
     
-    // Este metodo sustituye a esSobornado para que el controlador pregunte si puede mover
+    // Este metodo sustituye a esSobornado
     public boolean estaBloqueada() {
         return this.turnosBloqueada > 0;
     }
+    
 }

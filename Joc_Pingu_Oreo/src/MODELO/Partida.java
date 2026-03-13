@@ -1,6 +1,5 @@
 package MODELO;
 
-import CONTROLADOR.GestorTablero;
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -71,11 +71,9 @@ public abstract class Jugador {
 		
 	}
 
-
 	public int getTurnosPerdidos() {
 		return turnosPerdidos;
 	}
-
 
 	public void setTurnosPerdidos(int turnos) {
 		this.turnosPerdidos = turnos;

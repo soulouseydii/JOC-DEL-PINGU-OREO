@@ -1,6 +1,5 @@
 package MODELO;
 import java.util.Random;
-import java.util.random.*;
 public class Dado extends Item {
     Random r = new Random();
 
