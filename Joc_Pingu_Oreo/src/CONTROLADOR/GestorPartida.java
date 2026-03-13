@@ -14,6 +14,53 @@ public class GestorPartida {
     private GestorJugador gestorJugador;
     private Random random = new Random();
     
+    public void ejecutarTurnoCompleto() {
+        // Para saber quien es el jugador que tiene que mover ficha
+        Jugador jActual = partida.getJugadorActual();
+        
+        System.out.println("--- COMIENZA EL TURNO DE: " + jActual.getNombre() + " ---");
+
+        // Si es el turno de la foca y esta bloqueada pasamos al siguiente turno
+        if (jActual instanceof Foca) {
+            Foca f = (Foca) jActual;
+            if (f.getTurnosBloqueada() > 0) {
+                System.out.println("La foca está bloqueada por soborno. Turnos restantes: " + f.getTurnosBloqueada());
+                f.reducirBloqueo(); // Le quitamos turno al bloqueo
+                siguienteTurno();
+                return; // Salimos del metodo, no tira dado ni mueve
+            }
+        }
+
+        // Para tirar el dado, ademas le pasamos null en el segundo parametor porque de momento no hay dados especiales
+        int pasos = tirarDado(jActual, null);
+        System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
+
+        // Usamos metodo jugador se mueve de gestorJugador para actualizar la posicion
+        gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
+        System.out.println("Nueva posición: " + jActual.getPosicion());
+
+        // Preguntamos en que casilla a caido y llamamos a realizar accion
+        Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
+        casillaDondeCae.realizarAccion(partida, jActual);
+
+        // Si el que ha movido es un pinguino, miramos si hay una foca en su casilla.
+        for (Jugador j : partida.getJugadores()) {
+            if (j instanceof Foca && jActual instanceof Pinguino) {
+                interaccionFocaPinguino((Foca) j, (Pinguino) jActual, partida.getTablero());
+            }
+        }
+
+        // Verificamos si a ganado el jugador actual
+        if (jActual.getPosicion() >= 49) {
+            partida.setFinalizada(true);
+            partida.setGanador(jActual);
+            System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
+        } else {
+            // Si no gana jugador actual se pasa a siguiente turno
+            siguienteTurno();
+        }
+    }
+    
     public void siguienteTurno() {
         // Ponemos los jugadores totales en totalJugadores para operar luego
         int totalJugadores = this.partida.getJugadores().size();
