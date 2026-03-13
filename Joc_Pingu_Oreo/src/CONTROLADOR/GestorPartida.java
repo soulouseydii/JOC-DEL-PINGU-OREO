@@ -4,6 +4,7 @@ import MODELO.*;
 import java.util.Random;
 import MODELO.Dado;
 import MODELO.Jugador;
+import java.util.ArrayList;
 
 public class GestorPartida {
 	
@@ -12,6 +13,40 @@ public class GestorPartida {
     private GestorTablero gestorTablero;
     private GestorJugador gestorJugador;
     private Random random = new Random();
+    
+    public void siguienteTurno() {
+        // Ponemos los jugadores totales en totalJugadores para operar luego
+        int totalJugadores = this.partida.getJugadores().size();
+        
+        // para saber quien esta jugando actualmente
+        int indiceActual = this.partida.getJugadorActualIndice();
+        
+        // sumamos el indice mas 1 y si es divisible entre total de jugadores se repite el orden de tiradas entre jugadores
+        int siguienteIndice = (indiceActual + 1) % totalJugadores;
+        
+        // El jugadoractual pasa a ser 0
+        this.partida.setJugadorActualIndice(siguienteIndice);
+        
+        // Sumamos 1 al contador para saber cuantos turnos lleva la partida
+        this.partida.setTurnos(this.partida.getTurnos() + 1);
+    }
+    
+    /* Crea una nueva instancia de Partida y configura los elementos iniciales. */
+    public void nuevaPartida(ArrayList<Jugador> listaJugadores) {
+        // Creamos el objeto Partida 
+        this.partida = new Partida();
+        
+        // Asignamos la lista de jugadores que nos pasa la Vista.
+        this.partida.setJugadores(listaJugadores);
+        
+        // Valores de inicio de partida a 0
+        this.partida.setTurnos(0);              // Contador de turnos totales a 0
+        this.partida.setJugadorActualIndice(0); // Primer jugador de la lista
+        this.partida.setFinalizada(false);      // Partida acabada sera false
+        this.partida.setGanador(null);          // Ganador nulo
+        
+        System.out.println("Nueva partida creada con " + listaJugadores.size() + " jugadores.");
+    }
     
     /* Método en GestorPartida */
     public int tirarDado(Jugador j, Dado dadoSeleccionado) {
