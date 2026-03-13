@@ -26,7 +26,13 @@ public class GestorTablero {
 	
 	public void comprobarFinTurno(Partida partida) {
 		
+		// Agafar al jugador actual
+		Jugador j = partida.getJugadorActual();
 		
+		
+		// Creo una variable, que serà el calcul de la casilla final
+		
+		int ultimaCasilla = partida.getTablero().getListaCasillas().size() - 1; 
 		
 		
 		
