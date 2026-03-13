@@ -14,6 +14,7 @@ public class Partida {
 	private int jugadorActual;
 	private boolean finalizada;
 	private Jugador ganador;
+	private int id;
 	
 	// CONSTRUCTOR 
 	
@@ -119,6 +120,10 @@ public class Partida {
 
 	    public void setGanador(Jugador ganador) {
 	        this.ganador = ganador;
+	    }
+	    
+	    public int getId() {
+	        return id;
 	    }
 
 	   // JUGADOR GETJUGADORACTUAL
