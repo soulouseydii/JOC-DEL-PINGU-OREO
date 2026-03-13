@@ -1,6 +1,6 @@
 package MODELO;
 
-public class Item {
+public abstract class Item {
 	
 	protected String nombre;
 	protected int cantidad;
