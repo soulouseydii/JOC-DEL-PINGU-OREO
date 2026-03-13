@@ -47,16 +47,8 @@ public class GestorPartida {
         
         System.out.println("--- COMIENZA EL TURNO DE: " + jActual.getNombre() + " ---");
 
-        // Si es el turno de la foca y esta bloqueada pasamos al siguiente turno
-        if (jActual instanceof Foca) {
-            Foca f = (Foca) jActual;
-            if (f.getTurnosBloqueada() > 0) {
-                System.out.println("La foca está bloqueada por soborno. Turnos restantes: " + f.getTurnosBloqueada());
-                f.reducirBloqueo(); // Le quitamos turno al bloqueo
-                siguienteTurno();
-                return; // Salimos del metodo, no tira dado ni mueve
-            }
-        }
+        // Llamamos al metodo para procesar si es foca o jugador
+        procesarTurnoJugador(jActual);
 
         // Para tirar el dado, ademas le pasamos null en el segundo parametor porque de momento no hay dados especiales
       // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
