@@ -26,17 +26,40 @@ public class GestorTablero {
 	
 	public void comprobarFinTurno(Partida partida) {
 		
+		// validacio en el cas de que no hi hagi partida o cap jugador
+		
+		if (partida == null || partida.getJugadorActual() == null) {
+			return;
+		}
+		
 		// Agafar al jugador actual
 		Jugador j = partida.getJugadorActual();
 		
 		
 		// Creo una variable, que serà el calcul de la casilla final
 		
-		int ultimaCasilla = partida.getTablero().getListaCasillas().size() - 1; 
+		int ultimaCasilla = partida.getTablero().getListaCasillas().size() - 1; 	
 		
+		// en caso de que el jugador gane la partida, aquel jugador será el ganador y se finalizará la partida. 
+		if (j.getPosicion() >= ultimaCasilla) {
+			partida.setFinalizada(true);
+			partida.setGanador(j);
+			
+			System.out.println("El jugador " + j.getNombre() + " ha ganado !!!");
+			
+			// al acabar la partida y ganarla, se sale del mètodo.
+			return;
+			
+			
+		} 
 		
-		
+		// en el caso de que no gane la partida, pasamos al siguiente turno.
+			
+			int turnoActual = partida.getJugadorActualIndice();
+			int siguienteTurno = (turnoActual + 1) % partida.getJugadores().size();
+			
+			partida.setJugadorActualIndice(siguienteTurno);					
+				
 	}
-	
-	
+		
 }
