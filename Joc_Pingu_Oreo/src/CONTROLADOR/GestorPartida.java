@@ -4,6 +4,7 @@ import MODELO.*;
 import java.util.Random;
 import MODELO.Dado;
 import MODELO.Jugador;
+import java.util.ArrayList;
 
 public class GestorPartida {
 	
@@ -12,6 +13,87 @@ public class GestorPartida {
     private GestorTablero gestorTablero;
     private GestorJugador gestorJugador;
     private Random random = new Random();
+    
+    public void ejecutarTurnoCompleto() {
+        // Para saber quien es el jugador que tiene que mover ficha
+        Jugador jActual = partida.getJugadorActual();
+        
+        System.out.println("--- COMIENZA EL TURNO DE: " + jActual.getNombre() + " ---");
+
+        // Si es el turno de la foca y esta bloqueada pasamos al siguiente turno
+        if (jActual instanceof Foca) {
+            Foca f = (Foca) jActual;
+            if (f.getTurnosBloqueada() > 0) {
+                System.out.println("La foca está bloqueada por soborno. Turnos restantes: " + f.getTurnosBloqueada());
+                f.reducirBloqueo(); // Le quitamos turno al bloqueo
+                siguienteTurno();
+                return; // Salimos del metodo, no tira dado ni mueve
+            }
+        }
+
+        // Para tirar el dado, ademas le pasamos null en el segundo parametor porque de momento no hay dados especiales
+        int pasos = tirarDado(jActual, null);
+        System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
+
+        // Usamos metodo jugador se mueve de gestorJugador para actualizar la posicion
+        gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
+        System.out.println("Nueva posición: " + jActual.getPosicion());
+
+        // Preguntamos en que casilla a caido y llamamos a realizar accion
+        Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
+        casillaDondeCae.realizarAccion(partida, jActual);
+
+        // Si el que ha movido es un pinguino, miramos si hay una foca en su casilla.
+        for (Jugador j : partida.getJugadores()) {
+            if (j instanceof Foca && jActual instanceof Pinguino) {
+                interaccionFocaPinguino((Foca) j, (Pinguino) jActual, partida.getTablero());
+            }
+        }
+
+        // Verificamos si a ganado el jugador actual
+        if (jActual.getPosicion() >= 49) {
+            partida.setFinalizada(true);
+            partida.setGanador(jActual);
+            System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
+        } else {
+            // Si no gana jugador actual se pasa a siguiente turno
+            siguienteTurno();
+        }
+    }
+    
+    public void siguienteTurno() {
+        // Ponemos los jugadores totales en totalJugadores para operar luego
+        int totalJugadores = this.partida.getJugadores().size();
+        
+        // para saber quien esta jugando actualmente
+        int indiceActual = this.partida.getJugadorActualIndice();
+        
+        // sumamos el indice mas 1 y si es divisible entre total de jugadores se repite el orden de tiradas entre jugadores
+        int siguienteIndice = (indiceActual + 1) % totalJugadores;
+        
+        // El jugadoractual pasa a ser 0
+        this.partida.setJugadorActualIndice(siguienteIndice);
+        
+        // Sumamos 1 al contador para saber cuantos turnos lleva la partida
+        this.partida.setTurnos(this.partida.getTurnos() + 1);
+    }
+    
+    /* Crea una nueva instancia de Partida y configura los elementos iniciales. */
+    public void nuevaPartida(ArrayList<Jugador> listaJugadores) {
+        // Creamos el objeto Partida 
+        this.partida = new Partida();
+        
+        // Asignamos la lista de jugadores que nos pasa la Vista.
+        this.partida.setJugadores(listaJugadores);
+        
+        // Valores de inicio de partida a 0
+        this.partida.setTurnos(0);              // Contador de turnos totales a 0
+        this.partida.setJugadorActualIndice(0); // Primer jugador de la lista
+        this.partida.setFinalizada(false);      // Partida acabada sera false
+        this.partida.setGanador(null);          // Ganador nulo
+        
+        System.out.println("Nueva partida creada con " + listaJugadores.size() + " jugadores.");
+    }
     
     /* Método en GestorPartida */
     public int tirarDado(Jugador j, Dado dadoSeleccionado) {
