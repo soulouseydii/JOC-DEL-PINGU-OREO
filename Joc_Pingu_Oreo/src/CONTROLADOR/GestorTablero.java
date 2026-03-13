@@ -5,7 +5,7 @@ import MODELO.*;
 public class GestorTablero {
 	
 	
-	// MÈTODO EJECUTARCASILLA 
+	// MÈTODO EJECUTAR CASILLA 
 	
 	public void ejecutarCasilla(Partida partida, Pinguino p, Casilla c) {
 		
@@ -22,8 +22,15 @@ public class GestorTablero {
 	}
 	
 	
+	// MÈTODO COMPROBAR FIN TURNO 
 	
-	
+	public void comprobarFinTurno(Partida partida) {
+		
+		
+		
+		
+		
+	}
 	
 	
 }
