@@ -16,26 +16,18 @@ public class GestorPartida {
     private GestorJugador gestorJugador;
     private Random random = new Random();
     private Connection conexion;
+    private GestorBBDD gestorBBDD;
     
     public void guardarPartida() {
-        // 1. Creamos la frase SQL con los datos actuales de la partida
-        String sql = "UPDATE PARTIDAS SET CASILLA_ACTUAL = " + partida.getJugadorActual().getPosicion() + 
-                     " WHERE ID = " + partida.getId();
-        
-        // 2. Le pedimos al Archivador (GestorBBDD) que ejecute la frase
-        GestorBBDD.update(this.conexion, sql);
+        gestorBBDD.guardarBBDD(partida);
     }
 
     public void cargarPartida(int id) {
-        // 1. Preparamos la consulta
-        String sql = "SELECT * FROM PARTIDAS WHERE ID = " + id;
-        
-        // 2. Le pedimos los datos al Archivador
-        ArrayList<LinkedHashMap<String, String>> filas = GestorBBDD.select(this.conexion, sql);
-        
-        // 3. Si hay datos, reconstruimos el objeto Partida
-        if (!filas.isEmpty()) {
-            // Lógica para volcar esos Strings en tu objeto partida
+
+        Partida partidaCargada = gestorBBDD.cargarBBDD(id);
+
+        if (partidaCargada != null) {
+            this.partida = partidaCargada;
             System.out.println("Partida recuperada de la base de datos.");
         }
     }
