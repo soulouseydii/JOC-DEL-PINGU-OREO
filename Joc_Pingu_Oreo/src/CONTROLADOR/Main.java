@@ -1,25 +1,30 @@
 package CONTROLADOR;
 
-import java.sql.Connection;
-import java.util.Scanner;
+import MODELO.Partida;
 
 public class Main {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		// Si dejaste el código del profe tal cual (con el Scanner):
-        Scanner lector = new Scanner(System.in);
-        Connection miConexion = GestorBBDD.conectarBaseDatos(lector);
+    public static void main(String[] args) {
+        // Se instancia la aplicacion para iniciar el proceso
+        Main aplicacion = new Main();
+        aplicacion.jugar();
+    }
+
+    public void jugar() {
+        System.out.println("--- Iniciando el Juego de los Pinguinos ---");
         
-        // Si lo hardcodeaste como te sugerí (sin Scanner):
-        // Connection miConexion = BBDD.conectarBaseDatos();
+        // Configuracion del Gestor de Base de Datos
+        GestorBBDD gestorBD = new GestorBBDD();
+        gestorBD.setUrlBBDD("jdbc:oracle:thin:@//192.168.3.26:1521/XEPDB2");
+        gestorBD.setUsername("usuario_clase");
+        gestorBD.setPassword("password_clase");
+        System.out.println("Conexion a base de datos configurada.");
+
+        // Inicializacion de componentes del juego
+        Partida partidaActual = new Partida();
+        GestorPartida gestorPartida = new GestorPartida();
+
+        System.out.println("Componentes cargados. El juego esta listo para comenzar.");
         
-        if (miConexion != null) {
-            System.out.println("🎉 ¡LA CONEXIÓN FUNCIONA PERFECTAMENTE!");
-            GestorBBDD.cerrar(miConexion); // Cerramos al terminar por ser educados con el servidor
-        } else {
-            System.out.println("💥 Algo ha fallado. Revisa la consola.");
-        }
     }
 }
