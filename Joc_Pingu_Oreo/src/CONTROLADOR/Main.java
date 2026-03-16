@@ -1,13 +1,11 @@
 package CONTROLADOR;
 
-import MODELO.Partida;
+import javafx.application.Application;
+import VISTA.PantallaMenu;
 
 public class Main {
 
     public static void main(String[] args) {
-
-
-        // Se instancia la aplicacion para iniciar el proceso
         Main aplicacion = new Main();
         aplicacion.jugar();
     }
@@ -15,19 +13,19 @@ public class Main {
     public void jugar() {
         System.out.println("--- Iniciando el Juego de los Pinguinos ---");
         
-        // Configuracion del Gestor de Base de Datos
+        // 1. Configuración del Gestor de Base de Datos
         GestorBBDD gestorBD = new GestorBBDD();
         gestorBD.setUrlBBDD("jdbc:oracle:thin:@//192.168.3.26:1521/XEPDB2");
-        gestorBD.setUsername("usuario_clase");
-        gestorBD.setPassword("password_clase");
-        System.out.println("Conexion a base de datos configurada.");
-
-        // Inicializacion de componentes del juego
-        Partida partidaActual = new Partida();
-        GestorPartida gestorPartida = new GestorPartida();
-
-        System.out.println("Componentes cargados. El juego esta listo para comenzar.");
+        gestorBD.setUsername("usuario_clase"); // Modificar por las credenciales reales
+        gestorBD.setPassword("password_clase"); // Modificar por las credenciales reales
         
-
+        System.out.println("Conexion a base de datos configurada y lista.");
+        
+        // 2. Arrancar la interfaz gráfica de JavaFX
+        System.out.println("Cargando la interfaz grafica...");
+        Application.launch(PantallaMenu.class);
+        
+        // Lo que pongas a partir de aquí solo se ejecutará cuando cierres la ventana del juego
+        System.out.println("Juego cerrado. ¡Hasta pronto!");
     }
 }
