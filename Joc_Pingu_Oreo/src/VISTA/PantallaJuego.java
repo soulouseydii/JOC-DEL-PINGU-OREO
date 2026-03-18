@@ -153,6 +153,7 @@ public class PantallaJuego {
 		System.out.println("Pos pingu previa: " + pingu.getPosicion());
 
 		int resultado = gestorPartida.tirarDado((Jugador) pingu, d);
+		pingu.moverPosicion(resultado); // Update model's position!
 
 		System.out.println("Pos pingu actual: " + pingu.getPosicion());
 
