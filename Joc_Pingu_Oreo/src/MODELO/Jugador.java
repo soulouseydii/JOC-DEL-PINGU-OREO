@@ -55,6 +55,10 @@ public abstract class Jugador {
 	    return inventario;
 	}
 	
+	public void setInventario(Inventario inventario) {
+	    this.inventario = inventario;
+	}
+	
 	/* METODO POSICION */
 	public void moverPosicion(int p) {
 		this.posicion += p;

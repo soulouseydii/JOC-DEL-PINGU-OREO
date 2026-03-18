@@ -1,7 +1,6 @@
 package VISTA;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -13,8 +12,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import controlador.GestorPartida;
-import modelo.*;
+import CONTROLADOR.GestorPartida;
+import MODELO.*;
 
 public class PantallaJuego {
 
@@ -67,38 +66,28 @@ public class PantallaJuego {
 	private Circle P4;
 
 	private GestorPartida gestorPartida;
-	// ONLY FOR TESTING!!!
 	private int p1Position = 0; // Tracks current position (from 0 to 49 in a 5x10 grid)
 	private static final int COLUMNS = 5;
 
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
-	private final Random rand = new Random();
 
 	@FXML
 	private void initialize() {
 		eventos.setText("¡El juego ha comenzado!");
 
-		// Generate model board
-		/*
-		 * ArrayList<Jugador> jugadores = new ArrayList<>(); jugadores.add(new
-		 * Pinguino(0, "Jugador 1", "Rojo", new Inventario(new ArrayList<>()))); Tablero
-		 * modeloTablero = new Tablero(new ArrayList<>(), jugadores, 0,
-		 * jugadores.get(0)); modeloTablero.generarCasillasAleatorias();
-		 */
-
-		// Partida p = new Partida();
+		// Crear el gestor de partida
 		gestorPartida = new GestorPartida();
-		
+
+		// Crear la lista de jugadores
 		ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
 		Inventario inventario = new Inventario();
-		Dado dado = new Dado("normal", 1, 1, 6);
-		inventario.getLista().add(dado);
-		
+		Dado dadoNormal = new Dado("Normal");
+		inventario.getlista().add(dadoNormal);
+
 		jugadores.add(new Pinguino("Jugador1", "Azul", 0, inventario));
 
-		gestorPartida.nuevaPartida();
-		
-		gestorPartida.getPartida().setJugadores(jugadores);
+		// Crear nueva partida pasando los jugadores
+		gestorPartida.nuevaPartida(jugadores);
 
 		// Show board info
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
@@ -108,24 +97,24 @@ public class PantallaJuego {
 		// Clear only the labels we generated in previous calls
 		tablero.getChildren().removeIf(node -> TAG_CASILLA_TEXT.equals(node.getUserData()));
 
-		for (int i = 0; i < t.getCasillas().size(); i++) {
-			Casilla casilla = t.getCasillas().get(i);
+		for (int i = 0; i < t.getListaCasillas().size(); i++) {
+			Casilla casilla = t.getListaCasillas().get(i);
 
-			// Skip position 0 and 49 if you want them to be special (start/end)
+			// Skip position 0 and 49 (start/end)
 			if (i > 0 && i < 49) {
-			String tipo = casilla.getClass().getSimpleName();
+				String tipo = casilla.getClass().getSimpleName();
 
-			Text texto = new Text(tipo);
-			texto.setUserData(TAG_CASILLA_TEXT);
-			texto.getStyleClass().add("cell-type");
+				Text texto = new Text(tipo);
+				texto.setUserData(TAG_CASILLA_TEXT);
+				texto.getStyleClass().add("cell-type");
 
-			int row = i / COLUMNS;
-			int col = i % COLUMNS;
+				int row = i / COLUMNS;
+				int col = i % COLUMNS;
 
-			GridPane.setRowIndex(texto, row);
-			GridPane.setColumnIndex(texto, col);
+				GridPane.setRowIndex(texto, row);
+				GridPane.setColumnIndex(texto, col);
 
-			tablero.getChildren().add(texto);
+				tablero.getChildren().add(texto);
 			}
 		}
 	}
@@ -159,13 +148,13 @@ public class PantallaJuego {
 	@FXML
 	private void handleDado(ActionEvent event) {
 		Pinguino pingu = (Pinguino) gestorPartida.getPartida().getJugadores().get(0);
-		Dado d = (Dado) pingu.getInv().getLista().get(0);
-		
-		System.out.println("Pos pingu previa:" + pingu.getPosicion());
-		
+		Dado d = (Dado) pingu.getInv().getlista().get(0);
+
+		System.out.println("Pos pingu previa: " + pingu.getPosicion());
+
 		int resultado = gestorPartida.tirarDado((Jugador) pingu, d);
-		
-		System.out.println("Pos pingu actual:" + pingu.getPosicion());
+
+		System.out.println("Pos pingu actual: " + pingu.getPosicion());
 
 		// Update the Text
 		dadoResultText.setText("Ha salido: " + resultado);
@@ -174,82 +163,59 @@ public class PantallaJuego {
 		moveP1(resultado);
 	}
 
-	
-/*	Old simple version
- * private void moveP1(int steps) {
+	private void moveP1(int steps) {
+
+		// Evita spam del botón
+		dado.setDisable(true);
+
+		int oldPosition = p1Position;
+
 		p1Position += steps;
 
 		// Bound player
 		if (p1Position >= 50) {
-			p1Position = 49; // 5 columns * 10 rows = 50 cells (index 0 to 49)
+			p1Position = 49;
 		}
-		
+
 		if (p1Position < 0) {
 			p1Position = 0;
 		}
 
-		// Check row and column
-		int row = p1Position / COLUMNS;
-		int col = p1Position % COLUMNS;
+		// OLD position
+		int oldRow = oldPosition / COLUMNS;
+		int oldCol = oldPosition % COLUMNS;
 
-		// Change P1 property to match row and column
-		GridPane.setRowIndex(P1, row);
-		GridPane.setColumnIndex(P1, col);
-	}*/
-	
-	private void moveP1(int steps) {
+		// NEW position
+		int newRow = p1Position / COLUMNS;
+		int newCol = p1Position % COLUMNS;
 
-	    // Evita spam del botón
-	    dado.setDisable(true);
+		// Cell size (aproximado)
+		double cellWidth = tablero.getWidth() / COLUMNS;
+		double cellHeight = tablero.getHeight() / 10;
 
-	    int oldPosition = p1Position;
+		double dx = (newCol - oldCol) * cellWidth;
+		double dy = (newRow - oldRow) * cellHeight;
 
-	    p1Position += steps;
+		TranslateTransition slide = new TranslateTransition(Duration.millis(350), P1);
 
-	    // Bound player
-	    if (p1Position >= 50) {
-	        p1Position = 49;
-	    }
+		slide.setByX(dx);
+		slide.setByY(dy);
 
-	    if (p1Position < 0) {
-	        p1Position = 0;
-	    }
+		slide.setOnFinished(e -> {
 
-	    // OLD position
-	    int oldRow = oldPosition / COLUMNS;
-	    int oldCol = oldPosition % COLUMNS;
+			// reset translation
+			P1.setTranslateX(0);
+			P1.setTranslateY(0);
 
-	    // NEW position
-	    int newRow = p1Position / COLUMNS;
-	    int newCol = p1Position % COLUMNS;
+			// set real position in grid
+			GridPane.setRowIndex(P1, newRow);
+			GridPane.setColumnIndex(P1, newCol);
 
-	    // Cell size (aproximado)
-	    double cellWidth = tablero.getWidth() / COLUMNS;
-	    double cellHeight = tablero.getHeight() / 10;
+			// volver a activar el botón
+			dado.setDisable(false);
+		});
 
-	    double dx = (newCol - oldCol) * cellWidth;
-	    double dy = (newRow - oldRow) * cellHeight;
-
-	    TranslateTransition slide = new TranslateTransition(Duration.millis(350), P1);
-
-	    slide.setByX(dx);
-	    slide.setByY(dy);
-
-	    slide.setOnFinished(e -> {
-
-	        // reset translation
-	        P1.setTranslateX(0);
-	        P1.setTranslateY(0);
-
-	        // set real position in grid
-	        GridPane.setRowIndex(P1, newRow);
-	        GridPane.setColumnIndex(P1, newCol);
-
-	        // volver a activar el botón
-	        dado.setDisable(false);
-	    });
-
-	    slide.play();
+		slide.play();
 	}
 
 	@FXML
