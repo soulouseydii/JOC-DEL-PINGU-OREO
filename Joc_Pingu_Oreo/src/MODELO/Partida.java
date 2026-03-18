@@ -34,8 +34,8 @@ public class Partida {
 
 	    Random rand = new Random();
 
-	    for (int i = 1; i < 49; i++) {
-	        int tipo = rand.nextInt(6); // 0-5, for 6 types
+	    for (int i = 1; i < 50; i++) {
+	        int tipo = rand.nextInt(6);
 
 	        Casilla c;
 	        switch (tipo) {
@@ -66,7 +66,7 @@ public class Partida {
 	    }
 
 	    // Posición 49: siempre vacía
-	    casillas.add(new Normal(49));
+	    casillas.add(new Normal(50));
 	    
 	    this.tablero.setListaCasillas(casillas); 	
 	    

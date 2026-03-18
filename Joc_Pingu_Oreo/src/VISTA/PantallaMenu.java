@@ -101,7 +101,7 @@ public class PantallaMenu extends Application {
         // Basic check (just for demo, replace with real login logic)
         if (!username.isEmpty() && !password.isEmpty()) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/PantallaJuego.fxml"));
+            	FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
                 Parent pantallaJuegoRoot = loader.load();
                 Scene pantallaJuegoScene = new Scene(pantallaJuegoRoot);
 
