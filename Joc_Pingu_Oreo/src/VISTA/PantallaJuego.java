@@ -13,8 +13,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import controlador.GestorPartida;
-import modelo.*;
+import CONTROLADOR.GestorPartida;
+import MODELO.*;
 
 public class PantallaJuego {
 

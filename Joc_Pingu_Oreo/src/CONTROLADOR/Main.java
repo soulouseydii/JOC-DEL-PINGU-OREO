@@ -11,7 +11,7 @@ public class Main {
     }
 
     public void jugar() {
-        System.out.println("--- Iniciando el Juego de los Pinguinos ---");
+        System.out.println("--- Iniciando el Juego del Pinguino ---");
         
         // 1. Configuración del Gestor de Base de Datos
         GestorBBDD gestorBD = new GestorBBDD();
