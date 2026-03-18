@@ -17,6 +17,13 @@ public class GestorPartida {
     private Random random = new Random();
     private Connection conexion;
     private GestorBBDD gestorBBDD;
+
+    // Constructor
+    public GestorPartida() {
+        this.gestorTablero = new GestorTablero();
+        this.gestorJugador = new GestorJugador();
+        this.gestorBBDD = new GestorBBDD();
+    }
     
     public void guardarPartida() {
         gestorBBDD.guardarBBDD(partida);
@@ -132,6 +139,16 @@ public class GestorPartida {
         this.partida.setGanador(null);          // Ganador nulo
         
         System.out.println("Nueva partida creada con " + listaJugadores.size() + " jugadores.");
+    }
+    
+    /* Sobrecarga sin parámetros: crea una nueva partida con lista de jugadores vacía */
+    public void nuevaPartida() {
+        nuevaPartida(new ArrayList<Jugador>());
+    }
+    
+    /* Getter de Partida */
+    public Partida getPartida() {
+        return partida;
     }
     
     /* Método en GestorPartida */
