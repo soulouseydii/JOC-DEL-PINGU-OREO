@@ -16,10 +16,11 @@ public class Main {
         // 1. Configuración del Gestor de Base de Datos
         GestorBBDD gestorBD = new GestorBBDD();
         gestorBD.setUrlBBDD("jdbc:oracle:thin:@//192.168.3.26:1521/XEPDB2");
-        gestorBD.setUsername("usuario_clase");
-        gestorBD.setPassword("password_clase");
+        gestorBD.setUsername("DW2526_GR01_PINGU"); 
+        gestorBD.setPassword("AJBPNSS"); 
         
-        System.out.println("Conexion a base de datos configurada y lista.");
+        // Comprobar que la conexion a Oracle funciona antes de arrancar el juego
+        gestorBD.testConexion();
         
         // 2. Arrancar la interfaz gráfica de JavaFX
         System.out.println("Cargando la interfaz grafica...");
