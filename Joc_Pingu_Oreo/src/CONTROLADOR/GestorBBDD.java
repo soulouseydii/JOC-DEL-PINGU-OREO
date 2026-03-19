@@ -37,6 +37,25 @@ public class GestorBBDD {
         this.password = password;
     }
 
+    /**
+     * Comprueba si la conexion con la base de datos Oracle funciona correctamente.
+     * Imprime el resultado por consola.
+     * @return true si la conexion es exitosa, false si hay algun error.
+     */
+    public boolean testConexion() {
+        System.out.println("Probando conexion a: " + this.urlBBDD);
+        try (Connection con = DriverManager.getConnection(this.urlBBDD, this.username, this.password)) {
+            if (con != null && !con.isClosed()) {
+                System.out.println("✔ CONEXION EXITOSA a Oracle! Base de datos lista.");
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("✘ ERROR DE CONEXION: " + e.getMessage());
+            System.out.println("  Codigo de error Oracle: " + e.getErrorCode());
+        }
+        return false;
+    }
+
     public void guardarBBDD(Partida p) {
         // Se utiliza try-with-resources para asegurar que la conexion se cierra automaticamente
         try (Connection con = DriverManager.getConnection(this.urlBBDD, this.username, this.password)) {
