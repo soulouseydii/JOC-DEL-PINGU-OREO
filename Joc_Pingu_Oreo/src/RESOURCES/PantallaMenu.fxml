@@ -15,24 +15,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane
-    xmlns="http://javafx.com/javafx/21.0.10"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="VISTA.PantallaMenu"
-    stylesheets="@PantallaMenu.css"
-    styleClass="root">
-
+<BorderPane prefHeight="624.0" prefWidth="957.0" styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
     <top>
         <MenuBar>
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="newGame" mnemonicParsing="false" text="New" />
+                        <MenuItem fx:id="newGame" mnemonicParsing="false" onAction="#handleNewGame" text="New" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="saveGame" mnemonicParsing="false" text="Save" />
-                        <MenuItem fx:id="loadGame" mnemonicParsing="false" text="Load" />
+                        <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGame" text="Save" />
+                        <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#handleLoadGame" text="Load" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="quitGame" mnemonicParsing="false" text="Quit" />
+                        <MenuItem fx:id="quitGame" mnemonicParsing="false" onAction="#handleQuitGame" text="Quit" />
                     </items>
                 </Menu>
             </menus>
@@ -40,42 +34,41 @@
     </top>
 
     <center>
-        <StackPane>
+        <StackPane prefHeight="598.0" prefWidth="977.0" style="-fx-background-image: url(&quot;file:/C:/Users/paunadal14/JOC-DEL-PINGU-OREO/Joc_Pingu_Oreo/src/RESOURCES/imagenes/fondo_tablero.png&quot;); -fx-background-size: 100% 100%;; -fx-background-repeat: no-repeat;; -fx-background-position: center;; -fx-pref-height: 40px;;">
             <padding>
-                <Insets top="28" right="28" bottom="28" left="28"/>
+                <Insets bottom="28" left="28" right="28" top="28" />
             </padding>
 
-            <VBox spacing="16" styleClass="card" maxWidth="420">
+            <VBox maxWidth="420" spacing="16" style="-fx-background-color: rgba(255, 255, 255, 0.6);;" styleClass="card">
                 <padding>
-                    <Insets top="18" right="18" bottom="18" left="18"/>
+                    <Insets bottom="18" left="18" right="18" top="18" />
                 </padding>
 
                 <!-- Cabecera -->
-                <VBox spacing="6" alignment="CENTER">
-                    <Label text="EL JUEGO DEL PINGÜINO" styleClass="title" wrapText="true"/>
+                <VBox alignment="CENTER" prefHeight="48.0" prefWidth="394.0" spacing="6" style="-fx-background-color: rgba(255, 255, 255, 0.4); -fx-background-radius: 15;">
+                    <Label styleClass="title" text="EL JUEGO DEL PINGÜINO" wrapText="true" />
                 </VBox>
 
-                <Region prefHeight="8"/>
+                <Region prefHeight="8" />
 
                 <!-- Formulario -->
                 <VBox spacing="10">
-                    <Label text="Usuario" styleClass="field-label"/>
-                    <TextField fx:id="userField" promptText="Usuario..." styleClass="field"/>
+                    <Label styleClass="field-label" text="Usuario" />
+                    <TextField fx:id="userField" promptText="Usuario..." styleClass="field" />
 
-                    <Label text="Contraseña" styleClass="field-label"/>
-                    <PasswordField fx:id="passField" promptText="Contraseña..." styleClass="field"/>
+                    <Label styleClass="field-label" text="Contraseña" />
+                    <PasswordField fx:id="passField" promptText="Contraseña..." styleClass="field" />
                 </VBox>
 
-                <Region prefHeight="6"/>
+                <Region prefHeight="6" />
 
                 <!-- Botonera -->
                 <HBox spacing="10">
-                    <Button fx:id="loginButton" text="Login" onAction="#handleLogin" maxWidth="Infinity" styleClass="primary"/>
-                    <Button fx:id="registerButton" text="Registro" onAction="#handleRegister" maxWidth="Infinity"/>
+                    <Button fx:id="loginButton" maxWidth="Infinity" onAction="#handleLogin" styleClass="primary" text="Login" />
+                    <Button fx:id="registerButton" maxWidth="Infinity" onAction="#handleRegister" text="Registro" />
                 </HBox>
 
-                <Label text="Tip: para la demo, puedes entrar con cualquier usuario si aún no hay validación."
-                       styleClass="hint" wrapText="true"/>
+                <Label styleClass="hint" text="Tip: para la demo, puedes entrar con cualquier usuario si aún no hay validación." wrapText="true" />
             </VBox>
         </StackPane>
     </center>
