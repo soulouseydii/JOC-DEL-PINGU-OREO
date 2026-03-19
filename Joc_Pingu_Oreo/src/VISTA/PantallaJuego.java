@@ -66,31 +66,33 @@ public class PantallaJuego {
 	private Circle P4;
 
 	private GestorPartida gestorPartida;
-	private int p1Position = 0; // Tracks current position (from 0 to 49 in a 5x10 grid)
+	private int[] posiciones = new int[4];
 	private static final int COLUMNS = 5;
 
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
 
 	@FXML
 	private void initialize() {
-		eventos.setText("¡El juego ha comenzado!");
-
 		// Crear el gestor de partida
 		gestorPartida = new GestorPartida();
 
-		// Crear la lista de jugadores
+		// Crear la lista de jugadores (4 jugadores por defecto)
 		ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
-		Inventario inventario = new Inventario();
-		Dado dadoNormal = new Dado("Normal");
-		inventario.getlista().add(dadoNormal);
-
-		jugadores.add(new Pinguino("Jugador1", "Azul", 0, inventario));
+		
+		for (int i = 1; i <= 4; i++) {
+			Inventario inventario = new Inventario();
+			inventario.getlista().add(new Dado("Normal"));
+			String color = (i == 1) ? "Azul" : (i == 2) ? "Rojo" : (i == 3) ? "Verde" : "Amarillo";
+			jugadores.add(new Pinguino("Jugador " + i, color, 0, inventario));
+		}
 
 		// Crear nueva partida pasando los jugadores
 		gestorPartida.nuevaPartida(jugadores);
 
 		// Show board info
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
+        
+		eventos.setText("El juego ha comenzado! Turno de Jugador 1");
 	}
 
 	private void mostrarTiposDeCasillasEnTablero(Tablero t) {
@@ -122,65 +124,69 @@ public class PantallaJuego {
 	// Menu actions
 	@FXML
 	private void handleNewGame() {
-		System.out.println("New game.");
+		System.out.println("Nuevo Juego.");
 		// TODO
 	}
 
 	@FXML
 	private void handleSaveGame() {
-		System.out.println("Saved game.");
+		System.out.println("Guardar Juego.");
 		// TODO
 	}
 
 	@FXML
 	private void handleLoadGame() {
-		System.out.println("Loaded game.");
+		System.out.println("Cargar Juego.");
 		// TODO
 	}
 
 	@FXML
 	private void handleQuitGame() {
-		System.out.println("Exit...");
+		System.out.println("Salir...");
 		// TODO
 	}
 
 	// Button actions
 	@FXML
 	private void handleDado(ActionEvent event) {
-		Pinguino pingu = (Pinguino) gestorPartida.getPartida().getJugadores().get(0);
-		Dado d = (Dado) pingu.getInv().getlista().get(0);
+		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
+		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
+		
+		Dado d = null;
+		if (jugadorActual instanceof Pinguino) {
+			d = (Dado) ((Pinguino) jugadorActual).getInv().getlista().get(0);
+		}
 
-		// Disable button immediately to prevent double clicks
 		dado.setDisable(true);
 
-		int resultado = gestorPartida.tirarDado((Jugador) pingu, d);
-		pingu.moverPosicion(resultado); // Update model's position!
-
-		dadoResultText.setText("Ha salido: " + resultado);
-
-		// El modelo va de 1 a 50, la vista va de 0 a 49
-		int posicionDestino = pingu.getPosicion() - 1;
+		int resultado = gestorPartida.tirarDado(jugadorActual, d);
 		
-		// Forzar limites por seguridad
+		if (jugadorActual instanceof Pinguino) {
+			((Pinguino) jugadorActual).moverPosicion(resultado);
+		}
+
+		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultado);
+
+		int posicionDestino = jugadorActual.getPosicion() - 1;
+		
 		if (posicionDestino >= 49) {
 			posicionDestino = 49;
 		}
 
-		moveP1To(posicionDestino);
+		moveTo(indiceActual, posicionDestino);
 	}
 
-	private void moveP1To(int targetPosition) {
+	private void moveTo(int playerIndex, int targetPosition) {
 
-		int oldPosition = p1Position;
-		p1Position = targetPosition;
+		Circle fichaObj = (playerIndex == 0) ? P1 : (playerIndex == 1) ? P2 : (playerIndex == 2) ? P3 : P4;
+		int oldPosition = posiciones[playerIndex];
+		posiciones[playerIndex] = targetPosition;
 
-		//posicion antigua
 		int oldRow = oldPosition / COLUMNS;
 		int oldCol = oldPosition % COLUMNS;
 
-		//posicion nueva
-		int newRow = p1Position / COLUMNS;
-		int newCol = p1Position % COLUMNS;
+		int newRow = targetPosition / COLUMNS;
+		int newCol = targetPosition % COLUMNS;
 
 		double cellWidth = tablero.getWidth() / COLUMNS;
 		double cellHeight = tablero.getHeight() / 10;
@@ -188,24 +194,25 @@ public class PantallaJuego {
 		double dx = (newCol - oldCol) * cellWidth;
 		double dy = (newRow - oldRow) * cellHeight;
 
-		TranslateTransition slide = new TranslateTransition(Duration.millis(350), P1);
+		TranslateTransition slide = new TranslateTransition(Duration.millis(350), fichaObj);
 
 		slide.setByX(dx);
 		slide.setByY(dy);
 
 		slide.setOnFinished(e -> {
+			fichaObj.setTranslateX(0);
+			fichaObj.setTranslateY(0);
 
-			P1.setTranslateX(0);
-			P1.setTranslateY(0);
-
-			GridPane.setRowIndex(P1, newRow);
-			GridPane.setColumnIndex(P1, newCol);
+			GridPane.setRowIndex(fichaObj, newRow);
+			GridPane.setColumnIndex(fichaObj, newCol);
 
 			// Comprobar final
-			if (p1Position >= 49) {
-				eventos.setText("Has llegado a la meta!");
+			if (targetPosition >= 49) {
+				eventos.setText(gestorPartida.getPartida().getJugadorActual().getNombre() + ", ha ganado!");
 				dado.setDisable(true); // Asegurar que quede desactivado
 			} else {
+				gestorPartida.siguienteTurno();
+				eventos.setText("Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
 				dado.setDisable(false); // Reactivar si no ha ganado
 			}
 		});
