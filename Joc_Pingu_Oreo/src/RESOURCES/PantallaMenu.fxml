@@ -15,19 +15,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
-
+<BorderPane prefHeight="624.0" prefWidth="957.0" styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
     <top>
         <MenuBar>
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="newGame" mnemonicParsing="false" text="New" />
+                        <MenuItem fx:id="newGame" mnemonicParsing="false" onAction="#handleNewGame" text="New" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="saveGame" mnemonicParsing="false" text="Save" />
-                        <MenuItem fx:id="loadGame" mnemonicParsing="false" text="Load" />
+                        <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGame" text="Save" />
+                        <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#handleLoadGame" text="Load" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="quitGame" mnemonicParsing="false" text="Quit" />
+                        <MenuItem fx:id="quitGame" mnemonicParsing="false" onAction="#handleQuitGame" text="Quit" />
                     </items>
                 </Menu>
             </menus>
@@ -35,18 +34,18 @@
     </top>
 
     <center>
-        <StackPane prefHeight="483.0" prefWidth="663.0">
+        <StackPane prefHeight="598.0" prefWidth="977.0" style="-fx-background-image: url(&quot;file:/C:/Users/paunadal14/JOC-DEL-PINGU-OREO/Joc_Pingu_Oreo/src/RESOURCES/imagenes/fondo_tablero.png&quot;); -fx-background-size: 100% 100%;; -fx-background-repeat: no-repeat;; -fx-background-position: center;; -fx-pref-height: 40px;;">
             <padding>
                 <Insets bottom="28" left="28" right="28" top="28" />
             </padding>
 
-            <VBox maxWidth="420" spacing="16" styleClass="card">
+            <VBox maxWidth="420" spacing="16" style="-fx-background-color: rgba(255, 255, 255, 0.6);;" styleClass="card">
                 <padding>
                     <Insets bottom="18" left="18" right="18" top="18" />
                 </padding>
 
                 <!-- Cabecera -->
-                <VBox alignment="CENTER" spacing="6">
+                <VBox alignment="CENTER" prefHeight="48.0" prefWidth="394.0" spacing="6" style="-fx-background-color: rgba(255, 255, 255, 0.4); -fx-background-radius: 15;">
                     <Label styleClass="title" text="EL JUEGO DEL PINGÜINO" wrapText="true" />
                 </VBox>
 

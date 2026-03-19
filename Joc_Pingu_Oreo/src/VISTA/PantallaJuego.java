@@ -150,47 +150,38 @@ public class PantallaJuego {
 		Pinguino pingu = (Pinguino) gestorPartida.getPartida().getJugadores().get(0);
 		Dado d = (Dado) pingu.getInv().getlista().get(0);
 
-		System.out.println("Pos pingu previa: " + pingu.getPosicion());
+		// Disable button immediately to prevent double clicks
+		dado.setDisable(true);
 
 		int resultado = gestorPartida.tirarDado((Jugador) pingu, d);
 		pingu.moverPosicion(resultado); // Update model's position!
 
-		System.out.println("Pos pingu actual: " + pingu.getPosicion());
-
-		// Update the Text
 		dadoResultText.setText("Ha salido: " + resultado);
 
-		// Update the position
-		moveP1(resultado);
+		// El modelo va de 1 a 50, la vista va de 0 a 49
+		int posicionDestino = pingu.getPosicion() - 1;
+		
+		// Forzar limites por seguridad
+		if (posicionDestino >= 49) {
+			posicionDestino = 49;
+		}
+
+		moveP1To(posicionDestino);
 	}
 
-	private void moveP1(int steps) {
-
-		// Evita spam del botón
-		dado.setDisable(true);
+	private void moveP1To(int targetPosition) {
 
 		int oldPosition = p1Position;
+		p1Position = targetPosition;
 
-		p1Position += steps;
-
-		// Bound player
-		if (p1Position >= 50) {
-			p1Position = 49;
-		}
-
-		if (p1Position < 0) {
-			p1Position = 0;
-		}
-
-		// OLD position
+		//posicion antigua
 		int oldRow = oldPosition / COLUMNS;
 		int oldCol = oldPosition % COLUMNS;
 
-		// NEW position
+		//posicion nueva
 		int newRow = p1Position / COLUMNS;
 		int newCol = p1Position % COLUMNS;
 
-		// Cell size (aproximado)
 		double cellWidth = tablero.getWidth() / COLUMNS;
 		double cellHeight = tablero.getHeight() / 10;
 
@@ -204,16 +195,19 @@ public class PantallaJuego {
 
 		slide.setOnFinished(e -> {
 
-			// reset translation
 			P1.setTranslateX(0);
 			P1.setTranslateY(0);
 
-			// set real position in grid
 			GridPane.setRowIndex(P1, newRow);
 			GridPane.setColumnIndex(P1, newCol);
 
-			// volver a activar el botón
-			dado.setDisable(false);
+			// Comprobar final
+			if (p1Position >= 49) {
+				eventos.setText("Has llegado a la meta!");
+				dado.setDisable(true); // Asegurar que quede desactivado
+			} else {
+				dado.setDisable(false); // Reactivar si no ha ganado
+			}
 		});
 
 		slide.play();
