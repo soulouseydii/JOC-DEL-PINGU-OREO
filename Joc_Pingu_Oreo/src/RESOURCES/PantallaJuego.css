@@ -1,13 +1,19 @@
 .root {
     -fx-font-family: "System";
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     -fx-background-color: linear-gradient(to bottom, #4dd0e1, #01579b);
 =======
+=======
+>>>>>>> parent of 0937df9 (retocamos cambios graficos porque me habia equivocado)
     -fx-background-image: url('imagenes/fondo_tablero.png');
     -fx-background-size: cover;
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of 0937df9 (retocamos cambios graficos porque me habia equivocado)
 }
 
 /* MENU BAR - Frosty */
