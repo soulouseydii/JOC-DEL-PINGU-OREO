@@ -1,6 +1,7 @@
 .root {
     -fx-font-family: "System";
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     -fx-background-color: linear-gradient(to bottom, #4dd0e1, #01579b);
 =======
@@ -14,137 +15,130 @@
 >>>>>>> Stashed changes
 =======
 >>>>>>> parent of 0937df9 (retocamos cambios graficos porque me habia equivocado)
+=======
+    -fx-background-color: #f6f7fb;
+>>>>>>> parent of 375d920 (cambios en la parte grafica de la primera pantalla del juego)
 }
 
-/* MENU BAR - Frosty */
+/* MENU */
 .menu-bar {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-border-color: rgba(255, 255, 255, 0.4);
+    -fx-background-color: white;
+    -fx-border-color: #e6e7ee;
     -fx-border-width: 0 0 1 0;
-}
-.menu-bar .label {
-    -fx-text-fill: white;
 }
 
 /* TABLERO */
 .board {
-    -fx-background-color: rgba(255, 255, 255, 0.15); /* Glassmorphism */
+    -fx-background-color: white;
     -fx-background-radius: 14;
-    -fx-padding: 10;
-    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-padding: 14;
+    -fx-border-color: #e6e7ee;
     -fx-border-radius: 14;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 20, 0.2, 0, 5);
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 14, 0.15, 0, 2);
 }
 
 /* TEXTOS DEL TABLERO */
 .cell-title {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);
+    -fx-font-size: 22px;
+    -fx-opacity: 0.65;
 }
 
 .cell-type {
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-fill: #e0f7fa; /* Cyan claro */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0.5, 0, 1);
+    -fx-opacity: 0.85;
 }
 
-/* TARJETAS (Dado, Objetos, Eventos) - Glassmorphism profundo */
+/* BARRA INFERIOR */
+.bottom-bar {
+    -fx-background-color: transparent;
+}
+
+/* TARJETAS */
 .card {
-    -fx-background-color: linear-gradient(to bottom, rgba(20, 50, 100, 0.7), rgba(10, 30, 70, 0.8));
-    -fx-background-radius: 16;
-    -fx-padding: 16;
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-radius: 16;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 15, 0.2, 0, 8);
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-padding: 14;
+    -fx-border-color: #e6e7ee;
+    -fx-border-radius: 14;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 14, 0.15, 0, 2);
 }
 
 .card-title {
-    -fx-font-size: 20px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #80deea; /* Nieve/Cyan */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 2, 0, 0, 1);
+    -fx-opacity: 0.75;
 }
 
-/* TEXTOS */
 .big-text {
-    -fx-font-size: 24px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-fill: white;
 }
 
 .stat {
     -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-fill: white;
+    -fx-opacity: 0.85;
 }
 
 .events {
-    -fx-font-size: 16px;
-    -fx-font-style: italic;
-    -fx-fill: #b3e5fc;
+    -fx-font-size: 14px;
+    -fx-opacity: 0.85;
 }
 
-/* BOTONES PREMIUM ICE */
+/* BOTONES */
 .button {
-    -fx-background-radius: 12;
-    -fx-padding: 8 16;
-    -fx-background-color: linear-gradient(#b3e5fc, #81d4fa);
-    -fx-text-fill: #01579b;
+    -fx-background-radius: 10;
+    -fx-padding: 8 14;
+    -fx-background-color: #eef0f6;
+    -fx-text-fill: #1f2330;
     -fx-font-weight: bold;
-    -fx-border-color: rgba(255, 255, 255, 0.8);
-    -fx-border-radius: 12;
-    -fx-border-width: 1.5;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.1, 0, 3);
-    -fx-cursor: hand;
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(#ffffff, #b3e5fc);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+    -fx-background-color: #e6e8f0;
 }
 
-.button:pressed {
-    -fx-background-color: linear-gradient(#81d4fa, #4fc3f7);
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
-    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 2);
-}
-
-/* Botón Principal (Tirar Dado) */
 .button.primary {
-    -fx-background-color: linear-gradient(#4dd0e1, #00acc1);
+    -fx-background-color: #2f6fed;
     -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 12 20;
 }
 
 .button.primary:hover {
-    -fx-background-color: linear-gradient(#84ffff, #00bcd4);
-    -fx-text-fill: #004d40;
+    -fx-background-color: #295fd0;
 }
 
-/* SCROLL PANE TRANSPARENTE */
+/* SCROLL */
 .objects-scroll {
     -fx-background-color: transparent;
-    -fx-control-inner-background: transparent;
 }
+
 .objects-scroll > .viewport {
     -fx-background-color: transparent;
 }
 
-/* JUGADORES */
+/* ========================= */
+/*        JUGADORES          */
+/* ========================= */
+
 .player {
     -fx-stroke: white;
-    -fx-stroke-width: 2.5;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0.5, 0, 4);
+    -fx-stroke-width: 3;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 8, 0.35, 0, 2);
+
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
-#P1 { -fx-fill: linear-gradient(to bottom, #4fc3f7, #0288d1); }  
-#P2 { -fx-fill: linear-gradient(to bottom, #ef5350, #c62828); }  
-#P3 { -fx-fill: linear-gradient(to bottom, #66bb6a, #2e7d32); }  
-#P4 { -fx-fill: linear-gradient(to bottom, #ffee58, #fbc02d); }  
+/* Colores por ID (robusto en JavaFX 21) */
+#P1 { -fx-fill: #2f6fed; }  /* azul */
+#P2 { -fx-fill: #ef4444; }  /* rojo */
+#P3 { -fx-fill: #22c55e; }  /* verde */
+#P4 { -fx-fill: #facc15; }  /* amarillo */
+
+/* Si quieres marcar el jugador activo, añade/quita esta clase desde Java */
+.current-player {
+    -fx-effect: dropshadow(gaussian, gold, 12, 0.6, 0, 0);
+}
