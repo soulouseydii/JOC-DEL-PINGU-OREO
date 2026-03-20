@@ -1,6 +1,9 @@
 .root {
     -fx-font-family: "System";
-    -fx-background-color: #f6f7fb;
+    -fx-background-image: url('../imagenes/fondo_tablero.png');
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
 }
 
 /* MENU */
