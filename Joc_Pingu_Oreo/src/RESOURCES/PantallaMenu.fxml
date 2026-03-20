@@ -34,15 +34,7 @@
     </top>
 
     <center>
-<<<<<<< HEAD
-<<<<<<< HEAD
         <StackPane prefHeight="700.0" prefWidth="1000.0">
-=======
-        <StackPane prefHeight="598.0" prefWidth="977.0" style="-fx-background-image: url('@imagenes/fondo_tablero.png'); -fx-background-size: 100% 100%;; -fx-background-repeat: no-repeat;; -fx-background-position: center;; -fx-pref-height: 40px;;">
->>>>>>> main
-=======
-        <StackPane prefHeight="598.0" prefWidth="977.0" style="-fx-background-image: url(&quot;file:/C:/Users/paunadal14/JOC-DEL-PINGU-OREO/Joc_Pingu_Oreo/src/RESOURCES/imagenes/fondo_tablero.png&quot;); -fx-background-size: 100% 100%;; -fx-background-repeat: no-repeat;; -fx-background-position: center;; -fx-pref-height: 40px;;">
->>>>>>> parent of 0937df9 (retocamos cambios graficos porque me habia equivocado)
             <padding>
                 <Insets bottom="28" left="28" right="28" top="28" />
             </padding>
