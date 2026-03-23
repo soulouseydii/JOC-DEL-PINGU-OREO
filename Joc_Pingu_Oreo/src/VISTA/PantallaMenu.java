@@ -112,6 +112,8 @@ public class PantallaMenu extends Application {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(pantallaJuegoScene);
                 stage.setTitle("Pantalla de Juego");
+                // Forzar re-maximización al cambiar de escena
+                stage.setMaximized(false);
                 stage.setMaximized(true);
             } catch (Exception e) {
                 e.printStackTrace();
