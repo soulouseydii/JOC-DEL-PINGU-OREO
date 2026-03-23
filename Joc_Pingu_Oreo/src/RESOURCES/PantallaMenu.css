@@ -54,22 +54,28 @@
 .button {
     -fx-background-radius: 10;
     -fx-padding: 10 14;
-    -fx-background-color: #eef0f6;
-    -fx-text-fill: #1f2330;
+    -fx-background-image: url('../imagenes/fondo_botones.png');
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
 .button:hover {
-    -fx-background-color: #e6e8f0;
+    -fx-opacity: 0.85;
 }
 
 .button.primary {
-    -fx-background-color: #2f6fed;
+    -fx-background-image: url('../imagenes/fondo_botones.png');
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
     -fx-text-fill: white;
 }
 
 .button.primary:hover {
-    -fx-background-color: #295fd0;
+    -fx-opacity: 0.85;
 }
 
 /* Hint */
