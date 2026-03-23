@@ -13,7 +13,7 @@ public class Main {
     public void jugar(String[] args) {
         System.out.println("--- Iniciando el Juego de los Pinguinos ---");
         
-        // 1. Configuración del Gestor de Base de Datos
+        // Configuración del Gestor de Base de Datos
         GestorBBDD gestorBD = new GestorBBDD();
         gestorBD.setUrlBBDD("jdbc:oracle:thin:@//192.168.3.26:1521/XEPDB2");
         gestorBD.setUsername("DW2526_GR01_PINGU"); 
@@ -22,11 +22,10 @@ public class Main {
         // Comprobar que la conexion a Oracle funciona antes de arrancar el juego
         gestorBD.testConexion();
         
-        // 2. Arrancar la interfaz gráfica de JavaFX
+        // Arrancar la interfaz gráfica de JavaFX
         System.out.println("Cargando la interfaz grafica...");
         Application.launch(PantallaMenu.class, args);
         
-        // Lo que pongas a partir de aquí solo se ejecutará cuando cierres la ventana del juego
         System.out.println("Juego cerrado. ¡Hasta pronto!");
     }
 }
