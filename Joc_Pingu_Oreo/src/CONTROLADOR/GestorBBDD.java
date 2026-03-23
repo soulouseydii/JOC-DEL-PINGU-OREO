@@ -51,7 +51,7 @@ public class GestorBBDD {
             }
         } catch (SQLException e) {
             System.out.println("✘ ERROR DE CONEXION: " + e.getMessage());
-            System.out.println("  Codigo de error Oracle: " + e.getErrorCode());
+            System.out.println("Codigo de error Oracle: " + e.getErrorCode());
         }
         return false;
     }
