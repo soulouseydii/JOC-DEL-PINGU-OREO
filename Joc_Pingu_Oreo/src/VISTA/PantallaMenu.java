@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -46,9 +47,11 @@ public class PantallaMenu extends Application {
             javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(url);
             javafx.scene.Scene scene = new javafx.scene.Scene(root);
 
-            // 4. Mostramos la ventana con tu diseño
+            // 4. Mostramos la ventana sin bordes y maximizada
+            primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setTitle("Menú Pingu Oreo");
             primaryStage.setScene(scene);
+            primaryStage.setMaximized(true);
             primaryStage.show();
             
             System.out.println("El diseño fxml se ha cargado.");
@@ -109,6 +112,7 @@ public class PantallaMenu extends Application {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(pantallaJuegoScene);
                 stage.setTitle("Pantalla de Juego");
+                stage.setMaximized(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
