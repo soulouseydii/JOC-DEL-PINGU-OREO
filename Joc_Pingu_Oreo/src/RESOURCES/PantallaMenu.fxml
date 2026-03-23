@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="624.0" prefWidth="957.0" styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
+<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
     <top>
         <MenuBar>
             <menus>
@@ -34,7 +34,7 @@
     </top>
 
     <center>
-        <StackPane prefHeight="598.0" prefWidth="977.0" style="-fx-background-image: url('@imagenes/fondo_tablero.png'); -fx-background-size: 100% 100%;; -fx-background-repeat: no-repeat;; -fx-background-position: center;; -fx-pref-height: 40px;;">
+        <StackPane prefHeight="700.0" prefWidth="1000.0">
             <padding>
                 <Insets bottom="28" left="28" right="28" top="28" />
             </padding>
