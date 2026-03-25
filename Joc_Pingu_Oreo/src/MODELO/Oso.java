@@ -13,7 +13,8 @@ public class Oso extends Casilla {
 	@Override
 	public void realizarAccion(Partida partida, Jugador jugador) {
         
-        // Logica de la casilla oso
-        jugador.setPosicion(0);
+        // El oso atrapa al jugador y lo manda de vuelta a la casilla 1 (salida)
+        jugador.setPosicion(1);
+        System.out.println("Un oso ha atrapado a " + jugador.getNombre() + "! Vuelve a la casilla 1.");
 	}
 }

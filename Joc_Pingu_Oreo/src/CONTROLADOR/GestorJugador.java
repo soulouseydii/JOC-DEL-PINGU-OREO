@@ -24,7 +24,7 @@ public class GestorJugador {
 		
 		//Si el nombre del item coincide 
 		if (j.getInventario().getlista().get(i).getNombre().equalsIgnoreCase(nombreItem)) {
-			System.out.println("i" + j.getNombre() + " ha usado " + nombreItem + "!");
+			System.out.println(j.getNombre() + " ha usado " + nombreItem + "!");
 			
 			//Aqui va el efecto del item
 			switch (nombreItem.toLowerCase()) {
@@ -38,6 +38,16 @@ public class GestorJugador {
 					int avanceLento = (int) (Math.random() * 3) + 1;
 					System.out.println(j.getNombre() + " tira el dado lento y saca un " + avanceLento);
 					this.jugadorSeMueve(j, avanceLento, t);
+					break;
+					
+				case "moto de nieve":
+					int siguienteTrineo = t.buscarSiguienteTrineo(j.getPosicion());
+					if (siguienteTrineo != -1) {
+						j.setPosicion(siguienteTrineo);
+						System.out.println(j.getNombre() + " usa la Moto de Nieve y avanza hasta el trineo en la casilla " + siguienteTrineo + "!");
+					} else {
+						System.out.println(j.getNombre() + " usa la Moto de Nieve pero no hay más trineos adelante. Se queda donde está.");
+					}
 					break;
 				}
 			
@@ -102,15 +112,15 @@ public class GestorJugador {
 		
 		//Contar bolas de cada uno
 		int bolasP1 = contarBolas(p1);
-		int bolasP2 = contarBolas(p1);
+		int bolasP2 = contarBolas(p2);
 		
 		System.out.println(p1.getNombre() + " tiene " + bolasP1 + " bolas.");
         System.out.println(p2.getNombre() + " tiene " + bolasP2 + " bolas.");
 
-        // 2. Calcular la diferencia
+        // Calcular la diferencia
         int diferencia = Math.abs(bolasP1 - bolasP2);
 
-        // 3. Ver quién gana y hacer retroceder al perdedor
+        // Ver quién gana y hacer retroceder al perdedor
         if (bolasP1 > bolasP2) {
             System.out.println(p1.getNombre() + " gana la pelea!");
             // p2 retrocede (enviamos la diferencia en negativo)
@@ -125,7 +135,7 @@ public class GestorJugador {
             System.out.println("Empate! Nadie retrocede.");
         }
 
-        // 4. Ambos gastan todas sus bolas de nieve al terminar
+        // Ambos gastan todas sus bolas de nieve al terminar
         eliminarTodasLasBolas(p1);
         eliminarTodasLasBolas(p2);
     }

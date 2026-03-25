@@ -59,9 +59,7 @@ public class GestorPartida {
         
         // Si el jugador es un Pingüino
         else if (j instanceof Pinguino) {
-         // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
             int pasos = tirarDado(j, null);
-         // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
             gestorJugador.jugadorSeMueve(j, pasos, partida.getTablero());
         }
     }
@@ -72,37 +70,54 @@ public class GestorPartida {
         
         System.out.println("--- COMIENZA EL TURNO DE: " + jActual.getNombre() + " ---");
 
-        // Llamamos al metodo para procesar si es foca o jugador
-        procesarTurnoJugador(jActual);
+        // Comprobacion de turnos perdidos (SueloQuebradizo)
+        if (jActual.getTurnosPerdidos() > 0) {
+            jActual.setTurnosPerdidos(jActual.getTurnosPerdidos() - 1);
+            System.out.println(jActual.getNombre() + " pierde este turno por el suelo quebradizo. Turnos perdidos restantes: " + jActual.getTurnosPerdidos());
+            siguienteTurno();
+            return;
+        }
 
-        // Para tirar el dado, ademas le pasamos null en el segundo parametor porque de momento no hay dados especiales
-      // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
-        int pasos = tirarDado(jActual, null); 
-      // ACTUALIZAR CUANDO HAYAMOS HECHO VISTA!!!!!
-        System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
+        // Si es una Foca
+        if (jActual instanceof Foca) {
+            Foca f = (Foca) jActual;
+            if (f.getTurnosBloqueada() > 0) {
+                System.out.println("La foca está bloqueada. Turnos restantes: " + f.getTurnosBloqueada());
+                f.reducirBloqueo();
+                siguienteTurno();
+                return;
+            }
+            int pasosFoca = tirarDado(f, null);
+            System.out.println(f.getNombre() + " ha sacado un " + pasosFoca);
+            gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
+            System.out.println("Nueva posición de la foca: " + f.getPosicion());
 
-        // Usamos metodo jugador se mueve de gestorJugador para actualizar la posicion
-        gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
-        System.out.println("Nueva posición: " + jActual.getPosicion());
+        // Si es un Pinguino
+        } else if (jActual instanceof Pinguino) {
+            int pasos = tirarDado(jActual, null);
+            System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
+            gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
+            System.out.println("Nueva posición: " + jActual.getPosicion());
+        }
 
-        // Preguntamos en que casilla a caido y llamamos a realizar accion
+        // Ejecutar la accion de la casilla donde ha caido
         Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
         casillaDondeCae.realizarAccion(partida, jActual);
 
-        // Si el que ha movido es un pinguino, miramos si hay una foca en su casilla.
+        // Si el que ha movido es un pinguino, miramos si hay una foca en su casilla
         for (Jugador j : partida.getJugadores()) {
             if (j instanceof Foca && jActual instanceof Pinguino) {
                 interaccionFocaPinguino((Foca) j, (Pinguino) jActual, partida.getTablero());
             }
         }
 
-        // Verificamos si a ganado el jugador actual
+        // Verificamos si ha ganado el jugador actual
         if (jActual.getPosicion() >= 50) {
             partida.setFinalizada(true);
             partida.setGanador(jActual);
             System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
         } else {
-            // Si no gana jugador actual se pasa a siguiente turno
+            // Si no gana, pasamos al siguiente turno
             siguienteTurno();
         }
     }
@@ -192,13 +207,18 @@ public class GestorPartida {
             } else {
                 // Si no tiene pez la foca lo ataca
                 foca.golpearJugador(pinguino);
-				  
-                // GestorTablero busca donde lo tiene que enviar
-                int nuevaPosicion = tablero.buscarAgujeroAnterior(pinguino.getPosicion());				  
+			  
+                // GestorTablero busca donde lo tiene que enviar (agujero anterior o casilla 1)
+                int nuevaPosicion = tablero.buscarAgujeroAnterior(pinguino.getPosicion());
+                
+                // Si no hay agujero anterior, vuelve a la casilla 1
+                if (nuevaPosicion == -1) {
+                    nuevaPosicion = 1;
+                }
                 
                 // Movemos el pinguino a la posicion
                 pinguino.setPosicion(nuevaPosicion);
-                System.out.println(pinguino.getNombre() + " ha sido enviado al hueco de la casilla " + nuevaPosicion);
+                System.out.println(pinguino.getNombre() + " ha sido enviado a la casilla " + nuevaPosicion);
             }
         }
     }

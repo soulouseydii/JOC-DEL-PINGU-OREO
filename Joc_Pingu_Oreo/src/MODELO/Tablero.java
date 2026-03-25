@@ -27,17 +27,17 @@ public class Tablero {
 	public int buscarAgujeroAnterior(int posicionActual) {
 		
 		//Bucle que busca la posicion del hueco anterior mas cercano
-		for (int i = posicionActual - 1; i > 1; i--) {
+		for (int i = posicionActual - 1; i >= 1; i--) {
 			
 			Casilla c = this.getListaCasillas().get(i);
 			
-			//Si encuentra el agujero
+			//Si encuentra el agujero anterior (distinto de la casilla actual)
 			if (c.getTipo().equals("Agujero")) {
-				return i + 1; //Devuelve la posicion humana
+				return i; //Devuelve el indice real (1-based coincide con el indice de la lista)
 			}
 		}
-		//Si el bucle termina y no encuentra ningun agujero vuelve al inicio
-		return 1;
+		//Si el bucle termina y no encuentra ningun agujero anterior, senyal de -1
+		return -1;
 		
 	}
 	
@@ -48,7 +48,7 @@ public class Tablero {
 		//Bucle para recorrer el tablero 
 		for(int i = posicionActual + 1; i < listaCasillas.size(); i++) {
 			Casilla c = listaCasillas.get(i);
-			if (c.getClass().getSimpleName().equals("Trineo")) {
+			if (c.getTipo().equals("Trineo")) {
 				return i;
 			}
 		}

@@ -24,7 +24,7 @@ public class SueloQuebradizo extends Casilla {
 			int cantidadObjetos = 0;
 			
 			//Recorremos la lista del inventario y sumamos las cantidades
-			for (Item item : p.getInventario().getlista()) {
+			for (Item item : p.getInv().getlista()) {
 				cantidadObjetos = cantidadObjetos + item.getCantidad();
 			}
 			

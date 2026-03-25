@@ -26,17 +26,17 @@ public class Evento extends Casilla {
     		Pinguino p = (Pinguino) jugador;
     		
     		Random random = new Random();
-    		int evento = random.nextInt(4);
+    		int evento = random.nextInt(3); // 3 posibles eventos: 0=Pez, 1=Bolas de Nieve, 2=Moto de Nieve
     		
     		switch (evento) {
     		case 0:
-    			System.out.println("Evento! " + p.getNombre() + " ha enconctrado un Pez.");
+    			System.out.println("Evento! " + p.getNombre() + " ha encontrado un Pez.");
     			p.añadirItem(new Pez());
     			break;
     			
     		case 1:
-    			int bolas = random.nextInt(3) + 1;
-    			System.out.println("Evento! " + p.getNombre() + " ha encontrado " + bolas + " bolas de nieve.");
+    			int bolas = random.nextInt(3) + 1; // Entre 1 y 3 bolas
+    			System.out.println("Evento! " + p.getNombre() + " ha encontrado " + bolas + " bola(s) de nieve.");
     			//Bucle para añadir las bolas de nieve
     			for (int i = 0; i < bolas; i++) {
     				p.añadirItem(new bolaDeNieve());
@@ -44,13 +44,8 @@ public class Evento extends Casilla {
     			break;
     			
     		case 2:
-    			System.out.println("Evento! " + p.getNombre() + " ha encontrado un dado lento.");
-				p.añadirItem(new Dado("Lento"));
-    			break;
-    			
-    		case 3:
-    			System.out.println("Evento! " + p.getNombre() + " ha encontrado un dado rapido.");
-				p.añadirItem(new Dado("Rapido"));
+    			System.out.println("Evento! " + p.getNombre() + " ha encontrado una Moto de Nieve.");
+    			p.añadirItem(new MotoDeNieve());
     			break;
 
     		}

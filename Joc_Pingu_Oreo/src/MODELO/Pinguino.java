@@ -2,65 +2,63 @@ package MODELO;
 
 public class Pinguino extends Jugador {	
 
-	/* ATRIBUTO */
-	private Inventario inv;
-	
-	
 	/* CONSTRUCTOR QUE HEREDA DE JUGADOR */
 	public Pinguino(String nombre, String color, int posicion, Inventario inv) {
 		super(nombre, color, posicion);
-		this.inv = inv;
+		// Usamos el inventario del padre para que getInv() y getInventario() apunten al mismo objeto
+		super.setInventario(inv);
 	}
-
 
 
 	/* GETTERS I SETTERS DEL INVENTARIO */
+	// getInv() y setInv() delegan en el campo inventario del padre (Jugador)
+	// para garantizar que getInv() y getInventario() devuelven SIEMPRE el mismo objeto.
 	public Inventario getInv() {
-		return inv;
+		return super.getInventario();
 	}
-
 
 	public void setInv(Inventario inv) {
-		this.inv = inv;
+		super.setInventario(inv);
 	}
 	
-	
+
 	/* MÉTODO USAR ITEM */
 	
 	public void usarItem (Item i) {
 		
 		// VALIDA SI NO HAY NINGUN ITEM EN EL INVENTARIO 
 		
-		if (!inv.getlista().contains(i)) {
+		if (!getInventario().getlista().contains(i)) {
 			System.out.println("Este item no existe en el inventario. !!!");
 			return;
 		}
 		
-		// DETECTAR SI EL ITEM ES UN DADO Y USARLO
+		// DETECTAR EL TIPO DE ITEM Y APLICAR SU EFECTO BASICO
+		// Los items que requieren contexto del tablero (MotoDeNieve) son gestionados
+		// por GestorJugador.jugadorUsaItem, que ya recibe el Tablero como parámetro.
 		
 		if (i instanceof Dado) {
 			Dado d = (Dado) i;
-			
 			int pasos = d.tirar();			
 			this.moverPosicion(pasos);
-			
 			System.out.println("Has utilizado :" + i.getNombre());
-						
+				
 		} else if (i instanceof bolaDeNieve) {	
-			
-			System.out.println("Has usado una bola de nieve");
-					
+			System.out.println("Has usado una bola de nieve.");
+				
 		} else if (i instanceof Pez) {
-			
-			System.out.println("Usaras un pez cuando aparezca un oso");
-						
+			System.out.println("Usaras un pez cuando aparezca un oso.");
+				
+		} else if (i instanceof MotoDeNieve) {
+			// El movimiento real lo gestiona GestorJugador.jugadorUsaItem (tiene acceso al Tablero)
+			System.out.println(this.getNombre() + " usa una Moto de Nieve! (Efecto aplicado por el controlador)");
 		}
 		
 		// RESTAR 1 ITEM DEL INVENTARIO AL UTILIZARLO Y ELIMINARLO SI LLEGA A 0. 
 		i.setCantidad(i.getCantidad() - 1);
 		
 		if (i.getCantidad() <= 0) {
-			inv.getlista().remove(i);
+			getInventario().getlista().remove(i);
 		}
 	}
 	
@@ -69,7 +67,7 @@ public class Pinguino extends Jugador {
 	public void añadirItem (Item i) {
 		
 		// BUCLE QUE RECORRERA LOS ITEMS DEL INVENTARIO 
-		for (Item item: inv.getlista()) {
+		for (Item item: getInventario().getlista()) {
 			
 			// COMPRUEBA SI EL ITEM YA EXISTE 
 			if (item.getClass() == i.getClass()) {
@@ -92,7 +90,7 @@ public class Pinguino extends Jugador {
 		
 		// EN EL CASO DE Q EL ITEM NO ESTUVIERA EN EL INVENTARIO. LO AÑADIMOS DESDE 0. 
 		i.setCantidad(1);
-	    inv.getlista().add(i);
+	    getInventario().getlista().add(i);
 
 	    System.out.println(i.getNombre() + " añadido al inventario.");
 	
@@ -112,7 +110,7 @@ public class Pinguino extends Jugador {
 
 			// CUANDO LA CANTIDAD SEA 0, SE ELIMINARA EL ITEM DEL INVENTARIO 
 			if (i.getCantidad() == 0) {
-				inv.getlista().remove(i);
+				getInventario().getlista().remove(i);
 				System.out.println("Item eliminado del inventario.");
 			}			
 			
