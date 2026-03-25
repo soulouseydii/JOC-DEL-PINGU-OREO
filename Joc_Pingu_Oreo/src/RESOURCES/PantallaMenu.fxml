@@ -17,20 +17,45 @@
 
 <BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
     <top>
-        <MenuBar>
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem fx:id="newGame" mnemonicParsing="false" onAction="#handleNewGame" text="New" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGame" text="Save" />
-                        <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#handleLoadGame" text="Load" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="quitGame" mnemonicParsing="false" onAction="#handleQuitGame" text="Quit" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+             <VBox>
+            <!-- LA BARRA DE TÍTULO PERSONALIZADA -->
+            <!-- Le añadimos eventos para poder arrastrar la ventana con el ratón -->
+            <HBox alignment="CENTER_RIGHT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="30.0" style="-fx-background-color: #2c3e50;">
+                <padding>
+                    <Insets bottom="5" left="10" right="5" top="5" />
+                </padding>
+                
+                <!-- Título de la ventana a la izquierda -->
+                <Label text="Menú Pingu Oreo" textFill="WHITE" />
+                
+                <!-- Este Region vacío empuja los botones hacia la derecha -->
+                <Region HBox.hgrow="ALWAYS" />
+                
+                <!-- Botones de Minimizar, Maximizar y Cerrar -->
+                <HBox spacing="5" alignment="CENTER">
+                    <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="—" />
+                    <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="⬜" />
+                    <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="X" />
+                </HBox>
+            </HBox>
+            <!--MENÚ MAURI -->
+            <!--<MenuBar>
+                <menus>
+                    <Menu mnemonicParsing="false" text="File">
+                        <items>
+                            <MenuItem fx:id="newGame" mnemonicParsing="false" onAction="#handleNewGame" text="New" />
+                            <SeparatorMenuItem mnemonicParsing="false" />
+                            <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGame" text="Save" />
+                            <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#handleLoadGame" text="Load" />
+                            <SeparatorMenuItem mnemonicParsing="false" />
+                            <MenuItem fx:id="quitGame" mnemonicParsing="false" onAction="#handleQuitGame" text="Quit" />
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>-->
+        </VBox>
+
+
     </top>
 
     <center>
@@ -44,9 +69,9 @@
                     <Insets bottom="18" left="18" right="18" top="18" />
                 </padding>
 
-                <!-- Cabecera -->
+                <!-- Cabecera/Título -->
                 <VBox alignment="CENTER" prefHeight="48.0" prefWidth="394.0" spacing="6" style="-fx-background-color: rgba(255, 255, 255, 0.4); -fx-background-radius: 15;">
-                    <Label styleClass="title" text="EL JUEGO DEL PINGÜINO" wrapText="true" />
+                    <Label styleClass="title" text="EL JUEGO DEL PINGUINO" wrapText="true" />
                 </VBox>
 
                 <Region prefHeight="8" />
