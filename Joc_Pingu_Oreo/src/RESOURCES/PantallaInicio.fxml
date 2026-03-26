@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaInicio">
+<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaInicio">
     <top>
         <VBox>
             <!-- Barra de título -->
@@ -21,7 +21,7 @@
                 <Label text="Juego del Pingu Oreo - Inicio" textFill="WHITE" />
                 <Region HBox.hgrow="ALWAYS" />
                 
-                <HBox spacing="5" alignment="CENTER">
+                <HBox alignment="CENTER" spacing="5">
                     <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="—" />
                     <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="⬜" />
                     <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="X" />
@@ -31,17 +31,20 @@
     </top>
 
     <center>
-        <StackPane prefHeight="700.0" prefWidth="1000.0">
+        <StackPane prefHeight="700.0" prefWidth="1178.0">
             <padding>
-                <Insets bottom="28" left="28" right="28" top="28" />
+                <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
             </padding>
 
             <!-- Botones del Menú Principal -->
-            <VBox alignment="CENTER" maxWidth="420" maxHeight="-Infinity" translateY="60" spacing="15">
-                <Button fx:id="btnNuevaPartida" prefWidth="280" prefHeight="65" onAction="#handleNuevaPartida" styleClass="primary" text="Nueva Partida" />
-                <Button fx:id="btnCargarPartida" prefWidth="280" prefHeight="65" onAction="#handleCargarPartida" styleClass="primary" text="Cargar Partida" />
-                <Button fx:id="btnOpciones" prefWidth="280" prefHeight="65" onAction="#handleOpciones" styleClass="primary" text="Opciones" />
-                <Button fx:id="btnSalir" prefWidth="280" prefHeight="65" onAction="#handleSalir" text="Salir del Juego" />
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="470.0" prefHeight="197.0" prefWidth="470.0" spacing="15" translateY="60">
+                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Nueva Partida" />
+                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Cargar Partida" />
+                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Opciones" />
+                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="45.0" prefWidth="250.0" text="Salir del Juego" />
+            <StackPane.margin>
+               <Insets bottom="190.0" />
+            </StackPane.margin>
             </VBox>
         </StackPane>
     </center>
