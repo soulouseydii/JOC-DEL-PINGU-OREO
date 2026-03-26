@@ -2,10 +2,12 @@ package VISTA;
 
 import java.util.ArrayList;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -19,69 +21,48 @@ import MODELO.*;
 public class PantallaJuego {
 
 	// Menu items
-	@FXML
-	private MenuItem newGame;
-	@FXML
-	private MenuItem saveGame;
-	@FXML
-	private MenuItem loadGame;
-	@FXML
-	private MenuItem quitGame;
+	@FXML private MenuItem newGame;
+	@FXML private MenuItem saveGame;
+	@FXML private MenuItem loadGame;
+	@FXML private MenuItem quitGame;
 
-	// Buttons
-	@FXML
-	private Button dado;
-	@FXML
-	private Button rapido;
-	@FXML
-	private Button lento;
-	@FXML
-	private Button peces;
-	@FXML
-	private Button nieve;
-
-	// Texts
-	@FXML
-	private Text dadoResultText;
-	@FXML
-	private Text rapido_t;
-	@FXML
-	private Text lento_t;
-	@FXML
-	private Text peces_t;
-	@FXML
-	private Text nieve_t;
+	// Botón dado
+	@FXML private Button dado;
 	
-	// Log de eventos (TextArea acumulativo con scroll)
-	@FXML
-	private TextArea eventosLog;
+	// Textos UI
+	@FXML private Text dadoResultText;
+	
+	// Inventario UI
+	@FXML private Label inventarioTitulo;
+	@FXML private Text peces_t;
+	@FXML private Text nieve_t;
+	@FXML private Text moto_t;
+	@FXML private Button btnMoto;
+	
+	// Log de eventos
+	@FXML private TextArea eventosLog;
 
-	// Game board and player pieces
-	@FXML
-	private GridPane tablero;
-	@FXML
-	private Circle P1;
-	@FXML
-	private Circle P2;
-	@FXML
-	private Circle P3;
-	@FXML
-	private Circle P4;
+	// Tablero y fichas
+	@FXML private GridPane tablero;
+	@FXML private Circle P1;
+	@FXML private Circle P2;
+	@FXML private Circle P3;
+	@FXML private Circle P4;
 
 	private GestorPartida gestorPartida;
 	private int[] posiciones = new int[4]; // Todos empiezan en 0 (Start)
 	private static final int COLUMNS = 5;
-
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
+
+	// =========================================
+	//  INICIALIZACIÓN
+	// =========================================
 
 	@FXML
 	private void initialize() {
-		// Crear el gestor de partida
 		gestorPartida = new GestorPartida();
 
-		// Crear la lista de jugadores (4 jugadores por defecto)
 		ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
-		
 		for (int i = 1; i <= 4; i++) {
 			Inventario inventario = new Inventario();
 			inventario.getlista().add(new Dado("Normal"));
@@ -89,86 +70,97 @@ public class PantallaJuego {
 			jugadores.add(new Pinguino("Jugador " + i, color, 0, inventario));
 		}
 
-		// Crear nueva partida pasando los jugadores
 		gestorPartida.nuevaPartida(jugadores);
-
-		// Show board info
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
 		
-		// Las fichas empiezan en Start (posición 0 = fila 0, col 0) — ya definido en el FXML
+		// Actualizar la UI del inventario para el primer jugador
+		actualizarInventarioUI();
         
 		agregarEvento("🎮 ¡El juego ha comenzado! Turno de Jugador 1");
 	}
-	
+
 	// =========================================
-	//  MÉTODO PARA AÑADIR EVENTOS AL LOG
+	//  LOG DE EVENTOS
 	// =========================================
-	
-	/**
-	 * Añade un mensaje al log de eventos acumulativo.
-	 * Los mensajes nuevos aparecen al final y el scroll baja automáticamente.
-	 */
+
 	private void agregarEvento(String mensaje) {
 		if (eventosLog.getText().isEmpty()) {
 			eventosLog.setText(mensaje);
 		} else {
 			eventosLog.appendText("\n" + mensaje);
 		}
-		// Auto-scroll al final
 		eventosLog.setScrollTop(Double.MAX_VALUE);
 		eventosLog.positionCaret(eventosLog.getText().length());
 	}
 
+	// =========================================
+	//  INVENTARIO UI
+	// =========================================
+	
+	/**
+	 * Lee el inventario del jugador ACTUAL y actualiza los contadores en la UI.
+	 * Si el jugador no tiene un item, muestra 0.
+	 */
+	private void actualizarInventarioUI() {
+		Jugador jActual = gestorPartida.getPartida().getJugadorActual();
+		
+		// Título del inventario con el nombre del jugador
+		inventarioTitulo.setText("Inventario - " + jActual.getNombre());
+		
+		if (jActual instanceof Pinguino) {
+			Pinguino p = (Pinguino) jActual;
+			
+			int cantPeces = p.contarItem("Pez");
+			int cantBolas = p.contarItem("Bola de Nieve");
+			int cantMotos = p.contarItem("Moto de Nieve");
+			
+			peces_t.setText("Peces: " + cantPeces);
+			nieve_t.setText("Bolas de nieve: " + cantBolas);
+			moto_t.setText("Moto de Nieve: " + cantMotos);
+			
+			// Solo habilitar el botón de Moto si tiene al menos 1
+			btnMoto.setDisable(cantMotos <= 0);
+		} else {
+			// Si es una Foca (no tiene inventario visible)
+			peces_t.setText("Peces: -");
+			nieve_t.setText("Bolas de nieve: -");
+			moto_t.setText("Moto de Nieve: -");
+			btnMoto.setDisable(true);
+		}
+	}
+
+	// =========================================
+	//  TABLERO
+	// =========================================
+
 	private void mostrarTiposDeCasillasEnTablero(Tablero t) {
-		// Clear only the labels we generated in previous calls
 		tablero.getChildren().removeIf(node -> TAG_CASILLA_TEXT.equals(node.getUserData()));
 
 		for (int i = 0; i < t.getListaCasillas().size(); i++) {
 			Casilla casilla = t.getListaCasillas().get(i);
-
-			// Skip position 0 and 50 (start/end)
-			if (i > 0 && i < 50) {
+			if (i > 0 && i < 49) {
 				String tipo = casilla.getClass().getSimpleName();
-
 				Text texto = new Text(tipo);
 				texto.setUserData(TAG_CASILLA_TEXT);
 				texto.getStyleClass().add("cell-type");
 
 				int row = i / COLUMNS;
 				int col = i % COLUMNS;
-
 				GridPane.setRowIndex(texto, row);
 				GridPane.setColumnIndex(texto, col);
-
 				tablero.getChildren().add(texto);
 			}
 		}
 	}
 
-	// Menu actions
-	@FXML
-	private void handleNewGame() {
-		System.out.println("Nuevo Juego.");
-		// TODO
-	}
+	// =========================================
+	//  MENÚ
+	// =========================================
 
-	@FXML
-	private void handleSaveGame() {
-		System.out.println("Guardar Juego.");
-		// TODO
-	}
-
-	@FXML
-	private void handleLoadGame() {
-		System.out.println("Cargar Juego.");
-		// TODO
-	}
-
-	@FXML
-	private void handleQuitGame() {
-		System.out.println("Salir...");
-		// TODO
-	}
+	@FXML private void handleNewGame() { System.out.println("Nuevo Juego."); }
+	@FXML private void handleSaveGame() { System.out.println("Guardar Juego."); }
+	@FXML private void handleLoadGame() { System.out.println("Cargar Juego."); }
+	@FXML private void handleQuitGame() { System.out.println("Salir..."); }
 
 	// =========================================
 	//  HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
@@ -180,40 +172,27 @@ public class PantallaJuego {
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 		
 		dado.setDisable(true);
+		btnMoto.setDisable(true);
 
-		// Delegamos toda la lógica al controlador
 		gestorPartida.ejecutarTurnoCompleto();
 		
 		int posNueva = jugadorActual.getPosicion();
 		int resultadoDado = gestorPartida.getUltimoResultadoDado();
 		int casillaPisada = gestorPartida.getUltimaCasillaPisada();
 		
-		// Mostrar el resultado del dado en la UI
 		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
-		
-		// Registrar los eventos en el log
 		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado);
 		
-		// =====================================================
-		// ANIMACIÓN EN 2 PASOS:
-		// Paso 1: Animar la ficha hasta la casilla donde cayó
-		// Paso 2: Si hubo efecto (Agujero, Oso, etc.), animar
-		//         desde esa casilla hasta la posición final
-		// =====================================================
-		
-		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 50));
-		int posVisualFinal = Math.max(0, Math.min(posNueva, 50));
+		// Animación en 2 pasos
+		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
+		int posVisualFinal = Math.max(0, Math.min(posNueva, 49));
 		
 		if (casillaPisada >= 0 && posVisualCasilla != posVisualFinal) {
 			// HAY EFECTO: animación en 2 pasos
-			// Paso 1: ir a la casilla donde cayó
 			animarMovimiento(indiceActual, posVisualCasilla, () -> {
-				// Pausa breve para que se vea dónde cayó
-				javafx.animation.PauseTransition pausa = new javafx.animation.PauseTransition(Duration.millis(400));
+				PauseTransition pausa = new PauseTransition(Duration.millis(400));
 				pausa.setOnFinished(pausaEvt -> {
-					// Paso 2: ir a la posición final (efecto de casilla)
 					animarMovimiento(indiceActual, posVisualFinal, () -> {
-						// Actualizar las fichas de otros jugadores afectados
 						actualizarTodasLasFichas();
 						finalizarTurnoVisual();
 					});
@@ -221,18 +200,87 @@ public class PantallaJuego {
 				pausa.play();
 			});
 		} else {
-			// SIN EFECTO o posición no cambió: animación simple
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
 				actualizarTodasLasFichas();
 				finalizarTurnoVisual();
 			});
 		}
 	}
+
+	// =========================================
+	//  HANDLER USAR MOTO DE NIEVE
+	// =========================================
 	
-	/**
-	 * Anima la ficha de un jugador desde su posición visual actual
-	 * hasta la posición de destino, y ejecuta el callback al terminar.
-	 */
+	@FXML
+	private void handleUsarMoto() {
+		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
+		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
+		
+		if (!(jugadorActual instanceof Pinguino)) return;
+		Pinguino p = (Pinguino) jugadorActual;
+		
+		// Verificar que tiene Moto de Nieve
+		if (!p.tieneItem("Moto de Nieve")) {
+			agregarEvento("⚠️ " + p.getNombre() + " no tiene Moto de Nieve.");
+			return;
+		}
+		
+		// Buscar el siguiente trineo desde la posición actual
+		int siguienteTrineo = gestorPartida.getPartida().getTablero().buscarSiguienteTrineo(p.getPosicion());
+		
+		if (siguienteTrineo == -1) {
+			agregarEvento("⚠️ No hay trineos más adelante. La Moto de Nieve no se puede usar ahora.");
+			return;
+		}
+		
+		// Gastar la moto
+		p.gastarItem("Moto de Nieve", 1);
+		
+		// Guardar posición anterior para la animación
+		int posAnterior = p.getPosicion();
+		
+		// Mover al siguiente trineo
+		p.setPosicion(siguienteTrineo);
+		
+		agregarEvento("───────────────────────");
+		agregarEvento("🏍️ " + p.getNombre() + " usa la Moto de Nieve!");
+		agregarEvento("   ↪ Avanza de casilla " + posAnterior + " a casilla " + siguienteTrineo + " (Trineo)");
+		
+		// Animar el movimiento
+		dado.setDisable(true);
+		btnMoto.setDisable(true);
+		
+		int posVisualFinal = Math.max(0, Math.min(siguienteTrineo, 49));
+		animarMovimiento(indiceActual, posVisualFinal, () -> {
+			// Ahora ejecutamos la acción del trineo (que avanza al siguiente trineo)
+			Casilla casillaTrineo = gestorPartida.getPartida().getTablero().getListaCasillas().get(siguienteTrineo);
+			casillaTrineo.realizarAccion(gestorPartida.getPartida(), p);
+			
+			// Si el trineo lo movió más adelante, animar también eso
+			int posTrasTrineoEfecto = p.getPosicion();
+			if (posTrasTrineoEfecto != siguienteTrineo) {
+				int posVisualTrineo = Math.max(0, Math.min(posTrasTrineoEfecto, 49));
+				agregarEvento("🛷 ¡El trineo lo lleva hasta la casilla " + posTrasTrineoEfecto + "!");
+				
+				PauseTransition pausa = new PauseTransition(Duration.millis(300));
+				pausa.setOnFinished(e2 -> {
+					animarMovimiento(indiceActual, posVisualTrineo, () -> {
+						actualizarInventarioUI();
+						dado.setDisable(false);
+					});
+				});
+				pausa.play();
+			} else {
+				actualizarInventarioUI();
+				dado.setDisable(false);
+			}
+		});
+	}
+
+	// =========================================
+	//  ANIMACIÓN
+	// =========================================
+	
 	private void animarMovimiento(int playerIndex, int targetPosition, Runnable alTerminar) {
 		Circle fichaObj = getFicha(playerIndex);
 		int oldPosition = posiciones[playerIndex];
@@ -258,76 +306,54 @@ public class PantallaJuego {
 			fichaObj.setTranslateY(0);
 			GridPane.setRowIndex(fichaObj, newRow);
 			GridPane.setColumnIndex(fichaObj, newCol);
-			
-			// Ejecutar callback
-			if (alTerminar != null) {
-				alTerminar.run();
-			}
+			if (alTerminar != null) alTerminar.run();
 		});
 
 		slide.play();
 	}
 	
-	/**
-	 * Después de que termina toda la animación, muestra el turno siguiente
-	 * y reactiva el dado.
-	 */
 	private void finalizarTurnoVisual() {
 		if (gestorPartida.getPartida().isFinalizada()) {
 			agregarEvento("═══════════════════════");
 			agregarEvento("🏆 ¡" + gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA!");
 			agregarEvento("═══════════════════════");
 			dado.setDisable(true);
+			btnMoto.setDisable(true);
 		} else {
+			// Actualizar inventario para el SIGUIENTE jugador
+			actualizarInventarioUI();
 			agregarEvento("▶ Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
 			dado.setDisable(false);
 		}
 	}
 	
-	/**
-	 * Devuelve la ficha Circle del jugador por su índice.
-	 */
 	private Circle getFicha(int index) {
 		return (index == 0) ? P1 : (index == 1) ? P2 : (index == 2) ? P3 : P4;
 	}
 	
-	/**
-	 * Actualiza la posición visual de TODAS las fichas de otros jugadores
-	 * para reflejar los cambios que haya hecho el controlador (PvP, foca, etc.)
-	 */
 	private void actualizarTodasLasFichas() {
 		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
-		
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
 			Jugador j = jugadores.get(i);
-			int posVisual = j.getPosicion();
-			if (posVisual < 0) posVisual = 0;
-			if (posVisual >= 50) posVisual = 50;
-			
-			// Solo actualizar si la posición visual cambió
+			int posVisual = Math.max(0, Math.min(j.getPosicion(), 49));
 			if (posiciones[i] != posVisual) {
 				Circle fichaObj = getFicha(i);
-				
-				int newRow = posVisual / COLUMNS;
-				int newCol = posVisual % COLUMNS;
-				
 				fichaObj.setTranslateX(0);
 				fichaObj.setTranslateY(0);
-				GridPane.setRowIndex(fichaObj, newRow);
-				GridPane.setColumnIndex(fichaObj, newCol);
-				
+				GridPane.setRowIndex(fichaObj, posVisual / COLUMNS);
+				GridPane.setColumnIndex(fichaObj, posVisual % COLUMNS);
 				posiciones[i] = posVisual;
 			}
 		}
 	}
+
+	// =========================================
+	//  EVENTOS LOG
+	// =========================================
 	
-	/**
-	 * Registra en el log de eventos qué pasó en el turno del jugador.
-	 */
 	private void registrarEventosCasilla(Jugador jugador, int posicion, int dado) {
 		Tablero t = gestorPartida.getPartida().getTablero();
 		
-		// Separador visual entre turnos
 		agregarEvento("───────────────────────");
 		agregarEvento("🎲 " + jugador.getNombre() + " tira el dado: " + dado);
 		
@@ -345,7 +371,11 @@ public class PantallaJuego {
 					break;
 				case "Trineo":
 					agregarEvento("🛷 ¡Encuentra un TRINEO en la casilla " + posicion + "!");
-					agregarEvento("   ↪ Avanza hasta la casilla " + jugador.getPosicion());
+					if (jugador.getPosicion() != posicion) {
+						agregarEvento("   ↪ Avanza hasta la casilla " + jugador.getPosicion());
+					} else {
+						agregarEvento("   ↪ No hay más trineos adelante. Se queda aquí.");
+					}
 					break;
 				case "SueloQuebradizo":
 					agregarEvento("🧊 ¡Pisa SUELO QUEBRADIZO en la casilla " + posicion + "!");
@@ -362,7 +392,14 @@ public class PantallaJuego {
 					agregarEvento("   ↪ Vuelve a Start (casilla 0)");
 					break;
 				case "Evento":
-					agregarEvento("🎁 ¡EVENTO en la casilla " + posicion + "! Ha ganado un objeto.");
+					agregarEvento("🎁 ¡EVENTO en la casilla " + posicion + "!");
+					// Mostrar qué ganó
+					if (jugador instanceof Pinguino) {
+						Pinguino p = (Pinguino) jugador;
+						agregarEvento("   ↪ Inventario: " + p.contarItem("Pez") + " peces, " 
+								+ p.contarItem("Bola de Nieve") + " bolas, " 
+								+ p.contarItem("Moto de Nieve") + " motos");
+					}
 					break;
 				default:
 					agregarEvento("📍 " + jugador.getNombre() + " está en la casilla " + posicion + ".");
@@ -370,30 +407,6 @@ public class PantallaJuego {
 		}
 		
 		agregarEvento("📌 Posición final: casilla " + jugador.getPosicion());
-	}
-
-	@FXML
-	private void handleRapido() {
-		System.out.println("Fast.");
-		// TODO
-	}
-
-	@FXML
-	private void handleLento() {
-		System.out.println("Slow.");
-		// TODO
-	}
-
-	@FXML
-	private void handlePeces() {
-		System.out.println("Fish.");
-		// TODO
-	}
-
-	@FXML
-	private void handleNieve() {
-		System.out.println("Snow.");
-		// TODO
 	}
 
 	public void setGestorPartida(GestorPartida gestorPartida) {
