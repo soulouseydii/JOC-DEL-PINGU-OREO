@@ -30,7 +30,7 @@ public class SueloQuebradizo extends Casilla {
 			
 			if (cantidadObjetos > 5) {
 				//Mas de 5 objetos cae y vuelve al inicio
-				p.setPosicion(1);
+				p.setPosicion(0);
 				System.out.println("El hielo se ha roto! " + p.getNombre() + " Llevava demasiado peso (" + cantidadObjetos + " objetos) y vuelve al inicio.");
 			
 			} else if (cantidadObjetos > 0 && cantidadObjetos <= 5) {

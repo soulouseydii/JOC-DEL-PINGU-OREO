@@ -79,8 +79,8 @@ public class GestorJugador {
 		}
 		
 		// Protección contra posiciones negativas (al retroceder en PvP o por foca)
-		if (nuevaPosicion < 1) {
-			nuevaPosicion = 1;
+		if (nuevaPosicion < 0) {
+			nuevaPosicion = 0;
 		}
 		
 		//Actualiza su posicion actual

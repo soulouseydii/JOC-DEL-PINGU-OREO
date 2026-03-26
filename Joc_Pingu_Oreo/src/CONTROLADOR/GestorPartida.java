@@ -268,7 +268,7 @@ public class GestorPartida {
                 
                 // Si no hay agujero anterior, vuelve a la casilla 1
                 if (nuevaPosicion == -1) {
-                    nuevaPosicion = 1;
+                    nuevaPosicion = 0;
                 }
                 
                 // Movemos el pinguino a la posicion

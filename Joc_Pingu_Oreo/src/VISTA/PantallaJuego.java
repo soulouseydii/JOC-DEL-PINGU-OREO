@@ -69,7 +69,7 @@ public class PantallaJuego {
 	private Circle P4;
 
 	private GestorPartida gestorPartida;
-	private int[] posiciones = new int[4];
+	private int[] posiciones = new int[4]; // Todos empiezan en 0 (Start)
 	private static final int COLUMNS = 5;
 
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
@@ -94,6 +94,8 @@ public class PantallaJuego {
 
 		// Show board info
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
+		
+		// Las fichas empiezan en Start (posición 0 = fila 0, col 0) — ya definido en el FXML
         
 		agregarEvento("🎮 ¡El juego ha comenzado! Turno de Jugador 1");
 	}
@@ -124,8 +126,8 @@ public class PantallaJuego {
 		for (int i = 0; i < t.getListaCasillas().size(); i++) {
 			Casilla casilla = t.getListaCasillas().get(i);
 
-			// Skip position 0 and 49 (start/end)
-			if (i > 0 && i < 49) {
+			// Skip position 0 and 50 (start/end)
+			if (i > 0 && i < 50) {
 				String tipo = casilla.getClass().getSimpleName();
 
 				Text texto = new Text(tipo);
@@ -168,7 +170,10 @@ public class PantallaJuego {
 		// TODO
 	}
 
-	// Button actions
+	// =========================================
+	//  HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
+	// =========================================
+	
 	@FXML
 	private void handleDado(ActionEvent event) {
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
@@ -176,60 +181,132 @@ public class PantallaJuego {
 		
 		dado.setDisable(true);
 
-		// ===================================================
-		// DELEGAMOS TODA la lógica al controlador
-		// ejecutarTurnoCompleto() hace: tirar dado, mover,
-		// ejecutar casilla, comprobar foca, comprobar PvP,
-		// y pasar al siguiente turno.
-		// ===================================================
-		
+		// Delegamos toda la lógica al controlador
 		gestorPartida.ejecutarTurnoCompleto();
 		
-		// Después de ejecutar, la posición del jugador ya ha sido actualizada
-		// (puede haber cambiado por casillas especiales: Agujero, Oso, Trineo, etc.)
 		int posNueva = jugadorActual.getPosicion();
 		int resultadoDado = gestorPartida.getUltimoResultadoDado();
+		int casillaPisada = gestorPartida.getUltimaCasillaPisada();
 		
 		// Mostrar el resultado del dado en la UI
 		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
 		
-		// Calcular posición visual (el tablero visual es 0-indexed, el modelo es 1-indexed)
-		int posicionDestinoVisual = posNueva - 1;
-		if (posicionDestinoVisual >= 49) {
-			posicionDestinoVisual = 49;
-		}
-		if (posicionDestinoVisual < 0) {
-			posicionDestinoVisual = 0;
-		}
-		
-		// Animar el movimiento de la ficha
-		moveTo(indiceActual, posicionDestinoVisual);
-		
-		// Actualizar también las fichas de otros jugadores que pueden haber sido movidos
-		// (por ejemplo, un pingüino enviado a un agujero por la foca, o retrocedido por PvP)
-		actualizarTodasLasFichas();
-		
-		// Añadir los eventos al log acumulativo
-		int casillaPisada = gestorPartida.getUltimaCasillaPisada();
+		// Registrar los eventos en el log
 		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado);
+		
+		// =====================================================
+		// ANIMACIÓN EN 2 PASOS:
+		// Paso 1: Animar la ficha hasta la casilla donde cayó
+		// Paso 2: Si hubo efecto (Agujero, Oso, etc.), animar
+		//         desde esa casilla hasta la posición final
+		// =====================================================
+		
+		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 50));
+		int posVisualFinal = Math.max(0, Math.min(posNueva, 50));
+		
+		if (casillaPisada >= 0 && posVisualCasilla != posVisualFinal) {
+			// HAY EFECTO: animación en 2 pasos
+			// Paso 1: ir a la casilla donde cayó
+			animarMovimiento(indiceActual, posVisualCasilla, () -> {
+				// Pausa breve para que se vea dónde cayó
+				javafx.animation.PauseTransition pausa = new javafx.animation.PauseTransition(Duration.millis(400));
+				pausa.setOnFinished(pausaEvt -> {
+					// Paso 2: ir a la posición final (efecto de casilla)
+					animarMovimiento(indiceActual, posVisualFinal, () -> {
+						// Actualizar las fichas de otros jugadores afectados
+						actualizarTodasLasFichas();
+						finalizarTurnoVisual();
+					});
+				});
+				pausa.play();
+			});
+		} else {
+			// SIN EFECTO o posición no cambió: animación simple
+			animarMovimiento(indiceActual, posVisualFinal, () -> {
+				actualizarTodasLasFichas();
+				finalizarTurnoVisual();
+			});
+		}
 	}
 	
 	/**
-	 * Actualiza la posición visual de TODAS las fichas para reflejar
-	 * los cambios que haya hecho el controlador (efectos de casilla, PvP, foca, etc.)
+	 * Anima la ficha de un jugador desde su posición visual actual
+	 * hasta la posición de destino, y ejecuta el callback al terminar.
+	 */
+	private void animarMovimiento(int playerIndex, int targetPosition, Runnable alTerminar) {
+		Circle fichaObj = getFicha(playerIndex);
+		int oldPosition = posiciones[playerIndex];
+		posiciones[playerIndex] = targetPosition;
+
+		int oldRow = oldPosition / COLUMNS;
+		int oldCol = oldPosition % COLUMNS;
+		int newRow = targetPosition / COLUMNS;
+		int newCol = targetPosition % COLUMNS;
+
+		double cellWidth = tablero.getWidth() / COLUMNS;
+		double cellHeight = tablero.getHeight() / 10;
+
+		double dx = (newCol - oldCol) * cellWidth;
+		double dy = (newRow - oldRow) * cellHeight;
+
+		TranslateTransition slide = new TranslateTransition(Duration.millis(350), fichaObj);
+		slide.setByX(dx);
+		slide.setByY(dy);
+
+		slide.setOnFinished(e -> {
+			fichaObj.setTranslateX(0);
+			fichaObj.setTranslateY(0);
+			GridPane.setRowIndex(fichaObj, newRow);
+			GridPane.setColumnIndex(fichaObj, newCol);
+			
+			// Ejecutar callback
+			if (alTerminar != null) {
+				alTerminar.run();
+			}
+		});
+
+		slide.play();
+	}
+	
+	/**
+	 * Después de que termina toda la animación, muestra el turno siguiente
+	 * y reactiva el dado.
+	 */
+	private void finalizarTurnoVisual() {
+		if (gestorPartida.getPartida().isFinalizada()) {
+			agregarEvento("═══════════════════════");
+			agregarEvento("🏆 ¡" + gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA!");
+			agregarEvento("═══════════════════════");
+			dado.setDisable(true);
+		} else {
+			agregarEvento("▶ Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
+			dado.setDisable(false);
+		}
+	}
+	
+	/**
+	 * Devuelve la ficha Circle del jugador por su índice.
+	 */
+	private Circle getFicha(int index) {
+		return (index == 0) ? P1 : (index == 1) ? P2 : (index == 2) ? P3 : P4;
+	}
+	
+	/**
+	 * Actualiza la posición visual de TODAS las fichas de otros jugadores
+	 * para reflejar los cambios que haya hecho el controlador (PvP, foca, etc.)
 	 */
 	private void actualizarTodasLasFichas() {
 		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
 		
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
 			Jugador j = jugadores.get(i);
-			int posVisual = j.getPosicion() - 1;
+			int posVisual = j.getPosicion();
 			if (posVisual < 0) posVisual = 0;
-			if (posVisual >= 49) posVisual = 49;
+			if (posVisual >= 50) posVisual = 50;
 			
 			// Solo actualizar si la posición visual cambió
 			if (posiciones[i] != posVisual) {
-				Circle fichaObj = (i == 0) ? P1 : (i == 1) ? P2 : (i == 2) ? P3 : P4;
+				Circle fichaObj = getFicha(i);
 				
 				int newRow = posVisual / COLUMNS;
 				int newCol = posVisual % COLUMNS;
@@ -246,7 +323,6 @@ public class PantallaJuego {
 	
 	/**
 	 * Registra en el log de eventos qué pasó en el turno del jugador.
-	 * Incluye el dado, la casilla pisada y el efecto aplicado.
 	 */
 	private void registrarEventosCasilla(Jugador jugador, int posicion, int dado) {
 		Tablero t = gestorPartida.getPartida().getTablero();
@@ -273,8 +349,8 @@ public class PantallaJuego {
 					break;
 				case "SueloQuebradizo":
 					agregarEvento("🧊 ¡Pisa SUELO QUEBRADIZO en la casilla " + posicion + "!");
-					if (jugador.getPosicion() == 1) {
-						agregarEvento("   ↪ ¡El hielo se rompe! Vuelve al inicio.");
+					if (jugador.getPosicion() == 0) {
+						agregarEvento("   ↪ ¡El hielo se rompe! Vuelve a Start.");
 					} else if (jugador.getTurnosPerdidos() > 0) {
 						agregarEvento("   ↪ Se queda atascado. Pierde 1 turno.");
 					} else {
@@ -283,7 +359,7 @@ public class PantallaJuego {
 					break;
 				case "Oso":
 					agregarEvento("🐻 ¡Un OSO atrapa a " + jugador.getNombre() + " en la casilla " + posicion + "!");
-					agregarEvento("   ↪ Vuelve a la casilla " + jugador.getPosicion());
+					agregarEvento("   ↪ Vuelve a Start (casilla 0)");
 					break;
 				case "Evento":
 					agregarEvento("🎁 ¡EVENTO en la casilla " + posicion + "! Ha ganado un objeto.");
@@ -294,55 +370,6 @@ public class PantallaJuego {
 		}
 		
 		agregarEvento("📌 Posición final: casilla " + jugador.getPosicion());
-		
-		// Comprobar si alguien ha ganado
-		if (gestorPartida.getPartida().isFinalizada()) {
-			agregarEvento("═══════════════════════");
-			agregarEvento("🏆 ¡" + gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA!");
-			agregarEvento("═══════════════════════");
-			this.dado.setDisable(true);
-		}
-	}
-
-	private void moveTo(int playerIndex, int targetPosition) {
-
-		Circle fichaObj = (playerIndex == 0) ? P1 : (playerIndex == 1) ? P2 : (playerIndex == 2) ? P3 : P4;
-		int oldPosition = posiciones[playerIndex];
-		posiciones[playerIndex] = targetPosition;
-
-		int oldRow = oldPosition / COLUMNS;
-		int oldCol = oldPosition % COLUMNS;
-
-		int newRow = targetPosition / COLUMNS;
-		int newCol = targetPosition % COLUMNS;
-
-		double cellWidth = tablero.getWidth() / COLUMNS;
-		double cellHeight = tablero.getHeight() / 10;
-
-		double dx = (newCol - oldCol) * cellWidth;
-		double dy = (newRow - oldRow) * cellHeight;
-
-		TranslateTransition slide = new TranslateTransition(Duration.millis(350), fichaObj);
-
-		slide.setByX(dx);
-		slide.setByY(dy);
-
-		slide.setOnFinished(e -> {
-			fichaObj.setTranslateX(0);
-			fichaObj.setTranslateY(0);
-
-			GridPane.setRowIndex(fichaObj, newRow);
-			GridPane.setColumnIndex(fichaObj, newCol);
-
-			// El turno ya fue pasado por ejecutarTurnoCompleto(),
-			// así que solo actualizamos el texto y reactivamos el dado
-			if (!gestorPartida.getPartida().isFinalizada()) {
-				agregarEvento("▶ Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
-				dado.setDisable(false);
-			}
-		});
-
-		slide.play();
 	}
 
 	@FXML
