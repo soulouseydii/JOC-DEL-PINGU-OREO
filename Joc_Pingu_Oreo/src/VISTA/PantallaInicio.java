@@ -21,6 +21,7 @@ public class PantallaInicio extends Application {
     @FXML private Button btnNuevaPartida;
     @FXML private Button btnCargarPartida;
     @FXML private Button btnOpciones;
+    @FXML private Button btnCreditos;
     @FXML private Button btnSalir;
 
     @Override
@@ -88,6 +89,12 @@ public class PantallaInicio extends Application {
     private void handleOpciones(ActionEvent event) {
         System.out.println("Opciones clicked");
         // TODO: Implementar menú opciones
+    }
+
+    @FXML
+    private void handleCreditos(ActionEvent event) {
+        System.out.println("Créditos clicked");
+        // TODO: Implementar pantalla de créditos
     }
 
     @FXML
