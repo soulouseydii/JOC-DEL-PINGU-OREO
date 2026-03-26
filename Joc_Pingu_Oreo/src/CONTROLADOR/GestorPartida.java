@@ -163,7 +163,7 @@ public class GestorPartida {
         }
 
         // Verificamos si ha ganado el jugador actual
-        if (jActual.getPosicion() >= 50) {
+        if (jActual.getPosicion() >= 49) {
             partida.setFinalizada(true);
             partida.setGanador(jActual);
             System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");

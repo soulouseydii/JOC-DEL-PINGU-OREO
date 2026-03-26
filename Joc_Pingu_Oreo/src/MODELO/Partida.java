@@ -1,6 +1,7 @@
 package MODELO;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -29,13 +30,36 @@ public class Partida {
 		
         ArrayList<Casilla> casillas = new ArrayList<Casilla>();
         
-        // Posición 0: siempre vacía
+        // Posición 0: Start (Normal)
 	    casillas.add(new Normal(0));
 
 	    Random rand = new Random();
 
-	    for (int i = 1; i < 50; i++) {
-	        int tipo = rand.nextInt(6);
+	    // Lista total de casillas que vamos a generar (48 casillas aleatorias)
+	    ArrayList<Integer> tiposGenerados = new ArrayList<Integer>();
+	    
+	    // Dividimos el tablero en 3 ZONAS (16 casillas cada zona) para asegurar que 
+	    // la dificultad es equitativa y no se agrupan todos los agujeros al principio.
+	    for (int zona = 0; zona < 3; zona++) {
+	        ArrayList<Integer> zonaActual = new ArrayList<Integer>();
+	        // En cada tercio del tablero habrá exactamente:
+	        for (int i=0; i<2; i++) zonaActual.add(1); // 2 Osos
+	        for (int i=0; i<2; i++) zonaActual.add(3); // 2 Agujeros
+	        for (int i=0; i<2; i++) zonaActual.add(2); // 2 Trineos
+	        for (int i=0; i<2; i++) zonaActual.add(5); // 2 Suelos Quebradizos
+	        for (int i=0; i<3; i++) zonaActual.add(4); // 3 Eventos
+	        for (int i=0; i<5; i++) zonaActual.add(0); // 5 Normales
+	        
+	        // Mezclar las casillas de esta zona específica
+	        Collections.shuffle(zonaActual, rand);
+	        
+	        // Añadirlas a la lista total
+	        tiposGenerados.addAll(zonaActual);
+	    }
+
+	    // Posiciones 1-48: casillas ya pre-balanceadas
+	    for (int i = 1; i < 49; i++) {
+	        int tipo = tiposGenerados.get(i - 1);
 
 	        Casilla c;
 	        switch (tipo) {
@@ -65,8 +89,8 @@ public class Partida {
 	        System.out.println("Pos " + i + " → " + c.getClass().getSimpleName());
 	    }
 
-	    // Posición 49: siempre vacía
-	    casillas.add(new Normal(50));
+	    // Posición 49: Finish (Normal) — última casilla del tablero
+	    casillas.add(new Normal(49));
 	    
 	    this.tablero.setListaCasillas(casillas); 	
 	    
