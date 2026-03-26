@@ -82,7 +82,21 @@ public class PantallaInicio extends Application {
     @FXML
     private void handleCargarPartida(ActionEvent event) {
         System.out.println("Cargar Partida clicked");
-        // TODO: Implementar en el futuro
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaCargarPartida.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Cargar Partida - Pingu Oreo");
+            // Forzar re-maximización al cambiar de escena
+            stage.setMaximized(false);
+            stage.setMaximized(true);
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar PantallaCargarPartida.fxml");
+            e.printStackTrace();
+        }
     }
 
     @FXML
