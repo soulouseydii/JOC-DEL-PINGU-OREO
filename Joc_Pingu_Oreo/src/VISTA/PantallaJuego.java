@@ -152,6 +152,14 @@ public class PantallaJuego {
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 		
+		// Comprobar si pierde turno por casilla de hielo
+		if (jugadorActual.getTurnosPerdidos() > 0) {
+			jugadorActual.setTurnosPerdidos(jugadorActual.getTurnosPerdidos() - 1);
+			eventos.setText(jugadorActual.getNombre() + " está atascado. Pierde turno.");
+			gestorPartida.siguienteTurno();
+			return;
+		}
+
 		Dado d = null;
 		if (jugadorActual instanceof Pinguino) {
 			d = (Dado) ((Pinguino) jugadorActual).getInv().getlista().get(0);
@@ -173,10 +181,10 @@ public class PantallaJuego {
 			posicionDestino = 49;
 		}
 
-		moveTo(indiceActual, posicionDestino);
+		moveTo(indiceActual, posicionDestino, false);
 	}
 
-	private void moveTo(int playerIndex, int targetPosition) {
+	private void moveTo(int playerIndex, int targetPosition, boolean esRebote) {
 
 		Circle fichaObj = (playerIndex == 0) ? P1 : (playerIndex == 1) ? P2 : (playerIndex == 2) ? P3 : P4;
 		int oldPosition = posiciones[playerIndex];
@@ -206,13 +214,43 @@ public class PantallaJuego {
 			GridPane.setRowIndex(fichaObj, newRow);
 			GridPane.setColumnIndex(fichaObj, newCol);
 
+			// Evaluar la casilla si no es un rebote
+			Jugador jugadorActual = gestorPartida.getPartida().getJugadores().get(playerIndex);
+
+			if (!esRebote) {
+				int posAntes = jugadorActual.getPosicion();
+				Casilla casilla = gestorPartida.getPartida().getTablero().getListaCasillas().get(posAntes);
+				
+				casilla.realizarAccion(gestorPartida.getPartida(), jugadorActual);
+				
+				int posDespues = jugadorActual.getPosicion();
+				
+				if (posAntes != posDespues) {
+					eventos.setText("¡" + jugadorActual.getNombre() + " cayó en " + casilla.getTipo() + " y se mueve!");
+					
+					int nuevoDestino = posDespues - 1;
+					if (nuevoDestino >= 49) nuevoDestino = 49;
+					if (nuevoDestino < 0) nuevoDestino = 0;
+					
+					moveTo(playerIndex, nuevoDestino, true);
+					return; // Salir y evitar pasar turno aún
+				} else {
+					eventos.setText("¡" + jugadorActual.getNombre() + " cayó en " + casilla.getTipo() + "!");
+				}
+			}
+
 			// Comprobar final
-			if (targetPosition >= 49) {
-				eventos.setText(gestorPartida.getPartida().getJugadorActual().getNombre() + ", ha ganado!");
+			if (jugadorActual.getPosicion() >= 50 || targetPosition >= 49) {
+				eventos.setText(jugadorActual.getNombre() + " ¡HA GANADO!");
 				dado.setDisable(true); // Asegurar que quede desactivado
 			} else {
 				gestorPartida.siguienteTurno();
-				eventos.setText("Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
+				String currentTexto = eventos.getText();
+				if (currentTexto.contains("ganado") || currentTexto.contains("Turno de")) {
+					eventos.setText("Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
+				} else {
+					eventos.setText(currentTexto + " | Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
+				}
 				dado.setDisable(false); // Reactivar si no ha ganado
 			}
 		});
