@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -143,10 +144,10 @@
                 </ScrollPane>
             </VBox>
 
-            <!-- Tarjeta Eventos -->
+            <!-- Tarjeta Eventos (Log acumulativo con scroll) -->
             <VBox prefWidth="320" spacing="10" styleClass="card">
                 <Label styleClass="card-title" text="Eventos" />
-                <Text fx:id="eventos" styleClass="events" text="Evento ocurrido" wrappingWidth="280" />
+                <TextArea fx:id="eventosLog" editable="false" prefRowCount="6" wrapText="true" styleClass="events-log" promptText="Los eventos del juego apareceran aqui..." />
             </VBox>
 
         </HBox>

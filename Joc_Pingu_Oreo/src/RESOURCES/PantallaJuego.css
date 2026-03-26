@@ -67,9 +67,29 @@
     -fx-opacity: 0.85;
 }
 
-.events {
-    -fx-font-size: 14px;
-    -fx-opacity: 0.85;
+/* LOG DE EVENTOS (TextArea) */
+.events-log {
+    -fx-font-size: 12px;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-control-inner-background: #1a1a2e;
+    -fx-text-fill: #e0e0e0;
+    -fx-border-color: #3a3a5c;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.events-log .content {
+    -fx-background-color: #1a1a2e;
+}
+
+.events-log .scroll-pane {
+    -fx-background-color: #1a1a2e;
+}
+
+.events-log .scroll-pane > .viewport {
+    -fx-background-color: #1a1a2e;
 }
 
 /* BOTONES */
