@@ -37,7 +37,7 @@
             </padding>
 
             <!-- Botones del Menú Principal -->
-            <VBox alignment="CENTER" maxWidth="420" maxHeight="-Infinity" translateY="60" spacing="15">
+            <VBox alignment="CENTER" maxWidth="420" maxHeight="-Infinity" translateY="-80" spacing="15">
                 <Button fx:id="btnNuevaPartida" maxWidth="Infinity" onAction="#handleNuevaPartida" styleClass="primary" text="Nueva Partida" />
                 <Button fx:id="btnCargarPartida" maxWidth="Infinity" onAction="#handleCargarPartida" styleClass="primary" text="Cargar Partida" />
                 <Button fx:id="btnOpciones" maxWidth="Infinity" onAction="#handleOpciones" styleClass="primary" text="Opciones" />

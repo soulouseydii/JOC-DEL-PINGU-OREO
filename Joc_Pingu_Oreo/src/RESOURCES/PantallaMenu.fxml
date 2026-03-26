@@ -59,9 +59,9 @@
     </top>
 
     <center>
-        <StackPane prefHeight="700.0" prefWidth="1000.0">
+        <StackPane alignment="TOP_CENTER" prefHeight="700.0" prefWidth="1000.0">
             <padding>
-                <Insets bottom="28" left="28" right="28" top="28" />
+                <Insets bottom="28" left="28" right="28" top="0" />
             </padding>
 
             <VBox maxWidth="420" spacing="16" style="-fx-background-color: rgba(255, 255, 255, 0.6);;" styleClass="card">
