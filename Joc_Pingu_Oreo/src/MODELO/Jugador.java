@@ -63,9 +63,9 @@ public abstract class Jugador {
 	public void moverPosicion(int p) {
 		this.posicion += p;
 		
-		//Limit de 50 caselles
-		if (this.posicion > 50) {
-			this.posicion = 50;
+		//Limit de 49 caselles (Finish)
+		if (this.posicion > 49) {
+			this.posicion = 49;
 		}
 		
 		//Evitar posicions negatives

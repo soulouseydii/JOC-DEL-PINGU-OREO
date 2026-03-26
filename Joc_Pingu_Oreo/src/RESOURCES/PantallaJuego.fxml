@@ -104,9 +104,9 @@
                 <Button fx:id="dado" maxWidth="Infinity" onAction="#handleDado" styleClass="primary" text="Tirar dado" />
             </VBox>
 
-            <!-- Tarjeta Objetos -->
+            <!-- Tarjeta Inventario -->
             <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
-                <Label styleClass="card-title" text="Objetos" />
+                <Label fx:id="inventarioTitulo" styleClass="card-title" text="Inventario - Jugador 1" />
 
                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED">
                     <content>
@@ -116,27 +116,21 @@
                             </padding>
 
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                <Text fx:id="rapido_t" styleClass="stat" text="Dado rápido: 0" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Button fx:id="rapido" onAction="#handleRapido" text="Usar" />
-                            </HBox>
-
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                <Text fx:id="lento_t" styleClass="stat" text="Dado lento: 0" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Button fx:id="lento" onAction="#handleLento" text="Usar" />
-                            </HBox>
-
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
                                 <Text fx:id="peces_t" styleClass="stat" text="Peces: 0" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Button fx:id="peces" onAction="#handlePeces" text="Usar" />
+                                <Label styleClass="stat" text="(Auto vs Foca)" />
                             </HBox>
 
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
                                 <Text fx:id="nieve_t" styleClass="stat" text="Bolas de nieve: 0" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Button fx:id="nieve" onAction="#handleNieve" text="Usar" />
+                                <Label styleClass="stat" text="(Auto PvP)" />
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
+                                <Text fx:id="moto_t" styleClass="stat" text="Moto de Nieve: 0" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button fx:id="btnMoto" onAction="#handleUsarMoto" text="Usar" />
                             </HBox>
 
                         </VBox>
