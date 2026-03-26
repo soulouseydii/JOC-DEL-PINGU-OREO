@@ -1,7 +1,7 @@
 package CONTROLADOR;
 
 import javafx.application.Application;
-import VISTA.PantallaMenu;
+import VISTA.PantallaInicio;
 
 public class Main {
 
@@ -24,7 +24,7 @@ public class Main {
         
         // Arrancar la interfaz gráfica de JavaFX
         System.out.println("Cargando la interfaz grafica...");
-        Application.launch(PantallaMenu.class, args);
+        Application.launch(PantallaInicio.class, args);
         
         System.out.println("Juego cerrado. ¡Hasta pronto!");
     }
