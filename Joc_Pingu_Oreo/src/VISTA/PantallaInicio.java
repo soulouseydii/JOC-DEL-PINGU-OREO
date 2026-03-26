@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
 import javafx.stage.StageStyle;
 import javafx.application.Application;
 
@@ -57,6 +58,18 @@ public class PantallaInicio extends Application {
     @FXML
     private void initialize() {
         System.out.println("PantallaInicio Controller initialized");
+        
+        // Cerrar la app al pulsar ESC
+        btnSalir.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        System.out.println("ESC pulsado - Saliendo del juego...");
+                        System.exit(0);
+                    }
+                });
+            }
+        });
     }
 
     @FXML

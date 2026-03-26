@@ -18,7 +18,7 @@
                     <Insets bottom="5" left="10" right="5" top="5" />
                 </padding>
                 
-                <Label text="Juego del Pingu Oreo - Inicio" textFill="WHITE" />
+                <Label text="OREO" textFill="WHITE" />
                 <Region HBox.hgrow="ALWAYS" />
                 
                 <HBox spacing="5" alignment="CENTER">
