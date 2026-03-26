@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -50,8 +51,10 @@ public class PantallaJuego {
 	private Text peces_t;
 	@FXML
 	private Text nieve_t;
+	
+	// Log de eventos (TextArea acumulativo con scroll)
 	@FXML
-	private Text eventos;
+	private TextArea eventosLog;
 
 	// Game board and player pieces
 	@FXML
@@ -92,7 +95,26 @@ public class PantallaJuego {
 		// Show board info
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
         
-		eventos.setText("El juego ha comenzado! Turno de Jugador 1");
+		agregarEvento("🎮 ¡El juego ha comenzado! Turno de Jugador 1");
+	}
+	
+	// =========================================
+	//  MÉTODO PARA AÑADIR EVENTOS AL LOG
+	// =========================================
+	
+	/**
+	 * Añade un mensaje al log de eventos acumulativo.
+	 * Los mensajes nuevos aparecen al final y el scroll baja automáticamente.
+	 */
+	private void agregarEvento(String mensaje) {
+		if (eventosLog.getText().isEmpty()) {
+			eventosLog.setText(mensaje);
+		} else {
+			eventosLog.appendText("\n" + mensaje);
+		}
+		// Auto-scroll al final
+		eventosLog.setScrollTop(Double.MAX_VALUE);
+		eventosLog.positionCaret(eventosLog.getText().length());
 	}
 
 	private void mostrarTiposDeCasillasEnTablero(Tablero t) {
@@ -152,28 +174,134 @@ public class PantallaJuego {
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 		
-		Dado d = null;
-		if (jugadorActual instanceof Pinguino) {
-			d = (Dado) ((Pinguino) jugadorActual).getInv().getlista().get(0);
-		}
-
 		dado.setDisable(true);
 
-		int resultado = gestorPartida.tirarDado(jugadorActual, d);
+		// ===================================================
+		// DELEGAMOS TODA la lógica al controlador
+		// ejecutarTurnoCompleto() hace: tirar dado, mover,
+		// ejecutar casilla, comprobar foca, comprobar PvP,
+		// y pasar al siguiente turno.
+		// ===================================================
 		
-		if (jugadorActual instanceof Pinguino) {
-			((Pinguino) jugadorActual).moverPosicion(resultado);
-		}
-
-		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultado);
-
-		int posicionDestino = jugadorActual.getPosicion() - 1;
+		gestorPartida.ejecutarTurnoCompleto();
 		
-		if (posicionDestino >= 49) {
-			posicionDestino = 49;
+		// Después de ejecutar, la posición del jugador ya ha sido actualizada
+		// (puede haber cambiado por casillas especiales: Agujero, Oso, Trineo, etc.)
+		int posNueva = jugadorActual.getPosicion();
+		int resultadoDado = gestorPartida.getUltimoResultadoDado();
+		
+		// Mostrar el resultado del dado en la UI
+		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
+		
+		// Calcular posición visual (el tablero visual es 0-indexed, el modelo es 1-indexed)
+		int posicionDestinoVisual = posNueva - 1;
+		if (posicionDestinoVisual >= 49) {
+			posicionDestinoVisual = 49;
 		}
-
-		moveTo(indiceActual, posicionDestino);
+		if (posicionDestinoVisual < 0) {
+			posicionDestinoVisual = 0;
+		}
+		
+		// Animar el movimiento de la ficha
+		moveTo(indiceActual, posicionDestinoVisual);
+		
+		// Actualizar también las fichas de otros jugadores que pueden haber sido movidos
+		// (por ejemplo, un pingüino enviado a un agujero por la foca, o retrocedido por PvP)
+		actualizarTodasLasFichas();
+		
+		// Añadir los eventos al log acumulativo
+		int casillaPisada = gestorPartida.getUltimaCasillaPisada();
+		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado);
+	}
+	
+	/**
+	 * Actualiza la posición visual de TODAS las fichas para reflejar
+	 * los cambios que haya hecho el controlador (efectos de casilla, PvP, foca, etc.)
+	 */
+	private void actualizarTodasLasFichas() {
+		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
+		
+		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+			Jugador j = jugadores.get(i);
+			int posVisual = j.getPosicion() - 1;
+			if (posVisual < 0) posVisual = 0;
+			if (posVisual >= 49) posVisual = 49;
+			
+			// Solo actualizar si la posición visual cambió
+			if (posiciones[i] != posVisual) {
+				Circle fichaObj = (i == 0) ? P1 : (i == 1) ? P2 : (i == 2) ? P3 : P4;
+				
+				int newRow = posVisual / COLUMNS;
+				int newCol = posVisual % COLUMNS;
+				
+				fichaObj.setTranslateX(0);
+				fichaObj.setTranslateY(0);
+				GridPane.setRowIndex(fichaObj, newRow);
+				GridPane.setColumnIndex(fichaObj, newCol);
+				
+				posiciones[i] = posVisual;
+			}
+		}
+	}
+	
+	/**
+	 * Registra en el log de eventos qué pasó en el turno del jugador.
+	 * Incluye el dado, la casilla pisada y el efecto aplicado.
+	 */
+	private void registrarEventosCasilla(Jugador jugador, int posicion, int dado) {
+		Tablero t = gestorPartida.getPartida().getTablero();
+		
+		// Separador visual entre turnos
+		agregarEvento("───────────────────────");
+		agregarEvento("🎲 " + jugador.getNombre() + " tira el dado: " + dado);
+		
+		if (posicion >= 0 && posicion < t.getListaCasillas().size()) {
+			Casilla casilla = t.getListaCasillas().get(posicion);
+			String tipoCasilla = casilla.getClass().getSimpleName();
+			
+			switch (tipoCasilla) {
+				case "Normal":
+					agregarEvento("📍 Cae en casilla " + posicion + " (Normal). No pasa nada.");
+					break;
+				case "Agujero":
+					agregarEvento("🕳️ ¡Cae en un AGUJERO en la casilla " + posicion + "!");
+					agregarEvento("   ↪ Retrocede a la casilla " + jugador.getPosicion());
+					break;
+				case "Trineo":
+					agregarEvento("🛷 ¡Encuentra un TRINEO en la casilla " + posicion + "!");
+					agregarEvento("   ↪ Avanza hasta la casilla " + jugador.getPosicion());
+					break;
+				case "SueloQuebradizo":
+					agregarEvento("🧊 ¡Pisa SUELO QUEBRADIZO en la casilla " + posicion + "!");
+					if (jugador.getPosicion() == 1) {
+						agregarEvento("   ↪ ¡El hielo se rompe! Vuelve al inicio.");
+					} else if (jugador.getTurnosPerdidos() > 0) {
+						agregarEvento("   ↪ Se queda atascado. Pierde 1 turno.");
+					} else {
+						agregarEvento("   ↪ No lleva peso, pasa sin problema.");
+					}
+					break;
+				case "Oso":
+					agregarEvento("🐻 ¡Un OSO atrapa a " + jugador.getNombre() + " en la casilla " + posicion + "!");
+					agregarEvento("   ↪ Vuelve a la casilla " + jugador.getPosicion());
+					break;
+				case "Evento":
+					agregarEvento("🎁 ¡EVENTO en la casilla " + posicion + "! Ha ganado un objeto.");
+					break;
+				default:
+					agregarEvento("📍 " + jugador.getNombre() + " está en la casilla " + posicion + ".");
+			}
+		}
+		
+		agregarEvento("📌 Posición final: casilla " + jugador.getPosicion());
+		
+		// Comprobar si alguien ha ganado
+		if (gestorPartida.getPartida().isFinalizada()) {
+			agregarEvento("═══════════════════════");
+			agregarEvento("🏆 ¡" + gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA!");
+			agregarEvento("═══════════════════════");
+			this.dado.setDisable(true);
+		}
 	}
 
 	private void moveTo(int playerIndex, int targetPosition) {
@@ -206,14 +334,11 @@ public class PantallaJuego {
 			GridPane.setRowIndex(fichaObj, newRow);
 			GridPane.setColumnIndex(fichaObj, newCol);
 
-			// Comprobar final
-			if (targetPosition >= 49) {
-				eventos.setText(gestorPartida.getPartida().getJugadorActual().getNombre() + ", ha ganado!");
-				dado.setDisable(true); // Asegurar que quede desactivado
-			} else {
-				gestorPartida.siguienteTurno();
-				eventos.setText("Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
-				dado.setDisable(false); // Reactivar si no ha ganado
+			// El turno ya fue pasado por ejecutarTurnoCompleto(),
+			// así que solo actualizamos el texto y reactivamos el dado
+			if (!gestorPartida.getPartida().isFinalizada()) {
+				agregarEvento("▶ Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
+				dado.setDisable(false);
 			}
 		});
 

@@ -17,6 +17,11 @@ public class GestorPartida {
     private Random random = new Random();
     private Connection conexion;
     private GestorBBDD gestorBBDD;
+    
+    // Guarda la posición donde cayó el jugador ANTES del efecto de casilla
+    // para que la Vista sepa qué tipo de casilla pisó
+    private int ultimaCasillaPisada = -1;
+    private int ultimoResultadoDado = 0;
 
     // Constructor
     public GestorPartida() {
@@ -78,36 +83,82 @@ public class GestorPartida {
             return;
         }
 
-        // Si es una Foca
+        // ============================
+        //  TURNO DE LA FOCA
+        // ============================
         if (jActual instanceof Foca) {
             Foca f = (Foca) jActual;
+            
+            // Comprobar bloqueo por pez
             if (f.getTurnosBloqueada() > 0) {
                 System.out.println("La foca está bloqueada. Turnos restantes: " + f.getTurnosBloqueada());
                 f.reducirBloqueo();
                 siguienteTurno();
                 return;
             }
+            
+            // Guardamos la posición antes de mover para comprobar casillas intermedias
+            int posicionAnterior = f.getPosicion();
+            
+            // La foca tira el dado y se mueve
             int pasosFoca = tirarDado(f, null);
             System.out.println(f.getNombre() + " ha sacado un " + pasosFoca);
             gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
             System.out.println("Nueva posición de la foca: " + f.getPosicion());
+            
+            // REGLA: La foca aplasta a los pingüinos de las casillas INTERMEDIAS
+            // (entre posicionAnterior+1 y posicionFinal-1)
+            for (int casilla = posicionAnterior + 1; casilla < f.getPosicion(); casilla++) {
+                for (Jugador j : partida.getJugadores()) {
+                    if (j instanceof Pinguino && j.getPosicion() == casilla) {
+                        Pinguino p = (Pinguino) j;
+                        System.out.println("¡La foca ha pasado por encima de " + p.getNombre() + " en la casilla " + casilla + "!");
+                        f.aplastarJugador(p); // Solo pierde la mitad del inventario
+                    }
+                }
+            }
+            
+            // REGLA: En la casilla FINAL, comprobamos interacción completa (pez o agujero)
+            for (Jugador j : partida.getJugadores()) {
+                if (j instanceof Pinguino && j.getPosicion() == f.getPosicion()) {
+                    interaccionFocaPinguino(f, (Pinguino) j, partida.getTablero());
+                }
+            }
 
-        // Si es un Pinguino
+        // ============================
+        //  TURNO DEL PINGÜINO
+        // ============================
         } else if (jActual instanceof Pinguino) {
+            Pinguino pActual = (Pinguino) jActual;
+            
             int pasos = tirarDado(jActual, null);
+            ultimoResultadoDado = pasos;
             System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
             gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
             System.out.println("Nueva posición: " + jActual.getPosicion());
-        }
-
-        // Ejecutar la accion de la casilla donde ha caido
-        Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
-        casillaDondeCae.realizarAccion(partida, jActual);
-
-        // Si el que ha movido es un pinguino, miramos si hay una foca en su casilla
-        for (Jugador j : partida.getJugadores()) {
-            if (j instanceof Foca && jActual instanceof Pinguino) {
-                interaccionFocaPinguino((Foca) j, (Pinguino) jActual, partida.getTablero());
+            
+            // Guardamos la posición ANTES del efecto de casilla para la Vista
+            ultimaCasillaPisada = jActual.getPosicion();
+            
+            // Ejecutar la accion de la casilla donde ha caido
+            Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
+            casillaDondeCae.realizarAccion(partida, jActual);
+            
+            // REGLA: Comprobar si hay una FOCA en la misma casilla
+            for (Jugador j : partida.getJugadores()) {
+                if (j instanceof Foca && j.getPosicion() == pActual.getPosicion()) {
+                    interaccionFocaPinguino((Foca) j, pActual, partida.getTablero());
+                }
+            }
+            
+            // REGLA PvP: Comprobar si hay OTRO PINGÜINO en la misma casilla
+            for (Jugador j : partida.getJugadores()) {
+                if (j instanceof Pinguino && j != pActual && j.getPosicion() == pActual.getPosicion()) {
+                    Pinguino pOtro = (Pinguino) j;
+                    System.out.println("¡" + pActual.getNombre() + " y " + pOtro.getNombre() + " coinciden en la casilla " + pActual.getPosicion() + "!");
+                    gestorJugador.pinguinoGolpea(pActual, pOtro, partida.getTablero());
+                    break; // Solo una pelea por turno
+                }
             }
         }
 
@@ -166,6 +217,16 @@ public class GestorPartida {
         return partida;
     }
     
+    /* Getter de la última casilla pisada (antes del efecto) */
+    public int getUltimaCasillaPisada() {
+        return ultimaCasillaPisada;
+    }
+    
+    /* Getter del último resultado del dado */
+    public int getUltimoResultadoDado() {
+        return ultimoResultadoDado;
+    }
+    
     /* Método en GestorPartida */
     public int tirarDado(Jugador j, Dado dadoSeleccionado) {
         // Si el jugador no ha elegido un dado especial, creamos uno normal
@@ -177,35 +238,29 @@ public class GestorPartida {
         return dadoSeleccionado.tirar();
     }
 	
-    /*Metodo interaccionFocaPinguino*/
+    /*
+     * INTERACCIÓN FOCA-PINGÜINO (casilla final)
+     * 
+     * Si el pingüino TIENE pez: gasta 1 pez, la foca queda bloqueada 2 turnos.
+     * Si el pingüino NO tiene pez: la foca le golpea (pierde mitad inventario)
+     *   y lo envía al agujero anterior más cercano (o casilla 1).
+     */
     public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, Tablero tablero) {
 		  
         // Comprobamos si coinciden en la misma casilla
         if (foca.getPosicion() == pinguino.getPosicion()) {
 			  
-            boolean tienePez = false;
-            int indicePez = -1;
-			  
-            // Buscamos si el pinguino tiene un "Pez" en su inventario
-            for (int i = 0; i < pinguino.getInv().getlista().size(); i++) {
-                if (pinguino.getInv().getlista().get(i).getNombre().equalsIgnoreCase("Pez")) {
-                    indicePez = i;
-                    tienePez = true; 
-                    break; // dejar de buscar una vez encontrado
-                }
-            }
-			  
-            // Resolución según las reglas
-            if (tienePez) {
-                // Le damos el pez a la foca
-                pinguino.getInv().getlista().remove(indicePez);
+            // Resolución según las reglas usando los nuevos métodos de Pinguino
+            if (pinguino.tieneItem("Pez")) {
+                // Le damos el pez a la foca (gasta 1 unidad)
+                pinguino.gastarItem("Pez", 1);
                 
                 // Aplicamos el bloqueo de 2 turnos
                 foca.setTurnosBloqueada(2); 
                 
-                System.out.println(pinguino.getNombre() + " ha alimentado a la foca con un pez, ¡la foca queda bloqueada 2 turnos!");
+                System.out.println(pinguino.getNombre() + " ha alimentado a la foca con un pez. ¡La foca queda bloqueada 2 turnos!");
             } else {
-                // Si no tiene pez la foca lo ataca
+                // Si no tiene pez, la foca lo golpea (pierde mitad inventario)
                 foca.golpearJugador(pinguino);
 			  
                 // GestorTablero busca donde lo tiene que enviar (agujero anterior o casilla 1)

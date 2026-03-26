@@ -78,6 +78,11 @@ public class GestorJugador {
 			nuevaPosicion = meta;
 		}
 		
+		// Protección contra posiciones negativas (al retroceder en PvP o por foca)
+		if (nuevaPosicion < 1) {
+			nuevaPosicion = 1;
+		}
+		
 		//Actualiza su posicion actual
 		j.setPosicion(nuevaPosicion);
 		System.out.println(j.getNombre() + " ha caido en la casilla " + nuevaPosicion);
@@ -103,16 +108,16 @@ public class GestorJugador {
 		System.out.println(p.getNombre() + " mira al frente.");
 	}
 	
-	// ----------------
-	//  PINGUINOGOLPEA
-	// ----------------
+	// --------------------------------
+	//  PINGUINOGOLPEA (Guerra PvP)
+	// --------------------------------
 	
 	public void pinguinoGolpea(Pinguino p1, Pinguino p2, Tablero t) {
-		System.out.println("Gerra de bolas de nieve entre " + p1.getNombre() + " i " + p2.getNombre() + ".");
+		System.out.println("¡¡Guerra de bolas de nieve entre " + p1.getNombre() + " y " + p2.getNombre() + "!!");
 		
-		//Contar bolas de cada uno
-		int bolasP1 = contarBolas(p1);
-		int bolasP2 = contarBolas(p2);
+		// Contar bolas usando el método correcto que suma la propiedad 'cantidad'
+		int bolasP1 = p1.contarItem("Bola de Nieve");
+		int bolasP2 = p2.contarItem("Bola de Nieve");
 		
 		System.out.println(p1.getNombre() + " tiene " + bolasP1 + " bolas.");
         System.out.println(p2.getNombre() + " tiene " + bolasP2 + " bolas.");
@@ -123,42 +128,23 @@ public class GestorJugador {
         // Ver quién gana y hacer retroceder al perdedor
         if (bolasP1 > bolasP2) {
             System.out.println(p1.getNombre() + " gana la pelea!");
-            // p2 retrocede (enviamos la diferencia en negativo)
+            // p2 retrocede la diferencia de bolas
             this.jugadorSeMueve(p2, -diferencia, t); 
             
         } else if (bolasP2 > bolasP1) {
             System.out.println(p2.getNombre() + " gana la pelea!");
-            // p1 retrocede
+            // p1 retrocede la diferencia de bolas
             this.jugadorSeMueve(p1, -diferencia, t);
             
         } else {
-            System.out.println("Empate! Nadie retrocede.");
+            System.out.println("¡Empate! Nadie retrocede.");
         }
 
-        // Ambos gastan todas sus bolas de nieve al terminar
-        eliminarTodasLasBolas(p1);
-        eliminarTodasLasBolas(p2);
-    }
-	
-	//METODO CONTARBOLAS Y ELIMINARTODASLASBOLAS
-	
-	private int contarBolas(Pinguino p) {
-        int contador = 0;
-        for (int i = 0; i < p.getInventario().getlista().size(); i++) {
-            if (p.getInventario().getlista().get(i).getNombre().equalsIgnoreCase("bola de nieve")) {
-                contador++; // Suma 1 por cada bola que encuentra
-            }
-        }
-        return contador;
-    }
-
-    private void eliminarTodasLasBolas(Pinguino p) {
-        // Recorre la lista al revés para evitar errores al borrar elementos
-        for (int i = p.getInventario().getlista().size() - 1; i >= 0; i--) {
-            if (p.getInventario().getlista().get(i).getNombre().equalsIgnoreCase("bola de nieve")) {
-                p.getInventario().getlista().remove(i);
-            }
-        }
+        // Ambos gastan TODAS sus bolas de nieve al terminar la pelea
+        p1.gastarTodoItem("Bola de Nieve");
+        p2.gastarTodoItem("Bola de Nieve");
+        
+        System.out.println("Ambos jugadores han gastado todas sus bolas de nieve.");
     }
 	
 	// ----------------

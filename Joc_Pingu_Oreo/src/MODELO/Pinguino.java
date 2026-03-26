@@ -122,4 +122,100 @@ public class Pinguino extends Jugador {
 	}
 	
 	
+	// =========================================================
+	//  MÉTODOS HELPER DE INVENTARIO (usados por los Gestores)
+	// =========================================================
+	
+	/**
+	 * Cuenta la cantidad TOTAL de objetos en el inventario
+	 * sumando la propiedad 'cantidad' de cada Item.
+	 */
+	public int contarTotalObjetos() {
+		int total = 0;
+		for (Item item : getInventario().getlista()) {
+			total += item.getCantidad();
+		}
+		return total;
+	}
+	
+	/**
+	 * Cuenta cuántas unidades tiene de un item concreto por nombre.
+	 * Ejemplo: contarItem("Bola de Nieve") → 3
+	 */
+	public int contarItem(String nombre) {
+		for (Item item : getInventario().getlista()) {
+			if (item.getNombre().equalsIgnoreCase(nombre)) {
+				return item.getCantidad();
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * Comprueba si tiene al menos 1 unidad del item indicado.
+	 */
+	public boolean tieneItem(String nombre) {
+		return contarItem(nombre) > 0;
+	}
+	
+	/**
+	 * Gasta (elimina) una cantidad concreta de un item por nombre.
+	 * Si la cantidad llega a 0 o menos, elimina el item de la lista.
+	 */
+	public void gastarItem(String nombre, int cantidadAGastar) {
+		for (int i = getInventario().getlista().size() - 1; i >= 0; i--) {
+			Item item = getInventario().getlista().get(i);
+			if (item.getNombre().equalsIgnoreCase(nombre)) {
+				int nuevaCantidad = item.getCantidad() - cantidadAGastar;
+				if (nuevaCantidad <= 0) {
+					getInventario().getlista().remove(i);
+				} else {
+					item.setCantidad(nuevaCantidad);
+				}
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Gasta TODAS las unidades de un item concreto (lo elimina del inventario).
+	 * Usado para gastar todas las bolas de nieve tras un PvP.
+	 */
+	public void gastarTodoItem(String nombre) {
+		for (int i = getInventario().getlista().size() - 1; i >= 0; i--) {
+			if (getInventario().getlista().get(i).getNombre().equalsIgnoreCase(nombre)) {
+				getInventario().getlista().remove(i);
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Pierde la mitad del inventario total (redondeado hacia abajo).
+	 * Quita objetos empezando por el final de la lista.
+	 */
+	public void perderMitadInventario() {
+		int total = contarTotalObjetos();
+		int aQuitar = total / 2;
+		int quitados = 0;
+		
+		System.out.println(getNombre() + " tiene " + total + " objetos. Pierde " + aQuitar + ".");
+		
+		// Recorremos la lista de items del final al principio
+		for (int i = getInventario().getlista().size() - 1; i >= 0 && quitados < aQuitar; i--) {
+			Item item = getInventario().getlista().get(i);
+			int puedeQuitar = Math.min(item.getCantidad(), aQuitar - quitados);
+			item.setCantidad(item.getCantidad() - puedeQuitar);
+			quitados += puedeQuitar;
+			
+			// Si el item se queda a 0, lo eliminamos de la lista
+			if (item.getCantidad() <= 0) {
+				getInventario().getlista().remove(i);
+			}
+		}
+		
+		System.out.println(getNombre() + " ha perdido " + quitados + " objetos.");
+	}
+	
+	
 }
