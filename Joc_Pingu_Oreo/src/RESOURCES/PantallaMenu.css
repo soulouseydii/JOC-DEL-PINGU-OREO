@@ -19,7 +19,7 @@
     -fx-border-color: #e6e7ee;
     -fx-border-radius: 16;
 
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 16, 0.15, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.10), 16, 0.15, 0, 2);
 }
 
 .ice-card {
@@ -28,7 +28,7 @@
     -fx-border-color: rgba(255, 255, 255, 0.7);
     -fx-border-width: 2;
     -fx-border-radius: 20;
-    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
+    -fx-effect: dropshadow(two-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 4);
 }
 
 /* TITLES */
