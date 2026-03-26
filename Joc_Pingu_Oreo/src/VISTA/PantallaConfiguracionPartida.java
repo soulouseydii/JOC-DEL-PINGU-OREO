@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import MODELO.*;
 
 public class PantallaConfiguracionPartida {
 
@@ -157,11 +158,36 @@ public class PantallaConfiguracionPartida {
     @FXML
     private void handleEmpezar(ActionEvent event) {
         System.out.println("Partida iniciada con " + numJugadores + " jugadores.");
+        
+        ArrayList<Jugador> jugadoresConfigurados = new ArrayList<>();
+        String[] colores = {"Azul", "Rojo", "Verde", "Amarillo"};
+        
+        for (int i = 0; i < numJugadores; i++) {
+            TarjetaJugador tj = tarjetasActivas.get(i);
+            String tipo = tj.comboTipo.getValue();
+            String color = colores[i];
+            
+            if (tipo.equals("CPU (Foca)")) {
+                jugadoresConfigurados.add(new Foca("Jugador " + (i + 1) + " (Foca)", color, 0));
+            } else {
+                Inventario inv = new Inventario();
+                inv.getlista().add(new Dado("Normal"));
+                String nombre = tj.txtUsuario.getText();
+                if (nombre == null || nombre.trim().isEmpty()) {
+                    nombre = "Jugador " + (i + 1);
+                }
+                jugadoresConfigurados.add(new Pinguino(nombre, color, 0, inv));
+            }
+        }
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
             Parent root = loader.load();
+            
+            PantallaJuego controller = loader.getController();
+            controller.iniciarConJugadores(jugadoresConfigurados);
+            
             Scene scene = new Scene(root);
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("Juego Pingu Oreo");

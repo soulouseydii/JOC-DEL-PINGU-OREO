@@ -61,22 +61,34 @@ public class PantallaJuego {
 	@FXML
 	private void initialize() {
 		gestorPartida = new GestorPartida();
+	}
 
-		ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
-		for (int i = 1; i <= 4; i++) {
-			Inventario inventario = new Inventario();
-			inventario.getlista().add(new Dado("Normal"));
-			String color = (i == 1) ? "Azul" : (i == 2) ? "Rojo" : (i == 3) ? "Verde" : "Amarillo";
-			jugadores.add(new Pinguino("Jugador " + i, color, 0, inventario));
-		}
-
+	public void iniciarConJugadores(ArrayList<Jugador> jugadores) {
 		gestorPartida.nuevaPartida(jugadores);
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
 		
-		// Actualizar la UI del inventario para el primer jugador
+		// Ocultar fichas que no participen visualmente
+		P1.setVisible(false);
+		P2.setVisible(false);
+		P3.setVisible(false);
+		P4.setVisible(false);
+		
+		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+			getFicha(i).setVisible(true);
+		}
+		
 		actualizarInventarioUI();
-        
-		agregarEvento("🎮 ¡El juego ha comenzado! Turno de Jugador 1");
+		
+		Jugador j1 = gestorPartida.getPartida().getJugadorActual();
+		agregarEvento("🎮 ¡El juego ha comenzado! Turno de " + j1.getNombre());
+		
+		if (j1 instanceof Foca) {
+			dado.setDisable(true);
+			btnMoto.setDisable(true);
+			PauseTransition pausa = new PauseTransition(Duration.millis(1500));
+			pausa.setOnFinished(e -> handleDado(null));
+			pausa.play();
+		}
 	}
 
 	// =========================================
@@ -322,8 +334,18 @@ public class PantallaJuego {
 		} else {
 			// Actualizar inventario para el SIGUIENTE jugador
 			actualizarInventarioUI();
-			agregarEvento("▶ Turno de " + gestorPartida.getPartida().getJugadorActual().getNombre());
-			dado.setDisable(false);
+			Jugador sigJ = gestorPartida.getPartida().getJugadorActual();
+			agregarEvento("▶ Turno de " + sigJ.getNombre());
+			
+			if (sigJ instanceof Foca) {
+				dado.setDisable(true);
+				btnMoto.setDisable(true);
+				PauseTransition pausa = new PauseTransition(Duration.millis(1500));
+				pausa.setOnFinished(e -> handleDado(null));
+				pausa.play();
+			} else {
+				dado.setDisable(false);
+			}
 		}
 	}
 	
