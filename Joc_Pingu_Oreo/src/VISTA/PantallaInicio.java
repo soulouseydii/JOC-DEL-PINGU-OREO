@@ -63,18 +63,18 @@ public class PantallaInicio extends Application {
     private void handleNuevaPartida(ActionEvent event) {
         System.out.println("Nueva Partida clicked");
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaConfiguracionPartida.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
-            stage.setTitle("Menú Pingu Oreo");
+            stage.setTitle("Configuración Pingu Oreo");
             // Forzar re-maximización al cambiar de escena
             stage.setMaximized(false);
             stage.setMaximized(true);
         } catch (Exception e) {
-            System.out.println("No se pudo cargar PantallaMenu.fxml");
+            System.out.println("No se pudo cargar PantallaConfiguracionPartida.fxml");
             e.printStackTrace();
         }
     }
