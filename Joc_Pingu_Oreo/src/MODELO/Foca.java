@@ -27,24 +27,16 @@ public class Foca extends Jugador {
         }
     }
 
-    // Aplastar jugador
+    // Aplastar jugador: le quita la mitad del inventario al pasar por encima
     public void aplastarJugador(Pinguino p) {
-        int cantidadActual = p.getInv().getlista().size();
-        int aQuitar = cantidadActual / 2;
-        
         System.out.println("¡La foca aplasta a " + p.getNombre() + " al pasar por su casilla!");
-        
-        for (int i = 0; i < aQuitar; i++) {
-            if (!p.getInv().getlista().isEmpty()) {
-                p.getInv().getlista().remove(0);
-            }
-        }
-        System.out.println(p.getNombre() + " ha perdido " + aQuitar + " objetos.");
+        p.perderMitadInventario();
     }
     
-    // Logica de golpearjugador
+    // Golpear jugador: la foca le pega con la cola (usado cuando coinciden en casilla final)
     public void golpearJugador(Pinguino p) {
         System.out.println("¡La foca golpea a " + p.getNombre() + " con la cola!");
+        p.perderMitadInventario();
     }
     
     // Este metodo sustituye a esSobornado

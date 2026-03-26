@@ -14,7 +14,7 @@ public abstract class Jugador {
 	/* CONSTRUCTOR DEL JUGADOR */
 	
 	public Jugador(String nombre, String color, int posicion) {
-		this.posicion = 1;
+		this.posicion = 0; // Empieza en Start (casilla 0)
 		this.nombre = nombre;
 		this.color = color;
 	}
@@ -69,8 +69,8 @@ public abstract class Jugador {
 		}
 		
 		//Evitar posicions negatives
-		if (this.posicion < 1) {
-			this.posicion = 1;
+		if (this.posicion < 0) {
+			this.posicion = 0;
 		}
 		
 	}

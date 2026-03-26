@@ -23,8 +23,8 @@ public class Agujero extends Casilla {
             System.out.println(jugador.getNombre() + " ha caido en un agujero y retrocede a la casilla " + agujeroAnterior + "!");
         } else {
             // Si no hay agujero anterior, vuelve a la casilla 1 (salida)
-            jugador.setPosicion(1);
-            System.out.println(jugador.getNombre() + " ha caido en un agujero pero no hay agujeros anteriores. Vuelve a la casilla 1!");
+            jugador.setPosicion(0);
+            System.out.println(jugador.getNombre() + " ha caido en un agujero pero no hay agujeros anteriores. Vuelve a Start!");
         }
 
     }
