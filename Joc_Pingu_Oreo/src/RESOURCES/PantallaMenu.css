@@ -1,6 +1,6 @@
 .root {
     -fx-font-family: "System";
-    -fx-background-image: url('../imagenes/Fondo_Menu.png');
+    -fx-background-image: url('../imagenes/Fondo_Menu.jpg');
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
@@ -20,6 +20,15 @@
     -fx-border-radius: 16;
 
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 16, 0.15, 0, 2);
+}
+
+.ice-card {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.6), rgba(173, 216, 230, 0.4));
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(255, 255, 255, 0.7);
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
 }
 
 /* TITLES */
