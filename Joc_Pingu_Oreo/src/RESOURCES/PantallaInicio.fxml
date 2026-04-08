@@ -31,21 +31,20 @@
     </top>
 
     <center>
-        <StackPane prefHeight="700.0" prefWidth="1178.0">
+        <StackPane prefHeight="700.0" prefWidth="1123.0">
             <padding>
                 <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
             </padding>
-
-            <!-- Botones del Menú Principal -->
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="470.0" prefHeight="197.0" prefWidth="470.0" spacing="15" translateY="60">
-                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Nueva Partida" />
-                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Cargar Partida" />
-                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Opciones" />
-                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="45.0" prefWidth="250.0" text="Salir del Juego" />
-            <StackPane.margin>
-               <Insets bottom="190.0" />
-            </StackPane.margin>
-            </VBox>
         </StackPane>
     </center>
+   <left>
+
+         <!-- Botones del Menú Principal -->
+         <VBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="1096.0" prefHeight="858.0" prefWidth="479.0" spacing="15" BorderPane.alignment="CENTER">
+             <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Nueva Partida" />
+             <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Cargar Partida" />
+             <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Opciones" />
+             <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="45.0" prefWidth="250.0" text="Salir del Juego" />
+         </VBox>
+   </left>
 </BorderPane>
