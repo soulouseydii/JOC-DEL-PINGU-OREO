@@ -6,6 +6,9 @@ import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -13,6 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import CONTROLADOR.GestorPartida;
@@ -38,6 +42,7 @@ public class PantallaJuego {
 	@FXML private Text nieve_t;
 	@FXML private Text moto_t;
 	@FXML private Button btnMoto;
+	@FXML private Button btnVolverMenu;
 	
 	// Log de eventos
 	@FXML private TextArea eventosLog;
@@ -173,6 +178,33 @@ public class PantallaJuego {
 	@FXML private void handleSaveGame() { System.out.println("Guardar Juego."); }
 	@FXML private void handleLoadGame() { System.out.println("Cargar Juego."); }
 	@FXML private void handleQuitGame() { System.out.println("Salir..."); }
+
+	// =========================================
+	//  VOLVER AL MENÚ
+	// =========================================
+
+	@FXML
+	private void handleVolverMenu(ActionEvent event) {
+		try {
+			// 1. Cargamos el FXML del Menú
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
+			Parent menuRoot = loader.load();
+			Scene menuScene = new Scene(menuRoot);
+
+			// 2. Obtenemos el Stage actual a través del botón que disparó el evento
+			Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+			// 3. Cambiamos la escena al Menú
+			stage.setScene(menuScene);
+			stage.setMaximized(false);
+			stage.setMaximized(true);
+
+			System.out.println("Volviendo al Menú Principal.");
+		} catch (Exception e) {
+			System.out.println("Error al volver al Menú: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
 	// =========================================
 	//  HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
