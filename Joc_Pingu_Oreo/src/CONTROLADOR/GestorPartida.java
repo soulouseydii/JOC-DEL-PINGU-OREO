@@ -102,9 +102,17 @@ public class GestorPartida {
             
             // La foca tira el dado y se mueve
             int pasosFoca = tirarDado(f, null);
+            ultimoResultadoDado = pasosFoca;
             System.out.println(f.getNombre() + " ha sacado un " + pasosFoca);
             gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
             System.out.println("Nueva posición de la foca: " + f.getPosicion());
+            
+            // Guardamos la casilla donde cayó ANTES del efecto
+            ultimaCasillaPisada = f.getPosicion();
+            
+            // Ejecutar la acción de la casilla donde ha caído la foca
+            Casilla casillaFoca = partida.getTablero().getListaCasillas().get(f.getPosicion());
+            casillaFoca.realizarAccion(partida, f);
             
             // REGLA: La foca aplasta a los pingüinos de las casillas INTERMEDIAS
             // (entre posicionAnterior+1 y posicionFinal-1)
