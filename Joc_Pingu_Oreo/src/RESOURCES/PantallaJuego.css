@@ -154,3 +154,22 @@
 .current-player {
     -fx-effect: dropshadow(gaussian, gold, 12, 0.6, 0, 0);
 }
+
+/* ========================= */
+/*   BOTÓN CONFIGURACIÓN     */
+/* ========================= */
+
+.settings-button {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-background-radius: 50;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.settings-button:hover {
+    -fx-scale-x: 1.15;
+    -fx-scale-y: 1.15;
+    -fx-opacity: 1.0; /* Reset hover opacity from generic button if needed */
+}
