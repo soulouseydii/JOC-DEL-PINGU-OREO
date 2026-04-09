@@ -154,3 +154,83 @@
 .current-player {
     -fx-effect: dropshadow(gaussian, gold, 12, 0.6, 0, 0);
 }
+
+/* SETTINGS BUTTON */
+.settings-button {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-opacity: 0.9;
+    -fx-background-radius: 0;
+}
+
+.settings-button:hover {
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.15;
+    -fx-scale-y: 1.15;
+}
+
+.settings-button .graphic {
+    -fx-padding: 0;
+}
+
+/* OVERLAY MENU */
+.overlay-menu {
+    -fx-background-color: rgba(255, 255, 255, 0.88);
+    -fx-background-radius: 24;
+    -fx-border-color: #e6e7ee;
+    -fx-border-width: 2;
+    -fx-border-radius: 24;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 30, 0.2, 0, 10);
+}
+
+.main-container-disabled {
+    -fx-opacity: 0.4;
+    -fx-effect: transitions(blur, 10); /* Note: standard JFX CSS doesn't support blur easily, but we'll use opacity */
+}
+
+.menu-title {
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a2e;
+    -fx-padding: 0 0 10 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 0, 0, 0, 1);
+}
+
+/* CUSTOM CONTROLS FOR OPTIONS */
+.slider .track {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-radius: 5;
+    -fx-pref-height: 8;
+}
+
+.slider .thumb {
+    -fx-background-color: linear-gradient(to bottom, #74b9ff, #0984e3);
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.custom-checkbox .box {
+    -fx-background-color: rgba(255, 255, 255, 0.6);
+    -fx-background-radius: 5;
+    -fx-border-color: #0984e3;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-padding: 3;
+}
+
+.custom-checkbox:selected .mark {
+    -fx-background-color: #0984e3;
+}
+
+.custom-checkbox .label {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+
+

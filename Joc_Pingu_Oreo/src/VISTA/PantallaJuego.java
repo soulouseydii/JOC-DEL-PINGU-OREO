@@ -1,7 +1,10 @@
 package VISTA;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javafx.application.Platform;
+import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -13,10 +16,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -45,11 +54,17 @@ public class PantallaJuego {
 	@FXML private Text nieve_t;
 	@FXML private Text moto_t;
 	@FXML private Button btnMoto;
-	@FXML private Button btnGuardar;
-	@FXML private Button btnVolverMenu;
+	@FXML private Button btnSettings;
 	
 	// Log de eventos
 	@FXML private TextArea eventosLog;
+
+	// Contenedores para Overlay
+	@FXML private BorderPane mainContainer;
+	@FXML private VBox menuOverlay;
+	@FXML private VBox optionsSubmenu;
+	@FXML private CheckBox checkMusica;
+	@FXML private Slider sliderVolumen;
 
 	// Tablero y fichas
 	@FXML private GridPane tablero;
@@ -60,6 +75,9 @@ public class PantallaJuego {
 
 	private GestorPartida gestorPartida;
 	private int[] posiciones = new int[4];
+	private boolean isPaused = false;
+	private PauseTransition cpuPauseTransition;
+	private List<Animation> currentAnimations = new ArrayList<>();
 	private static final int COLUMNS = 5;
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
 
@@ -70,6 +88,11 @@ public class PantallaJuego {
 	@FXML
 	private void initialize() {
 		gestorPartida = new GestorPartida();
+		
+		// Tooltip Opciones (1s de retardo)
+		Tooltip tooltip = new Tooltip("Opciones");
+		tooltip.setShowDelay(Duration.seconds(1));
+		btnSettings.setTooltip(tooltip);
 	}
 
 	public void iniciarConJugadores(ArrayList<Jugador> jugadores) {
@@ -94,9 +117,13 @@ public class PantallaJuego {
 		if (j1 instanceof Foca) {
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
-			PauseTransition pausa = new PauseTransition(Duration.millis(1500));
-			pausa.setOnFinished(e -> handleDado(null));
-			pausa.play();
+			cpuPauseTransition = new PauseTransition(Duration.millis(1500));
+			cpuPauseTransition.setOnFinished(e -> {
+				currentAnimations.remove(cpuPauseTransition);
+				if (!isPaused) handleDado(null);
+			});
+			currentAnimations.add(cpuPauseTransition);
+			cpuPauseTransition.play();
 		}
 	}
 
@@ -223,64 +250,116 @@ public class PantallaJuego {
 	@FXML private void handleQuitGame() { System.out.println("Salir..."); }
 
 	// =========================================
-	//  GUARDAR PARTIDA (Botón visible)
+	//  HANDLER CONFIGURACIÓN (Overlay)
 	// =========================================
 
 	@FXML
-	private void handleGuardarPartida(ActionEvent event) {
-		handleSaveGame();
+	private void handleSettingsClick(ActionEvent event) {
+		isPaused = true;
+		
+		// Detener todas las animaciones configuradas (del tablero y de la CPU)
+		for (Animation a : currentAnimations) {
+			if (a.getStatus() == Animation.Status.RUNNING) {
+				a.pause();
+			}
+		}
+		
+		menuOverlay.setVisible(true);
+		mainContainer.setDisable(true);
+		if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
+			mainContainer.getStyleClass().add("main-container-disabled");
+		}
 	}
 
-	// =========================================
-	//  VOLVER AL MENÚ (pregunta si guardar)
-	// =========================================
+	@FXML
+	private void handleResume(ActionEvent event) {
+		isPaused = false;
+		menuOverlay.setVisible(false);
+		mainContainer.setDisable(false);
+		mainContainer.getStyleClass().remove("main-container-disabled");
+
+		// Reanudar todas las animaciones pausadas
+		for (Animation a : currentAnimations) {
+			if (a.getStatus() == Animation.Status.PAUSED) {
+				a.play();
+			}
+		}
+	}
 
 	@FXML
-	private void handleVolverMenu(ActionEvent event) {
-		// Crear dialogo con 3 opciones
-		Alert dialogo = new Alert(Alert.AlertType.CONFIRMATION);
-		dialogo.setTitle("Volver al Menu");
-		dialogo.setHeaderText("¿Quieres guardar la partida antes de salir?");
-		dialogo.setContentText("Si no guardas, perderas el progreso actual.");
+	private void handleMenuSave(ActionEvent event) {
+		// Según indicación del usuario: Redirigir a PantallaCargarPartida
+		handleLoadGame();
+	}
 
-		ButtonType btnGuardarYSalir = new ButtonType("Guardar y Salir");
-		ButtonType btnSalirSinGuardar = new ButtonType("Salir sin Guardar");
-		ButtonType btnCancelar = new ButtonType("Cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+	@FXML
+	private void handleMenuBackToMenu(ActionEvent event) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Volver al Menú");
+		alert.setHeaderText("¿Quieres guardar la partida?");
+		alert.setContentText("Selecciona una opción:");
 
-		dialogo.getButtonTypes().setAll(btnGuardarYSalir, btnSalirSinGuardar, btnCancelar);
+		ButtonType btnGuardar = new ButtonType("Guardar");
+		ButtonType btnNoGuardar = new ButtonType("No guardar");
+		ButtonType btnCancelar = new ButtonType("No, cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
 
-		dialogo.showAndWait().ifPresent(respuesta -> {
-			if (respuesta == btnGuardarYSalir) {
-				// Guardar y luego volver al menu
-				int id = gestorPartida.guardarPartida();
-				if (id > 0) {
-					System.out.println("Partida guardada con ID: " + id);
+		alert.getButtonTypes().setAll(btnGuardar, btnNoGuardar, btnCancelar);
+
+		alert.showAndWait().ifPresent(response -> {
+			if (response == btnGuardar) {
+				handleMenuSave(event);
+			} else if (response == btnNoGuardar) {
+				try {
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
+					Parent root = loader.load();
+					Scene scene = new Scene(root);
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					stage.setScene(scene);
+					stage.setMaximized(false);
+					stage.setMaximized(true);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				volverAlMenu(event);
-			} else if (respuesta == btnSalirSinGuardar) {
-				volverAlMenu(event);
 			}
-			// Si es Cancelar, no hacemos nada y se queda en el juego
 		});
 	}
 
-	private void volverAlMenu(ActionEvent event) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
-			Parent menuRoot = loader.load();
-			Scene menuScene = new Scene(menuRoot);
+	@FXML
+	private void handleMenuExit(ActionEvent event) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Salir del Juego");
+		alert.setHeaderText("¿Quieres guardar la partida?");
+		alert.setContentText("Selecciona una opción:");
 
-			Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-			stage.setScene(menuScene);
-			stage.setMaximized(false);
-			stage.setMaximized(true);
+		ButtonType btnGuardar = new ButtonType("Guardar");
+		ButtonType btnNoGuardar = new ButtonType("No guardar");
+		ButtonType btnCancelar = new ButtonType("No, cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
 
-			System.out.println("Volviendo al Menu Principal.");
-		} catch (Exception e) {
-			System.out.println("Error al volver al Menu: " + e.getMessage());
-			e.printStackTrace();
-		}
+		alert.getButtonTypes().setAll(btnGuardar, btnNoGuardar, btnCancelar);
+
+		alert.showAndWait().ifPresent(response -> {
+			if (response == btnGuardar) {
+				handleMenuSave(event);
+			} else if (response == btnNoGuardar) {
+				Platform.exit();
+			}
+		});
 	}
+
+	@FXML
+	private void handleMenuOptions(ActionEvent event) {
+		menuOverlay.setVisible(false);
+		optionsSubmenu.setVisible(true);
+	}
+
+	@FXML
+	private void handleBackFromOptions(ActionEvent event) {
+		optionsSubmenu.setVisible(false);
+		menuOverlay.setVisible(true);
+	}
+
+
+
 
 	// =========================================
 	//  HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
@@ -288,6 +367,8 @@ public class PantallaJuego {
 	
 	@FXML
 	private void handleDado(ActionEvent event) {
+		if (isPaused) return;
+		
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 		
@@ -310,14 +391,16 @@ public class PantallaJuego {
 		if (casillaPisada >= 0 && posVisualCasilla != posVisualFinal) {
 			// HAY EFECTO: animación en 2 pasos
 			animarMovimiento(indiceActual, posVisualCasilla, () -> {
-				PauseTransition pausa = new PauseTransition(Duration.millis(400));
-				pausa.setOnFinished(pausaEvt -> {
+				PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
+				pausaEfecto.setOnFinished(pausaEvt -> {
+					currentAnimations.remove(pausaEfecto);
 					animarMovimiento(indiceActual, posVisualFinal, () -> {
 						actualizarTodasLasFichas();
 						finalizarTurnoVisual();
 					});
 				});
-				pausa.play();
+				currentAnimations.add(pausaEfecto);
+				pausaEfecto.play();
 			});
 		} else {
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
@@ -333,6 +416,8 @@ public class PantallaJuego {
 	
 	@FXML
 	private void handleUsarMoto() {
+		if (isPaused) return;
+		
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 		
@@ -422,6 +507,7 @@ public class PantallaJuego {
 		slide.setByY(dy);
 
 		slide.setOnFinished(e -> {
+			currentAnimations.remove(slide);
 			fichaObj.setTranslateX(0);
 			fichaObj.setTranslateY(0);
 			GridPane.setRowIndex(fichaObj, newRow);
@@ -429,6 +515,7 @@ public class PantallaJuego {
 			if (alTerminar != null) alTerminar.run();
 		});
 
+		currentAnimations.add(slide);
 		slide.play();
 	}
 	
@@ -448,9 +535,13 @@ public class PantallaJuego {
 			if (sigJ instanceof Foca) {
 				dado.setDisable(true);
 				btnMoto.setDisable(true);
-				PauseTransition pausa = new PauseTransition(Duration.millis(1500));
-				pausa.setOnFinished(e -> handleDado(null));
-				pausa.play();
+				cpuPauseTransition = new PauseTransition(Duration.millis(1500));
+				cpuPauseTransition.setOnFinished(e -> {
+					currentAnimations.remove(cpuPauseTransition);
+					if (!isPaused) handleDado(null);
+				});
+				currentAnimations.add(cpuPauseTransition);
+				cpuPauseTransition.play();
 			} else {
 				dado.setDisable(false);
 			}
