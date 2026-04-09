@@ -102,6 +102,7 @@
                 <Label styleClass="card-title" text="Dado" />
                 <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="240" />
                 <Button fx:id="dado" maxWidth="Infinity" onAction="#handleDado" styleClass="primary" text="Tirar dado" />
+                <Button fx:id="btnGuardar" maxWidth="Infinity" onAction="#handleGuardarPartida" styleClass="secondary" text="💾 Guardar Partida" />
                 <Button fx:id="btnVolverMenu" maxWidth="Infinity" onAction="#handleVolverMenu" styleClass="secondary" text="🏠 Volver al Menú" />
             </VBox>
 
