@@ -19,7 +19,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
@@ -39,11 +38,6 @@ import MODELO.*;
 
 public class PantallaJuego {
 
-	// Menu items
-	@FXML private MenuItem newGame;
-	@FXML private MenuItem saveGame;
-	@FXML private MenuItem loadGame;
-	@FXML private MenuItem quitGame;
 
 	// Botón dado
 	@FXML private Button dado;
@@ -259,10 +253,8 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  MENÚ
+	//  MENÚ GUARDADO / CARGA (Desde Pause)
 	// =========================================
-
-	@FXML private void handleNewGame() { System.out.println("Nuevo Juego."); }
 
 	@FXML
 	private void handleSaveGame() {
@@ -310,7 +302,6 @@ public class PantallaJuego {
 		}
 	}
 
-	@FXML private void handleQuitGame() { System.out.println("Salir..."); }
 
 	// =========================================
 	//  HANDLER CONFIGURACIÓN (Overlay)

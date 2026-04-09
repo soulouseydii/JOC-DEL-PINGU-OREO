@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
 import javafx.stage.StageStyle;
 import javafx.application.Application;
@@ -16,8 +15,6 @@ import javafx.application.Application;
 
 public class PantallaInicio extends Application {
 
-    private double xOffset = 0;
-    private double yOffset = 0;
 
     @FXML private Button btnNuevaPartida;
     @FXML private Button btnCargarPartida;
@@ -130,45 +127,5 @@ public class PantallaInicio extends Application {
         System.exit(0);
     }
 
-    // ==========================================
-    // LÓGICA DE LOS BOTONES DE LA BARRA DE TÍTULO
-    // ==========================================
 
-    @FXML
-    private void minimizarVentana(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setIconified(true);
-    }
-
-    @FXML
-    private void maximizarVentana(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setMaximized(!stage.isMaximized());
-    }
-
-    @FXML
-    private void cerrarVentana(ActionEvent event) {
-        System.out.println("Cerrando el juego...");
-        System.exit(0);
-    }
-
-    // ==========================================
-    // LÓGICA PARA ARRASTRAR LA VENTANA
-    // ==========================================
-
-    @FXML
-    private void onTitleBarPressed(MouseEvent event) {
-        xOffset = event.getSceneX();
-        yOffset = event.getSceneY();
-    }
-
-    @FXML
-    private void onTitleBarDragged(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if(stage.isMaximized()) {
-            stage.setMaximized(false);
-        }
-        stage.setX(event.getScreenX() - xOffset);
-        stage.setY(event.getScreenY() - yOffset);
-    }
 }
