@@ -1,6 +1,7 @@
 package VISTA;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
@@ -13,6 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import CONTROLADOR.GestorBBDD;
+import CONTROLADOR.GestorPartida;
+import MODELO.Partida;
 
 public class PantallaCargarPartida {
 
@@ -27,47 +33,116 @@ public class PantallaCargarPartida {
 
     private ObservableList<String> partidas;
 
+    // Guardamos los IDs reales de la base de datos para saber cual cargar/eliminar
+    private ArrayList<Integer> idsPartidas = new ArrayList<>();
+
+    private GestorBBDD gestorBBDD;
+
     @FXML
     private void initialize() {
         System.out.println("PantallaCargarPartida Controller initialized");
-        
-        // Cargar datos dummy
-        partidas = FXCollections.observableArrayList(
-            "Partida 1 - Nivel 3",
-            "Partida 2 - Nivel 5",
-            "Partida 3 - Nivel 1"
-        );
+
+        gestorBBDD = new GestorBBDD();
+        cargarListaDesdeOracle();
+    }
+
+    private void cargarListaDesdeOracle() {
+        partidas = FXCollections.observableArrayList();
+        idsPartidas.clear();
+
+        ArrayList<String[]> listaDB = gestorBBDD.listarPartidas();
+
+        if (listaDB.isEmpty()) {
+            partidas.add("(No hay partidas guardadas)");
+        } else {
+            for (String[] info : listaDB) {
+                idsPartidas.add(Integer.parseInt(info[0]));
+                partidas.add(info[1]);
+            }
+        }
+
         listaPartidas.setItems(partidas);
     }
 
     @FXML
     private void handleCargar(ActionEvent event) {
-        String seleccionada = listaPartidas.getSelectionModel().getSelectedItem();
-        if (seleccionada != null) {
-            System.out.println("Cargar partida seleccionada: " + seleccionada);
-            // TODO: Lógica para pasar a la pantalla de juego con la partida cargada
-        } else {
+        int indiceSeleccionado = listaPartidas.getSelectionModel().getSelectedIndex();
+
+        if (indiceSeleccionado < 0 || idsPartidas.isEmpty()) {
             System.out.println("Por favor, selecciona una partida para cargar.");
+            return;
+        }
+
+        int idPartida = idsPartidas.get(indiceSeleccionado);
+        System.out.println("Cargando partida con ID: " + idPartida);
+
+        // Cargar la partida completa desde Oracle
+        Partida partidaCargada = gestorBBDD.cargarBBDD(idPartida);
+
+        if (partidaCargada == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No se pudo cargar la partida desde la base de datos.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Abrir PantallaJuego con la partida cargada
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
+            Parent root = loader.load();
+
+            PantallaJuego controller = loader.getController();
+            controller.cargarPartidaGuardada(partidaCargada);
+
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Juego Pingu Oreo - Partida Cargada");
+            stage.setMaximized(false);
+            stage.setMaximized(true);
+
+        } catch (Exception e) {
+            System.out.println("Error al abrir PantallaJuego: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void handleEliminar(ActionEvent event) {
-        String seleccionada = listaPartidas.getSelectionModel().getSelectedItem();
-        if (seleccionada != null) {
-            overlayConfirmacion.setVisible(true);
-        } else {
+        int indiceSeleccionado = listaPartidas.getSelectionModel().getSelectedIndex();
+
+        if (indiceSeleccionado < 0 || idsPartidas.isEmpty()) {
             System.out.println("Por favor, selecciona una partida para eliminar.");
+            return;
         }
+
+        overlayConfirmacion.setVisible(true);
     }
 
     @FXML
     private void confirmarBorrado(ActionEvent event) {
-        String seleccionada = listaPartidas.getSelectionModel().getSelectedItem();
-        if (seleccionada != null) {
-            System.out.println("Partida borrada: " + seleccionada);
-            partidas.remove(seleccionada);
+        int indiceSeleccionado = listaPartidas.getSelectionModel().getSelectedIndex();
+
+        if (indiceSeleccionado >= 0 && indiceSeleccionado < idsPartidas.size()) {
+            int idPartida = idsPartidas.get(indiceSeleccionado);
+
+            boolean eliminada = gestorBBDD.eliminarPartida(idPartida);
+
+            if (eliminada) {
+                System.out.println("Partida ID " + idPartida + " eliminada.");
+                // Refrescar la lista
+                cargarListaDesdeOracle();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("No se pudo eliminar la partida.");
+                alert.showAndWait();
+            }
         }
+
         overlayConfirmacion.setVisible(false);
     }
 
@@ -92,10 +167,6 @@ public class PantallaCargarPartida {
             e.printStackTrace();
         }
     }
-
-    // ==========================================
-    // LÓGICA DE LOS BOTONES DE LA BARRA DE TÍTULO
-    // ==========================================
 
     @FXML
     private void minimizarVentana(ActionEvent event) {

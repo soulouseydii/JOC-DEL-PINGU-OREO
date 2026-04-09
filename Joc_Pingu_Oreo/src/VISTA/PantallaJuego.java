@@ -7,9 +7,12 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
@@ -42,6 +45,7 @@ public class PantallaJuego {
 	@FXML private Text nieve_t;
 	@FXML private Text moto_t;
 	@FXML private Button btnMoto;
+	@FXML private Button btnGuardar;
 	@FXML private Button btnVolverMenu;
 	
 	// Log de eventos
@@ -55,7 +59,7 @@ public class PantallaJuego {
 	@FXML private Circle P4;
 
 	private GestorPartida gestorPartida;
-	private int[] posiciones = new int[4]; // Todos empiezan en 0 (Start)
+	private int[] posiciones = new int[4];
 	private static final int COLUMNS = 5;
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
 
@@ -114,10 +118,6 @@ public class PantallaJuego {
 	//  INVENTARIO UI
 	// =========================================
 	
-	/**
-	 * Lee el inventario del jugador ACTUAL y actualiza los contadores en la UI.
-	 * Si el jugador no tiene un item, muestra 0.
-	 */
 	private void actualizarInventarioUI() {
 		Jugador jActual = gestorPartida.getPartida().getJugadorActual();
 		
@@ -135,10 +135,8 @@ public class PantallaJuego {
 			nieve_t.setText("Bolas de nieve: " + cantBolas);
 			moto_t.setText("Moto de Nieve: " + cantMotos);
 			
-			// Solo habilitar el botón de Moto si tiene al menos 1
 			btnMoto.setDisable(cantMotos <= 0);
 		} else {
-			// Si es una Foca (no tiene inventario visible)
 			peces_t.setText("Peces: -");
 			nieve_t.setText("Bolas de nieve: -");
 			moto_t.setText("Moto de Nieve: -");
@@ -175,33 +173,111 @@ public class PantallaJuego {
 	// =========================================
 
 	@FXML private void handleNewGame() { System.out.println("Nuevo Juego."); }
-	@FXML private void handleSaveGame() { System.out.println("Guardar Juego."); }
-	@FXML private void handleLoadGame() { System.out.println("Cargar Juego."); }
+
+	@FXML
+	private void handleSaveGame() {
+		if (gestorPartida.getPartida() == null) {
+			agregarEvento("⚠️ No hay partida activa para guardar.");
+			return;
+		}
+		int idGuardado = gestorPartida.guardarPartida();
+		if (idGuardado > 0) {
+			agregarEvento("═══════════════════════");
+			agregarEvento("💾 Partida guardada correctamente! (ID: " + idGuardado + ")");
+			agregarEvento("═══════════════════════");
+
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("Partida Guardada");
+			alert.setHeaderText(null);
+			alert.setContentText("Partida guardada correctamente en la base de datos.\nID de partida: " + idGuardado);
+			alert.showAndWait();
+		} else {
+			agregarEvento("❌ Error al guardar la partida.");
+
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("No se pudo guardar la partida. Revisa la conexion a la base de datos.");
+			alert.showAndWait();
+		}
+	}
+
+	@FXML
+	private void handleLoadGame() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaCargarPartida.fxml"));
+			Parent root = loader.load();
+			Scene scene = new Scene(root);
+
+			Stage stage = (Stage) tablero.getScene().getWindow();
+			stage.setScene(scene);
+			stage.setTitle("Cargar Partida");
+			stage.setMaximized(false);
+			stage.setMaximized(true);
+		} catch (Exception e) {
+			System.out.println("Error al abrir pantalla de cargar partida: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	@FXML private void handleQuitGame() { System.out.println("Salir..."); }
 
 	// =========================================
-	//  VOLVER AL MENÚ
+	//  GUARDAR PARTIDA (Botón visible)
+	// =========================================
+
+	@FXML
+	private void handleGuardarPartida(ActionEvent event) {
+		handleSaveGame();
+	}
+
+	// =========================================
+	//  VOLVER AL MENÚ (pregunta si guardar)
 	// =========================================
 
 	@FXML
 	private void handleVolverMenu(ActionEvent event) {
+		// Crear dialogo con 3 opciones
+		Alert dialogo = new Alert(Alert.AlertType.CONFIRMATION);
+		dialogo.setTitle("Volver al Menu");
+		dialogo.setHeaderText("¿Quieres guardar la partida antes de salir?");
+		dialogo.setContentText("Si no guardas, perderas el progreso actual.");
+
+		ButtonType btnGuardarYSalir = new ButtonType("Guardar y Salir");
+		ButtonType btnSalirSinGuardar = new ButtonType("Salir sin Guardar");
+		ButtonType btnCancelar = new ButtonType("Cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+
+		dialogo.getButtonTypes().setAll(btnGuardarYSalir, btnSalirSinGuardar, btnCancelar);
+
+		dialogo.showAndWait().ifPresent(respuesta -> {
+			if (respuesta == btnGuardarYSalir) {
+				// Guardar y luego volver al menu
+				int id = gestorPartida.guardarPartida();
+				if (id > 0) {
+					System.out.println("Partida guardada con ID: " + id);
+				}
+				volverAlMenu(event);
+			} else if (respuesta == btnSalirSinGuardar) {
+				volverAlMenu(event);
+			}
+			// Si es Cancelar, no hacemos nada y se queda en el juego
+		});
+	}
+
+	private void volverAlMenu(ActionEvent event) {
 		try {
-			// 1. Cargamos el FXML del Menú
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
 			Parent menuRoot = loader.load();
 			Scene menuScene = new Scene(menuRoot);
 
-			// 2. Obtenemos el Stage actual a través del botón que disparó el evento
 			Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-
-			// 3. Cambiamos la escena al Menú
 			stage.setScene(menuScene);
 			stage.setMaximized(false);
 			stage.setMaximized(true);
 
-			System.out.println("Volviendo al Menú Principal.");
+			System.out.println("Volviendo al Menu Principal.");
 		} catch (Exception e) {
-			System.out.println("Error al volver al Menú: " + e.getMessage());
+			System.out.println("Error al volver al Menu: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -465,5 +541,59 @@ public class PantallaJuego {
 
 	public void setGestorPartida(GestorPartida gestorPartida) {
 		this.gestorPartida = gestorPartida;
+	}
+
+	// =========================================
+	//  CARGAR PARTIDA GUARDADA
+	// =========================================
+
+	/**
+	 * Restaura el estado visual del juego a partir de una Partida
+	 * previamente cargada de la base de datos.
+	 */
+	public void cargarPartidaGuardada(Partida partida) {
+		gestorPartida.setPartida(partida);
+		mostrarTiposDeCasillasEnTablero(partida.getTablero());
+
+		// Ocultar todas las fichas primero
+		P1.setVisible(false);
+		P2.setVisible(false);
+		P3.setVisible(false);
+		P4.setVisible(false);
+
+		// Mostrar y posicionar fichas activas
+		ArrayList<Jugador> jugadores = partida.getJugadores();
+		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+			Circle ficha = getFicha(i);
+			ficha.setVisible(true);
+
+			int posVisual = Math.max(0, Math.min(jugadores.get(i).getPosicion(), 49));
+			posiciones[i] = posVisual;
+
+			ficha.setTranslateX(0);
+			ficha.setTranslateY(0);
+			GridPane.setRowIndex(ficha, posVisual / COLUMNS);
+			GridPane.setColumnIndex(ficha, posVisual % COLUMNS);
+		}
+
+		actualizarInventarioUI();
+
+		Jugador jActual = partida.getJugadorActual();
+		agregarEvento("💾 Partida cargada! Turno de " + jActual.getNombre());
+		agregarEvento("📌 Turno numero: " + partida.getTurnos());
+
+		// Mostrar posiciones de todos los jugadores
+		for (Jugador j : jugadores) {
+			agregarEvento("   " + j.getNombre() + " → casilla " + j.getPosicion());
+		}
+
+		// Si le toca a una Foca, ejecutar su turno automáticamente
+		if (jActual instanceof Foca) {
+			dado.setDisable(true);
+			btnMoto.setDisable(true);
+			PauseTransition pausa = new PauseTransition(Duration.millis(1500));
+			pausa.setOnFinished(e -> handleDado(null));
+			pausa.play();
+		}
 	}
 }
