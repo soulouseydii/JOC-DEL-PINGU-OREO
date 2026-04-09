@@ -3,6 +3,7 @@ package VISTA;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
@@ -15,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
@@ -59,6 +62,9 @@ public class PantallaJuego {
 	// Contenedores para Overlay
 	@FXML private BorderPane mainContainer;
 	@FXML private VBox menuOverlay;
+	@FXML private VBox optionsSubmenu;
+	@FXML private CheckBox checkMusica;
+	@FXML private Slider sliderVolumen;
 
 	// Tablero y fichas
 	@FXML private GridPane tablero;
@@ -264,6 +270,96 @@ public class PantallaJuego {
 			mainContainer.getStyleClass().add("main-container-disabled");
 		}
 	}
+
+	@FXML
+	private void handleResume(ActionEvent event) {
+		isPaused = false;
+		menuOverlay.setVisible(false);
+		mainContainer.setDisable(false);
+		mainContainer.getStyleClass().remove("main-container-disabled");
+
+		// Reanudar todas las animaciones pausadas
+		for (Animation a : currentAnimations) {
+			if (a.getStatus() == Animation.Status.PAUSED) {
+				a.play();
+			}
+		}
+	}
+
+	@FXML
+	private void handleMenuSave(ActionEvent event) {
+		// Según indicación del usuario: Redirigir a PantallaCargarPartida
+		handleLoadGame();
+	}
+
+	@FXML
+	private void handleMenuBackToMenu(ActionEvent event) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Volver al Menú");
+		alert.setHeaderText("¿Quieres guardar la partida?");
+		alert.setContentText("Selecciona una opción:");
+
+		ButtonType btnGuardar = new ButtonType("Guardar");
+		ButtonType btnNoGuardar = new ButtonType("No guardar");
+		ButtonType btnCancelar = new ButtonType("No, cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+
+		alert.getButtonTypes().setAll(btnGuardar, btnNoGuardar, btnCancelar);
+
+		alert.showAndWait().ifPresent(response -> {
+			if (response == btnGuardar) {
+				handleMenuSave(event);
+			} else if (response == btnNoGuardar) {
+				try {
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
+					Parent root = loader.load();
+					Scene scene = new Scene(root);
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					stage.setScene(scene);
+					stage.setMaximized(false);
+					stage.setMaximized(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	@FXML
+	private void handleMenuExit(ActionEvent event) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Salir del Juego");
+		alert.setHeaderText("¿Quieres guardar la partida?");
+		alert.setContentText("Selecciona una opción:");
+
+		ButtonType btnGuardar = new ButtonType("Guardar");
+		ButtonType btnNoGuardar = new ButtonType("No guardar");
+		ButtonType btnCancelar = new ButtonType("No, cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+
+		alert.getButtonTypes().setAll(btnGuardar, btnNoGuardar, btnCancelar);
+
+		alert.showAndWait().ifPresent(response -> {
+			if (response == btnGuardar) {
+				handleMenuSave(event);
+			} else if (response == btnNoGuardar) {
+				Platform.exit();
+			}
+		});
+	}
+
+	@FXML
+	private void handleMenuOptions(ActionEvent event) {
+		menuOverlay.setVisible(false);
+		optionsSubmenu.setVisible(true);
+	}
+
+	@FXML
+	private void handleBackFromOptions(ActionEvent event) {
+		optionsSubmenu.setVisible(false);
+		menuOverlay.setVisible(true);
+	}
+
+
+
 
 	// =========================================
 	//  HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
