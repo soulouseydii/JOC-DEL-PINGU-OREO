@@ -5,6 +5,11 @@ import VISTA.PantallaInicio;
 
 public class Main {
 
+    // Credenciales de la base de datos Oracle (accesibles desde cualquier clase)
+    public static String DB_URL = "jdbc:oracle:thin:@//192.168.3.26:1521/XEPDB2";
+    public static String DB_USER = "DW2526_GR01_PINGU";
+    public static String DB_PASS = "AJBPNSS";
+
     public static void main(String[] args) {
         Main aplicacion = new Main();
         aplicacion.jugar(args);
