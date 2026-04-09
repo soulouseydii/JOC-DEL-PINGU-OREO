@@ -49,33 +49,29 @@
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
 
-                <GridPane fx:id="tablero" gridLinesVisible="true" prefHeight="400.0" prefWidth="1000.0" styleClass="board" StackPane.alignment="CENTER">
+                <GridPane fx:id="tablero" gridLinesVisible="false" prefHeight="400.0" prefWidth="1000.0" styleClass="board" StackPane.alignment="CENTER">
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="20.0" />
-                        <ColumnConstraints percentWidth="20.0" />
-                        <ColumnConstraints percentWidth="20.0" />
-                        <ColumnConstraints percentWidth="20.0" />
-                        <ColumnConstraints percentWidth="20.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
+                        <ColumnConstraints percentWidth="10.0" />
                     </columnConstraints>
 
                     <rowConstraints>
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
-                        <RowConstraints percentHeight="10.0" />
+                        <RowConstraints percentHeight="20.0" />
+                        <RowConstraints percentHeight="20.0" />
+                        <RowConstraints percentHeight="20.0" />
+                        <RowConstraints percentHeight="20.0" />
+                        <RowConstraints percentHeight="20.0" />
                     </rowConstraints>
 
                     <children>
-                        <!-- Esquinas -->
-                        <Text styleClass="cell-title" text="Start" />
-                        <Text styleClass="cell-title" text="Finish" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
-          
                         <!-- Jugadores: fx:id para Controller + id para CSS -->
                         <Circle id="P1" fx:id="P1" radius="14.0" styleClass="player" />
                         <Circle id="P2" fx:id="P2" radius="14.0" styleClass="player">

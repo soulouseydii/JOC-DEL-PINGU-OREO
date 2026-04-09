@@ -30,6 +30,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
 
 import CONTROLADOR.GestorPartida;
 import MODELO.*;
@@ -78,8 +81,17 @@ public class PantallaJuego {
 	private boolean isPaused = false;
 	private PauseTransition cpuPauseTransition;
 	private List<Animation> currentAnimations = new ArrayList<>();
-	private static final int COLUMNS = 5;
+	private static final int COLUMNS = 10;
+	private static final int ROWS = 5;
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
+
+	// Imágenes de las casillas
+	private Image imgNormal;
+	private Image imgAgujero;
+	private Image imgTrineo;
+	private Image imgSueloQuebradizo;
+	private Image imgOso;
+	private Image imgEvento;
 
 	// =========================================
 	//  INICIALIZACIÓN
@@ -88,6 +100,17 @@ public class PantallaJuego {
 	@FXML
 	private void initialize() {
 		gestorPartida = new GestorPartida();
+		
+		try {
+			imgNormal = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_normal.png"));
+			imgAgujero = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_agujero.png"));
+			imgTrineo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_trineo.png"));
+			imgSueloQuebradizo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_SueloQuebradizo.png"));
+			imgOso = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_oso.png"));
+			imgEvento = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_evento.png"));
+		} catch (Exception e) {
+			System.out.println("Error al cargar imágenes de las casillas: " + e.getMessage());
+		}
 		
 		// Tooltip Opciones (1s de retardo)
 		Tooltip tooltip = new Tooltip("Opciones");
@@ -172,26 +195,66 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  TABLERO
+	//  TABLERO Y COORDENADAS
 	// =========================================
+
+	private int[] getCoordenadas(int posicion) {
+		int posReal = Math.max(0, Math.min(posicion, 49));
+		int fila = (ROWS - 1) - (posReal / COLUMNS);
+		int col;
+		if ((posReal / COLUMNS) % 2 == 0) {
+			col = posReal % COLUMNS;
+		} else {
+			col = (COLUMNS - 1) - (posReal % COLUMNS);
+		}
+		return new int[]{col, fila};
+	}
+
+	private Image getImagenParaCasilla(Casilla casilla) {
+		String tipo = casilla.getClass().getSimpleName();
+		switch (tipo) {
+			case "Agujero": return imgAgujero != null ? imgAgujero : imgNormal;
+			case "Trineo": return imgTrineo != null ? imgTrineo : imgNormal;
+			case "SueloQuebradizo": return imgSueloQuebradizo != null ? imgSueloQuebradizo : imgNormal;
+			case "Oso": return imgOso != null ? imgOso : imgNormal;
+			case "Evento": return imgEvento != null ? imgEvento : imgNormal;
+			case "Normal":
+			default: return imgNormal;
+		}
+	}
 
 	private void mostrarTiposDeCasillasEnTablero(Tablero t) {
 		tablero.getChildren().removeIf(node -> TAG_CASILLA_TEXT.equals(node.getUserData()));
 
-		for (int i = 0; i < t.getListaCasillas().size(); i++) {
+		for (int i = 0; i < 50 && i < t.getListaCasillas().size(); i++) {
 			Casilla casilla = t.getListaCasillas().get(i);
-			if (i > 0 && i < 49) {
-				String tipo = casilla.getClass().getSimpleName();
-				Text texto = new Text(tipo);
-				texto.setUserData(TAG_CASILLA_TEXT);
-				texto.getStyleClass().add("cell-type");
-
-				int row = i / COLUMNS;
-				int col = i % COLUMNS;
-				GridPane.setRowIndex(texto, row);
-				GridPane.setColumnIndex(texto, col);
-				tablero.getChildren().add(texto);
+			
+			StackPane celdaContainer = new StackPane();
+			celdaContainer.setUserData(TAG_CASILLA_TEXT);
+			
+			Image img = getImagenParaCasilla(casilla);
+			if (img != null) {
+				ImageView imgView = new ImageView(img);
+				imgView.setPreserveRatio(true);
+				imgView.fitWidthProperty().bind(tablero.widthProperty().divide(COLUMNS).multiply(0.85));
+				imgView.fitHeightProperty().bind(tablero.heightProperty().divide(ROWS).multiply(0.85));
+				celdaContainer.getChildren().add(imgView);
 			}
+
+			if (i == 0) {
+				Text texto = new Text("INICIO");
+				texto.getStyleClass().add("cell-title");
+				celdaContainer.getChildren().add(texto);
+			} else if (i == 49) {
+				Text texto = new Text("FIN");
+				texto.getStyleClass().add("cell-title");
+				celdaContainer.getChildren().add(texto);
+			}
+
+			int[] coords = getCoordenadas(i);
+			GridPane.setColumnIndex(celdaContainer, coords[0]);
+			GridPane.setRowIndex(celdaContainer, coords[1]);
+			tablero.getChildren().add(celdaContainer);
 		}
 	}
 
@@ -491,13 +554,16 @@ public class PantallaJuego {
 		int oldPosition = posiciones[playerIndex];
 		posiciones[playerIndex] = targetPosition;
 
-		int oldRow = oldPosition / COLUMNS;
-		int oldCol = oldPosition % COLUMNS;
-		int newRow = targetPosition / COLUMNS;
-		int newCol = targetPosition % COLUMNS;
+		int[] coordsOld = getCoordenadas(oldPosition);
+		int[] coordsNew = getCoordenadas(targetPosition);
+
+		int oldCol = coordsOld[0];
+		int oldRow = coordsOld[1];
+		int newCol = coordsNew[0];
+		int newRow = coordsNew[1];
 
 		double cellWidth = tablero.getWidth() / COLUMNS;
-		double cellHeight = tablero.getHeight() / 10;
+		double cellHeight = tablero.getHeight() / ROWS;
 
 		double dx = (newCol - oldCol) * cellWidth;
 		double dy = (newRow - oldRow) * cellHeight;
@@ -561,8 +627,9 @@ public class PantallaJuego {
 				Circle fichaObj = getFicha(i);
 				fichaObj.setTranslateX(0);
 				fichaObj.setTranslateY(0);
-				GridPane.setRowIndex(fichaObj, posVisual / COLUMNS);
-				GridPane.setColumnIndex(fichaObj, posVisual % COLUMNS);
+				int[] coords = getCoordenadas(posVisual);
+				GridPane.setColumnIndex(fichaObj, coords[0]);
+				GridPane.setRowIndex(fichaObj, coords[1]);
 				posiciones[i] = posVisual;
 			}
 		}
@@ -663,8 +730,9 @@ public class PantallaJuego {
 
 			ficha.setTranslateX(0);
 			ficha.setTranslateY(0);
-			GridPane.setRowIndex(ficha, posVisual / COLUMNS);
-			GridPane.setColumnIndex(ficha, posVisual % COLUMNS);
+			int[] coords = getCoordenadas(posVisual);
+			GridPane.setColumnIndex(ficha, coords[0]);
+			GridPane.setRowIndex(ficha, coords[1]);
 		}
 
 		actualizarInventarioUI();
