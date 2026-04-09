@@ -13,36 +13,38 @@
     <top>
         <VBox>
             <!-- Barra de título -->
-            <HBox alignment="CENTER_RIGHT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="30.0" styleClass="title-bar">
+            <HBox alignment="CENTER_RIGHT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="30.0" style="-fx-background-color: #2c3e50;">
                 <padding>
                     <Insets bottom="5" left="10" right="5" top="5" />
                 </padding>
                 
-                <Label styleClass="title-bar-label" text="El Juego del Pingüino" />
+                <Label text="OREO" textFill="WHITE" />
                 <Region HBox.hgrow="ALWAYS" />
                 
                 <HBox alignment="CENTER" spacing="5">
-                    <Button mnemonicParsing="false" onAction="#minimizarVentana" styleClass="window-btn" text="—" />
-                    <Button mnemonicParsing="false" onAction="#maximizarVentana" styleClass="window-btn" text="⬜" />
-                    <Button mnemonicParsing="false" onAction="#cerrarVentana" styleClass="window-btn, window-btn-close" text="X" />
+                    <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="—" />
+                    <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="⬜" />
+                    <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="X" />
                 </HBox>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <StackPane styleClass="main-container">
-            <!-- Contenedor de botones posicionado a la derecha, dentro del panel de hielo -->
-            <VBox alignment="CENTER" spacing="22" styleClass="menu-buttons-panel" StackPane.alignment="CENTER_RIGHT">
-                <padding>
-                    <Insets bottom="80" left="30" right="60" top="40" />
-                </padding>
-
-                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="65.0" prefWidth="320.0" styleClass="ice-btn" text="Nueva Partida" />
-                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="65.0" prefWidth="320.0" styleClass="ice-btn" text="Cargar Partida" />
-                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="65.0" prefWidth="320.0" styleClass="ice-btn" text="Opciones" />
-                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="65.0" prefWidth="320.0" styleClass="ice-btn, ice-btn-exit" text="Salir" />
-            </VBox>
+        <StackPane prefHeight="700.0" prefWidth="1123.0">
+            <padding>
+                <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
+            </padding>
         </StackPane>
     </center>
+   <left>
+
+         <!-- Botones del Menú Principal -->
+         <VBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="1096.0" prefHeight="858.0" prefWidth="479.0" spacing="15" BorderPane.alignment="CENTER">
+             <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Nueva Partida" />
+             <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Cargar Partida" />
+             <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="45.0" prefWidth="250.0" styleClass="primary" text="Opciones" />
+             <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="45.0" prefWidth="250.0" text="Salir del Juego" />
+         </VBox>
+   </left>
 </BorderPane>

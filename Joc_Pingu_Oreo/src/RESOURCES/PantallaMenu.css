@@ -1,145 +1,24 @@
-/* ---- FONDO ---- */
 .root {
-    -fx-font-family: "Segoe UI", "Arial", sans-serif;
-    -fx-background-color: #92d4f8; /* Color de fondo azul hielo por si la imagen no llena toda la pantalla */
-    -fx-background-image: url('../imagenes/fondo_Menu.png');
-    -fx-background-size: cover;
-    -fx-background-position: center center;
+    -fx-font-family: "System";
+    -fx-background-image: url('../imagenes/Fondo_Menu.jpg');
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-/* ---- BARRA DE TÍTULO ---- */
-.title-bar {
-    -fx-background-color: linear-gradient(to right, rgba(20, 40, 80, 0.85), rgba(30, 60, 100, 0.85));
-    -fx-border-color: rgba(100, 180, 255, 0.3);
+/* MENU */
+.menu-bar {
+    -fx-background-color: white;
+    -fx-border-color: #e6e7ee;
     -fx-border-width: 0 0 1 0;
 }
 
-.title-bar-label {
-    -fx-text-fill: white;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-}
-
-/* Botones de ventana (min, max, cerrar) */
-.window-btn {
-    -fx-background-color: transparent;
-    -fx-text-fill: rgba(255, 255, 255, 0.8);
-    -fx-cursor: hand;
-    -fx-font-size: 12px;
-    -fx-padding: 2 8;
-    -fx-background-radius: 4;
-}
-
-.window-btn:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-text-fill: white;
-}
-
-.window-btn-close:hover {
-    -fx-background-color: rgba(220, 50, 50, 0.8);
-    -fx-text-fill: white;
-}
-
-/* ---- CONTENEDOR PRINCIPAL ---- */
-.main-container {
-    -fx-padding: 0;
-}
-
-/* ---- PANEL DE BOTONES DEL MENÚ ---- */
-/* Se posiciona sobre el panel de hielo del fondo */
-.menu-buttons-panel {
-    -fx-max-width: 480;
-    -fx-min-width: 480;
-    -fx-max-height: 600;
-}
-
-.ice-btn {
-    /* Gradiente azul hielo brillante */
-    -fx-background-color: 
-        linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, transparent 50%),
-        linear-gradient(to bottom, #7ecef4 0%, #4aa3d4 40%, #3a8ec4 100%);
-    -fx-background-radius: 12;
-    
-    /* Borde blanco suave tipo hielo */
-    -fx-border-color: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(150,210,255,0.6));
-    -fx-border-width: 2;
-    -fx-border-radius: 12;
-    
-    /* Texto */
-    -fx-text-fill: white;
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    
-    /* Efecto de brillo y sombra */
-    -fx-effect: dropshadow(gaussian, rgba(0, 80, 160, 0.4), 8, 0.2, 0, 3);
-    
-    /* Cursor y padding */
-    -fx-cursor: hand;
-    -fx-padding: 12 30;
-    
-    /* Transición suave */
-    -fx-background-insets: 0, 0;
-}
-
-/* ---- HOVER: Brillo más intenso ---- */
-.ice-btn:hover {
-    -fx-background-color: 
-        linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, transparent 50%),
-        linear-gradient(to bottom, #96dcfa 0%, #5cb8e8 40%, #4aa3d4 100%);
-    -fx-border-color: linear-gradient(to bottom, rgba(255,255,255,1.0), rgba(180,230,255,0.8));
-    -fx-effect: dropshadow(gaussian, rgba(100, 200, 255, 0.6), 15, 0.3, 0, 2);
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
-}
-
-/* ---- PRESSED: Más oscuro, efecto hundido ---- */
-.ice-btn:pressed {
-    -fx-background-color: 
-        linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, transparent 40%),
-        linear-gradient(to bottom, #5a9ec4 0%, #3880a8 40%, #2c6e96 100%);
-    -fx-border-color: linear-gradient(to bottom, rgba(200,230,255,0.5), rgba(100,170,220,0.4));
-    -fx-effect: dropshadow(gaussian, rgba(0, 40, 80, 0.5), 4, 0.1, 0, 1);
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
-}
-
-/* ---- FOCUSED ---- */
-.ice-btn:focused {
-    -fx-border-color: rgba(180, 230, 255, 0.9);
-    -fx-border-width: 2.5;
-}
-
-/* ---- BOTÓN SALIR: Tono más rojizo/frío ---- */
-.ice-btn-exit {
-    -fx-background-color: 
-        linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, transparent 50%),
-        linear-gradient(to bottom, #c47a8a 0%, #a45a6a 40%, #8e4a5a 100%);
-    -fx-border-color: linear-gradient(to bottom, rgba(255,220,230,0.8), rgba(200,150,160,0.5));
-    -fx-effect: dropshadow(gaussian, rgba(120, 40, 60, 0.35), 8, 0.2, 0, 3);
-}
-
-.ice-btn-exit:hover {
-    -fx-background-color: 
-        linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, transparent 50%),
-        linear-gradient(to bottom, #d48a9a 0%, #b46a7a 40%, #a45a6a 100%);
-    -fx-border-color: linear-gradient(to bottom, rgba(255,230,240,1.0), rgba(220,170,180,0.7));
-    -fx-effect: dropshadow(gaussian, rgba(200, 100, 130, 0.5), 15, 0.3, 0, 2);
-}
-
-.ice-btn-exit:pressed {
-    -fx-background-color: 
-        linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, transparent 40%),
-        linear-gradient(to bottom, #8e4a5a 0%, #7a3a4a 40%, #6a2a3a 100%);
-    -fx-effect: dropshadow(gaussian, rgba(80, 20, 30, 0.5), 4, 0.1, 0, 1);
-}
-
-/* CARD genérica */
+/* CARD */
 .card {
     -fx-background-color: white;
     -fx-background-radius: 16;
     -fx-border-color: #e6e7ee;
     -fx-border-radius: 16;
+
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.10), 16, 0.15, 0, 2);
 }
 
@@ -180,23 +59,40 @@
     -fx-padding: 10 12;
 }
 
-/* BUTTONS genéricos (para otras pantallas que usen .primary) */
-.button.primary {
-    -fx-background-color: linear-gradient(to bottom, #7ecef4, #3a8ec4);
-    -fx-background-radius: 10;
-    -fx-border-color: rgba(255,255,255,0.6);
-    -fx-border-width: 1.5;
-    -fx-border-radius: 10;
+/* BUTTONS */
+.button {
+    -fx-background-radius: 0;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+    -fx-background-image: url('../imagenes/botones_menu.png');
+    -fx-background-size: 300% 300%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 80, 160, 0.3), 6, 0.1, 0, 2);
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0.5, 0, 1);
+}
+
+.button:hover {
+    -fx-opacity: 0.85;
+}
+
+.button.primary {
+    -fx-background-image: url('../imagenes/botones_menu.png');
+    -fx-background-size: 300% 300%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0.5, 0, 1);
 }
 
 .button.primary:hover {
-    -fx-background-color: linear-gradient(to bottom, #96dcfa, #4aa3d4);
-    -fx-effect: dropshadow(gaussian, rgba(100, 200, 255, 0.5), 12, 0.2, 0, 2);
+    -fx-opacity: 0.85;
 }
 
 /* Hint */
