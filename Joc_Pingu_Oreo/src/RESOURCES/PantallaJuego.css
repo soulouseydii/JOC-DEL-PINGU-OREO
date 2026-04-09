@@ -14,82 +14,88 @@
 
 /* TABLERO */
 .board {
-    -fx-background-color: rgba(255, 255, 255, 0.7);
-    -fx-background-radius: 14;
-    -fx-padding: 14;
-    -fx-border-color: #e6e7ee;
-    -fx-border-radius: 14;
-
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 14, 0.15, 0, 2);
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
 }
 
 /* TEXTOS DEL TABLERO */
 .cell-title {
-    -fx-font-size: 22px;
-    -fx-opacity: 0.65;
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-fill: #ffffff;
+    -fx-stroke: #1a365d;
+    -fx-stroke-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);
 }
 
 .cell-type {
-    -fx-font-size: 12px;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
-    -fx-opacity: 0.85;
+    -fx-fill: white;
 }
 
 /* BARRA INFERIOR */
 .bottom-bar {
     -fx-background-color: transparent;
+    -fx-padding: 10 20 20 20;
 }
 
-/* TARJETAS */
+/* TARJETAS GLASSMORPHISM */
 .card {
-    -fx-background-color: white;
-    -fx-background-radius: 14;
-    -fx-padding: 14;
-    -fx-border-color: #e6e7ee;
-    -fx-border-radius: 14;
+    -fx-background-color: rgba(15, 30, 60, 0.75);
+    -fx-background-radius: 20;
+    -fx-padding: 18;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 20;
 
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 14, 0.15, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0.1, 0, 8);
 }
 
 .card-title {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-opacity: 0.75;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #90cdf4;
 }
 
 .big-text {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
 }
 
 .stat {
     -fx-font-size: 15px;
-    -fx-opacity: 0.85;
+    -fx-font-weight: 600;
+    -fx-fill: #e2e8f0;
+    -fx-text-fill: #e2e8f0;
 }
 
 /* LOG DE EVENTOS (TextArea) */
 .events-log {
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-control-inner-background: #1a1a2e;
-    -fx-text-fill: #e0e0e0;
-    -fx-border-color: #3a3a5c;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
+    -fx-control-inner-background: rgba(10, 15, 35, 0.85);
+    -fx-text-fill: #63b3ed;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
 .events-log .content {
-    -fx-background-color: #1a1a2e;
+    -fx-background-color: rgba(10, 15, 35, 0.85);
 }
 
 .events-log .scroll-pane {
-    -fx-background-color: #1a1a2e;
+    -fx-background-color: transparent;
 }
 
 .events-log .scroll-pane > .viewport {
-    -fx-background-color: #1a1a2e;
+    -fx-background-color: transparent;
 }
 
 /* BOTONES */
