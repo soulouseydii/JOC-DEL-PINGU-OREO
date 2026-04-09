@@ -30,27 +30,18 @@ public class GestorPartida {
         this.gestorBBDD = new GestorBBDD();
     }
     
-    public int guardarPartida() {
-        int id = gestorBBDD.guardarBBDD(partida);
-        return id;
+    public void guardarPartida() {
+        gestorBBDD.guardarBBDD(partida);
     }
 
-    public boolean cargarPartida(int id) {
+    public void cargarPartida(int id) {
+
         Partida partidaCargada = gestorBBDD.cargarBBDD(id);
+
         if (partidaCargada != null) {
             this.partida = partidaCargada;
             System.out.println("Partida recuperada de la base de datos.");
-            return true;
         }
-        return false;
-    }
-
-    public void setPartida(Partida partida) {
-        this.partida = partida;
-    }
-
-    public GestorBBDD getGestorBBDD() {
-        return gestorBBDD;
     }
     
     /* Gestiona las reglas específicas según el tipo de jugador, Pingüino o Foca */
