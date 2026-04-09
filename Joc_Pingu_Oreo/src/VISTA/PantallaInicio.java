@@ -12,48 +12,25 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
 import javafx.stage.StageStyle;
 import javafx.application.Application;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Slider;
+
 
 public class PantallaInicio extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
 
-    @FXML
-    private Button btnNuevaPartida;
-    @FXML
-    private Button btnCargarPartida;
-    @FXML
-    private Button btnOpciones;
-    @FXML
-    private Button btnCreditos;
-    @FXML
-    private Button btnSalir;
-
-    // Elementos del menú de opciones
-    @FXML
-    private VBox paneOpciones;
-    @FXML
-    private CheckBox chkMusica;
-    @FXML
-    private Slider sliderMusica;
-    @FXML
-    private CheckBox chkSonido;
-    @FXML
-    private Slider sliderSonido;
-    @FXML
-    private CheckBox chkAnimaciones;
-    @FXML
-    private CheckBox chkPantallaCompleta;
+    @FXML private Button btnNuevaPartida;
+    @FXML private Button btnCargarPartida;
+    @FXML private Button btnOpciones;
+    @FXML private Button btnCreditos;
+    @FXML private Button btnSalir;
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            String rutaFxml = "/RESOURCES/PantallaInicio.fxml";
+            String rutaFxml = "/RESOURCES/PantallaInicio.fxml"; 
             java.net.URL url = getClass().getResource(rutaFxml);
-
+            
             if (url == null) {
                 System.out.println("No encuentra el FXML en la ruta: " + rutaFxml);
                 primaryStage.setTitle("Fallo FXML - Inicio");
@@ -69,7 +46,7 @@ public class PantallaInicio extends Application {
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true);
             primaryStage.show();
-
+            
             System.out.println("El diseño fxml de inicio se ha cargado.");
 
         } catch (Exception e) {
@@ -81,7 +58,7 @@ public class PantallaInicio extends Application {
     @FXML
     private void initialize() {
         System.out.println("PantallaInicio Controller initialized");
-
+        
         // Cerrar la app al pulsar ESC
         btnSalir.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -138,54 +115,7 @@ public class PantallaInicio extends Application {
     @FXML
     private void handleOpciones(ActionEvent event) {
         System.out.println("Opciones clicked");
-        paneOpciones.setVisible(true);
-    }
-
-    @FXML
-    private void cerrarOpciones(ActionEvent event) {
-        paneOpciones.setVisible(false);
-    }
-
-    @FXML
-    private void handleChkMusica(ActionEvent event) {
-        // TODO: Implement music system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
-    }
-
-    @FXML
-    private void handleSliderMusica(MouseEvent event) {
-        // TODO: Implement music system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
-    }
-
-    @FXML
-    private void handleChkSonido(ActionEvent event) {
-        // TODO: Implement sound effects system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
-    }
-
-    @FXML
-    private void handleSliderSonido(MouseEvent event) {
-        // TODO: Implement sound effects system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
-    }
-
-    @FXML
-    private void handleChkAnimaciones(ActionEvent event) {
-        // TODO: Implement animations system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
-    }
-
-    @FXML
-    private void handleChkPantallaCompleta(ActionEvent event) {
-        Stage stage = (Stage) paneOpciones.getScene().getWindow();
-        stage.setMaximized(chkPantallaCompleta.isSelected());
-        // TODO: Save settings persistently later
+        // TODO: Implementar menú opciones
     }
 
     @FXML
@@ -235,7 +165,7 @@ public class PantallaInicio extends Application {
     @FXML
     private void onTitleBarDragged(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        if (stage.isMaximized()) {
+        if(stage.isMaximized()) {
             stage.setMaximized(false);
         }
         stage.setX(event.getScreenX() - xOffset);
