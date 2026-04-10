@@ -11,6 +11,9 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.PathTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.RotateTransition;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.QuadCurveTo;
@@ -81,7 +84,7 @@ public class PantallaJuego {
 	@FXML private Circle P4;
 
 	private GestorPartida gestorPartida;
-	private int[] posiciones = new int[4];
+	private int[] posiciones = new int[] {-1, -1, -1, -1};
 	private boolean isPaused = false;
 	private PauseTransition cpuPauseTransition;
 	private List<Animation> currentAnimations = new ArrayList<>();
@@ -171,6 +174,8 @@ public class PantallaJuego {
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
 			getFicha(i).setVisible(true);
 		}
+		
+		actualizarTodasLasFichas();
 		
 		actualizarInventarioUI();
 		
@@ -481,11 +486,44 @@ public class PantallaJuego {
 	private void handleDado(ActionEvent event) {
 		if (isPaused) return;
 		
-		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
-		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
-		
 		dado.setDisable(true);
 		btnMoto.setDisable(true);
+
+		// 1. Animación visual del botón (vibración)
+		RotateTransition rt = new RotateTransition(Duration.millis(80), dado);
+		rt.setFromAngle(-15);
+		rt.setToAngle(15);
+		rt.setCycleCount(10);
+		rt.setAutoReverse(true);
+
+		// 2. Animación de cambio de números en el texto ("efecto giro")
+		Timeline timeline = new Timeline();
+		for (int i = 0; i < 10; i++) {
+			final int tempNum = (int)(Math.random() * 6) + 1;
+			KeyFrame kf = new KeyFrame(Duration.millis(i * 100), e -> {
+				dadoResultText.setText("Girando... " + tempNum);
+			});
+			timeline.getKeyFrames().add(kf);
+		}
+
+		// 3. Al terminar la animación, ejecutamos la lógica real de la partida
+		timeline.setOnFinished(e -> {
+			rt.stop();        // Detener la rotación
+			dado.setRotate(0); // Resetear rotación a 0
+			currentAnimations.remove(rt);
+			currentAnimations.remove(timeline);
+			continuarTurnoTrasAnimacion();
+		});
+
+		currentAnimations.add(rt);
+		currentAnimations.add(timeline);
+		rt.play();
+		timeline.play();
+	}
+
+	private void continuarTurnoTrasAnimacion() {
+		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
+		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 
 		gestorPartida.ejecutarTurnoCompleto();
 		
@@ -496,12 +534,12 @@ public class PantallaJuego {
 		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
 		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado);
 		
-		// Animación en 2 pasos
+		// Animación del movimiento del jugador (saltos parabólicos)
 		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
 		int posVisualFinal = Math.max(0, Math.min(posNueva, 49));
 		
 		if (casillaPisada >= 0 && posVisualCasilla != posVisualFinal) {
-			// HAY EFECTO: animación en 2 pasos
+			// HAY EFECTO de casilla (retroceso o avance): animación en 2 pasos
 			animarMovimiento(indiceActual, posVisualCasilla, () -> {
 				PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
 				pausaEfecto.setOnFinished(pausaEvt -> {
@@ -515,6 +553,7 @@ public class PantallaJuego {
 				pausaEfecto.play();
 			});
 		} else {
+			// Movimiento normal directo a la casilla final
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
 				actualizarTodasLasFichas();
 				finalizarTurnoVisual();

@@ -23,7 +23,7 @@
     -fx-fill: #ffffff;
     -fx-stroke: #1a365d;
     -fx-stroke-width: 1.5px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 5, 0.5, 0, 2);
 }
 
 .cell-type {
@@ -47,7 +47,7 @@
     -fx-border-width: 1.5;
     -fx-border-radius: 20;
 
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0.1, 0, 8);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0.1, 0, 8);
 }
 
 .card-title {
@@ -91,7 +91,7 @@
     -fx-background-color: transparent;
 }
 
-.events-log .scroll-pane > .viewport {
+.events-log .scroll-pane>.viewport {
     -fx-background-color: transparent;
 }
 
@@ -112,28 +112,6 @@
     -fx-opacity: 0.85;
 }
 
-/* BOTONES ESTILO MENÚ INICIO (para Overlays) */
-.menu-button-alt {
-    -fx-background-radius: 0;
-    -fx-padding: 8 16;
-    -fx-cursor: hand;
-    -fx-background-image: url('../imagenes/botones_menu.png');
-    -fx-background-size: 300% 300%;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 15px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0.5, 0, 1);
-}
-
-.menu-button-alt:hover {
-    -fx-opacity: 0.85;
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
 .button.primary {
     -fx-background-image: url('../imagenes/fondo_botones.png');
     -fx-background-size: 100% 100%;
@@ -146,12 +124,31 @@
     -fx-opacity: 0.85;
 }
 
+.dice-button {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
+}
+
+.dice-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-opacity: 0.9;
+}
+
+.dice-button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
 /* SCROLL */
 .objects-scroll {
     -fx-background-color: transparent;
 }
 
-.objects-scroll > .viewport {
+.objects-scroll>.viewport {
     -fx-background-color: transparent;
 }
 
@@ -163,17 +160,33 @@
     -fx-stroke: white;
     -fx-stroke-width: 3;
 
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 8, 0.35, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 8, 0.35, 0, 2);
 
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
 
 /* Colores por ID (robusto en JavaFX 21) */
-#P1 { -fx-fill: #2f6fed; }  /* azul */
-#P2 { -fx-fill: #ef4444; }  /* rojo */
-#P3 { -fx-fill: #22c55e; }  /* verde */
-#P4 { -fx-fill: #facc15; }  /* amarillo */
+#P1 {
+    -fx-fill: #2f6fed;
+}
+
+/* azul */
+#P2 {
+    -fx-fill: #ef4444;
+}
+
+/* rojo */
+#P3 {
+    -fx-fill: #22c55e;
+}
+
+/* verde */
+#P4 {
+    -fx-fill: #facc15;
+}
+
+/* amarillo */
 
 /* Si quieres marcar el jugador activo, añade/quita esta clase desde Java */
 .current-player {
@@ -200,40 +213,29 @@
     -fx-padding: 0;
 }
 
-/* OVERLAY MENU (Igualando estética de PantallaInicio) */
+/* OVERLAY MENU */
 .overlay-menu {
-    -fx-background-color: rgba(173, 216, 230, 0.95);
-    -fx-background-radius: 20;
-    -fx-border-color: white;
-    -fx-border-width: 3;
-    -fx-border-radius: 20;
-    -fx-padding: 30 40;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 30, 0.2, 0, 10);
-}
-
-.options-section {
-    -fx-background-color: rgba(255, 255, 255, 0.6);
-    -fx-background-radius: 12;
-    -fx-padding: 15;
-}
-
-.section-title {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
-    -fx-padding: 0 0 5 0;
+    -fx-background-color: rgba(255, 255, 255, 0.88);
+    -fx-background-radius: 24;
+    -fx-border-color: #e6e7ee;
+    -fx-border-width: 2;
+    -fx-border-radius: 24;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 30, 0.2, 0, 10);
 }
 
 .main-container-disabled {
-    -fx-opacity: 0.5;
-    -fx-effect: gaussianblur(12);
+    -fx-opacity: 0.4;
+    -fx-effect: gaussianblur(10);
+    /* Standard JFX CSS effect */
 }
 
 .menu-title {
-    -fx-font-size: 32px;
+    -fx-font-size: 38px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
+    -fx-text-fill: #1a1a2e;
     -fx-padding: 0 0 10 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 0, 0, 0, 1);
 }
 
 /* CUSTOM CONTROLS FOR OPTIONS */
@@ -247,7 +249,7 @@
     -fx-background-color: linear-gradient(to bottom, #74b9ff, #0984e3);
     -fx-background-radius: 12;
     -fx-padding: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 
 .custom-checkbox .box {
@@ -270,4 +272,7 @@
 }
 
 
-
+
+-fx-font-size: 16px;
+-fx-font-weight: bold;
+}

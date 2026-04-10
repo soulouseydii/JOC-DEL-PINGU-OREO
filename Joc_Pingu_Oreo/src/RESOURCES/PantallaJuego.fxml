@@ -81,10 +81,18 @@
                 </padding>
 
                 <!-- Tarjeta Dado -->
-                <VBox prefWidth="280" spacing="10" styleClass="card">
+                <VBox prefWidth="280" spacing="10" styleClass="card" alignment="CENTER">
                     <Label styleClass="card-title" text="Dado" />
-                    <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="240" />
-                    <Button fx:id="dado" maxWidth="Infinity" onAction="#handleDado" styleClass="primary" text="Tirar dado" />
+                    <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
+                        <graphic>
+                            <ImageView fitWidth="200" preserveRatio="true">
+                                <image>
+                                    <Image url="@../imagenes/Botón de tirar dado congelado.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="240" textAlignment="CENTER" />
                 </VBox>
 
                 <!-- Tarjeta Inventario -->
