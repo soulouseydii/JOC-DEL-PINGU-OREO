@@ -112,6 +112,28 @@
     -fx-opacity: 0.85;
 }
 
+/* BOTONES ESTILO MENÚ INICIO (para Overlays) */
+.menu-button-alt {
+    -fx-background-radius: 0;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-background-image: url('../imagenes/botones_menu.png');
+    -fx-background-size: 300% 300%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0.5, 0, 1);
+}
+
+.menu-button-alt:hover {
+    -fx-opacity: 0.85;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
 .button.primary {
     -fx-background-image: url('../imagenes/fondo_botones.png');
     -fx-background-size: 100% 100%;
@@ -178,28 +200,40 @@
     -fx-padding: 0;
 }
 
-/* OVERLAY MENU */
+/* OVERLAY MENU (Igualando estética de PantallaInicio) */
 .overlay-menu {
-    -fx-background-color: rgba(255, 255, 255, 0.88);
-    -fx-background-radius: 24;
-    -fx-border-color: #e6e7ee;
-    -fx-border-width: 2;
-    -fx-border-radius: 24;
-    -fx-padding: 40;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 30, 0.2, 0, 10);
+    -fx-background-color: rgba(173, 216, 230, 0.95);
+    -fx-background-radius: 20;
+    -fx-border-color: white;
+    -fx-border-width: 3;
+    -fx-border-radius: 20;
+    -fx-padding: 30 40;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 30, 0.2, 0, 10);
+}
+
+.options-section {
+    -fx-background-color: rgba(255, 255, 255, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 5 0;
 }
 
 .main-container-disabled {
-    -fx-opacity: 0.4;
-    -fx-effect: gaussianblur(10); /* Standard JFX CSS effect */
+    -fx-opacity: 0.5;
+    -fx-effect: gaussianblur(12);
 }
 
 .menu-title {
-    -fx-font-size: 38px;
+    -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1a1a2e;
+    -fx-text-fill: #2c3e50;
     -fx-padding: 0 0 10 0;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 0, 0, 0, 1);
 }
 
 /* CUSTOM CONTROLS FOR OPTIONS */
