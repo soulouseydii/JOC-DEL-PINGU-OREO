@@ -55,6 +55,11 @@ public class PantallaInicio extends Application {
 
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setTitle("Inicio Pingu Oreo");
+            try {
+                primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/imagenes/icono_oreo.png")));
+            } catch (Exception e) {
+                System.out.println("No se pudo cargar el icono del juego");
+            }
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true);
             primaryStage.show();
