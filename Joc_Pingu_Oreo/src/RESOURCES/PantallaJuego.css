@@ -194,7 +194,7 @@
 
 .main-container-disabled {
     -fx-opacity: 0.4;
-    -fx-effect: transitions(blur, 10); /* Note: standard JFX CSS doesn't support blur easily, but we'll use opacity */
+    -fx-effect: gaussianblur(10); /* Standard JFX CSS effect */
 }
 
 .menu-title {

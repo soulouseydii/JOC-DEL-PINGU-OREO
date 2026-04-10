@@ -19,7 +19,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
@@ -39,11 +38,6 @@ import MODELO.*;
 
 public class PantallaJuego {
 
-	// Menu items
-	@FXML private MenuItem newGame;
-	@FXML private MenuItem saveGame;
-	@FXML private MenuItem loadGame;
-	@FXML private MenuItem quitGame;
 
 	// Botón dado
 	@FXML private Button dado;
@@ -117,6 +111,12 @@ public class PantallaJuego {
 		Tooltip tooltip = new Tooltip("Opciones");
 		tooltip.setShowDelay(Duration.seconds(1));
 		btnSettings.setTooltip(tooltip);
+		
+		// Clipping bounds del tablero principal
+		javafx.scene.shape.Rectangle clipRect = new javafx.scene.shape.Rectangle();
+		clipRect.widthProperty().bind(tablero.widthProperty());
+		clipRect.heightProperty().bind(tablero.heightProperty());
+		tablero.setClip(clipRect);
 	}
 
 	public void iniciarConJugadores(ArrayList<Jugador> jugadores) {
@@ -257,13 +257,16 @@ public class PantallaJuego {
 			GridPane.setRowIndex(celdaContainer, coords[1]);
 			tablero.getChildren().add(celdaContainer);
 		}
+		
+		P1.toFront();
+		P2.toFront();
+		P3.toFront();
+		P4.toFront();
 	}
 
 	// =========================================
-	//  MENÚ
+	//  MENÚ GUARDADO / CARGA (Desde Pause)
 	// =========================================
-
-	@FXML private void handleNewGame() { System.out.println("Nuevo Juego."); }
 
 	@FXML
 	private void handleSaveGame() {
@@ -311,7 +314,6 @@ public class PantallaJuego {
 		}
 	}
 
-	@FXML private void handleQuitGame() { System.out.println("Salir..."); }
 
 	// =========================================
 	//  HANDLER CONFIGURACIÓN (Overlay)

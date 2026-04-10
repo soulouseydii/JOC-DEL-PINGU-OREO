@@ -3,11 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
@@ -26,30 +22,16 @@
 
 <StackPane stylesheets="@PantallaJuego.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaJuego" styleClass="root">
     <BorderPane fx:id="mainContainer">
-        <top>
-            <MenuBar>
-                <menus>
-                    <Menu mnemonicParsing="false" text="File">
-                        <items>
-                            <MenuItem fx:id="newGame" mnemonicParsing="false" onAction="#handleNewGame" text="New" />
-                            <SeparatorMenuItem mnemonicParsing="false" />
-                            <MenuItem fx:id="saveGame" mnemonicParsing="false" onAction="#handleSaveGame" text="Save" />
-                            <MenuItem fx:id="loadGame" mnemonicParsing="false" onAction="#handleLoadGame" text="Load" />
-                            <SeparatorMenuItem mnemonicParsing="false" />
-                            <MenuItem fx:id="quitGame" mnemonicParsing="false" onAction="#handleQuitGame" text="Quit" />
-                        </items>
-                    </Menu>
-                </menus>
-            </MenuBar>
-        </top>
 
         <center>
             <StackPane>
+                <!-- Margen estéticamente equilibrado para separar el tablero de los bordes de la pantalla -->
                 <padding>
-                    <Insets bottom="20" left="20" right="20" top="20" />
+                    <Insets bottom="60" left="60" right="60" top="60" />
                 </padding>
 
-                <GridPane fx:id="tablero" gridLinesVisible="false" prefHeight="400.0" prefWidth="1000.0" styleClass="board" StackPane.alignment="CENTER">
+                <!-- El tablero de las 50 casillas. Scalea automáticamente su contenido. -->
+                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" maxWidth="Infinity" maxHeight="Infinity">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="10.0" />
                         <ColumnConstraints percentWidth="10.0" />
@@ -84,10 +66,8 @@
                             <GridPane.margin><Insets left="102.0" /></GridPane.margin>
                         </Circle>
                     </children>
-                <StackPane.margin>
-                   <Insets bottom="130.0" left="50.0" right="50.0" top="40.0" />
-                </StackPane.margin>
                 </GridPane>
+
                 <Button fx:id="btnSettings" onAction="#handleSettingsClick" styleClass="settings-button" StackPane.alignment="TOP_RIGHT">
                     <graphic>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
@@ -182,11 +162,6 @@
             <VBox alignment="CENTER" spacing="10.0">
                 <Label style="-fx-text-fill: #1a1a2e; -fx-font-size: 18px; -fx-font-weight: bold;" text="Volumen" />
                 <Slider fx:id="sliderVolumen" maxWidth="250.0" showTickLabels="true" value="75.0" />
-            </VBox>
-            
-            <VBox alignment="CENTER" spacing="10.0">
-                <Label style="-fx-text-fill: #1a1a2e; -fx-font-size: 18px; -fx-font-weight: bold;" text="Pantalla completa" />
-                <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="custom-checkbox" text="Activada" />
             </VBox>
             
             <Button maxWidth="200.0" onAction="#handleBackFromOptions" styleClass="primary" text="Volver" />
