@@ -151,11 +151,13 @@
             <VBox alignment="CENTER" spacing="10.0">
                 <Label style="-fx-text-fill: #1a1a2e; -fx-font-size: 18px; -fx-font-weight: bold;" text="Música de fondo" />
                 <CheckBox fx:id="checkMusica" selected="true" styleClass="custom-checkbox" text="Activada" />
+                <Slider fx:id="sliderVolumen" maxWidth="250.0" showTickLabels="true" value="50.0" />
             </VBox>
             
             <VBox alignment="CENTER" spacing="10.0">
-                <Label style="-fx-text-fill: #1a1a2e; -fx-font-size: 18px; -fx-font-weight: bold;" text="Volumen" />
-                <Slider fx:id="sliderVolumen" maxWidth="250.0" showTickLabels="true" value="75.0" />
+                <Label style="-fx-text-fill: #1a1a2e; -fx-font-size: 18px; -fx-font-weight: bold;" text="Efectos de sonido" />
+                <CheckBox fx:id="checkSonidos" selected="true" styleClass="custom-checkbox" text="Activados" />
+                <Slider fx:id="sliderSonidos" maxWidth="250.0" showTickLabels="true" value="100.0" />
             </VBox>
             
             <Button maxWidth="200.0" onAction="#handleBackFromOptions" styleClass="primary" text="Volver" />

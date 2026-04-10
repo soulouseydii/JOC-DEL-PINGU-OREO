@@ -145,6 +145,13 @@ public class PantallaConfiguracionPartida {
                     notificarNuevasSkins();
                 }
                 
+                // Aplicar efectos visuales y sonoros a los botones fijos cuando la escena esté lista
+                btnEmpezar.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                    if (newScene != null) {
+                        CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
+                    }
+                });
+                
                 verificarTodosListos();
             });
 
@@ -243,6 +250,13 @@ public class PantallaConfiguracionPartida {
         System.out.println("PantallaConfiguracionPartida Controller initialized");
         comboNumJugadores.getItems().addAll(2, 3, 4);
         comboNumJugadores.setValue(2);
+        
+        // Aplicar efectos visuales y sonoros a los botones fijos cuando la escena esté lista
+        btnEmpezar.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
+            }
+        });
         
         generarTarjetas();
     }

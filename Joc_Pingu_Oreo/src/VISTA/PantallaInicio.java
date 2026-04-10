@@ -79,23 +79,31 @@ public class PantallaInicio extends Application {
         GestorAudio gestorAudio = GestorAudio.getInstance();
         gestorAudio.playMusicaFondo();
         
-        // Sincronizar UI de Opciones de Inicio
-        if(chkMusica != null) chkMusica.setSelected(gestorAudio.isMusicaHabilitada());
-        if(sliderMusica != null) {
-            sliderMusica.setValue(50); // Default placeholder, you could store volume globally later
-        }
-
-        // Cerrar la app al pulsar ESC
+        // Aplicar efectos visuales y sonoros a los botones cuando la escena esté lista
         btnSalir.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
+                CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
+
+                // Cerrar la app al pulsar ESC
                 newScene.setOnKeyPressed(event -> {
-                    if (event.getCode() == KeyCode.ESCAPE) {
+                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
                         System.out.println("ESC pulsado - Saliendo del juego...");
                         System.exit(0);
                     }
                 });
             }
         });
+        
+        // Sincronizar UI de Opciones de Inicio
+        if(chkMusica != null) chkMusica.setSelected(gestorAudio.isMusicaHabilitada());
+        if(sliderMusica != null) {
+            sliderMusica.setValue(50); // Default placeholder, you could store volume globally later
+        }
+
+        if(chkSonido != null) chkSonido.setSelected(gestorAudio.isSonidoHabilitado());
+        if(sliderSonido != null) {
+            sliderSonido.setValue(100);
+        }
     }
 
     @FXML
@@ -166,16 +174,16 @@ public class PantallaInicio extends Application {
 
     @FXML
     private void handleChkSonido(ActionEvent event) {
-        // TODO: Implement sound effects system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
+        boolean habilitado = chkSonido.isSelected();
+        GestorAudio.getInstance().setSonidosHabilitados(habilitado);
     }
 
     @FXML
     private void handleSliderSonido(MouseEvent event) {
-        // TODO: Implement sound effects system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
+        if (sliderSonido != null) {
+            double sliderVal = sliderSonido.getValue();
+            GestorAudio.getInstance().setVolumenSonidos(sliderVal / 100.0);
+        }
     }
 
     @FXML
