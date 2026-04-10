@@ -27,6 +27,13 @@ public class PantallaConfiguracionPartida {
     @FXML private Button btnEmpezar;
 
     private int numJugadores = 2; // Default
+    
+    // Arrays de skins disponibles
+    private static final String[] SKINS_PINGUINO = {"Pingu Azul", "Pingu Rojo", "Pingu Verde", "Pingu Amarillo"};
+    private static final String[] SKINS_FOCA = {"Foca Azul", "Foca Roja", "Foca Verde", "Foca Amarilla"};
+
+    // Referencia de las skins que ya han sido confirmadas por jugadores "listos"
+    private java.util.Set<String> skinsSeleccionadas = new java.util.HashSet<>();
 
     // Clase interna para manejar cada tarjeta de jugador de forma independiente 
     private class TarjetaJugador {
@@ -38,6 +45,14 @@ public class PantallaConfiguracionPartida {
         Button btnListo;
         Label lblEstado;
         boolean estaListo = false;
+        
+        // Elementos Carousel
+        VBox cajaCarousel;
+        Button btnLeft;
+        Button btnRight;
+        Label lblSkinActual;
+        int currentSkinIndex = 0;
+        String currentSkinType = "Pinguino"; // Pinguino o Foca
 
         public TarjetaJugador(int numero) {
             root = new VBox(10);
@@ -72,14 +87,44 @@ public class PantallaConfiguracionPartida {
 
             cajaLogin.getChildren().addAll(new Label("Usuario:"), txtUsuario, new Label("Contraseña:"), txtPassword, btnListo);
 
+            // Setup Carousel UI
+            cajaCarousel = new VBox(5);
+            cajaCarousel.setAlignment(Pos.CENTER);
+            HBox carouselNav = new HBox(10);
+            carouselNav.setAlignment(Pos.CENTER);
+            btnLeft = new Button("<");
+            btnLeft.setStyle("-fx-cursor: hand; -fx-font-weight: bold;");
+            btnRight = new Button(">");
+            btnRight.setStyle("-fx-cursor: hand; -fx-font-weight: bold;");
+            
+            lblSkinActual = new Label("");
+            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5; -fx-background-color: #e0e0e0; -fx-background-radius: 5; -fx-min-width: 100; -fx-alignment: center;");
+            
+            carouselNav.getChildren().addAll(btnLeft, lblSkinActual, btnRight);
+            cajaCarousel.getChildren().addAll(new Label("Skin:"), carouselNav);
+
+            btnLeft.setOnAction(e -> cambiarSkin(-1));
+            btnRight.setOnAction(e -> cambiarSkin(1));
+
             comboTipo.setOnAction(e -> {
+                if (estaListo) {
+                    skinsSeleccionadas.remove(getCurrentSkin());
+                }
+                
                 if (comboTipo.getValue().equals("CPU (Foca)")) {
+                    currentSkinType = "Foca";
+                    currentSkinIndex = 0;
                     cajaLogin.setVisible(false);
                     cajaLogin.setManaged(false);
                     lblEstado.setText("CPU Lista");
                     lblEstado.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
                     estaListo = true;
+                    btnLeft.setDisable(true);
+                    btnRight.setDisable(true);
+                    comboTipo.setDisable(true); // Una vez es CPU no puede cambiar
                 } else {
+                    currentSkinType = "Pinguino";
+                    currentSkinIndex = 0;
                     cajaLogin.setVisible(true);
                     cajaLogin.setManaged(true);
                     lblEstado.setText("Esperando login...");
@@ -90,7 +135,17 @@ public class PantallaConfiguracionPartida {
                     txtUsuario.setDisable(false);
                     txtPassword.setDisable(false);
                     btnListo.setDisable(false);
+                    btnLeft.setDisable(false);
+                    btnRight.setDisable(false);
                 }
+                
+                actualizarSkinLibre();
+                
+                if (estaListo) {
+                    skinsSeleccionadas.add(getCurrentSkin());
+                    notificarNuevasSkins();
+                }
+                
                 verificarTodosListos();
             });
 
@@ -104,6 +159,13 @@ public class PantallaConfiguracionPartida {
                     txtUsuario.setDisable(true);
                     txtPassword.setDisable(true);
                     btnListo.setDisable(true);
+                    btnLeft.setDisable(true);
+                    btnRight.setDisable(true);
+                    comboTipo.setDisable(true);
+                    
+                    // Registrar skin ocupada
+                    skinsSeleccionadas.add(getCurrentSkin());
+                    notificarNuevasSkins();
                     
                     verificarTodosListos();
                 } else {
@@ -111,7 +173,49 @@ public class PantallaConfiguracionPartida {
                 }
             });
 
-            root.getChildren().addAll(lblTitulo, new Label("Tipo:"), comboTipo, cajaLogin, lblEstado);
+            root.getChildren().addAll(lblTitulo, new Label("Tipo:"), comboTipo, cajaCarousel, cajaLogin, lblEstado);
+            actualizarSkinLibre(); // Inicializar
+        }
+        
+        private String[] getSkinArray() {
+            return currentSkinType.equals("Pinguino") ? SKINS_PINGUINO : SKINS_FOCA;
+        }
+
+        public String getCurrentSkin() {
+            return getSkinArray()[currentSkinIndex];
+        }
+
+        private void cambiarSkin(int delta) {
+            String[] skins = getSkinArray();
+            int n = skins.length;
+            int offset = currentSkinIndex;
+            
+            for (int i = 0; i < n; i++) {
+                offset = (offset + delta + n) % n;
+                if (!skinsSeleccionadas.contains(skins[offset])) {
+                    currentSkinIndex = offset;
+                    lblSkinActual.setText(skins[currentSkinIndex]);
+                    return;
+                }
+            }
+        }
+
+        public void actualizarSkinLibre() {
+            if (estaListo) return; // Si ya estaba listo, no cambia
+            String skin = getCurrentSkin();
+            if (skinsSeleccionadas.contains(skin)) {
+                cambiarSkin(1); // Mover al siguiente libre
+            } else {
+                lblSkinActual.setText(skin);
+            }
+        }
+    }
+    
+    private void notificarNuevasSkins() {
+        for (TarjetaJugador tj : tarjetasActivas) {
+            if (!tj.estaListo) {
+                tj.actualizarSkinLibre();
+            }
         }
     }
 
@@ -134,6 +238,7 @@ public class PantallaConfiguracionPartida {
     }
 
     private void generarTarjetas() {
+        skinsSeleccionadas.clear();
         contenedorJugadores.getChildren().clear();
         tarjetasActivas.clear();
 
@@ -160,12 +265,11 @@ public class PantallaConfiguracionPartida {
         System.out.println("Partida iniciada con " + numJugadores + " jugadores.");
         
         ArrayList<Jugador> jugadoresConfigurados = new ArrayList<>();
-        String[] colores = {"Azul", "Rojo", "Verde", "Amarillo"};
         
         for (int i = 0; i < numJugadores; i++) {
             TarjetaJugador tj = tarjetasActivas.get(i);
             String tipo = tj.comboTipo.getValue();
-            String color = colores[i];
+            String color = tj.getCurrentSkin(); // Color ahora pasa a ser el nombre real de la skin elegida
             
             if (tipo.equals("CPU (Foca)")) {
                 jugadoresConfigurados.add(new Foca("Jugador " + (i + 1) + " (Foca)", color, 0));
