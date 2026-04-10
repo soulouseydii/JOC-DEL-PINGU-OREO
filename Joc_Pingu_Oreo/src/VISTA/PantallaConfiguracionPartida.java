@@ -119,9 +119,8 @@ public class PantallaConfiguracionPartida {
                     lblEstado.setText("CPU Lista");
                     lblEstado.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
                     estaListo = true;
-                    btnLeft.setDisable(true);
-                    btnRight.setDisable(true);
-                    comboTipo.setDisable(true); // Una vez es CPU no puede cambiar
+                    btnLeft.setDisable(false); // No bloquear para Foca
+                    btnRight.setDisable(false); // No bloquear para Foca
                 } else {
                     currentSkinType = "Pinguino";
                     currentSkinIndex = 0;
@@ -185,7 +184,20 @@ public class PantallaConfiguracionPartida {
             return getSkinArray()[currentSkinIndex];
         }
 
+        private void animarCambioSkin(String nuevaSkin) {
+            javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(100), lblSkinActual);
+            st.setToX(0);
+            st.setOnFinished(e -> {
+                lblSkinActual.setText(nuevaSkin);
+                javafx.animation.ScaleTransition st2 = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(100), lblSkinActual);
+                st2.setToX(1.0);
+                st2.play();
+            });
+            st.play();
+        }
+
         private void cambiarSkin(int delta) {
+            String oldSkin = getCurrentSkin();
             String[] skins = getSkinArray();
             int n = skins.length;
             int offset = currentSkinIndex;
@@ -193,8 +205,13 @@ public class PantallaConfiguracionPartida {
             for (int i = 0; i < n; i++) {
                 offset = (offset + delta + n) % n;
                 if (!skinsSeleccionadas.contains(skins[offset])) {
+                    if (estaListo) {
+                        skinsSeleccionadas.remove(oldSkin);
+                        skinsSeleccionadas.add(skins[offset]);
+                        notificarNuevasSkins();
+                    }
                     currentSkinIndex = offset;
-                    lblSkinActual.setText(skins[currentSkinIndex]);
+                    animarCambioSkin(skins[currentSkinIndex]);
                     return;
                 }
             }
@@ -206,7 +223,7 @@ public class PantallaConfiguracionPartida {
             if (skinsSeleccionadas.contains(skin)) {
                 cambiarSkin(1); // Mover al siguiente libre
             } else {
-                lblSkinActual.setText(skin);
+                animarCambioSkin(skin);
             }
         }
     }
