@@ -225,9 +225,9 @@ public class PantallaJuego {
 
 	private int[] getCoordenadas(int posicion) {
 		int posReal = Math.max(0, Math.min(posicion, 49));
-		int fila = (ROWS - 1) - (posReal / COLUMNS);
+		int fila = posReal / COLUMNS;
 		int col;
-		if ((posReal / COLUMNS) % 2 == 0) {
+		if (fila % 2 == 0) {
 			col = posReal % COLUMNS;
 		} else {
 			col = (COLUMNS - 1) - (posReal % COLUMNS);
@@ -279,6 +279,8 @@ public class PantallaJuego {
 			int[] coords = getCoordenadas(i);
 			GridPane.setColumnIndex(celdaContainer, coords[0]);
 			GridPane.setRowIndex(celdaContainer, coords[1]);
+			GridPane.setHalignment(celdaContainer, javafx.geometry.HPos.CENTER);
+			GridPane.setValignment(celdaContainer, javafx.geometry.VPos.CENTER);
 			tablero.getChildren().add(celdaContainer);
 		}
 
@@ -640,6 +642,8 @@ public class PantallaJuego {
 			int[] finalCoords = getCoordenadas(targetPosition);
 			GridPane.setRowIndex(fichaObj, finalCoords[1]);
 			GridPane.setColumnIndex(fichaObj, finalCoords[0]);
+			GridPane.setHalignment(fichaObj, javafx.geometry.HPos.CENTER);
+			GridPane.setValignment(fichaObj, javafx.geometry.VPos.CENTER);
 			if (alTerminar != null) alTerminar.run();
 		});
 
@@ -692,6 +696,8 @@ public class PantallaJuego {
 				int[] coords = getCoordenadas(posVisual);
 				GridPane.setColumnIndex(fichaObj, coords[0]);
 				GridPane.setRowIndex(fichaObj, coords[1]);
+				GridPane.setHalignment(fichaObj, javafx.geometry.HPos.CENTER);
+				GridPane.setValignment(fichaObj, javafx.geometry.VPos.CENTER);
 				posiciones[i] = posVisual;
 			}
 		}
@@ -795,6 +801,8 @@ public class PantallaJuego {
 			int[] coords = getCoordenadas(posVisual);
 			GridPane.setColumnIndex(ficha, coords[0]);
 			GridPane.setRowIndex(ficha, coords[1]);
+			GridPane.setHalignment(ficha, javafx.geometry.HPos.CENTER);
+			GridPane.setValignment(ficha, javafx.geometry.VPos.CENTER);
 		}
 
 		actualizarInventarioUI();

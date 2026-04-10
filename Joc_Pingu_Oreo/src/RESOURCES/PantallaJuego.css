@@ -1,8 +1,5 @@
 .root {
     -fx-font-family: "System";
-    -fx-background-image: url('../imagenes/Tablero.png');
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
 }
 
 /* MENU */

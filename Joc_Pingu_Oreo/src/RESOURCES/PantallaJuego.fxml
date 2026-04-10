@@ -55,16 +55,10 @@
 
                     <children>
                         <!-- Jugadores: fx:id para Controller + id para CSS -->
-                        <Circle id="P1" fx:id="P1" radius="14.0" styleClass="player" />
-                        <Circle id="P2" fx:id="P2" radius="14.0" styleClass="player">
-                            <GridPane.margin><Insets left="34.0" /></GridPane.margin>
-                        </Circle>
-                        <Circle id="P3" fx:id="P3" radius="14.0" styleClass="player">
-                            <GridPane.margin><Insets left="68.0" /></GridPane.margin>
-                        </Circle>
-                        <Circle id="P4" fx:id="P4" radius="14.0" styleClass="player">
-                            <GridPane.margin><Insets left="102.0" /></GridPane.margin>
-                        </Circle>
+                        <Circle id="P1" fx:id="P1" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle id="P2" fx:id="P2" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle id="P3" fx:id="P3" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle id="P4" fx:id="P4" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                     </children>
                 </GridPane>
 
