@@ -11,6 +11,9 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.stage.StageStyle;
 import javafx.application.Application;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 
 
 public class PantallaInicio extends Application {
@@ -21,6 +24,15 @@ public class PantallaInicio extends Application {
     @FXML private Button btnOpciones;
     @FXML private Button btnCreditos;
     @FXML private Button btnSalir;
+
+    // Elementos del menú de opciones
+    @FXML private VBox paneOpciones;
+    @FXML private CheckBox chkMusica;
+    @FXML private Slider sliderMusica;
+    @FXML private CheckBox chkSonido;
+    @FXML private Slider sliderSonido;
+    @FXML private CheckBox chkAnimaciones;
+    @FXML private CheckBox chkPantallaCompleta;
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,6 +52,11 @@ public class PantallaInicio extends Application {
 
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setTitle("Inicio Pingu Oreo");
+            try {
+                primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/imagenes/icono_oreo.png")));
+            } catch (Exception e) {
+                System.out.println("No se pudo cargar el icono del juego");
+            }
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true);
             primaryStage.show();
@@ -112,7 +129,54 @@ public class PantallaInicio extends Application {
     @FXML
     private void handleOpciones(ActionEvent event) {
         System.out.println("Opciones clicked");
-        // TODO: Implementar menú opciones
+        paneOpciones.setVisible(true);
+    }
+
+    @FXML
+    private void cerrarOpciones(ActionEvent event) {
+        paneOpciones.setVisible(false);
+    }
+
+    @FXML
+    private void handleChkMusica(ActionEvent event) {
+        // TODO: Implement music system later
+        // TODO: Apply changes in real time later
+        // TODO: Save settings persistently later
+    }
+
+    @FXML
+    private void handleSliderMusica(MouseEvent event) {
+        // TODO: Implement music system later
+        // TODO: Apply changes in real time later
+        // TODO: Save settings persistently later
+    }
+
+    @FXML
+    private void handleChkSonido(ActionEvent event) {
+        // TODO: Implement sound effects system later
+        // TODO: Apply changes in real time later
+        // TODO: Save settings persistently later
+    }
+
+    @FXML
+    private void handleSliderSonido(MouseEvent event) {
+        // TODO: Implement sound effects system later
+        // TODO: Apply changes in real time later
+        // TODO: Save settings persistently later
+    }
+
+    @FXML
+    private void handleChkAnimaciones(ActionEvent event) {
+        // TODO: Implement animations system later
+        // TODO: Apply changes in real time later
+        // TODO: Save settings persistently later
+    }
+
+    @FXML
+    private void handleChkPantallaCompleta(ActionEvent event) {
+        Stage stage = (Stage) paneOpciones.getScene().getWindow();
+        stage.setMaximized(chkPantallaCompleta.isSelected());
+        // TODO: Save settings persistently later
     }
 
     @FXML

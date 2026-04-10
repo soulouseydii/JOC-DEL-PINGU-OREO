@@ -62,6 +62,7 @@ public class PantallaJuego {
 	@FXML private VBox optionsSubmenu;
 	@FXML private CheckBox checkMusica;
 	@FXML private Slider sliderVolumen;
+	@FXML private CheckBox chkPantallaCompleta;
 
 	// Tablero y fichas
 	@FXML private GridPane tablero;
@@ -412,7 +413,11 @@ public class PantallaJuego {
 		menuOverlay.setVisible(true);
 	}
 
-
+	@FXML
+	private void handleChkPantallaCompleta(ActionEvent event) {
+		Stage stage = (Stage) optionsSubmenu.getScene().getWindow();
+		stage.setMaximized(chkPantallaCompleta.isSelected());
+	}
 
 
 	// =========================================
