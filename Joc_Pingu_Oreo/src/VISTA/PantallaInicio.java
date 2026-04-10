@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
+import CONTROLADOR.GestorAudio;
 
 
 public class PantallaInicio extends Application {
@@ -74,6 +75,16 @@ public class PantallaInicio extends Application {
     private void initialize() {
         System.out.println("PantallaInicio Controller initialized");
         
+        // Inicializar Gestor de Audio
+        GestorAudio gestorAudio = GestorAudio.getInstance();
+        gestorAudio.playMusicaFondo();
+        
+        // Sincronizar UI de Opciones de Inicio
+        if(chkMusica != null) chkMusica.setSelected(gestorAudio.isMusicaHabilitada());
+        if(sliderMusica != null) {
+            sliderMusica.setValue(50); // Default placeholder, you could store volume globally later
+        }
+
         // Cerrar la app al pulsar ESC
         btnSalir.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -140,16 +151,17 @@ public class PantallaInicio extends Application {
 
     @FXML
     private void handleChkMusica(ActionEvent event) {
-        // TODO: Implement music system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
+        boolean habilitada = chkMusica.isSelected();
+        GestorAudio.getInstance().setMusicaHabilitada(habilitada);
     }
 
     @FXML
     private void handleSliderMusica(MouseEvent event) {
-        // TODO: Implement music system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
+        if (sliderMusica != null) {
+            // Volume ranges from 0 to 1 in MediaPlayer, and Slider is maybe 0 to 100
+            double sliderVal = sliderMusica.getValue();
+            GestorAudio.getInstance().setVolumenMusica(sliderVal / 100.0);
+        }
     }
 
     @FXML

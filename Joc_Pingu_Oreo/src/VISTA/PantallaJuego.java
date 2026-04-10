@@ -114,6 +114,21 @@ public class PantallaJuego {
 			System.out.println("Error al cargar imágenes de las casillas: " + e.getMessage());
 		}
 		
+		// Sincronizar audio con GestorAudio
+		if (checkMusica != null) {
+			checkMusica.setSelected(CONTROLADOR.GestorAudio.getInstance().isMusicaHabilitada());
+			checkMusica.setOnAction(e -> {
+				CONTROLADOR.GestorAudio.getInstance().setMusicaHabilitada(checkMusica.isSelected());
+			});
+		}
+		if (sliderVolumen != null) {
+			// Valor inicial genérico o guardado (para simular el estado real, lo ideal es guardarlo en GestorAudio)
+			sliderVolumen.setValue(50.0);
+			sliderVolumen.valueProperty().addListener((obs, oldVal, newVal) -> {
+				CONTROLADOR.GestorAudio.getInstance().setVolumenMusica(newVal.doubleValue() / 100.0);
+			});
+		}
+
 		// Tooltip Opciones (1s de retardo)
 		Tooltip tooltip = new Tooltip("Opciones");
 		tooltip.setShowDelay(Duration.seconds(1));
