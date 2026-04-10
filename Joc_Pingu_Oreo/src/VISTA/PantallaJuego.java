@@ -7,6 +7,13 @@ import javafx.application.Platform;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.PathTransition;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -257,6 +264,12 @@ public class PantallaJuego {
 			GridPane.setRowIndex(celdaContainer, coords[1]);
 			tablero.getChildren().add(celdaContainer);
 		}
+
+		// Asegurar que los jugadores estén siempre por encima de las casillas
+		P1.toFront();
+		P2.toFront();
+		P3.toFront();
+		P4.toFront();
 	}
 
 	// =========================================
@@ -557,37 +570,67 @@ public class PantallaJuego {
 	private void animarMovimiento(int playerIndex, int targetPosition, Runnable alTerminar) {
 		Circle fichaObj = getFicha(playerIndex);
 		int oldPosition = posiciones[playerIndex];
+		
+		if (oldPosition == targetPosition) {
+			if (alTerminar != null) alTerminar.run();
+			return;
+		}
+
 		posiciones[playerIndex] = targetPosition;
-
-		int[] coordsOld = getCoordenadas(oldPosition);
-		int[] coordsNew = getCoordenadas(targetPosition);
-
-		int oldCol = coordsOld[0];
-		int oldRow = coordsOld[1];
-		int newCol = coordsNew[0];
-		int newRow = coordsNew[1];
-
 		double cellWidth = tablero.getWidth() / COLUMNS;
 		double cellHeight = tablero.getHeight() / ROWS;
 
-		double dx = (newCol - oldCol) * cellWidth;
-		double dy = (newRow - oldRow) * cellHeight;
+		SequentialTransition sequence = new SequentialTransition();
+		int step = (targetPosition > oldPosition) ? 1 : -1;
+		int currentPos = oldPosition;
 
-		TranslateTransition slide = new TranslateTransition(Duration.millis(350), fichaObj);
-		slide.setByX(dx);
-		slide.setByY(dy);
+		double currentTx = 0;
+		double currentTy = 0;
 
-		slide.setOnFinished(e -> {
-			currentAnimations.remove(slide);
+		while (currentPos != targetPosition) {
+			int nextPos = currentPos + step;
+			int[] coordsCurr = getCoordenadas(currentPos);
+			int[] coordsNext = getCoordenadas(nextPos);
+
+			double cellDx = (coordsNext[0] - coordsCurr[0]) * cellWidth;
+			double cellDy = (coordsNext[1] - coordsCurr[1]) * cellHeight;
+
+			double nextTx = currentTx + cellDx;
+			double nextTy = currentTy + cellDy;
+
+			Path path = new Path();
+			path.getElements().add(new MoveTo(currentTx + fichaObj.getRadius(), currentTy + fichaObj.getRadius()));
+			
+			double controlX = currentTx + (cellDx / 2) + fichaObj.getRadius();
+			double controlY = Math.min(currentTy, nextTy) - 35 + fichaObj.getRadius(); // Altura del salto parabólico
+
+			path.getElements().add(new QuadCurveTo(controlX, controlY, nextTx + fichaObj.getRadius(), nextTy + fichaObj.getRadius()));
+
+			PathTransition jump = new PathTransition();
+			jump.setNode(fichaObj);
+			jump.setDuration(Duration.millis(250));
+			jump.setPath(path);
+
+			sequence.getChildren().add(jump);
+
+			currentTx = nextTx;
+			currentTy = nextTy;
+			currentPos = nextPos;
+		}
+
+		sequence.setOnFinished(e -> {
+			currentAnimations.remove(sequence);
 			fichaObj.setTranslateX(0);
 			fichaObj.setTranslateY(0);
-			GridPane.setRowIndex(fichaObj, newRow);
-			GridPane.setColumnIndex(fichaObj, newCol);
+			
+			int[] finalCoords = getCoordenadas(targetPosition);
+			GridPane.setRowIndex(fichaObj, finalCoords[1]);
+			GridPane.setColumnIndex(fichaObj, finalCoords[0]);
 			if (alTerminar != null) alTerminar.run();
 		});
 
-		currentAnimations.add(slide);
-		slide.play();
+		currentAnimations.add(sequence);
+		sequence.play();
 	}
 	
 	private void finalizarTurnoVisual() {
