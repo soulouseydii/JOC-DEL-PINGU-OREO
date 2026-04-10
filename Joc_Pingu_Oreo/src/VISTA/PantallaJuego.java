@@ -79,7 +79,7 @@ public class PantallaJuego {
 	@FXML private Circle P4;
 
 	private GestorPartida gestorPartida;
-	private int[] posiciones = new int[4];
+	private int[] posiciones = new int[] {-1, -1, -1, -1};
 	private boolean isPaused = false;
 	private PauseTransition cpuPauseTransition;
 	private List<Animation> currentAnimations = new ArrayList<>();
@@ -139,6 +139,8 @@ public class PantallaJuego {
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
 			getFicha(i).setVisible(true);
 		}
+		
+		actualizarTodasLasFichas();
 		
 		actualizarInventarioUI();
 		
