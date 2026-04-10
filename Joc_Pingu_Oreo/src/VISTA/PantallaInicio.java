@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 
 
 public class PantallaInicio extends Application {

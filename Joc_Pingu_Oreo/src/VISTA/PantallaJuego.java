@@ -111,6 +111,12 @@ public class PantallaJuego {
 		Tooltip tooltip = new Tooltip("Opciones");
 		tooltip.setShowDelay(Duration.seconds(1));
 		btnSettings.setTooltip(tooltip);
+		
+		// Clipping bounds del tablero principal
+		javafx.scene.shape.Rectangle clipRect = new javafx.scene.shape.Rectangle();
+		clipRect.widthProperty().bind(tablero.widthProperty());
+		clipRect.heightProperty().bind(tablero.heightProperty());
+		tablero.setClip(clipRect);
 	}
 
 	public void iniciarConJugadores(ArrayList<Jugador> jugadores) {
@@ -251,6 +257,11 @@ public class PantallaJuego {
 			GridPane.setRowIndex(celdaContainer, coords[1]);
 			tablero.getChildren().add(celdaContainer);
 		}
+		
+		P1.toFront();
+		P2.toFront();
+		P3.toFront();
+		P4.toFront();
 	}
 
 	// =========================================
