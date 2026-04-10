@@ -69,6 +69,8 @@ public class PantallaJuego {
 	@FXML private VBox optionsSubmenu;
 	@FXML private CheckBox checkMusica;
 	@FXML private Slider sliderVolumen;
+	@FXML private CheckBox checkSonidos;
+	@FXML private Slider sliderSonidos;
 	@FXML private CheckBox chkPantallaCompleta;
 
 	// Tablero y fichas
@@ -115,17 +117,25 @@ public class PantallaJuego {
 		}
 		
 		// Sincronizar audio con GestorAudio
+		CONTROLADOR.GestorAudio gestorAudio = CONTROLADOR.GestorAudio.getInstance();
 		if (checkMusica != null) {
-			checkMusica.setSelected(CONTROLADOR.GestorAudio.getInstance().isMusicaHabilitada());
-			checkMusica.setOnAction(e -> {
-				CONTROLADOR.GestorAudio.getInstance().setMusicaHabilitada(checkMusica.isSelected());
-			});
+			checkMusica.setSelected(gestorAudio.isMusicaHabilitada());
+			checkMusica.setOnAction(e -> gestorAudio.setMusicaHabilitada(checkMusica.isSelected()));
 		}
 		if (sliderVolumen != null) {
-			// Valor inicial genérico o guardado (para simular el estado real, lo ideal es guardarlo en GestorAudio)
 			sliderVolumen.setValue(50.0);
 			sliderVolumen.valueProperty().addListener((obs, oldVal, newVal) -> {
-				CONTROLADOR.GestorAudio.getInstance().setVolumenMusica(newVal.doubleValue() / 100.0);
+				gestorAudio.setVolumenMusica(newVal.doubleValue() / 100.0);
+			});
+		}
+		if (checkSonidos != null) {
+			checkSonidos.setSelected(gestorAudio.isSonidoHabilitado());
+			checkSonidos.setOnAction(e -> gestorAudio.setSonidosHabilitados(checkSonidos.isSelected()));
+		}
+		if (sliderSonidos != null) {
+			sliderSonidos.setValue(100.0);
+			sliderSonidos.valueProperty().addListener((obs, oldVal, newVal) -> {
+				gestorAudio.setVolumenSonidos(newVal.doubleValue() / 100.0);
 			});
 		}
 
@@ -139,6 +149,13 @@ public class PantallaJuego {
 		clipRect.widthProperty().bind(tablero.widthProperty());
 		clipRect.heightProperty().bind(tablero.heightProperty());
 		tablero.setClip(clipRect);
+		
+		// Aplicar efectos visuales y sonoros a los botones cuando la escena esté lista
+		tablero.sceneProperty().addListener((obs, oldScene, newScene) -> {
+			if (newScene != null) {
+				CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
+			}
+		});
 	}
 
 	public void iniciarConJugadores(ArrayList<Jugador> jugadores) {
