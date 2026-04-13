@@ -352,8 +352,11 @@ public class PantallaJuego {
 			if (img != null) {
 				ImageView imgView = new ImageView(img);
 				imgView.setPreserveRatio(true);
-				imgView.fitWidthProperty().bind(tablero.widthProperty().divide(COLUMNS).multiply(0.85));
-				imgView.fitHeightProperty().bind(tablero.heightProperty().divide(ROWS).multiply(0.85));
+				// Permitir que el contenedor se encoja rompiendo la dependencia del tamaño de la imagen original
+				celdaContainer.setMinSize(0, 0);
+				
+				imgView.fitWidthProperty().bind(celdaContainer.widthProperty().multiply(1.00));
+				imgView.fitHeightProperty().bind(celdaContainer.heightProperty().multiply(1.00));
 				celdaContainer.getChildren().add(imgView);
 			}
 

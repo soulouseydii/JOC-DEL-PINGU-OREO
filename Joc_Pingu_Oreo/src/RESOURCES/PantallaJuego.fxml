@@ -31,7 +31,7 @@
                 </padding>
 
                 <!-- El tablero de las 50 casillas. Scalea automáticamente su contenido. -->
-                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" maxWidth="Infinity" maxHeight="Infinity">
+                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" translateY="60" maxWidth="1300" maxHeight="600">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="10.0" />
                         <ColumnConstraints percentWidth="10.0" />
@@ -62,6 +62,57 @@
                     </children>
                 </GridPane>
 
+                <!-- Tarjeta Eventos (Log acumulativo con scroll) en OVERLAY DERECHO -->
+                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_RIGHT">
+                    <padding>
+                        <Insets right="30" />
+                    </padding>
+                    <VBox spacing="10" styleClass="card">
+                        <Label styleClass="card-title" text="Eventos" />
+                        <TextArea fx:id="eventosLog" editable="false" prefRowCount="15" wrapText="true" styleClass="events-log" promptText="Los eventos del juego apareceran aqui..." />
+                    </VBox>
+                </VBox>
+
+                <!-- Tarjeta Inventario en OVERLAY IZQUIERDO -->
+                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets left="30" />
+                    </padding>
+                    <VBox spacing="10" styleClass="card">
+                        <Label fx:id="inventarioTitulo" styleClass="card-title" text="Inventario - Jugador 1" />
+
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED">
+                            <content>
+                                <VBox spacing="10">
+                                    <padding>
+                                        <Insets bottom="6" left="6" right="6" top="6" />
+                                    </padding>
+
+                                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
+                                        <Text fx:id="peces_t" styleClass="stat" text="Peces: 0" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label styleClass="stat" text="(Auto vs Foca)" />
+                                    </HBox>
+
+                                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
+                                        <Text fx:id="nieve_t" styleClass="stat" text="Bolas de nieve: 0" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label styleClass="stat" text="(Auto PvP)" />
+                                    </HBox>
+
+                                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
+                                        <Text fx:id="moto_t" styleClass="stat" text="Moto de Nieve: 0" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button fx:id="btnMoto" onAction="#handleUsarMoto" text="Usar" />
+                                    </HBox>
+
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </VBox>
+                </VBox>
+
+                <!-- Boton Settings siempre en la capa mas alta -->
                 <Button fx:id="btnSettings" onAction="#handleSettingsClick" styleClass="settings-button" StackPane.alignment="TOP_RIGHT">
                     <graphic>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
@@ -75,94 +126,58 @@
         </center>
 
         <bottom>
-            <HBox spacing="16" styleClass="bottom-bar">
+            <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER">
                 <padding>
                     <Insets bottom="16" left="16" right="16" top="16" />
                 </padding>
 
-                <!-- Tarjeta Dado -->
-                <VBox prefWidth="280" spacing="10" styleClass="card" alignment="CENTER">
-                    <Label styleClass="card-title" text="Dado" />
-                    <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
-                        <graphic>
-                            <ImageView fitWidth="200" preserveRatio="true">
-                                <image>
-                                    <Image url="@../imagenes/Botón de tirar dado congelado.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="240" textAlignment="CENTER" />
-                    
-                    <HBox spacing="15" alignment="CENTER">
-                        <VBox alignment="CENTER" spacing="5">
-                            <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
-                                <graphic>
-                                    <ImageView fitWidth="120" preserveRatio="true">
-                                        <image>
-                                            <Image url="@../imagenes/Dado rápido.png" />
-                                        </image>
-                                    </ImageView>
-                                </graphic>
-                            </Button>
-                            <Label fx:id="lblCantRapido" styleClass="stat" text="Rapidos: 0" />
-                        </VBox>
+                <!-- Tarjeta Dado Horizontal -->
+                <HBox spacing="40" styleClass="card" alignment="CENTER">
+                    <!-- Dado Lento -->
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label styleClass="card-title" text="Dado Lento" />
+                        <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
+                            <graphic>
+                                <ImageView fitWidth="90" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../imagenes/Dado lento.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Label fx:id="lblCantLento" styleClass="stat" text="Lentos: 0" />
+                    </VBox>
 
-                        <VBox alignment="CENTER" spacing="5">
-                            <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
-                                <graphic>
-                                    <ImageView fitWidth="120" preserveRatio="true">
-                                        <image>
-                                            <Image url="@../imagenes/Dado lento.png" />
-                                        </image>
-                                    </ImageView>
-                                </graphic>
-                            </Button>
-                            <Label fx:id="lblCantLento" styleClass="stat" text="Lentos: 0" />
-                        </VBox>
-                    </HBox>
-                </VBox>
+                    <!-- Dado Normal -->
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label styleClass="card-title" text="Dado Normal" />
+                        <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
+                            <graphic>
+                                <ImageView fitWidth="120" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../imagenes/Botón de tirar dado congelado.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="140" textAlignment="CENTER" />
+                    </VBox>
 
-                <!-- Tarjeta Inventario -->
-                <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
-                    <Label fx:id="inventarioTitulo" styleClass="card-title" text="Inventario - Jugador 1" />
-
-                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED">
-                        <content>
-                            <VBox spacing="10">
-                                <padding>
-                                    <Insets bottom="6" left="6" right="6" top="6" />
-                                </padding>
-
-                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                    <Text fx:id="peces_t" styleClass="stat" text="Peces: 0" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label styleClass="stat" text="(Auto vs Foca)" />
-                                </HBox>
-
-                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                    <Text fx:id="nieve_t" styleClass="stat" text="Bolas de nieve: 0" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label styleClass="stat" text="(Auto PvP)" />
-                                </HBox>
-
-                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                    <Text fx:id="moto_t" styleClass="stat" text="Moto de Nieve: 0" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="btnMoto" onAction="#handleUsarMoto" text="Usar" />
-                                </HBox>
-
-                            </VBox>
-                        </content>
-                    </ScrollPane>
-                </VBox>
-
-                <!-- Tarjeta Eventos (Log acumulativo con scroll) -->
-                <VBox prefWidth="320" spacing="10" styleClass="card">
-                    <Label styleClass="card-title" text="Eventos" />
-                    <TextArea fx:id="eventosLog" editable="false" prefRowCount="6" wrapText="true" styleClass="events-log" promptText="Los eventos del juego apareceran aqui..." />
-                </VBox>
-
+                    <!-- Dado Rápido -->
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label styleClass="card-title" text="Dado Rápido" />
+                        <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
+                            <graphic>
+                                <ImageView fitWidth="90" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../imagenes/Dado rápido.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Label fx:id="lblCantRapido" styleClass="stat" text="Rapidos: 0" />
+                    </VBox>
+                </HBox>
             </HBox>
         </bottom>
     </BorderPane>
