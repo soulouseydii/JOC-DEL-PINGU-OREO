@@ -78,7 +78,7 @@ public class GestorPartida {
         }
     }
     
-    public void ejecutarTurnoCompleto() {
+    public void ejecutarTurnoCompleto(Dado dadoEspecial) {
         // Para saber quien es el jugador que tiene que mover ficha
         Jugador jActual = partida.getJugadorActual();
         
@@ -110,7 +110,7 @@ public class GestorPartida {
             int posicionAnterior = f.getPosicion();
             
             // La foca tira el dado y se mueve
-            int pasosFoca = tirarDado(f, null);
+            int pasosFoca = tirarDado(f, dadoEspecial);
             ultimoResultadoDado = pasosFoca;
             System.out.println(f.getNombre() + " ha sacado un " + pasosFoca);
             gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
@@ -148,7 +148,7 @@ public class GestorPartida {
         } else if (jActual instanceof Pinguino) {
             Pinguino pActual = (Pinguino) jActual;
             
-            int pasos = tirarDado(jActual, null);
+            int pasos = tirarDado(jActual, dadoEspecial);
             ultimoResultadoDado = pasos;
             System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
             gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());

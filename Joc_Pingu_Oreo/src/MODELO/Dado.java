@@ -12,8 +12,22 @@ public class Dado extends Item {
 	
 	public Dado(String tipo) {
         super("Dado", 0, 3);
-		this.max = 6;
-		this.min = 1;
+        
+        switch (tipo.toLowerCase()) {
+            case "rapido":
+                this.min = 5;
+                this.max = 10;
+                break;
+            case "lento":
+                this.min = 1;
+                this.max = 3;
+                break;
+            case "normal":
+            default:
+                this.min = 1;
+                this.max = 6;
+                break;
+        }
 	}
 
 		

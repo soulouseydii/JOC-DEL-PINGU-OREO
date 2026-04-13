@@ -62,6 +62,10 @@ public class PantallaJuego {
 	@FXML private Text moto_t;
 	@FXML private Button btnMoto;
 	@FXML private Button btnSettings;
+	@FXML private Button btnDadoRapido;
+	@FXML private Button btnDadoLento;
+	@FXML private Label lblCantRapido;
+	@FXML private Label lblCantLento;
 	
 	// Log de eventos
 	@FXML private TextArea eventosLog;
@@ -195,6 +199,59 @@ public class PantallaJuego {
 		}
 	}
 
+	@FXML
+	private void handleDadoRapido(ActionEvent event) {
+		if (isPaused) return;
+		Jugador j = gestorPartida.getPartida().getJugadorActual();
+		j.getInventario().usarDadoRapido();
+		ejecutarAnimacionDado(new Dado("Rapido"));
+	}
+
+	@FXML
+	private void handleDadoLento(ActionEvent event) {
+		if (isPaused) return;
+		Jugador j = gestorPartida.getPartida().getJugadorActual();
+		j.getInventario().usarDadoLento();
+		ejecutarAnimacionDado(new Dado("Lento"));
+	}
+
+	private void ejecutarAnimacionDado(Dado dadoEspecial) {
+		dado.setDisable(true);
+		btnDadoRapido.setDisable(true);
+		btnDadoLento.setDisable(true);
+		btnMoto.setDisable(true);
+
+		// 1. Animación visual del botón (vibración)
+		RotateTransition rt = new RotateTransition(Duration.millis(80), dado);
+		rt.setFromAngle(-15);
+		rt.setToAngle(15);
+		rt.setCycleCount(10);
+		rt.setAutoReverse(true);
+
+		// 2. Animación de cambio de números en el texto
+		Timeline timeline = new Timeline();
+		for (int i = 0; i < 10; i++) {
+			final int tempNum = (int)(Math.random() * (dadoEspecial != null ? (dadoEspecial.getMax() - dadoEspecial.getMin() + 1) : 6)) + (dadoEspecial != null ? dadoEspecial.getMin() : 1);
+			KeyFrame kf = new KeyFrame(Duration.millis(i * 100), e -> {
+				dadoResultText.setText("Girando... " + tempNum);
+			});
+			timeline.getKeyFrames().add(kf);
+		}
+
+		timeline.setOnFinished(e -> {
+			rt.stop();
+			dado.setRotate(0);
+			currentAnimations.remove(rt);
+			currentAnimations.remove(timeline);
+			continuarTurnoTrasAnimacion(dadoEspecial);
+		});
+
+		currentAnimations.add(rt);
+		currentAnimations.add(timeline);
+		rt.play();
+		timeline.play();
+	}
+
 	// =========================================
 	//  LOG DE EVENTOS
 	// =========================================
@@ -231,11 +288,25 @@ public class PantallaJuego {
 			moto_t.setText("Moto de Nieve: " + cantMotos);
 			
 			btnMoto.setDisable(cantMotos <= 0);
+			
+			// Dados especiales
+			int cantRapidos = jActual.getInventario().getDadosRapidos();
+			int cantLentos = jActual.getInventario().getDadosLentos();
+			
+			lblCantRapido.setText("Rápido: " + cantRapidos);
+			lblCantLento.setText("Lento: " + cantLentos);
+			
+			btnDadoRapido.setDisable(cantRapidos <= 0);
+			btnDadoLento.setDisable(cantLentos <= 0);
 		} else {
 			peces_t.setText("Peces: -");
 			nieve_t.setText("Bolas de nieve: -");
 			moto_t.setText("Moto de Nieve: -");
 			btnMoto.setDisable(true);
+			btnDadoRapido.setDisable(true);
+			btnDadoLento.setDisable(true);
+			lblCantRapido.setText("Rápido: -");
+			lblCantLento.setText("Lento: -");
 		}
 	}
 
@@ -493,47 +564,14 @@ public class PantallaJuego {
 	@FXML
 	private void handleDado(ActionEvent event) {
 		if (isPaused) return;
-		
-		dado.setDisable(true);
-		btnMoto.setDisable(true);
-
-		// 1. Animación visual del botón (vibración)
-		RotateTransition rt = new RotateTransition(Duration.millis(80), dado);
-		rt.setFromAngle(-15);
-		rt.setToAngle(15);
-		rt.setCycleCount(10);
-		rt.setAutoReverse(true);
-
-		// 2. Animación de cambio de números en el texto ("efecto giro")
-		Timeline timeline = new Timeline();
-		for (int i = 0; i < 10; i++) {
-			final int tempNum = (int)(Math.random() * 6) + 1;
-			KeyFrame kf = new KeyFrame(Duration.millis(i * 100), e -> {
-				dadoResultText.setText("Girando... " + tempNum);
-			});
-			timeline.getKeyFrames().add(kf);
-		}
-
-		// 3. Al terminar la animación, ejecutamos la lógica real de la partida
-		timeline.setOnFinished(e -> {
-			rt.stop();        // Detener la rotación
-			dado.setRotate(0); // Resetear rotación a 0
-			currentAnimations.remove(rt);
-			currentAnimations.remove(timeline);
-			continuarTurnoTrasAnimacion();
-		});
-
-		currentAnimations.add(rt);
-		currentAnimations.add(timeline);
-		rt.play();
-		timeline.play();
+		ejecutarAnimacionDado(null);
 	}
 
-	private void continuarTurnoTrasAnimacion() {
+	private void continuarTurnoTrasAnimacion(Dado dadoEspecial) {
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 
-		gestorPartida.ejecutarTurnoCompleto();
+		gestorPartida.ejecutarTurnoCompleto(dadoEspecial);
 		
 		int posNueva = jugadorActual.getPosicion();
 		int resultadoDado = gestorPartida.getUltimoResultadoDado();
