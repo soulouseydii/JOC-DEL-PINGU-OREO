@@ -328,6 +328,8 @@ public class PantallaJuego {
 			agregarEvento("═══════════════════════");
 
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
+			alert.getDialogPane().getStyleClass().add("custom-alert");
 			alert.setTitle("Partida Guardada");
 			alert.setHeaderText(null);
 			alert.setContentText("Partida guardada correctamente en la base de datos.\nID de partida: " + idGuardado);
@@ -336,6 +338,8 @@ public class PantallaJuego {
 			agregarEvento("❌ Error al guardar la partida.");
 
 			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
+			alert.getDialogPane().getStyleClass().add("custom-alert");
 			alert.setTitle("Error");
 			alert.setHeaderText(null);
 			alert.setContentText("No se pudo guardar la partida. Revisa la conexion a la base de datos.");
@@ -408,6 +412,8 @@ public class PantallaJuego {
 	@FXML
 	private void handleMenuBackToMenu(ActionEvent event) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
+		alert.getDialogPane().getStyleClass().add("custom-alert");
 		alert.setTitle("Volver al Menú");
 		alert.setHeaderText("¿Quieres guardar la partida?");
 		alert.setContentText("Selecciona una opción:");
@@ -440,6 +446,8 @@ public class PantallaJuego {
 	@FXML
 	private void handleMenuExit(ActionEvent event) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
+		alert.getDialogPane().getStyleClass().add("custom-alert");
 		alert.setTitle("Salir del Juego");
 		alert.setHeaderText("¿Quieres guardar la partida?");
 		alert.setContentText("Selecciona una opción:");

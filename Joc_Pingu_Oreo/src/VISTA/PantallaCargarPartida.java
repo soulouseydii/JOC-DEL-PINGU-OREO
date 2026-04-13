@@ -81,6 +81,7 @@ public class PantallaCargarPartida {
 
         if (partidaCargada == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaMenu.css").toExternalForm());
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("No se pudo cargar la partida desde la base de datos.");
@@ -136,6 +137,7 @@ public class PantallaCargarPartida {
                 cargarListaDesdeOracle();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaMenu.css").toExternalForm());
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("No se pudo eliminar la partida.");
