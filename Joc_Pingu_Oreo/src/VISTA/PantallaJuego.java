@@ -204,7 +204,7 @@ public class PantallaJuego {
 		if (isPaused) return;
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoRapido();
-		ejecutarAnimacionDado(new Dado("Rapido"));
+		ejecutarAnimacionDado(new Dado("Rapido"), btnDadoRapido);
 	}
 
 	@FXML
@@ -212,17 +212,17 @@ public class PantallaJuego {
 		if (isPaused) return;
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoLento();
-		ejecutarAnimacionDado(new Dado("Lento"));
+		ejecutarAnimacionDado(new Dado("Lento"), btnDadoLento);
 	}
 
-	private void ejecutarAnimacionDado(Dado dadoEspecial) {
+	private void ejecutarAnimacionDado(Dado dadoEspecial, Button botonAAnimar) {
 		dado.setDisable(true);
 		btnDadoRapido.setDisable(true);
 		btnDadoLento.setDisable(true);
 		btnMoto.setDisable(true);
 
 		// 1. Animación visual del botón (vibración)
-		RotateTransition rt = new RotateTransition(Duration.millis(80), dado);
+		RotateTransition rt = new RotateTransition(Duration.millis(80), botonAAnimar);
 		rt.setFromAngle(-15);
 		rt.setToAngle(15);
 		rt.setCycleCount(10);
@@ -240,7 +240,7 @@ public class PantallaJuego {
 
 		timeline.setOnFinished(e -> {
 			rt.stop();
-			dado.setRotate(0);
+			botonAAnimar.setRotate(0);
 			currentAnimations.remove(rt);
 			currentAnimations.remove(timeline);
 			continuarTurnoTrasAnimacion(dadoEspecial);
@@ -564,7 +564,7 @@ public class PantallaJuego {
 	@FXML
 	private void handleDado(ActionEvent event) {
 		if (isPaused) return;
-		ejecutarAnimacionDado(null);
+		ejecutarAnimacionDado(null, dado);
 	}
 
 	private void continuarTurnoTrasAnimacion(Dado dadoEspecial) {
