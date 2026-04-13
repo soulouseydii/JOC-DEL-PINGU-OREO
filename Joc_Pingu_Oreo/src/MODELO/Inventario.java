@@ -6,6 +6,8 @@ public class Inventario {
 	
 	/* ATRIBUTOS */
     private ArrayList<Item> lista;
+    private int dadosRapidos = 0;
+    private int dadosLentos = 0;
 
     // Constructor
     public Inventario() {

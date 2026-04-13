@@ -93,6 +93,34 @@
                         </graphic>
                     </Button>
                     <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="240" textAlignment="CENTER" />
+                    
+                    <HBox spacing="15" alignment="CENTER">
+                        <VBox alignment="CENTER" spacing="5">
+                            <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
+                                <graphic>
+                                    <ImageView fitWidth="120" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../imagenes/Dado rápido.png" />
+                                        </image>
+                                    </ImageView>
+                                </graphic>
+                            </Button>
+                            <Label fx:id="lblCantRapido" styleClass="stat" text="Rapidos: 0" />
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="5">
+                            <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
+                                <graphic>
+                                    <ImageView fitWidth="120" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../imagenes/Dado lento.png" />
+                                        </image>
+                                    </ImageView>
+                                </graphic>
+                            </Button>
+                            <Label fx:id="lblCantLento" styleClass="stat" text="Lentos: 0" />
+                        </VBox>
+                    </HBox>
                 </VBox>
 
                 <!-- Tarjeta Inventario -->

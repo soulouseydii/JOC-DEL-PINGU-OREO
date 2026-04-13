@@ -290,3 +290,27 @@
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
+
+/* DADOS ESPECIALES */
+.dice-button-special {
+    -fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);
+    -fx-background-image: none;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+.dice-button-special:hover {
+    -fx-background-color: #2980b9;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.dice-button-special:disabled {
+    -fx-background-color: #7f8c8d;
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
