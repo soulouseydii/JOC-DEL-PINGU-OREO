@@ -27,11 +27,11 @@
             <StackPane>
                 <!-- Margen estéticamente equilibrado para separar el tablero de los bordes de la pantalla -->
                 <padding>
-                    <Insets bottom="60" left="60" right="60" top="60" />
+                    <Insets bottom="30" left="80" right="80" top="30" />
                 </padding>
 
                 <!-- El tablero de las 50 casillas. Scalea automáticamente su contenido. -->
-                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" maxWidth="Infinity" maxHeight="Infinity">
+                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" translateY="60" maxWidth="1250" maxHeight="550">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="10.0" />
                         <ColumnConstraints percentWidth="10.0" />
