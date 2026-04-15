@@ -31,7 +31,7 @@
                 </padding>
 
                 <!-- El tablero de las 50 casillas. Scalea automáticamente su contenido. -->
-                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" translateY="60" maxWidth="1300" maxHeight="600">
+                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" translateY="60" maxWidth="1050" maxHeight="480">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="10.0" />
                         <ColumnConstraints percentWidth="10.0" />
@@ -69,7 +69,7 @@
                     </padding>
                     <VBox spacing="10" styleClass="card">
                         <Label styleClass="card-title" text="Eventos" />
-                        <TextArea fx:id="eventosLog" editable="false" prefRowCount="15" wrapText="true" styleClass="events-log" promptText="Los eventos del juego apareceran aqui..." />
+                        <TextArea fx:id="eventosLog" editable="false" prefHeight="400" minHeight="350" wrapText="true" styleClass="events-log" VBox.vgrow="ALWAYS" promptText="Los eventos del juego apareceran aqui..." />
                     </VBox>
                 </VBox>
 
@@ -91,13 +91,13 @@
                                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
                                         <Text fx:id="peces_t" styleClass="stat" text="Peces: 0" />
                                         <Region HBox.hgrow="ALWAYS" />
-                                        <Label styleClass="stat" text="(Auto vs Foca)" />
+                                        <Button fx:id="btnPeces" onAction="#handleUsarPeces" text="Usar" />
                                     </HBox>
 
                                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
                                         <Text fx:id="nieve_t" styleClass="stat" text="Bolas de nieve: 0" />
                                         <Region HBox.hgrow="ALWAYS" />
-                                        <Label styleClass="stat" text="(Auto PvP)" />
+                                        <Button fx:id="btnNieve" onAction="#handleUsarNieve" text="Usar" />
                                     </HBox>
 
                                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
