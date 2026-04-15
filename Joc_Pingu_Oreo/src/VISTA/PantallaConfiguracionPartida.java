@@ -85,7 +85,7 @@ public class PantallaConfiguracionPartida {
             lblEstado = new Label("Esperando login...");
             lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
-            cajaLogin.getChildren().addAll(new Label("Usuario:"), txtUsuario, new Label("Contraseña:"), txtPassword, btnListo);
+            cajaLogin.getChildren().addAll(new Label("Usuario:"), txtUsuario, new Label("Contraseña:"), txtPassword);
 
             // Setup Carousel UI
             cajaCarousel = new VBox(5);
@@ -111,16 +111,17 @@ public class PantallaConfiguracionPartida {
                     skinsSeleccionadas.remove(getCurrentSkin());
                 }
                 
+                estaListo = false;
+                btnListo.setText("Listo");
+                btnListo.setDisable(false);
+                
                 if (comboTipo.getValue().equals("CPU (Foca)")) {
                     currentSkinType = "Foca";
                     currentSkinIndex = 0;
                     cajaLogin.setVisible(false);
                     cajaLogin.setManaged(false);
-                    lblEstado.setText("CPU Lista");
-                    lblEstado.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                    estaListo = true;
-                    btnLeft.setDisable(false); // No bloquear para Foca
-                    btnRight.setDisable(false); // No bloquear para Foca
+                    lblEstado.setText("CPU Esperando...");
+                    lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                 } else {
                     currentSkinType = "Pinguino";
                     currentSkinIndex = 0;
@@ -128,22 +129,17 @@ public class PantallaConfiguracionPartida {
                     cajaLogin.setManaged(true);
                     lblEstado.setText("Esperando login...");
                     lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-                    estaListo = false;
                     
-                    // Resetear el boton y los campos
+                    // Resetear campos
                     txtUsuario.setDisable(false);
                     txtPassword.setDisable(false);
-                    btnListo.setDisable(false);
-                    btnLeft.setDisable(false);
-                    btnRight.setDisable(false);
                 }
+                
+                // Asegurar que los botones de skin estén activos al cambiar tipo
+                btnLeft.setDisable(false);
+                btnRight.setDisable(false);
                 
                 actualizarSkinLibre();
-                
-                if (estaListo) {
-                    skinsSeleccionadas.add(getCurrentSkin());
-                    notificarNuevasSkins();
-                }
                 
                 // Aplicar efectos visuales y sonoros a los botones fijos cuando la escena esté lista
                 btnEmpezar.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -156,15 +152,41 @@ public class PantallaConfiguracionPartida {
             });
 
             btnListo.setOnAction(e -> {
-                if (!txtUsuario.getText().isEmpty() && !txtPassword.getText().isEmpty()) {
-                    // Simulación de validación exitosa (Login)
+                if (estaListo) {
+                    // DESMARCAR LISTO (Toggle OFF)
+                    estaListo = false;
+                    btnListo.setText("Listo");
+                    lblEstado.setText(currentSkinType.equals("Foca") ? "CPU Esperando..." : "Esperando login...");
+                    lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    
+                    // Desbloquear todo
+                    txtUsuario.setDisable(false);
+                    txtPassword.setDisable(false);
+                    btnLeft.setDisable(false);
+                    btnRight.setDisable(false);
+                    comboTipo.setDisable(false);
+                    
+                    // Liberar skin
+                    skinsSeleccionadas.remove(getCurrentSkin());
+                    notificarNuevasSkins();
+                    verificarTodosListos();
+                } else {
+                    // MARCAR LISTO (Toggle ON)
+                    if (currentSkinType.equals("Pinguino")) {
+                        if (txtUsuario.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+                            lblEstado.setText("¡Faltan credenciales!");
+                            return;
+                        }
+                    }
+                    
+                    estaListo = true;
+                    btnListo.setText("Modificar");
                     lblEstado.setText("¡Jugador Listo!");
                     lblEstado.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                    estaListo = true;
-                    // Bloquear campos para que no se modifiquen tras el login
+                    
+                    // Bloquear todo
                     txtUsuario.setDisable(true);
                     txtPassword.setDisable(true);
-                    btnListo.setDisable(true);
                     btnLeft.setDisable(true);
                     btnRight.setDisable(true);
                     comboTipo.setDisable(true);
@@ -172,14 +194,11 @@ public class PantallaConfiguracionPartida {
                     // Registrar skin ocupada
                     skinsSeleccionadas.add(getCurrentSkin());
                     notificarNuevasSkins();
-                    
                     verificarTodosListos();
-                } else {
-                    lblEstado.setText("¡Faltan credenciales!");
                 }
             });
 
-            root.getChildren().addAll(lblTitulo, new Label("Tipo:"), comboTipo, cajaCarousel, cajaLogin, lblEstado);
+            root.getChildren().addAll(lblTitulo, new Label("Tipo:"), comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
             actualizarSkinLibre(); // Inicializar
         }
         
