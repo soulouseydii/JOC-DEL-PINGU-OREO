@@ -43,43 +43,44 @@
 
 /* TARJETAS GLASSMORPHISM */
 .card {
-    -fx-background-color: rgba(15, 30, 60, 0.75);
+    -fx-background-color: rgba(255, 255, 255, 0.35);
     -fx-background-radius: 20;
     -fx-padding: 18;
-    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.8);
     -fx-border-width: 1.5;
     -fx-border-radius: 20;
 
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0.1, 0, 8);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 15, 0.1, 0, 5);
 }
 
 .card-title {
     -fx-font-size: 18px;
-    -fx-font-weight: 800;
-    -fx-text-fill: #90cdf4;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0c4a6e;
 }
 
 .big-text {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-fill: #ffffff;
-    -fx-text-fill: #ffffff;
+    -fx-fill: #0c4a6e;
+    -fx-text-fill: #0c4a6e;
 }
 
 .stat {
     -fx-font-size: 15px;
-    -fx-font-weight: 600;
-    -fx-fill: #e2e8f0;
-    -fx-text-fill: #e2e8f0;
+    -fx-font-weight: 700;
+    -fx-fill: #1e293b;
+    -fx-text-fill: #1e293b;
 }
 
 /* LOG DE EVENTOS (TextArea) */
 .events-log {
     -fx-font-size: 13px;
     -fx-font-family: "Consolas", "Courier New", monospace;
-    -fx-control-inner-background: rgba(10, 15, 35, 0.85);
-    -fx-text-fill: #63b3ed;
-    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-font-weight: bold;
+    -fx-control-inner-background: rgba(255, 255, 255, 0.45);
+    -fx-text-fill: #0f172a;
+    -fx-border-color: rgba(255, 255, 255, 0.5);
     -fx-border-radius: 12;
     -fx-background-radius: 12;
     -fx-focus-color: transparent;
@@ -87,7 +88,7 @@
 }
 
 .events-log .content {
-    -fx-background-color: rgba(10, 15, 35, 0.85);
+    -fx-background-color: rgba(255, 255, 255, 0.45);
 }
 
 .events-log .scroll-pane {
