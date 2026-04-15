@@ -79,6 +79,9 @@ public class PantallaJuego {
 	@FXML private CheckBox checkSonidos;
 	@FXML private Slider sliderSonidos;
 	@FXML private CheckBox chkPantallaCompleta;
+	@FXML private VBox confirmationOverlay;
+	@FXML private Label confirmationTitle;
+	@FXML private Label confirmationMessage;
 
 	// Tablero y fichas
 	@FXML private GridPane tablero;
@@ -95,6 +98,9 @@ public class PantallaJuego {
 	private static final int COLUMNS = 10;
 	private static final int ROWS = 5;
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
+
+	private enum ConfirmAction { BACK_TO_MENU, EXIT_GAME }
+	private ConfirmAction pendingAction;
 
 	// Imágenes de las casillas
 	private Image imgNormal;
@@ -485,61 +491,63 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleMenuBackToMenu(ActionEvent event) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
-		alert.getDialogPane().getStyleClass().add("custom-alert");
-		alert.setTitle("Volver al Menú");
-		alert.setHeaderText("¿Quieres guardar la partida?");
-		alert.setContentText("Selecciona una opción:");
-
-		ButtonType btnGuardar = new ButtonType("Guardar");
-		ButtonType btnNoGuardar = new ButtonType("No guardar");
-		ButtonType btnCancelar = new ButtonType("No, cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
-
-		alert.getButtonTypes().setAll(btnGuardar, btnNoGuardar, btnCancelar);
-
-		alert.showAndWait().ifPresent(response -> {
-			if (response == btnGuardar) {
-				handleMenuSave(event);
-			} else if (response == btnNoGuardar) {
-				try {
-					FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
-					Parent root = loader.load();
-					Scene scene = new Scene(root);
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-					stage.setScene(scene);
-					stage.setMaximized(false);
-					stage.setMaximized(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		pendingAction = ConfirmAction.BACK_TO_MENU;
+		confirmationTitle.setText("VOLVER AL MENÚ");
+		confirmationMessage.setText("¿Quieres guardar la partida antes de volver al menú principal?");
+		
+		menuOverlay.setVisible(false);
+		confirmationOverlay.setVisible(true);
 	}
 
 	@FXML
 	private void handleMenuExit(ActionEvent event) {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
-		alert.getDialogPane().getStyleClass().add("custom-alert");
-		alert.setTitle("Salir del Juego");
-		alert.setHeaderText("¿Quieres guardar la partida?");
-		alert.setContentText("Selecciona una opción:");
-
-		ButtonType btnGuardar = new ButtonType("Guardar");
-		ButtonType btnNoGuardar = new ButtonType("No guardar");
-		ButtonType btnCancelar = new ButtonType("No, cancelar", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
-
-		alert.getButtonTypes().setAll(btnGuardar, btnNoGuardar, btnCancelar);
-
-		alert.showAndWait().ifPresent(response -> {
-			if (response == btnGuardar) {
-				handleMenuSave(event);
-			} else if (response == btnNoGuardar) {
-				Platform.exit();
-			}
-		});
+		pendingAction = ConfirmAction.EXIT_GAME;
+		confirmationTitle.setText("SALIR DEL JUEGO");
+		confirmationMessage.setText("¿Quieres guardar la partida antes de cerrar el juego?");
+		
+		menuOverlay.setVisible(false);
+		confirmationOverlay.setVisible(true);
 	}
+
+	@FXML
+	private void handleConfirmSave(ActionEvent event) {
+		// Primero guardamos (redirige a la pantalla de guardar/cargar según la lógica actual)
+		handleMenuSave(event);
+		// Si es salir del juego, deberíamos cerrar, pero la lógica de handleMenuSave redirige.
+		// Para mantener consistencia con el comportamiento previo:
+		if (pendingAction == ConfirmAction.EXIT_GAME) {
+			// En la lógica antigua, handleMenuSave(event) se llamaba y NADA MÁS.
+			// No se cerraba el programa si elegías guardar, solo se redirigía.
+		}
+		confirmationOverlay.setVisible(false);
+	}
+
+	@FXML
+	private void handleConfirmDiscard(ActionEvent event) {
+		confirmationOverlay.setVisible(false);
+		if (pendingAction == ConfirmAction.BACK_TO_MENU) {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
+				Parent root = loader.load();
+				Scene scene = new Scene(root);
+				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+				stage.setScene(scene);
+				stage.setMaximized(false);
+				stage.setMaximized(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (pendingAction == ConfirmAction.EXIT_GAME) {
+			Platform.exit();
+		}
+	}
+
+	@FXML
+	private void handleConfirmCancel(ActionEvent event) {
+		confirmationOverlay.setVisible(false);
+		menuOverlay.setVisible(true);
+	}
+
 
 	@FXML
 	private void handleMenuOptions(ActionEvent event) {

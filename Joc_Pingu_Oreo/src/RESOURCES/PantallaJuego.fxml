@@ -227,4 +227,19 @@
             <Button maxWidth="250.0" onAction="#handleBackFromOptions" styleClass="menu-button-alt" text="Volver al Menú" />
         </children>
     </VBox>
+
+    <!-- Overlay de Confirmación -->
+    <VBox fx:id="confirmationOverlay" alignment="CENTER" maxHeight="450.0" maxWidth="500.0" mouseTransparent="false" spacing="20.0" styleClass="overlay-menu" visible="false" StackPane.alignment="CENTER">
+        <children>
+            <Label fx:id="confirmationTitle" styleClass="menu-title" text="CONFIRMACIÓN" />
+            <Label fx:id="confirmationMessage" styleClass="confirmation-text" text="¿Quieres guardar la partida?" wrapText="true" />
+            
+            <VBox spacing="15.0" alignment="CENTER">
+                <Button maxWidth="320.0" onAction="#handleConfirmSave" styleClass="menu-button-alt" text="Guardar y continuar" />
+                <Button maxWidth="320.0" onAction="#handleConfirmDiscard" styleClass="menu-button-alt" text="No guardar" />
+                <Button maxWidth="320.0" onAction="#handleConfirmCancel" styleClass="menu-button-alt" text="Cancelar" />
+            </VBox>
+        </children>
+    </VBox>
+
 </StackPane>
