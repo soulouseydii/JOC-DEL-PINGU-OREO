@@ -14,6 +14,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.RotateTransition;
+import javafx.animation.FadeTransition;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.QuadCurveTo;
@@ -83,6 +84,12 @@ public class PantallaJuego {
 	@FXML private Label confirmationTitle;
 	@FXML private Label confirmationMessage;
 
+	// Snowball Fight overlays
+	@FXML private StackPane snowballFightImageOverlay;
+	@FXML private ImageView snowballFightImage;
+	@FXML private VBox snowballDecisionOverlay;
+	@FXML private Label snowballDecisionMessage;
+
 	// Tablero y fichas
 	@FXML private GridPane tablero;
 	@FXML private Circle P1;
@@ -101,6 +108,11 @@ public class PantallaJuego {
 
 	private enum ConfirmAction { BACK_TO_MENU, EXIT_GAME }
 	private ConfirmAction pendingAction;
+
+	// PvP snowball fight state
+	private Pinguino pvpAtacante;
+	private Pinguino pvpDefensor;
+	private int pvpIndiceAtacante;
 
 	// Imágenes de las casillas
 	private Image imgNormal;
@@ -603,7 +615,7 @@ public class PantallaJuego {
 					currentAnimations.remove(pausaEfecto);
 					animarMovimiento(indiceActual, posVisualFinal, () -> {
 						actualizarTodasLasFichas();
-						finalizarTurnoVisual();
+						comprobarPvPYFinalizar(jugadorActual, indiceActual);
 					});
 				});
 				currentAnimations.add(pausaEfecto);
@@ -613,9 +625,200 @@ public class PantallaJuego {
 			// Movimiento normal directo a la casilla final
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
 				actualizarTodasLasFichas();
-				finalizarTurnoVisual();
+				comprobarPvPYFinalizar(jugadorActual, indiceActual);
 			});
 		}
+	}
+
+	// =========================================
+	//  GUERRA DE BOLAS DE NIEVE (PvP)
+	// =========================================
+
+	/**
+	 * Después de que la animación de movimiento termina, comprueba si
+	 * el jugador actual (Pingüino) ha caído en la misma casilla que otro Pingüino.
+	 * Si es así, lanza la secuencia visual de guerra de bolas de nieve.
+	 * Si no, finaliza el turno normalmente.
+	 */
+	private void comprobarPvPYFinalizar(Jugador jugadorActual, int indiceActual) {
+		if (jugadorActual instanceof Pinguino) {
+			Pinguino atacante = (Pinguino) jugadorActual;
+			
+			// En la primera casilla (inicio) no hay guerra de bolas de nieve
+			if (atacante.getPosicion() == 0) {
+				finalizarTurnoVisual();
+				return;
+			}
+			
+			Pinguino defensor = gestorPartida.detectarPvP(atacante);
+
+			if (defensor != null) {
+				// Guardar estado PvP para los handlers de los botones
+				pvpAtacante = atacante;
+				pvpDefensor = defensor;
+				pvpIndiceAtacante = indiceActual;
+
+				agregarEvento("═══════════════════════");
+				agregarEvento("⚔️ ¡" + atacante.getNombre() + " y " + defensor.getNombre() + " se encuentran en la casilla " + atacante.getPosicion() + "!");
+
+				// Lanzar la secuencia visual
+				mostrarEventoGuerraBolasNieve();
+				return;
+			}
+		}
+		// No hay PvP → finalizar turno normalmente
+		finalizarTurnoVisual();
+	}
+
+	/**
+	 * Muestra la imagen guerra_bolas_nieve.png en el centro de la pantalla
+	 * con una animación de fade-in + zoom. Después de ~1.5s, muestra el diálogo de decisión.
+	 */
+	private void mostrarEventoGuerraBolasNieve() {
+		// Preparar la imagen para la animación
+		snowballFightImage.setOpacity(0);
+		snowballFightImage.setScaleX(0.7);
+		snowballFightImage.setScaleY(0.7);
+		snowballFightImageOverlay.setVisible(true);
+
+		// Fade in
+		FadeTransition fadeIn = new FadeTransition(Duration.millis(600), snowballFightImage);
+		fadeIn.setFromValue(0);
+		fadeIn.setToValue(1);
+
+		// Zoom in suave
+		ScaleTransition zoomIn = new ScaleTransition(Duration.millis(600), snowballFightImage);
+		zoomIn.setFromX(0.7);
+		zoomIn.setFromY(0.7);
+		zoomIn.setToX(1.0);
+		zoomIn.setToY(1.0);
+
+		ParallelTransition entrada = new ParallelTransition(fadeIn, zoomIn);
+
+		// Mantener visible 1.5 segundos, luego mostrar decisión
+		PauseTransition espera = new PauseTransition(Duration.millis(1500));
+
+		// Fade out de la imagen
+		FadeTransition fadeOut = new FadeTransition(Duration.millis(400), snowballFightImage);
+		fadeOut.setFromValue(1);
+		fadeOut.setToValue(0);
+
+		SequentialTransition secuencia = new SequentialTransition(entrada, espera, fadeOut);
+		secuencia.setOnFinished(e -> {
+			currentAnimations.remove(secuencia);
+			snowballFightImageOverlay.setVisible(false);
+			mostrarDecisionGuerraBolasNieve();
+		});
+
+		currentAnimations.add(secuencia);
+		secuencia.play();
+	}
+
+	/**
+	 * Muestra el diálogo de decisión para el defensor.
+	 * Si el defensor es una Foca (CPU), auto-ignora.
+	 */
+	private void mostrarDecisionGuerraBolasNieve() {
+		// Si el defensor es CPU (Foca), no debería ocurrir, pero por seguridad auto-ignoramos
+		if (pvpDefensor == null || !(pvpDefensor instanceof Pinguino)) {
+			finalizarTurnoVisual();
+			return;
+		}
+
+		int bolasAtacante = pvpAtacante.contarItem("Bola de Nieve");
+		int bolasDefensor = pvpDefensor.contarItem("Bola de Nieve");
+
+		snowballDecisionMessage.setText(
+			pvpDefensor.getNombre() + ", ¿quieres iniciar una guerra de bolas de nieve contra " + pvpAtacante.getNombre() + "?\n\n" +
+			"Tus bolas de nieve: " + bolasDefensor + "\n" +
+			"Bolas de " + pvpAtacante.getNombre() + ": " + bolasAtacante
+		);
+
+		snowballDecisionOverlay.setVisible(true);
+	}
+
+	@FXML
+	private void handleSnowballFight(ActionEvent event) {
+		snowballDecisionOverlay.setVisible(false);
+
+		if (pvpAtacante == null || pvpDefensor == null) {
+			finalizarTurnoVisual();
+			return;
+		}
+
+		// Ejecutar la pelea y obtener resultado
+		int[] resultado = gestorPartida.ejecutarPelea(pvpAtacante, pvpDefensor);
+		int ganador = resultado[0];
+		int diferencia = resultado[1];
+		int bolasAtacante = resultado[2];
+		int bolasDefensor = resultado[3];
+
+		agregarEvento("🎯 " + pvpAtacante.getNombre() + " (" + bolasAtacante + " bolas) vs " + pvpDefensor.getNombre() + " (" + bolasDefensor + " bolas)");
+
+		if (ganador == 0) {
+			// Atacante gana → defensor retrocede
+			agregarEvento("🏆 ¡" + pvpAtacante.getNombre() + " gana la guerra de bolas de nieve!");
+			agregarEvento("   ↪ " + pvpDefensor.getNombre() + " retrocede " + diferencia + " casillas");
+
+			// Animar el retroceso del defensor
+			int indiceDefensor = getIndiceJugador(pvpDefensor);
+			int posVisualDefensor = Math.max(0, Math.min(pvpDefensor.getPosicion(), 49));
+			animarMovimiento(indiceDefensor, posVisualDefensor, () -> {
+				actualizarTodasLasFichas();
+				actualizarInventarioUI();
+				finalizarTurnoVisual();
+			});
+
+		} else if (ganador == 1) {
+			// Defensor gana → atacante retrocede
+			agregarEvento("🏆 ¡" + pvpDefensor.getNombre() + " gana la guerra de bolas de nieve!");
+			agregarEvento("   ↪ " + pvpAtacante.getNombre() + " retrocede " + diferencia + " casillas");
+
+			// Animar el retroceso del atacante
+			int posVisualAtacante = Math.max(0, Math.min(pvpAtacante.getPosicion(), 49));
+			animarMovimiento(pvpIndiceAtacante, posVisualAtacante, () -> {
+				actualizarTodasLasFichas();
+				actualizarInventarioUI();
+				finalizarTurnoVisual();
+			});
+
+		} else {
+			// Empate → nadie se mueve, pero ambos pierden todas sus bolas
+			agregarEvento("🤝 ¡Empate! Ambos pierden todas sus bolas de nieve. Nadie se mueve.");
+			actualizarInventarioUI();
+			finalizarTurnoVisual();
+		}
+
+		agregarEvento("═══════════════════════");
+
+		// Limpiar estado PvP
+		pvpAtacante = null;
+		pvpDefensor = null;
+	}
+
+	@FXML
+	private void handleSnowballIgnore(ActionEvent event) {
+		snowballDecisionOverlay.setVisible(false);
+
+		agregarEvento("🕊️ " + pvpDefensor.getNombre() + " decide ignorar a " + pvpAtacante.getNombre() + ". No pasa nada.");
+		agregarEvento("═══════════════════════");
+
+		// Limpiar estado PvP
+		pvpAtacante = null;
+		pvpDefensor = null;
+
+		finalizarTurnoVisual();
+	}
+
+	/**
+	 * Obtiene el índice del jugador en la lista de jugadores de la partida.
+	 */
+	private int getIndiceJugador(Jugador j) {
+		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
+		for (int i = 0; i < jugadores.size(); i++) {
+			if (jugadores.get(i) == j) return i;
+		}
+		return 0;
 	}
 
 	// =========================================

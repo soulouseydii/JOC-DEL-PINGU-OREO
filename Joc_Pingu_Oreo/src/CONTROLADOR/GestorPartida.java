@@ -168,15 +168,9 @@ public class GestorPartida {
                 }
             }
             
-            // REGLA PvP: Comprobar si hay OTRO PINGÜINO en la misma casilla
-            for (Jugador j : partida.getJugadores()) {
-                if (j instanceof Pinguino && j != pActual && j.getPosicion() == pActual.getPosicion()) {
-                    Pinguino pOtro = (Pinguino) j;
-                    System.out.println("¡" + pActual.getNombre() + " y " + pOtro.getNombre() + " coinciden en la casilla " + pActual.getPosicion() + "!");
-                    gestorJugador.pinguinoGolpea(pActual, pOtro, partida.getTablero());
-                    break; // Solo una pelea por turno
-                }
-            }
+            // REGLA PvP: La detección de otro pingüino en la misma casilla
+            // se maneja ahora desde la VISTA (PantallaJuego) para mostrar
+            // la animación visual y el diálogo de decisión.
         }
 
         // Verificamos si ha ganado el jugador actual
@@ -293,5 +287,45 @@ public class GestorPartida {
                 System.out.println(pinguino.getNombre() + " ha sido enviado a la casilla " + nuevaPosicion);
             }
         }
+    }
+
+    /**
+     * Detecta si hay otro Pinguino en la misma casilla que el atacante.
+     * Devuelve el Pinguino rival o null si no hay encuentro PvP.
+     */
+    public Pinguino detectarPvP(Pinguino atacante) {
+        for (Jugador j : partida.getJugadores()) {
+            if (j instanceof Pinguino && j != atacante && j.getPosicion() == atacante.getPosicion()) {
+                return (Pinguino) j;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Ejecuta la pelea PvP y devuelve información del resultado.
+     * result[0] = índice del ganador: 0=atacante, 1=defensor, -1=empate
+     * result[1] = diferencia de bolas (casillas que retrocede el perdedor)
+     * result[2] = bolas del atacante (antes de la pelea)
+     * result[3] = bolas del defensor (antes de la pelea)
+     */
+    public int[] ejecutarPelea(Pinguino atacante, Pinguino defensor) {
+        int bolasAtacante = atacante.contarItem("Bola de Nieve");
+        int bolasDefensor = defensor.contarItem("Bola de Nieve");
+        int diferencia = Math.abs(bolasAtacante - bolasDefensor);
+
+        // Delegar la resolución al GestorJugador
+        gestorJugador.pinguinoGolpea(atacante, defensor, partida.getTablero());
+
+        int ganador;
+        if (bolasAtacante > bolasDefensor) {
+            ganador = 0; // atacante gana
+        } else if (bolasDefensor > bolasAtacante) {
+            ganador = 1; // defensor gana
+        } else {
+            ganador = -1; // empate
+        }
+
+        return new int[]{ganador, diferencia, bolasAtacante, bolasDefensor};
     }
 }

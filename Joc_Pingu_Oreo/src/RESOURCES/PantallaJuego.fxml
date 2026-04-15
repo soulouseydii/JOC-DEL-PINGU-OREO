@@ -242,4 +242,26 @@
         </children>
     </VBox>
 
+    <!-- Overlay de imagen Guerra de Bolas de Nieve (aparece con animación) -->
+    <StackPane fx:id="snowballFightImageOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="snowball-image-overlay">
+        <ImageView fx:id="snowballFightImage" fitWidth="500" fitHeight="500" preserveRatio="true" StackPane.alignment="CENTER">
+            <image>
+                <Image url="@../imagenes/guerra_bolas_nieve.png" />
+            </image>
+        </ImageView>
+    </StackPane>
+
+    <!-- Overlay de decisión Guerra de Bolas de Nieve -->
+    <VBox fx:id="snowballDecisionOverlay" alignment="CENTER" maxHeight="400.0" maxWidth="650.0" mouseTransparent="false" spacing="20.0" styleClass="overlay-menu" visible="false" StackPane.alignment="CENTER">
+        <children>
+            <Label styleClass="menu-title" text="GUERRA DE BOLAS DE NIEVE" wrapText="true" />
+            <Label fx:id="snowballDecisionMessage" styleClass="confirmation-text" text="" wrapText="true" />
+            
+            <VBox spacing="15.0" alignment="CENTER">
+                <Button maxWidth="320.0" onAction="#handleSnowballFight" styleClass="menu-button-alt" text="¡Pelear!" />
+                <Button maxWidth="320.0" onAction="#handleSnowballIgnore" styleClass="menu-button-alt" text="Ignorar" />
+            </VBox>
+        </children>
+    </VBox>
+
 </StackPane>

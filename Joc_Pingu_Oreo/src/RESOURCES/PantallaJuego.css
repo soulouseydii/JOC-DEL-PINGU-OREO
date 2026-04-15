@@ -326,3 +326,8 @@
     -fx-padding: 10 20;
 }
 
+/* SNOWBALL FIGHT IMAGE OVERLAY */
+.snowball-image-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.65);
+}
+
