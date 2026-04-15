@@ -41,12 +41,28 @@ public class GestorBBDD {
         return false;
     }
 
+    // ============================================================
+    //  GUARDAR PARTIDA (INSERT si nueva, UPDATE si ya existe)
+    // ============================================================
+
     public int guardarBBDD(Partida p) {
+        if (p.getId() > 0) {
+            return actualizarPartida(p);
+        } else {
+            return insertarPartida(p);
+        }
+    }
+
+    // ============================================================
+    //  INSERT: Crear partida nueva
+    // ============================================================
+
+    private int insertarPartida(Partida p) {
         try (Connection con = getConexion()) {
             con.setAutoCommit(false);
 
             try {
-                // ----- 1. INSERT EN PARTIDA -----
+                // 1. INSERT PARTIDA
                 String sqlPartida = "INSERT INTO PARTIDA (TURNOS, JUGADOR_ACTUAL, FINALIZADA) VALUES (?, ?, ?)";
                 int idPartida;
 
@@ -62,62 +78,16 @@ public class GestorBBDD {
                     }
                 }
 
-                // ----- 2. INSERT JUGADORES -----
-                String sqlJugador = "INSERT INTO JUGADOR (ID_PARTIDA, INDICE_ORDEN, NOMBRE, COLOR, POSICION, TIPO, TURNOS_PERDIDOS, TURNOS_BLOQUEADA) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                // 2. INSERT JUGADORES
+                insertarJugadores(con, p, idPartida);
 
-                for (int i = 0; i < p.getJugadores().size(); i++) {
-                    Jugador j = p.getJugadores().get(i);
-                    int idJugador;
+                // 3. INSERT CASILLAS
+                insertarCasillas(con, p, idPartida);
 
-                    try (PreparedStatement ps = con.prepareStatement(sqlJugador, new String[]{"ID_JUGADOR"})) {
-                        ps.setInt(1, idPartida);
-                        ps.setInt(2, i);
-                        ps.setString(3, j.getNombre());
-                        ps.setString(4, j.getColor());
-                        ps.setInt(5, j.getPosicion());
-                        ps.setString(6, j instanceof Pinguino ? "PINGUINO" : "FOCA");
-                        ps.setInt(7, j.getTurnosPerdidos());
-                        ps.setInt(8, j instanceof Foca ? ((Foca) j).getTurnosBloqueada() : 0);
-                        ps.executeUpdate();
-
-                        try (ResultSet keys = ps.getGeneratedKeys()) {
-                            keys.next();
-                            idJugador = keys.getInt(1);
-                        }
-                    }
-
-                    // ----- 3. INSERT ITEMS DEL INVENTARIO (solo Pinguinos) -----
-                    if (j instanceof Pinguino) {
-                        Pinguino ping = (Pinguino) j;
-                        String sqlItem = "INSERT INTO INVENTARIO_ITEM (ID_JUGADOR, TIPO_ITEM, CANTIDAD) VALUES (?, ?, ?)";
-
-                        for (Item item : ping.getInventario().getlista()) {
-                            try (PreparedStatement psItem = con.prepareStatement(sqlItem)) {
-                                psItem.setInt(1, idJugador);
-                                psItem.setString(2, item.getNombre());
-                                psItem.setInt(3, item.getCantidad());
-                                psItem.executeUpdate();
-                            }
-                        }
-                    }
-                }
-
-                // ----- 4. INSERT CASILLAS DEL TABLERO -----
-                String sqlCasilla = "INSERT INTO CASILLA_TABLERO (ID_PARTIDA, POSICION, TIPO) VALUES (?, ?, ?)";
-
-                for (Casilla c : p.getTablero().getListaCasillas()) {
-                    try (PreparedStatement ps = con.prepareStatement(sqlCasilla)) {
-                        ps.setInt(1, idPartida);
-                        ps.setInt(2, c.getPosicion());
-                        ps.setString(3, c.getClass().getSimpleName());
-                        ps.executeUpdate();
-                    }
-                }
-
-                // ----- COMMIT -----
+                // COMMIT
                 con.commit();
                 p.setId(idPartida);
-                System.out.println("Partida guardada correctamente en la BBDD con ID: " + idPartida);
+                System.out.println("Partida NUEVA guardada con ID: " + idPartida);
                 return idPartida;
 
             } catch (SQLException e) {
@@ -126,25 +96,139 @@ public class GestorBBDD {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al guardar la partida en BBDD: " + e.getMessage());
+            System.out.println("Error al guardar partida: " + e.getMessage());
             e.printStackTrace();
             return -1;
         }
     }
 
+    // ============================================================
+    //  UPDATE: Sobrescribir partida existente
+    // ============================================================
+
+    private int actualizarPartida(Partida p) {
+        try (Connection con = getConexion()) {
+            con.setAutoCommit(false);
+
+            try {
+                int idPartida = p.getId();
+
+                // 1. UPDATE PARTIDA
+                String sqlUpdate = "UPDATE PARTIDA SET TURNOS = ?, JUGADOR_ACTUAL = ?, FINALIZADA = ? WHERE ID_PARTIDA = ?";
+                try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
+                    ps.setInt(1, p.getTurnos());
+                    ps.setInt(2, p.getJugadorActualIndice());
+                    ps.setInt(3, p.isFinalizada() ? 1 : 0);
+                    ps.setInt(4, idPartida);
+                    ps.executeUpdate();
+                }
+
+                // 2. BORRAR jugadores antiguos (CASCADE borra inventarios)
+                try (PreparedStatement ps = con.prepareStatement("DELETE FROM JUGADOR WHERE ID_PARTIDA = ?")) {
+                    ps.setInt(1, idPartida);
+                    ps.executeUpdate();
+                }
+
+                // 3. RE-INSERTAR jugadores con estado actual
+                insertarJugadores(con, p, idPartida);
+
+                // 4. BORRAR y re-insertar casillas
+                try (PreparedStatement ps = con.prepareStatement("DELETE FROM CASILLA_TABLERO WHERE ID_PARTIDA = ?")) {
+                    ps.setInt(1, idPartida);
+                    ps.executeUpdate();
+                }
+                insertarCasillas(con, p, idPartida);
+
+                // COMMIT
+                con.commit();
+                System.out.println("Partida ID " + idPartida + " ACTUALIZADA correctamente.");
+                return idPartida;
+
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar partida: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    // ============================================================
+    //  METODOS AUXILIARES INSERT
+    // ============================================================
+
+    private void insertarJugadores(Connection con, Partida p, int idPartida) throws SQLException {
+        String sqlJugador = "INSERT INTO JUGADOR (ID_PARTIDA, INDICE_ORDEN, NOMBRE, COLOR, POSICION, TIPO, TURNOS_PERDIDOS, TURNOS_BLOQUEADA) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        for (int i = 0; i < p.getJugadores().size(); i++) {
+            Jugador j = p.getJugadores().get(i);
+            int idJugador;
+
+            try (PreparedStatement ps = con.prepareStatement(sqlJugador, new String[]{"ID_JUGADOR"})) {
+                ps.setInt(1, idPartida);
+                ps.setInt(2, i);
+                ps.setString(3, j.getNombre());
+                ps.setString(4, j.getColor());
+                ps.setInt(5, j.getPosicion());
+                ps.setString(6, j instanceof Pinguino ? "PINGUINO" : "FOCA");
+                ps.setInt(7, j.getTurnosPerdidos());
+                ps.setInt(8, j instanceof Foca ? ((Foca) j).getTurnosBloqueada() : 0);
+                ps.executeUpdate();
+
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    keys.next();
+                    idJugador = keys.getInt(1);
+                }
+            }
+
+            // INSERT items del inventario (solo Pinguinos)
+            if (j instanceof Pinguino) {
+                Pinguino ping = (Pinguino) j;
+                String sqlItem = "INSERT INTO INVENTARIO_ITEM (ID_JUGADOR, TIPO_ITEM, CANTIDAD) VALUES (?, ?, ?)";
+
+                for (Item item : ping.getInventario().getlista()) {
+                    try (PreparedStatement psItem = con.prepareStatement(sqlItem)) {
+                        psItem.setInt(1, idJugador);
+                        psItem.setString(2, item.getNombre());
+                        psItem.setInt(3, item.getCantidad());
+                        psItem.executeUpdate();
+                    }
+                }
+            }
+        }
+    }
+
+    private void insertarCasillas(Connection con, Partida p, int idPartida) throws SQLException {
+        String sqlCasilla = "INSERT INTO CASILLA_TABLERO (ID_PARTIDA, POSICION, TIPO) VALUES (?, ?, ?)";
+
+        for (Casilla c : p.getTablero().getListaCasillas()) {
+            try (PreparedStatement ps = con.prepareStatement(sqlCasilla)) {
+                ps.setInt(1, idPartida);
+                ps.setInt(2, c.getPosicion());
+                ps.setString(3, c.getClass().getSimpleName());
+                ps.executeUpdate();
+            }
+        }
+    }
+
+    // ============================================================
     //  CARGAR PARTIDA COMPLETA
+    // ============================================================
 
     public Partida cargarBBDD(int id) {
         try (Connection con = getConexion()) {
 
-            // ----- 1. CARGAR DATOS DE LA PARTIDA -----
+            // 1. CARGAR DATOS DE LA PARTIDA
             int turnos, jugadorActual, finalizada;
 
             try (PreparedStatement ps = con.prepareStatement("SELECT TURNOS, JUGADOR_ACTUAL, FINALIZADA FROM PARTIDA WHERE ID_PARTIDA = ?")) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
-                        System.out.println("No se encontro ninguna partida con ID: " + id);
+                        System.out.println("No se encontro partida con ID: " + id);
                         return null;
                     }
                     turnos = rs.getInt("TURNOS");
@@ -153,7 +237,7 @@ public class GestorBBDD {
                 }
             }
 
-            // ----- 2. CARGAR CASILLAS DEL TABLERO -----
+            // 2. CARGAR CASILLAS DEL TABLERO
             ArrayList<Casilla> casillas = new ArrayList<>();
 
             try (PreparedStatement ps = con.prepareStatement(
@@ -168,7 +252,7 @@ public class GestorBBDD {
                 }
             }
 
-            // ----- 3. CARGAR JUGADORES -----
+            // 3. CARGAR JUGADORES
             ArrayList<Jugador> jugadores = new ArrayList<>();
 
             try (PreparedStatement ps = con.prepareStatement(
@@ -223,7 +307,7 @@ public class GestorBBDD {
                 }
             }
 
-            // ----- 4. CONSTRUIR OBJETO PARTIDA -----
+            // 4. CONSTRUIR OBJETO PARTIDA
             Partida partida = new Partida();
             partida.setId(id);
             partida.setTurnos(turnos);
@@ -232,25 +316,31 @@ public class GestorBBDD {
             partida.getTablero().setListaCasillas(casillas);
             partida.setJugadores(jugadores);
 
-            System.out.println("Partida ID " + id + " cargada correctamente desde la BBDD.");
+            System.out.println("Partida ID " + id + " cargada correctamente.");
+            System.out.println("  Turnos: " + turnos + " | Jugador actual: " + jugadorActual + " | Jugadores: " + jugadores.size());
+            for (Jugador j : jugadores) {
+                System.out.println("  -> " + j.getNombre() + " | Pos: " + j.getPosicion() + " | Tipo: " + j.getClass().getSimpleName());
+            }
             return partida;
 
         } catch (SQLException e) {
-            System.out.println("Error al cargar la partida desde BBDD: " + e.getMessage());
+            System.out.println("Error al cargar partida: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
 
+    // ============================================================
     //  LISTAR PARTIDAS GUARDADAS
+    // ============================================================
 
     public ArrayList<String[]> listarPartidas() {
         ArrayList<String[]> lista = new ArrayList<>();
 
         try (Connection con = getConexion()) {
-            String sql = "SELECT p.ID_PARTIDA, p.TURNOS, p.FINALIZADA, p.FECHA_GUARDADO, " +
+            String sql = "SELECT p.ID_PARTIDA, p.TURNOS, p.FINALIZADA, " +
                          "(SELECT COUNT(*) FROM JUGADOR j WHERE j.ID_PARTIDA = p.ID_PARTIDA) AS NUM_JUGADORES " +
-                         "FROM PARTIDA p ORDER BY p.FECHA_GUARDADO DESC";
+                         "FROM PARTIDA p ORDER BY p.ID_PARTIDA DESC";
 
             try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
                 while (rs.next()) {
@@ -260,17 +350,11 @@ public class GestorBBDD {
                     int numTurnos = rs.getInt("TURNOS");
                     int numJugadores = rs.getInt("NUM_JUGADORES");
                     int finalizada = rs.getInt("FINALIZADA");
-                    String fecha = rs.getString("FECHA_GUARDADO");
-
-                    // Limpiar la fecha para mostrarla bonita
-                    if (fecha != null && fecha.length() > 19) {
-                        fecha = fecha.substring(0, 19);
-                    }
 
                     String estado = finalizada == 1 ? "Finalizada" : "En curso";
 
                     info[1] = "Partida #" + info[0] + "  |  " + numJugadores + " jugadores  |  " +
-                              numTurnos + " turnos  |  " + estado + "  |  " + fecha;
+                              numTurnos + " turnos  |  " + estado;
 
                     lista.add(info);
                 }
@@ -283,7 +367,9 @@ public class GestorBBDD {
         return lista;
     }
 
+    // ============================================================
     //  ELIMINAR PARTIDA
+    // ============================================================
 
     public boolean eliminarPartida(int id) {
         try (Connection con = getConexion()) {
@@ -292,7 +378,7 @@ public class GestorBBDD {
                 ps.setInt(1, id);
                 int filas = ps.executeUpdate();
                 if (filas > 0) {
-                    System.out.println("Partida ID " + id + " eliminada de la BBDD.");
+                    System.out.println("Partida ID " + id + " eliminada.");
                     return true;
                 } else {
                     System.out.println("No se encontro partida con ID: " + id);
@@ -304,6 +390,10 @@ public class GestorBBDD {
         return false;
     }
 
+    // ============================================================
+    //  FABRICAS DE OBJETOS
+    // ============================================================
+
     private Casilla crearCasillaPorTipo(int posicion, String tipo) {
         switch (tipo) {
             case "Oso":             return new Oso(posicion);
@@ -314,7 +404,6 @@ public class GestorBBDD {
             default:                return new Normal(posicion);
         }
     }
-
 
     private Item crearItemPorTipo(String tipoItem) {
         switch (tipoItem) {

@@ -30,6 +30,12 @@ public class GestorPartida {
         this.gestorBBDD = new GestorBBDD();
     }
     
+    /**
+     * Guarda la partida actual en la BD.
+     * Si ya tiene ID (fue guardada antes), hace UPDATE.
+     * Si es nueva, hace INSERT.
+     * @return ID de la partida guardada, o -1 si fallo
+     */
     public int guardarPartida() {
         int id = gestorBBDD.guardarBBDD(partida);
         return id;

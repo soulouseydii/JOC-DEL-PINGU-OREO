@@ -226,7 +226,7 @@ public class PantallaJuego {
 		if (isPaused) return;
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoRapido();
-		ejecutarAnimacionDado(new Dado("Rapido"));
+		ejecutarAnimacionDado(new Dado("Rapido"), btnDadoRapido);
 	}
 
 	@FXML
@@ -234,10 +234,10 @@ public class PantallaJuego {
 		if (isPaused) return;
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoLento();
-		ejecutarAnimacionDado(new Dado("Lento"));
+		ejecutarAnimacionDado(new Dado("Lento"), btnDadoLento);
 	}
 
-	private void ejecutarAnimacionDado(Dado dadoEspecial) {
+	private void ejecutarAnimacionDado(Dado dadoEspecial, Button botonAAnimar) {
 		dado.setDisable(true);
 		btnDadoRapido.setDisable(true);
 		btnDadoLento.setDisable(true);
@@ -246,7 +246,7 @@ public class PantallaJuego {
 		btnNieve.setDisable(true);
 
 		// 1. Animación visual del botón (vibración)
-		RotateTransition rt = new RotateTransition(Duration.millis(80), dado);
+		RotateTransition rt = new RotateTransition(Duration.millis(80), botonAAnimar);
 		rt.setFromAngle(-15);
 		rt.setToAngle(15);
 		rt.setCycleCount(10);
@@ -264,7 +264,7 @@ public class PantallaJuego {
 
 		timeline.setOnFinished(e -> {
 			rt.stop();
-			dado.setRotate(0);
+			botonAAnimar.setRotate(0);
 			currentAnimations.remove(rt);
 			currentAnimations.remove(timeline);
 			continuarTurnoTrasAnimacion(dadoEspecial);
@@ -417,34 +417,48 @@ public class PantallaJuego {
 	//  MENÚ GUARDADO / CARGA (Desde Pause)
 	// =========================================
 
+	/**
+	 * Guarda la partida directamente en la BD.
+	 * Si ya fue guardada antes (tiene ID), actualiza.
+	 * Si es nueva, inserta.
+	 * No cambia de pantalla. Muestra alerta de confirmacion.
+	 */
 	@FXML
 	private void handleSaveGame() {
 		if (gestorPartida.getPartida() == null) {
 			agregarEvento("⚠️ No hay partida activa para guardar.");
 			return;
 		}
+
 		int idGuardado = gestorPartida.guardarPartida();
+
 		if (idGuardado > 0) {
 			agregarEvento("═══════════════════════");
 			agregarEvento("💾 Partida guardada correctamente! (ID: " + idGuardado + ")");
 			agregarEvento("═══════════════════════");
 
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
-			alert.getDialogPane().getStyleClass().add("custom-alert");
+			try {
+				alert.getDialogPane().getStylesheets().add(
+					getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("custom-alert");
+			} catch (Exception ignored) {}
 			alert.setTitle("Partida Guardada");
 			alert.setHeaderText(null);
-			alert.setContentText("Partida guardada correctamente en la base de datos.\nID de partida: " + idGuardado);
+			alert.setContentText("Partida guardada correctamente.\nID: " + idGuardado);
 			alert.showAndWait();
 		} else {
 			agregarEvento("❌ Error al guardar la partida.");
 
 			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.getDialogPane().getStylesheets().add(getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
-			alert.getDialogPane().getStyleClass().add("custom-alert");
+			try {
+				alert.getDialogPane().getStylesheets().add(
+					getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
+				alert.getDialogPane().getStyleClass().add("custom-alert");
+			} catch (Exception ignored) {}
 			alert.setTitle("Error");
 			alert.setHeaderText(null);
-			alert.setContentText("No se pudo guardar la partida. Revisa la conexion a la base de datos.");
+			alert.setContentText("No se pudo guardar la partida.\nRevisa la conexion a la base de datos.");
 			alert.showAndWait();
 		}
 	}
@@ -467,7 +481,6 @@ public class PantallaJuego {
 		}
 	}
 
-
 	// =========================================
 	//  HANDLER CONFIGURACIÓN (Overlay)
 	// =========================================
@@ -476,7 +489,6 @@ public class PantallaJuego {
 	private void handleSettingsClick(ActionEvent event) {
 		isPaused = true;
 		
-		// Detener todas las animaciones configuradas (del tablero y de la CPU)
 		for (Animation a : currentAnimations) {
 			if (a.getStatus() == Animation.Status.RUNNING) {
 				a.pause();
@@ -492,23 +504,29 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleResume(ActionEvent event) {
+		reanudarJuego();
+	}
+
+	@FXML
+	private void handleMenuSave(ActionEvent event) {
+		// Guardar directo y reanudar
+		handleSaveGame();
+		reanudarJuego();
+	}
+
+	/**
+	 * Despausa el juego y cierra el overlay de menu.
+	 */
+	private void reanudarJuego() {
 		isPaused = false;
 		menuOverlay.setVisible(false);
 		mainContainer.setDisable(false);
 		mainContainer.getStyleClass().remove("main-container-disabled");
-
-		// Reanudar todas las animaciones pausadas
 		for (Animation a : currentAnimations) {
 			if (a.getStatus() == Animation.Status.PAUSED) {
 				a.play();
 			}
 		}
-	}
-
-	@FXML
-	private void handleMenuSave(ActionEvent event) {
-		// Según indicación del usuario: Redirigir a PantallaCargarPartida
-		handleLoadGame();
 	}
 
 	@FXML
@@ -533,15 +551,26 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleConfirmSave(ActionEvent event) {
-		// Primero guardamos (redirige a la pantalla de guardar/cargar según la lógica actual)
-		handleMenuSave(event);
-		// Si es salir del juego, deberíamos cerrar, pero la lógica de handleMenuSave redirige.
-		// Para mantener consistencia con el comportamiento previo:
-		if (pendingAction == ConfirmAction.EXIT_GAME) {
-			// En la lógica antigua, handleMenuSave(event) se llamaba y NADA MÁS.
-			// No se cerraba el programa si elegías guardar, solo se redirigía.
-		}
+		// Guardar la partida
+		handleSaveGame();
 		confirmationOverlay.setVisible(false);
+		
+		// Ejecutar la accion pendiente
+		if (pendingAction == ConfirmAction.BACK_TO_MENU) {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
+				Parent root = loader.load();
+				Scene scene = new Scene(root);
+				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+				stage.setScene(scene);
+				stage.setMaximized(false);
+				stage.setMaximized(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (pendingAction == ConfirmAction.EXIT_GAME) {
+			Platform.exit();
+		}
 	}
 
 	@FXML
@@ -597,7 +626,7 @@ public class PantallaJuego {
 	@FXML
 	private void handleDado(ActionEvent event) {
 		if (isPaused) return;
-		ejecutarAnimacionDado(null);
+		ejecutarAnimacionDado(null, dado);
 	}
 
 	private void continuarTurnoTrasAnimacion(Dado dadoEspecial) {
@@ -1178,7 +1207,8 @@ public class PantallaJuego {
 		actualizarInventarioUI();
 
 		Jugador jActual = partida.getJugadorActual();
-		agregarEvento("💾 Partida cargada! Turno de " + jActual.getNombre());
+		String nombreP = partida.getNombrePartida() != null ? partida.getNombrePartida() : "Sin nombre";
+		agregarEvento("💾 Partida \"" + nombreP + "\" cargada! Turno de " + jActual.getNombre());
 		agregarEvento("📌 Turno numero: " + partida.getTurnos());
 
 		// Mostrar posiciones de todos los jugadores
