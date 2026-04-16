@@ -57,51 +57,60 @@ public class PantallaConfiguracionPartida {
         public TarjetaJugador(int numero) {
             root = new VBox(10);
             root.setAlignment(Pos.CENTER);
-            root.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-border-color: #2c3e50; -fx-border-radius: 10;");
-            root.setPrefWidth(200);
+            root.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(8,20,50,0.97), rgba(5,50,85,0.97)); -fx-background-radius: 18; -fx-padding: 18; -fx-border-color: rgba(130,210,255,0.45); -fx-border-radius: 18; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.15, 0, 8);");
+            root.setPrefWidth(220);
 
             Label lblTitulo = new Label("Jugador " + numero);
-            lblTitulo.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+            lblTitulo.setStyle("-fx-font-weight: 900; -fx-font-size: 17px; -fx-text-fill: #d0f0ff; -fx-effect: dropshadow(gaussian, rgba(100,200,255,0.4), 8, 0.3, 0, 0);");
 
             comboTipo = new ComboBox<>();
             comboTipo.getItems().addAll("Humano (Pingüino)", "CPU (Foca)");
             comboTipo.setValue("Humano (Pingüino)");
+            comboTipo.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.35); -fx-border-radius: 8; -fx-border-width: 1; -fx-text-fill: #d0f0ff;");
+            comboTipo.setMaxWidth(Double.MAX_VALUE);
 
             cajaLogin = new VBox(5);
             cajaLogin.setAlignment(Pos.CENTER);
 
             txtUsuario = new TextField();
             txtUsuario.setPromptText("Usuario...");
-            txtUsuario.getStyleClass().add("field");
+            txtUsuario.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-border-width: 1.5; -fx-text-fill: #d0f0ff; -fx-prompt-text-fill: rgba(160,210,255,0.35); -fx-padding: 7 10;");
 
             txtPassword = new PasswordField();
             txtPassword.setPromptText("Contraseña...");
-            txtPassword.getStyleClass().add("field");
+            txtPassword.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-border-width: 1.5; -fx-text-fill: #d0f0ff; -fx-prompt-text-fill: rgba(160,210,255,0.35); -fx-padding: 7 10;");
 
-            btnListo = new Button("Listo");
-            btnListo.getStyleClass().add("primary");
+            btnListo = new Button("✓  Listo");
+            btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.6); -fx-border-radius: 10; -fx-border-width: 1.5; -fx-text-fill: #d0f0ff; -fx-font-weight: 900; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 8 16;");
             btnListo.setMaxWidth(Double.MAX_VALUE);
 
             lblEstado = new Label("Esperando login...");
-            lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            lblEstado.setStyle("-fx-text-fill: rgba(255,100,100,0.9); -fx-font-weight: bold; -fx-font-size: 12px;");
 
-            cajaLogin.getChildren().addAll(new Label("Usuario:"), txtUsuario, new Label("Contraseña:"), txtPassword);
+            Label lblUsuario = new Label("Usuario:");
+            lblUsuario.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
+            Label lblPass = new Label("Contraseña:");
+            lblPass.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
+            cajaLogin.getChildren().addAll(lblUsuario, txtUsuario, lblPass, txtPassword);
 
             // Setup Carousel UI
-            cajaCarousel = new VBox(5);
+            cajaCarousel = new VBox(6);
             cajaCarousel.setAlignment(Pos.CENTER);
+            cajaCarousel.setStyle("-fx-background-color: rgba(255,255,255,0.04); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.15); -fx-border-radius: 10; -fx-border-width: 1; -fx-padding: 8;");
             HBox carouselNav = new HBox(10);
             carouselNav.setAlignment(Pos.CENTER);
-            btnLeft = new Button("<");
-            btnLeft.setStyle("-fx-cursor: hand; -fx-font-weight: bold;");
-            btnRight = new Button(">");
-            btnRight.setStyle("-fx-cursor: hand; -fx-font-weight: bold;");
+            btnLeft = new Button("‹");
+            btnLeft.setStyle("-fx-cursor: hand; -fx-font-weight: 900; -fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-text-fill: #d0f0ff; -fx-padding: 4 12;");
+            btnRight = new Button("›");
+            btnRight.setStyle("-fx-cursor: hand; -fx-font-weight: 900; -fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-text-fill: #d0f0ff; -fx-padding: 4 12;");
             
             lblSkinActual = new Label("");
-            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5; -fx-background-color: #e0e0e0; -fx-background-radius: 5; -fx-min-width: 100; -fx-alignment: center;");
+            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-color: rgba(100,180,255,0.15); -fx-background-radius: 6; -fx-border-color: rgba(130,210,255,0.25); -fx-border-radius: 6; -fx-border-width: 1; -fx-text-fill: #c8eeff; -fx-font-size: 12px; -fx-min-width: 110; -fx-alignment: center;");
             
+            Label lblSkinHeader = new Label("SKIN:");
+            lblSkinHeader.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
             carouselNav.getChildren().addAll(btnLeft, lblSkinActual, btnRight);
-            cajaCarousel.getChildren().addAll(new Label("Skin:"), carouselNav);
+            cajaCarousel.getChildren().addAll(lblSkinHeader, carouselNav);
 
             btnLeft.setOnAction(e -> cambiarSkin(-1));
             btnRight.setOnAction(e -> cambiarSkin(1));
@@ -121,14 +130,14 @@ public class PantallaConfiguracionPartida {
                     cajaLogin.setVisible(false);
                     cajaLogin.setManaged(false);
                     lblEstado.setText("CPU Esperando...");
-                    lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    lblEstado.setStyle("-fx-text-fill: rgba(255,180,80,0.9); -fx-font-weight: bold; -fx-font-size: 12px;");
                 } else {
                     currentSkinType = "Pinguino";
                     currentSkinIndex = 0;
                     cajaLogin.setVisible(true);
                     cajaLogin.setManaged(true);
                     lblEstado.setText("Esperando login...");
-                    lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    lblEstado.setStyle("-fx-text-fill: rgba(255,100,100,0.9); -fx-font-weight: bold; -fx-font-size: 12px;");
                     
                     // Resetear campos
                     txtUsuario.setDisable(false);
@@ -155,9 +164,10 @@ public class PantallaConfiguracionPartida {
                 if (estaListo) {
                     // DESMARCAR LISTO (Toggle OFF)
                     estaListo = false;
-                    btnListo.setText("Listo");
+                    btnListo.setText("✓  Listo");
+                    btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.6); -fx-border-radius: 10; -fx-border-width: 1.5; -fx-text-fill: #d0f0ff; -fx-font-weight: 900; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 8 16;");
                     lblEstado.setText(currentSkinType.equals("Foca") ? "CPU Esperando..." : "Esperando login...");
-                    lblEstado.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    lblEstado.setStyle("-fx-text-fill: rgba(255,100,100,0.9); -fx-font-weight: bold; -fx-font-size: 12px;");
                     
                     // Desbloquear todo
                     txtUsuario.setDisable(false);
@@ -180,9 +190,10 @@ public class PantallaConfiguracionPartida {
                     }
                     
                     estaListo = true;
-                    btnListo.setText("Modificar");
-                    lblEstado.setText("¡Jugador Listo!");
-                    lblEstado.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                    btnListo.setText("✎  Modificar");
+                    btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(10,80,30,0.7), rgba(5,60,20,0.85)); -fx-background-radius: 10; -fx-border-color: rgba(100,210,130,0.6); -fx-border-radius: 10; -fx-border-width: 1.5; -fx-text-fill: #b0ffc0; -fx-font-weight: 900; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 8 16;");
+                    lblEstado.setText("✓  ¡Jugador Listo!");
+                    lblEstado.setStyle("-fx-text-fill: rgba(100,255,130,0.9); -fx-font-weight: bold; -fx-font-size: 12px;");
                     
                     // Bloquear todo
                     txtUsuario.setDisable(true);
@@ -198,7 +209,9 @@ public class PantallaConfiguracionPartida {
                 }
             });
 
-            root.getChildren().addAll(lblTitulo, new Label("Tipo:"), comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
+            Label lblTipoHeader = new Label("TIPO:");
+            lblTipoHeader.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
+            root.getChildren().addAll(lblTitulo, lblTipoHeader, comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
             actualizarSkinLibre(); // Inicializar
         }
         

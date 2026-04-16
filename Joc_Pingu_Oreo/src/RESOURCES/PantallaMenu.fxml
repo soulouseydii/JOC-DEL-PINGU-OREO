@@ -14,41 +14,52 @@
 <BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaMenu">
 
     <center>
-        <StackPane alignment="TOP_CENTER" prefHeight="700.0" prefWidth="1000.0">
+        <StackPane alignment="CENTER" prefHeight="700.0" prefWidth="1000.0">
             <padding>
-                <Insets bottom="28" left="28" right="28" top="0" />
+                <Insets bottom="28" left="28" right="28" top="28" />
             </padding>
 
-            <VBox maxWidth="420" spacing="16" style="-fx-background-color: rgba(255, 255, 255, 0.6);;" styleClass="card">
+            <VBox maxWidth="440" spacing="0" styleClass="dark-panel">
                 <padding>
-                    <Insets bottom="18" left="18" right="18" top="18" />
+                    <Insets bottom="40" left="40" right="40" top="40" />
                 </padding>
 
-                <!-- Cabecera/Título -->
-                <VBox alignment="CENTER" prefHeight="48.0" prefWidth="394.0" spacing="6" style="-fx-background-color: rgba(255, 255, 255, 0.4); -fx-background-radius: 15;">
-                    <Label styleClass="title" text="EL JUEGO DEL PINGUINO" wrapText="true" />
+                <!-- Encabezado -->
+                <VBox alignment="CENTER" spacing="8" style="-fx-padding: 0 0 28 0;">
+                    <Label text="🐧" style="-fx-font-size: 52px;" />
+                    <Label text="EL JUEGO DEL PINGUINO" styleClass="panel-title" />
+                    <Label text="Inicia sesión para continuar tu aventura" styleClass="panel-subtitle" />
                 </VBox>
 
-                <Region prefHeight="8" />
+                <!-- Separador -->
+                <Region prefHeight="1" style="-fx-background-color: rgba(130,210,255,0.25);" />
+                <Region prefHeight="28" />
 
                 <!-- Formulario -->
-                <VBox spacing="10">
-                    <Label styleClass="field-label" text="Usuario" />
-                    <TextField fx:id="userField" promptText="Usuario..." styleClass="field" />
+                <VBox spacing="16">
+                    <VBox spacing="6">
+                        <Label styleClass="form-label" text="USUARIO" />
+                        <TextField fx:id="userField" promptText="Introduce tu usuario..." styleClass="dark-field" />
+                    </VBox>
 
-                    <Label styleClass="field-label" text="Contraseña" />
-                    <PasswordField fx:id="passField" promptText="Contraseña..." styleClass="field" />
+                    <VBox spacing="6">
+                        <Label styleClass="form-label" text="CONTRASEÑA" />
+                        <PasswordField fx:id="passField" promptText="Introduce tu contraseña..." styleClass="dark-field" />
+                    </VBox>
                 </VBox>
 
-                <Region prefHeight="6" />
+                <Region prefHeight="24" />
 
-                <!-- Botonera -->
-                <HBox spacing="10">
-                    <Button fx:id="loginButton" maxWidth="Infinity" onAction="#handleLogin" styleClass="primary" text="Login" />
-                    <Button fx:id="registerButton" maxWidth="Infinity" onAction="#handleRegister" text="Registro" />
+                <!-- Botones -->
+                <HBox spacing="12">
+                    <Button fx:id="loginButton" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#handleLogin" styleClass="dark-btn-primary" text="Entrar" prefHeight="44" />
+                    <Button fx:id="registerButton" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#handleRegister" styleClass="dark-btn-secondary" text="Registro" prefHeight="44" />
                 </HBox>
 
-                <Label styleClass="hint" text="Tip: para la demo, puedes entrar con cualquier usuario si aún no hay validación." wrapText="true" />
+                <Region prefHeight="20" />
+
+                <!-- Nota -->
+                <Label styleClass="panel-hint" text="💡  Demo: puedes entrar con cualquier usuario si aún no hay validación." wrapText="true" />
             </VBox>
         </StackPane>
     </center>

@@ -18,44 +18,41 @@
             <padding>
                 <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
             </padding>
-            <VBox fx:id="paneOpciones" alignment="CENTER" maxHeight="500" maxWidth="500" spacing="20" style="-fx-background-color: rgba(173, 216, 230, 0.9); -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15; -fx-border-width: 3;" visible="false">
+            <VBox fx:id="paneOpciones" alignment="CENTER" maxHeight="500" maxWidth="500" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, rgba(10, 30, 60, 0.97), rgba(5, 55, 90, 0.97)); -fx-background-radius: 24; -fx-border-color: rgba(130, 210, 255, 0.5); -fx-border-radius: 24; -fx-border-width: 2;" visible="false">
                 <padding>
                     <Insets bottom="30" left="40" right="40" top="30" />
                 </padding>
-                <Label style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="OPCIONES" />
+                <Label style="-fx-font-size: 30; -fx-font-weight: 900; -fx-text-fill: #d0f0ff; -fx-effect: dropshadow(gaussian, rgba(100,200,255,0.5), 10, 0.4, 0, 0);" text="OPCIONES" />
                 
-                <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: rgba(255, 255, 255, 0.6); -fx-background-radius: 10; -fx-padding: 15;">
-                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="AUDIO" />
+                <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 15;">
+                    <Label style="-fx-font-size: 18; -fx-font-weight: 900; -fx-text-fill: rgba(130,210,255,0.85);" text="AUDIO" />
                     <HBox alignment="CENTER_LEFT" spacing="20">
-                        <CheckBox fx:id="chkMusica" onAction="#handleChkMusica" selected="true" style="-fx-font-size: 16; -fx-text-fill: #2c3e50;" text="Música" />
+                        <CheckBox fx:id="chkMusica" onAction="#handleChkMusica" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Música" />
                         <Region HBox.hgrow="ALWAYS" />
                         <Slider fx:id="sliderMusica" max="100" onMouseReleased="#handleSliderMusica" prefWidth="150" value="50" />
                     </HBox>
                     <HBox alignment="CENTER_LEFT" spacing="20">
-                        <CheckBox fx:id="chkSonido" onAction="#handleChkSonido" selected="true" style="-fx-font-size: 16; -fx-text-fill: #2c3e50;" text="Efectos de Sonido" />
+                        <CheckBox fx:id="chkSonido" onAction="#handleChkSonido" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Efectos de Sonido" />
                         <Region HBox.hgrow="ALWAYS" />
                         <Slider fx:id="sliderSonido" max="100" onMouseReleased="#handleSliderSonido" prefWidth="150" value="50" />
                     </HBox>
                 </VBox>
 
-                <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: rgba(255, 255, 255, 0.6); -fx-background-radius: 10; -fx-padding: 15;">
-                    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="VISUAL" />
-                    <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" style="-fx-font-size: 16; -fx-text-fill: #2c3e50;" text="Animaciones" />
-                    <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" style="-fx-font-size: 16; -fx-text-fill: #2c3e50;" text="Pantalla Completa" />
+                <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 15;">
+                    <Label style="-fx-font-size: 18; -fx-font-weight: 900; -fx-text-fill: rgba(130,210,255,0.85);" text="VISUAL" />
+                    <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Animaciones" />
+                    <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Pantalla Completa" />
                 </VBox>
                 
-                <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="250" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand;" text="Volver" />
+                <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="250" style="-fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(100,180,255,0.18)); -fx-text-fill: #d0f0ff; -fx-font-size: 16; -fx-font-weight: 900; -fx-background-radius: 14; -fx-border-color: rgba(130,210,255,0.5); -fx-border-radius: 14; -fx-border-width: 1.5; -fx-cursor: hand;" text="Volver" />
+            </VBox>
+            <!-- Botones del Menú Principal (centrados) -->
+            <VBox alignment="CENTER" spacing="15" maxWidth="320" StackPane.alignment="CENTER">
+                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Nueva Partida" />
+                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Cargar Partida" />
+                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Opciones" />
+                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="58.0" maxWidth="Infinity" styleClass="btn-exit" text="Salir del Juego" />
             </VBox>
         </StackPane>
     </center>
-   <left>
-
-         <!-- Botones del Menú Principal -->
-         <VBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="1096.0" prefHeight="627.0" prefWidth="614.0" spacing="15" BorderPane.alignment="CENTER">
-             <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="58.0" prefWidth="281.0" styleClass="primary" text="Nueva Partida" />
-             <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="60.0" prefWidth="279.0" styleClass="primary" text="Cargar Partida" />
-             <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="62.0" prefWidth="274.0" styleClass="primary" text="Opciones" />
-             <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="65.0" prefWidth="277.0" text="Salir del Juego" />
-         </VBox>
-   </left>
 </BorderPane>
