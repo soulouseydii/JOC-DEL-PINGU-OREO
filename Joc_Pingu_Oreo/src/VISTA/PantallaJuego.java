@@ -637,14 +637,38 @@ public class PantallaJuego {
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 
+		// Capturar inventario ANTES del turno para detectar qué se ganó
+		int pecesAntes = 0, bolasAntes = 0, motosAntes = 0, rapidosAntes = 0, lentosAntes = 0;
+		if (jugadorActual instanceof Pinguino) {
+			Pinguino p = (Pinguino) jugadorActual;
+			pecesAntes    = p.contarItem("Pez");
+			bolasAntes    = p.contarItem("Bola de Nieve");
+			motosAntes    = p.contarItem("Moto de Nieve");
+			rapidosAntes  = p.getInv().getDadosRapidos();
+			lentosAntes   = p.getInv().getDadosLentos();
+		}
+
 		gestorPartida.ejecutarTurnoCompleto(dadoEspecial);
 		
 		int posNueva = jugadorActual.getPosicion();
 		int resultadoDado = gestorPartida.getUltimoResultadoDado();
 		int casillaPisada = gestorPartida.getUltimaCasillaPisada();
+
+		// Calcular diferencias del inventario
+		int[] diffInv = null;
+		if (jugadorActual instanceof Pinguino) {
+			Pinguino p = (Pinguino) jugadorActual;
+			diffInv = new int[]{
+				p.contarItem("Pez")          - pecesAntes,
+				p.contarItem("Bola de Nieve")- bolasAntes,
+				p.contarItem("Moto de Nieve")- motosAntes,
+				p.getInv().getDadosRapidos() - rapidosAntes,
+				p.getInv().getDadosLentos()  - lentosAntes
+			};
+		}
 		
 		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
-		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado);
+		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
 		
 		// Animación del movimiento del jugador (saltos parabólicos)
 		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
@@ -1110,7 +1134,7 @@ public class PantallaJuego {
 	//  EVENTOS LOG
 	// =========================================
 	
-	private void registrarEventosCasilla(Jugador jugador, int posicion, int dado) {
+	private void registrarEventosCasilla(Jugador jugador, int posicion, int dado, int[] diffInv) {
 		Tablero t = gestorPartida.getPartida().getTablero();
 		
 		agregarEvento("───────────────────────");
@@ -1139,7 +1163,7 @@ public class PantallaJuego {
 				case "SueloQuebradizo":
 					agregarEvento("🧊 ¡Pisa SUELO QUEBRADIZO en la casilla " + posicion + "!");
 					if (jugador.getPosicion() == 0) {
-						agregarEvento("   ↪ ¡El hielo se rompe! Vuelve a Start.");
+					agregarEvento("   ↪ ¡El hielo se rompe! Vuelve a Inicio.");
 					} else if (jugador.getTurnosPerdidos() > 0) {
 						agregarEvento("   ↪ Se queda atascado. Pierde 1 turno.");
 					} else {
@@ -1148,16 +1172,24 @@ public class PantallaJuego {
 					break;
 				case "Oso":
 					agregarEvento("🐻 ¡Un OSO atrapa a " + jugador.getNombre() + " en la casilla " + posicion + "!");
-					agregarEvento("   ↪ Vuelve a Start (casilla 0)");
+					agregarEvento("   ↪ Vuelve a Inicio (casilla 0)");
 					break;
 				case "Evento":
 					agregarEvento("🎁 ¡EVENTO en la casilla " + posicion + "!");
-					// Mostrar qué ganó
-					if (jugador instanceof Pinguino) {
-						Pinguino p = (Pinguino) jugador;
-						agregarEvento("   ↪ Inventario: " + p.contarItem("Pez") + " peces, " 
-								+ p.contarItem("Bola de Nieve") + " bolas, " 
-								+ p.contarItem("Moto de Nieve") + " motos");
+					if (diffInv != null) {
+						// diffInv: [0]=peces, [1]=bolas, [2]=motos, [3]=dadosRapidos, [4]=dadosLentos
+						if (diffInv[3] > 0)
+							agregarEvento("   ↪ ¡Ha encontrado un DADO RÁPIDO! 🎲⚡");
+						else if (diffInv[4] > 0)
+							agregarEvento("   ↪ ¡Ha encontrado un DADO LENTO! 🎲🐢");
+						else if (diffInv[0] > 0)
+							agregarEvento("   ↪ ¡Ha encontrado " + diffInv[0] + " Pez(ces)! 🐟");
+						else if (diffInv[1] > 0)
+							agregarEvento("   ↪ ¡Ha encontrado " + diffInv[1] + " Bola(s) de Nieve! ❄️");
+						else if (diffInv[2] > 0)
+							agregarEvento("   ↪ ¡Ha encontrado una Moto de Nieve! 🏍️");
+						else
+							agregarEvento("   ↪ El inventario está lleno, no cabe nada.");
 					}
 					break;
 				default:
