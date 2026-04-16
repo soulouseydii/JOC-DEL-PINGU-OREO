@@ -86,6 +86,10 @@ public class PantallaJuego {
 	@FXML private Label confirmationTitle;
 	@FXML private Label confirmationMessage;
 
+	// Save Success Overlay
+	@FXML private VBox saveSuccessOverlay;
+	@FXML private Label saveMessageLabel;
+
 	// Snowball Fight overlays
 	@FXML private StackPane snowballFightImageOverlay;
 	@FXML private ImageView snowballFightImage;
@@ -437,31 +441,31 @@ public class PantallaJuego {
 			agregarEvento("💾 Partida guardada correctamente! (ID: " + idGuardado + ")");
 			agregarEvento("═══════════════════════");
 
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			try {
-				alert.getDialogPane().getStylesheets().add(
-					getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
-				alert.getDialogPane().getStyleClass().add("custom-alert");
-			} catch (Exception ignored) {}
-			alert.setTitle("Partida Guardada");
-			alert.setHeaderText(null);
-			alert.setContentText("Partida guardada correctamente.\nID: " + idGuardado);
-			alert.showAndWait();
+			// Actualizar mensaje y mostrar overlay personalizado
+			saveMessageLabel.setText("Partida guardada correctamente\nID de la partida: " + idGuardado);
+			saveSuccessOverlay.setVisible(true);
+			mainContainer.setDisable(true);
+			if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
+				mainContainer.getStyleClass().add("main-container-disabled");
+			}
 		} else {
 			agregarEvento("❌ Error al guardar la partida.");
+			saveMessageLabel.setText("Error: No se pudo guardar la partida.\nComprueba la base de datos.");
+			saveSuccessOverlay.setVisible(true);
+			mainContainer.setDisable(true);
+		}
+		}
+	
 
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			try {
-				alert.getDialogPane().getStylesheets().add(
-					getClass().getResource("/RESOURCES/PantallaJuego.css").toExternalForm());
-				alert.getDialogPane().getStyleClass().add("custom-alert");
-			} catch (Exception ignored) {}
-			alert.setTitle("Error");
-			alert.setHeaderText(null);
-			alert.setContentText("No se pudo guardar la partida.\nRevisa la conexion a la base de datos.");
-			alert.showAndWait();
+	@FXML
+	private void handleCloseSaveOverlay() {
+		saveSuccessOverlay.setVisible(false);
+		if (!isPaused) {
+			mainContainer.setDisable(false);
+			mainContainer.getStyleClass().remove("main-container-disabled");
 		}
 	}
+
 
 	@FXML
 	private void handleLoadGame() {

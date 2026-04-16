@@ -264,4 +264,19 @@
         </children>
     </VBox>
 
+    <!-- Overlay de éxito al guardar partida -->
+    <VBox fx:id="saveSuccessOverlay" alignment="CENTER" maxHeight="350.0" maxWidth="600.0" mouseTransparent="false" spacing="25.0" styleClass="save-overlay" visible="false" StackPane.alignment="CENTER">
+        <children>
+            <Label styleClass="menu-title" text="PARTIDA GUARDADA" />
+            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../imagenes/icono_oreo.png" />
+                </image>
+            </ImageView>
+            <Label fx:id="saveMessageLabel" alignment="CENTER" maxWidth="500.0" prefWidth="500.0" styleClass="save-message-text" text="Partida guardada correctamente" textAlignment="CENTER" wrapText="true" />
+            <Button maxWidth="220.0" onAction="#handleCloseSaveOverlay" styleClass="menu-button-alt" text="Aceptar" />
+        </children>
+    </VBox>
+
 </StackPane>
+

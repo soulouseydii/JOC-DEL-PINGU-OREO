@@ -332,3 +332,27 @@
     -fx-background-color: rgba(0, 0, 0, 0.65);
 }
 
+/* CUSTOM SAVE OVERLAY (OPAQUE) */
+.save-overlay {
+    -fx-background-color: linear-gradient(to bottom right, #1a365d, #0c4a6e);
+    -fx-background-radius: 24;
+    -fx-border-color: #74b9ff;
+    -fx-border-width: 3;
+    -fx-border-radius: 24;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 40, 0, 0, 20);
+}
+
+.save-overlay .menu-title {
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 2, 0, 0, 1);
+}
+
+.save-message-text {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e0f2f1;
+    -fx-text-alignment: center;
+    -fx-padding: 10 20;
+}
+
