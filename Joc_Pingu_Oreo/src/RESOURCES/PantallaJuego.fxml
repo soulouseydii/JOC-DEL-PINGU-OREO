@@ -123,16 +123,19 @@
         </center>
         <bottom>
              <!-- Barra Inferior de dados -->
-             <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER" minHeight="240" prefHeight="240">
+             <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER" minHeight="160" prefHeight="160">
+                 <BorderPane.margin>
+                     <Insets bottom="60" />
+                 </BorderPane.margin>
                  <padding>
-                     <Insets bottom="16" left="16" right="16" top="16" />
+                     <Insets bottom="10" left="16" right="16" top="10" />
                  </padding>
                  <HBox spacing="70" styleClass="card" alignment="CENTER">
                      <padding>
-                         <Insets bottom="20" left="50" right="50" top="20" />
+                         <Insets bottom="10" left="50" right="50" top="10" />
                      </padding>
                      <!-- Dado Lento -->
-                     <VBox alignment="CENTER" spacing="8">
+                     <VBox alignment="CENTER" spacing="0">
                          <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
                              <graphic>
                                  <ImageView fitWidth="200" preserveRatio="true">
@@ -142,12 +145,12 @@
                                  </ImageView>
                              </graphic>
                          </Button>
-                         <VBox alignment="TOP_CENTER" minHeight="50">
+                         <VBox alignment="TOP_CENTER" minHeight="40">
                              <Label fx:id="lblCantLento" styleClass="stat" style="-fx-font-size: 18px;" text="Lentos: 0" />
                          </VBox>
                      </VBox>
                      <!-- Dado Normal -->
-                     <VBox alignment="CENTER" spacing="8">
+                     <VBox alignment="CENTER" spacing="0">
                          <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
                              <graphic>
                                  <ImageView fitWidth="250" preserveRatio="true">
@@ -157,12 +160,12 @@
                                  </ImageView>
                              </graphic>
                          </Button>
-                         <VBox alignment="TOP_CENTER" minHeight="50">
+                         <VBox alignment="TOP_CENTER" minHeight="40">
                              <Text fx:id="dadoResultText" styleClass="stat" style="-fx-font-size: 18px;" text="Ha salido: -" textAlignment="CENTER" wrappingWidth="200" />
                          </VBox>
                      </VBox>
                      <!-- Dado Rápido -->
-                     <VBox alignment="CENTER" spacing="8">
+                     <VBox alignment="CENTER" spacing="0">
                          <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
                              <graphic>
                                  <ImageView fitWidth="200" preserveRatio="true">
@@ -172,7 +175,7 @@
                                  </ImageView>
                              </graphic>
                          </Button>
-                         <VBox alignment="TOP_CENTER" minHeight="50">
+                         <VBox alignment="TOP_CENTER" minHeight="40">
                              <Label fx:id="lblCantRapido" styleClass="stat" style="-fx-font-size: 18px;" text="Rapidos: 0" />
                          </VBox>
                      </VBox>
