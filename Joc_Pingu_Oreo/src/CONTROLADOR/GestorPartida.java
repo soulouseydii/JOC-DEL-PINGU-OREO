@@ -23,6 +23,9 @@ public class GestorPartida {
     private int ultimaCasillaPisada = -1;
     private int ultimoResultadoDado = 0;
 
+    // Pingüinos aplastados en el último movimiento de foca (casillas intermedias)
+    private ArrayList<Pinguino> ultimosPinguinosAplastados = new ArrayList<>();
+
     // Constructor
     public GestorPartida() {
         this.gestorTablero = new GestorTablero();
@@ -129,14 +132,16 @@ public class GestorPartida {
             Casilla casillaFoca = partida.getTablero().getListaCasillas().get(f.getPosicion());
             casillaFoca.realizarAccion(partida, f);
             
-            // REGLA: La foca aplasta a los pingüinos de las casillas INTERMEDIAS
-            // (entre posicionAnterior+1 y posicionFinal-1)
-            for (int casilla = posicionAnterior + 1; casilla < f.getPosicion(); casilla++) {
+            // REGLA: Detectar pingüinos en casillas INTERMEDIAS (aplastados)
+            // (entre posicionAnterior+1 y posicionDado-1, NO la casilla final)
+            // El efecto se aplica desde la VISTA después de la animación visual.
+            ultimosPinguinosAplastados.clear();
+            for (int casilla = posicionAnterior + 1; casilla < ultimaCasillaPisada; casilla++) {
                 for (Jugador j : partida.getJugadores()) {
                     if (j instanceof Pinguino && j.getPosicion() == casilla) {
                         Pinguino p = (Pinguino) j;
                         System.out.println("¡La foca ha pasado por encima de " + p.getNombre() + " en la casilla " + casilla + "!");
-                        f.aplastarJugador(p); // Solo pierde la mitad del inventario
+                        ultimosPinguinosAplastados.add(p);
                     }
                 }
             }
@@ -383,5 +388,25 @@ public class GestorPartida {
         pinguino.setPosicion(nuevaPos);
         System.out.println(pinguino.getNombre() + " ha sido golpeado por la foca y enviado a la casilla " + nuevaPos);
         return nuevaPos;
+    }
+
+    // =========================================
+    //  APLASTAMIENTO — Foca pasa por encima
+    // =========================================
+
+    /**
+     * Devuelve la lista de pingüinos aplastados en el último movimiento de foca.
+     * Solo contiene pingüinos en casillas intermedias (no la casilla final).
+     */
+    public ArrayList<Pinguino> getUltimosPinguinosAplastados() {
+        return ultimosPinguinosAplastados;
+    }
+
+    /**
+     * Aplica el efecto de aplastamiento: el pingüino pierde TODO el inventario.
+     */
+    public void aplicarAplastamiento(Pinguino p) {
+        p.perderTodoInventario();
+        System.out.println("Una foca ha aplastado a " + p.getNombre() + " y ha perdido todos sus objetos.");
     }
 }

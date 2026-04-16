@@ -266,6 +266,15 @@
         </children>
     </VBox>
 
+    <!-- Overlay de imagen Aplastamiento (foca pasa por encima) -->
+    <StackPane fx:id="crushImageOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="crush-image-overlay">
+        <ImageView fx:id="crushImage" fitWidth="450" fitHeight="450" preserveRatio="true" StackPane.alignment="CENTER">
+            <image>
+                <Image url="@../imagenes/pinguino_aplastado.png" />
+            </image>
+        </ImageView>
+    </StackPane>
+
     <!-- Overlay de imagen Encuentro con Foca (aparece con animación) -->
     <StackPane fx:id="sealEncounterImageOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="seal-image-overlay">
         <ImageView fx:id="sealEncounterImage" fitWidth="500" fitHeight="500" preserveRatio="true" StackPane.alignment="CENTER">

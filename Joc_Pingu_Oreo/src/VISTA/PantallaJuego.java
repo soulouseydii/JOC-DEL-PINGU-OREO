@@ -104,6 +104,10 @@ public class PantallaJuego {
 	@FXML private Label sealEncounterMessage;
 	@FXML private Button btnSealInfo;
 
+	// Crush (seal passing over) overlay
+	@FXML private StackPane crushImageOverlay;
+	@FXML private ImageView crushImage;
+
 	// Tablero y fichas
 	@FXML private GridPane tablero;
 	@FXML private Circle P1;
@@ -701,7 +705,7 @@ public class PantallaJuego {
 					currentAnimations.remove(pausaEfecto);
 					animarMovimiento(indiceActual, posVisualFinal, () -> {
 						actualizarTodasLasFichas();
-						comprobarFocaYFinalizar(jugadorActual, indiceActual);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 					});
 				});
 				currentAnimations.add(pausaEfecto);
@@ -711,9 +715,117 @@ public class PantallaJuego {
 			// Movimiento normal directo a la casilla final
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
 				actualizarTodasLasFichas();
-				comprobarFocaYFinalizar(jugadorActual, indiceActual);
+				comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 			});
 		}
+	}
+
+	// =========================================
+	//  APLASTAMIENTO (Foca pasa por encima)
+	// =========================================
+
+	/**
+	 * Comprueba si la foca ha pasado por encima de algún pingüino
+	 * durante su movimiento (casillas intermedias, NO la final).
+	 * Si hay aplastados, muestra la animación y aplica el efecto.
+	 * Si no, continúa con comprobarFocaYFinalizar.
+	 */
+	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual) {
+		ArrayList<Pinguino> aplastados = gestorPartida.getUltimosPinguinosAplastados();
+
+		if (aplastados != null && !aplastados.isEmpty()) {
+			// Aplicar el efecto a todos los aplastados
+			for (Pinguino p : aplastados) {
+				gestorPartida.aplicarAplastamiento(p);
+			}
+
+			// Mostrar la animación visual, después continuar
+			mostrarEventoAplastamiento(aplastados, jugadorActual, indiceActual);
+		} else {
+			// No hay aplastados → continuar con el check de foca en casilla final
+			comprobarFocaYFinalizar(jugadorActual, indiceActual);
+		}
+	}
+
+	/**
+	 * Muestra la imagen pinguino_aplastado.png con una animación de impacto
+	 * (squash + shake). Después de ~1.5s, registra los eventos en el log
+	 * y continúa con el flujo normal.
+	 */
+	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual) {
+		// Preparar la imagen para la animación
+		crushImage.setOpacity(0);
+		crushImage.setScaleX(1.3);
+		crushImage.setScaleY(0.5);
+		crushImageOverlay.setVisible(true);
+
+		// Fade in rápido
+		FadeTransition fadeIn = new FadeTransition(Duration.millis(200), crushImage);
+		fadeIn.setFromValue(0);
+		fadeIn.setToValue(1);
+
+		// Efecto squash: se aplasta de arriba abajo (impacto)
+		ScaleTransition squash = new ScaleTransition(Duration.millis(200), crushImage);
+		squash.setFromX(1.3);
+		squash.setFromY(0.5);
+		squash.setToX(1.0);
+		squash.setToY(1.0);
+
+		ParallelTransition impacto = new ParallelTransition(fadeIn, squash);
+
+		// Pequeño rebote tras el impacto
+		ScaleTransition rebote1 = new ScaleTransition(Duration.millis(100), crushImage);
+		rebote1.setToX(1.05);
+		rebote1.setToY(0.95);
+		ScaleTransition rebote2 = new ScaleTransition(Duration.millis(100), crushImage);
+		rebote2.setToX(1.0);
+		rebote2.setToY(1.0);
+
+		// Leve temblor (shake)
+		TranslateTransition shake1 = new TranslateTransition(Duration.millis(40), crushImage);
+		shake1.setByX(8);
+		TranslateTransition shake2 = new TranslateTransition(Duration.millis(40), crushImage);
+		shake2.setByX(-16);
+		TranslateTransition shake3 = new TranslateTransition(Duration.millis(40), crushImage);
+		shake3.setByX(12);
+		TranslateTransition shake4 = new TranslateTransition(Duration.millis(40), crushImage);
+		shake4.setByX(-4);
+		SequentialTransition shakeSeq = new SequentialTransition(shake1, shake2, shake3, shake4);
+
+		// Mantener visible 1.2 segundos
+		PauseTransition espera = new PauseTransition(Duration.millis(1200));
+
+		// Fade out
+		FadeTransition fadeOut = new FadeTransition(Duration.millis(400), crushImage);
+		fadeOut.setFromValue(1);
+		fadeOut.setToValue(0);
+
+		SequentialTransition secuencia = new SequentialTransition(
+			impacto, new ParallelTransition(rebote1, shakeSeq), rebote2, espera, fadeOut
+		);
+
+		secuencia.setOnFinished(e -> {
+			currentAnimations.remove(secuencia);
+			crushImageOverlay.setVisible(false);
+			crushImage.setTranslateX(0);
+			crushImage.setTranslateY(0);
+
+			// Registrar en el log
+			agregarEvento("═══════════════════════");
+			for (Pinguino p : aplastados) {
+				agregarEvento("💥 Una foca ha aplastado a " + p.getNombre() + " y ha perdido todos sus objetos.");
+			}
+			agregarEvento("═══════════════════════");
+
+			actualizarInventarioUI();
+			actualizarTodasLasFichas();
+
+			// Continuar con el flujo normal: check foca en casilla final
+			comprobarFocaYFinalizar(jugadorActual, indiceActual);
+		});
+
+		currentAnimations.add(secuencia);
+		secuencia.play();
 	}
 
 	// =========================================

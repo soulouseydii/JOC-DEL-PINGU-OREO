@@ -217,5 +217,23 @@ public class Pinguino extends Jugador {
 		System.out.println(getNombre() + " ha perdido " + quitados + " objetos.");
 	}
 	
+	/**
+	 * Pierde TODO el inventario (items + dados especiales).
+	 * Usado cuando la foca pasa por encima del pingüino.
+	 */
+	public void perderTodoInventario() {
+		int total = contarTotalObjetos();
+		int dadosEsp = getInventario().getDadosRapidos() + getInventario().getDadosLentos();
+		
+		getInventario().getlista().clear();
+		getInventario().usarDadoRapido(); // Resetear a 0 si hay
+		getInventario().usarDadoLento();
+		// Forzar a 0 directamente usando un bucle
+		while (getInventario().getDadosRapidos() > 0) getInventario().usarDadoRapido();
+		while (getInventario().getDadosLentos() > 0) getInventario().usarDadoLento();
+		
+		System.out.println(getNombre() + " ha perdido todo su inventario (" + total + " objetos, " + dadosEsp + " dados especiales).");
+	}
+	
 	
 }

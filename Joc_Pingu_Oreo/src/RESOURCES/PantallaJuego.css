@@ -411,3 +411,8 @@
     -fx-effect: dropshadow(gaussian, rgba(0,180,255,0.6), 10, 0, 0, 2);
 }
 
+/* CRUSH IMAGE OVERLAY (foca pasa por encima) */
+.crush-image-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.70);
+}
+
