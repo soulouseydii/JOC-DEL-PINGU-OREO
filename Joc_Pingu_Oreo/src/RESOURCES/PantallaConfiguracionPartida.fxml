@@ -13,16 +13,16 @@
 <BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaConfiguracionPartida">
     <top>
         <VBox>
-            <HBox alignment="CENTER_RIGHT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="30.0" style="-fx-background-color: #2c3e50;">
-                <padding><Insets bottom="5" left="10" right="5" top="5" /></padding>
-                
-                <Label text="Juego del Pingu Oreo - Nueva Partida" textFill="WHITE" />
+            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="36.0" style="-fx-background-color: linear-gradient(to right, rgba(5,15,35,0.98), rgba(5,55,90,0.95)); -fx-border-color: transparent transparent rgba(130,210,255,0.3) transparent; -fx-border-width: 0 0 1 0;">
+                <padding>
+                    <Insets bottom="6" left="16" right="8" top="6" />
+                </padding>
+                <Label text="❄  El Juego del Pinguino — Nueva Partida" style="-fx-text-fill: rgba(200,230,255,0.7); -fx-font-size: 13px; -fx-font-weight: bold;" />
                 <Region HBox.hgrow="ALWAYS" />
-                
-                <HBox spacing="5" alignment="CENTER">
-                    <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="—" />
-                    <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="⬜" />
-                    <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;" text="X" />
+                <HBox spacing="4" alignment="CENTER">
+                    <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
+                    <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 12px;" text="⬜" />
+                    <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: rgba(200,50,50,0.3); -fx-text-fill: rgba(255,180,180,0.9); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 10; -fx-border-color: transparent; -fx-font-weight: bold;" text="✕" />
                 </HBox>
             </HBox>
         </VBox>
@@ -30,37 +30,48 @@
 
     <center>
         <StackPane prefHeight="700.0" prefWidth="1200.0">
-            <padding><Insets bottom="28" left="28" right="28" top="28" /></padding>
+            <padding>
+                <Insets bottom="36" left="40" right="40" top="28" />
+            </padding>
 
-            <VBox alignment="CENTER" maxWidth="1000" spacing="20" style="-fx-background-color: rgba(255, 255, 255, 0.6);" styleClass="card">
-                <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+            <VBox alignment="CENTER" maxWidth="1050" spacing="0" styleClass="dark-panel">
+                <padding>
+                    <Insets bottom="36" left="40" right="40" top="36" />
+                </padding>
 
-                <!-- Título -->
-                <VBox alignment="CENTER" prefHeight="48.0" prefWidth="800.0" spacing="6" style="-fx-background-color: rgba(255, 255, 255, 0.4); -fx-background-radius: 15;">
-                    <Label styleClass="title" text="CONFIGURACIÓN DE LA PARTIDA" wrapText="true" />
+                <!-- Encabezado -->
+                <VBox alignment="CENTER" spacing="6" style="-fx-padding: 0 0 20 0;">
+                    <Label text="🎮" style="-fx-font-size: 40px;" />
+                    <Label text="NUEVA PARTIDA" styleClass="panel-title" />
+                    <Label text="Configura los jugadores antes de empezar" styleClass="panel-subtitle" />
                 </VBox>
 
-                <!-- Selector de Jugadores -->
-                <HBox spacing="15" alignment="CENTER">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Número de Jugadores:" />
-                    <ComboBox fx:id="comboNumJugadores" onAction="#onNumJugadoresChanged" prefWidth="100.0" />
+                <!-- Separador -->
+                <Region prefHeight="1" maxWidth="600" style="-fx-background-color: rgba(130,210,255,0.25);" />
+                <Region prefHeight="22" />
+
+                <!-- Selector de número de jugadores -->
+                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.04); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 14 24;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #c8eeff;" text="Número de Jugadores:" />
+                    <ComboBox fx:id="comboNumJugadores" onAction="#onNumJugadoresChanged" prefWidth="110.0" styleClass="dark-combo" />
                 </HBox>
 
-                <!-- Contenedor de Tarjetas de Jugadores (Generado Dinámicamente) -->
-                <HBox fx:id="contenedorJugadores" spacing="20" alignment="CENTER" VBox.vgrow="ALWAYS">
-                    <!-- Tarjetas insertadas por PantallaConfiguracionPartida.java -->
+                <Region prefHeight="22" />
+
+                <!-- Tarjetas de jugadores (dinámicas) -->
+                <HBox fx:id="contenedorJugadores" spacing="18" alignment="CENTER" VBox.vgrow="ALWAYS" />
+
+                <Region prefHeight="24" />
+
+                <!-- Botones finales -->
+                <HBox spacing="16" alignment="CENTER">
+                    <Button fx:id="btnEmpezar" onAction="#handleEmpezar" disable="true" styleClass="dark-btn-primary" text="▶  Empezar Partida" prefWidth="220" prefHeight="48" />
                 </HBox>
 
-                <Region prefHeight="10" />
-
-                <!-- Botones Finales -->
-                <HBox spacing="15" alignment="CENTER">
-                    <Button fx:id="btnEmpezar" onAction="#handleEmpezar" disable="true" styleClass="primary" text="Empezar Partida" />
-                </HBox>
-                
-                <Region prefHeight="5" />
-                <Button fx:id="btnVolver" maxWidth="250" onAction="#handleVolver" text="Volver al Menú Principal" />
+                <Region prefHeight="12" />
+                <Button fx:id="btnVolver" maxWidth="260" onAction="#handleVolver" styleClass="dark-btn-secondary" text="← Volver al Menú" prefHeight="40" />
             </VBox>
+
         </StackPane>
     </center>
 </BorderPane>
