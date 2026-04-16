@@ -110,7 +110,7 @@
                 </VBox>
 
                 <!-- Boton Settings siempre en la capa mas alta -->
-                <Button fx:id="btnSettings" onAction="#handleSettingsClick" styleClass="settings-button" StackPane.alignment="TOP_RIGHT">
+                <Button fx:id="btnSettings" onAction="#handleSettingsClick" styleClass="settings-button" StackPane.alignment="TOP_RIGHT" translateY="-40" translateX="20">
                     <graphic>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                             <image>
