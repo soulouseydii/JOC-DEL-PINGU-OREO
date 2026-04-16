@@ -266,6 +266,30 @@
         </children>
     </VBox>
 
+    <!-- Overlay de imagen Encuentro con Foca (aparece con animación) -->
+    <StackPane fx:id="sealEncounterImageOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="seal-image-overlay">
+        <ImageView fx:id="sealEncounterImage" fitWidth="500" fitHeight="500" preserveRatio="true" StackPane.alignment="CENTER">
+            <image>
+                <Image url="@../imagenes/encuentro_foca.png" />
+            </image>
+        </ImageView>
+    </StackPane>
+
+    <!-- Overlay de decisión Encuentro con Foca -->
+    <VBox fx:id="sealEncounterDecisionOverlay" alignment="CENTER" maxHeight="420.0" maxWidth="550.0" mouseTransparent="false" spacing="20.0" styleClass="overlay-menu" visible="false" StackPane.alignment="CENTER">
+        <children>
+            <Label styleClass="menu-title" text="ENCUENTRO CON LA FOCA" wrapText="true" />
+            <Label fx:id="sealEncounterMessage" styleClass="confirmation-text" text="" wrapText="true" />
+            
+            <VBox spacing="15.0" alignment="CENTER">
+                <Button fx:id="btnSobornarFoca" maxWidth="320.0" onAction="#handleSobornarFoca" styleClass="menu-button-alt" text="Sobornar a la foca" />
+                <Button maxWidth="320.0" onAction="#handleNoHacerNadaFoca" styleClass="menu-button-alt" text="No hacer nada" />
+            </VBox>
+
+            <Button fx:id="btnSealInfo" styleClass="seal-info-button" text="ℹ" />
+        </children>
+    </VBox>
+
     <!-- Overlay de éxito al guardar partida -->
     <VBox fx:id="saveSuccessOverlay" alignment="CENTER" maxHeight="350.0" maxWidth="600.0" mouseTransparent="false" spacing="25.0" styleClass="save-overlay" visible="false" StackPane.alignment="CENTER">
         <children>

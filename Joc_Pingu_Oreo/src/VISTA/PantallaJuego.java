@@ -96,6 +96,14 @@ public class PantallaJuego {
 	@FXML private VBox snowballDecisionOverlay;
 	@FXML private Label snowballDecisionMessage;
 
+	// Seal Encounter overlays
+	@FXML private StackPane sealEncounterImageOverlay;
+	@FXML private ImageView sealEncounterImage;
+	@FXML private VBox sealEncounterDecisionOverlay;
+	@FXML private Button btnSobornarFoca;
+	@FXML private Label sealEncounterMessage;
+	@FXML private Button btnSealInfo;
+
 	// Tablero y fichas
 	@FXML private GridPane tablero;
 	@FXML private Circle P1;
@@ -119,6 +127,11 @@ public class PantallaJuego {
 	private Pinguino pvpAtacante;
 	private Pinguino pvpDefensor;
 	private int pvpIndiceAtacante;
+
+	// Seal encounter state
+	private Foca sealEncounterFoca;
+	private Pinguino sealEncounterPinguino;
+	private int sealEncounterPinguinoIndice;
 
 	// Imágenes de las casillas
 	private Image imgNormal;
@@ -174,6 +187,12 @@ public class PantallaJuego {
 		Tooltip tooltip = new Tooltip("Opciones");
 		tooltip.setShowDelay(Duration.seconds(1));
 		btnSettings.setTooltip(tooltip);
+
+		// Tooltip para el botón de info de la foca
+		Tooltip sealTooltip = new Tooltip("Si la foca te golpea, serás dirigido al último agujero más cercano.");
+		sealTooltip.setShowDelay(Duration.millis(100));
+		sealTooltip.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+		btnSealInfo.setTooltip(sealTooltip);
 		
 		// Clipping bounds del tablero principal
 		javafx.scene.shape.Rectangle clipRect = new javafx.scene.shape.Rectangle();
@@ -682,7 +701,7 @@ public class PantallaJuego {
 					currentAnimations.remove(pausaEfecto);
 					animarMovimiento(indiceActual, posVisualFinal, () -> {
 						actualizarTodasLasFichas();
-						comprobarPvPYFinalizar(jugadorActual, indiceActual);
+						comprobarFocaYFinalizar(jugadorActual, indiceActual);
 					});
 				});
 				currentAnimations.add(pausaEfecto);
@@ -692,7 +711,7 @@ public class PantallaJuego {
 			// Movimiento normal directo a la casilla final
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
 				actualizarTodasLasFichas();
-				comprobarPvPYFinalizar(jugadorActual, indiceActual);
+				comprobarFocaYFinalizar(jugadorActual, indiceActual);
 			});
 		}
 	}
@@ -700,6 +719,57 @@ public class PantallaJuego {
 	// =========================================
 	//  GUERRA DE BOLAS DE NIEVE (PvP)
 	// =========================================
+
+	/**
+	 * Después de que la animación de movimiento termina, comprueba si
+	 * el jugador actual (Pingüino) ha caído en la misma casilla que otro Pingüino.
+	 * Si es así, lanza la secuencia visual de guerra de bolas de nieve.
+	 * Si no, finaliza el turno normalmente.
+	 */
+	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual) {
+		// ── CASO 1: El jugador actual es un Pingüino → comprobar si hay foca ──
+		if (jugadorActual instanceof Pinguino) {
+			Pinguino pActual = (Pinguino) jugadorActual;
+			Foca foca = gestorPartida.detectarFoca(pActual);
+
+			if (foca != null && pActual.getPosicion() != 0) {
+				// Guardar estado del encuentro
+				sealEncounterFoca = foca;
+				sealEncounterPinguino = pActual;
+				sealEncounterPinguinoIndice = indiceActual;
+
+				agregarEvento("═══════════════════════");
+				agregarEvento("🦭 ¡" + pActual.getNombre() + " se encuentra con la foca en la casilla " + pActual.getPosicion() + "!");
+
+				// Lanzar la secuencia visual del encuentro con foca
+				mostrarEventoEncuentroFoca();
+				return;
+			}
+		}
+
+		// ── CASO 2: El jugador actual es una Foca → comprobar si hay pingüino ──
+		if (jugadorActual instanceof Foca) {
+			Foca fActual = (Foca) jugadorActual;
+			Pinguino pEncontrado = gestorPartida.detectarPinguinoEnCasillaFoca(fActual);
+
+			if (pEncontrado != null && fActual.getPosicion() != 0) {
+				// Guardar estado del encuentro
+				sealEncounterFoca = fActual;
+				sealEncounterPinguino = pEncontrado;
+				sealEncounterPinguinoIndice = getIndiceJugador(pEncontrado);
+
+				agregarEvento("═══════════════════════");
+				agregarEvento("🦭 ¡La foca cae en la casilla de " + pEncontrado.getNombre() + " (casilla " + fActual.getPosicion() + ")!");
+
+				// Lanzar la secuencia visual del encuentro con foca
+				mostrarEventoEncuentroFoca();
+				return;
+			}
+		}
+
+		// No hay encuentro con foca → comprobar PvP
+		comprobarPvPYFinalizar(jugadorActual, indiceActual);
+	}
 
 	/**
 	 * Después de que la animación de movimiento termina, comprueba si
@@ -886,6 +956,164 @@ public class PantallaJuego {
 			if (jugadores.get(i) == j) return i;
 		}
 		return 0;
+	}
+
+	// =========================================
+	//  ENCUENTRO CON LA FOCA
+	// =========================================
+
+	/**
+	 * Muestra la imagen encuentro_foca.png en el centro de la pantalla
+	 * con una animación de fade-in + zoom. Después de ~1.5s, muestra el diálogo de decisión.
+	 */
+	private void mostrarEventoEncuentroFoca() {
+		// Preparar la imagen para la animación
+		sealEncounterImage.setOpacity(0);
+		sealEncounterImage.setScaleX(0.7);
+		sealEncounterImage.setScaleY(0.7);
+		sealEncounterImageOverlay.setVisible(true);
+
+		// Fade in
+		FadeTransition fadeIn = new FadeTransition(Duration.millis(600), sealEncounterImage);
+		fadeIn.setFromValue(0);
+		fadeIn.setToValue(1);
+
+		// Zoom in suave
+		ScaleTransition zoomIn = new ScaleTransition(Duration.millis(600), sealEncounterImage);
+		zoomIn.setFromX(0.7);
+		zoomIn.setFromY(0.7);
+		zoomIn.setToX(1.0);
+		zoomIn.setToY(1.0);
+
+		ParallelTransition entrada = new ParallelTransition(fadeIn, zoomIn);
+
+		// Mantener visible 1.5 segundos, luego mostrar decisión
+		PauseTransition espera = new PauseTransition(Duration.millis(1500));
+
+		// Fade out de la imagen
+		FadeTransition fadeOut = new FadeTransition(Duration.millis(400), sealEncounterImage);
+		fadeOut.setFromValue(1);
+		fadeOut.setToValue(0);
+
+		SequentialTransition secuencia = new SequentialTransition(entrada, espera, fadeOut);
+		secuencia.setOnFinished(e -> {
+			currentAnimations.remove(secuencia);
+			sealEncounterImageOverlay.setVisible(false);
+			mostrarDecisionEncuentroFoca();
+		});
+
+		currentAnimations.add(secuencia);
+		secuencia.play();
+	}
+
+	/**
+	 * Muestra el panel de decisión del encuentro con la foca.
+	 * Habilita/deshabilita el botón de sobornar según si el pingüino tiene peces.
+	 */
+	private void mostrarDecisionEncuentroFoca() {
+		if (sealEncounterPinguino == null || sealEncounterFoca == null) {
+			finalizarTurnoVisual();
+			return;
+		}
+
+		boolean tienePez = sealEncounterPinguino.tieneItem("Pez");
+		int cantPeces = sealEncounterPinguino.contarItem("Pez");
+
+		if (tienePez) {
+			btnSobornarFoca.setText("Sobornar a la foca");
+			btnSobornarFoca.setDisable(false);
+		} else {
+			btnSobornarFoca.setText("¡No te quedan peces!");
+			btnSobornarFoca.setDisable(true);
+		}
+
+		sealEncounterMessage.setText(
+			sealEncounterPinguino.getNombre() + " se ha encontrado con la foca.\n\n" +
+			"Peces disponibles: " + cantPeces + "\n" +
+			"¿Qué quieres hacer?"
+		);
+
+		sealEncounterDecisionOverlay.setVisible(true);
+	}
+
+	@FXML
+	private void handleSobornarFoca(ActionEvent event) {
+		sealEncounterDecisionOverlay.setVisible(false);
+
+		if (sealEncounterFoca == null || sealEncounterPinguino == null) {
+			finalizarTurnoVisual();
+			return;
+		}
+
+		// Resolver el soborno en el controlador
+		gestorPartida.resolverSobornoFoca(sealEncounterFoca, sealEncounterPinguino);
+
+		agregarEvento("🐟 " + sealEncounterPinguino.getNombre() + " soborna a la foca con un pez.");
+		agregarEvento("   ↪ La foca queda bloqueada 2 turnos. ¡" + sealEncounterPinguino.getNombre() + " se queda en su casilla!");
+		agregarEvento("═══════════════════════");
+
+		actualizarInventarioUI();
+
+		// Limpiar estado
+		sealEncounterFoca = null;
+		sealEncounterPinguino = null;
+
+		// Evento finalizado → devolver control al flujo del juego
+		finalizarTurnoVisual();
+	}
+
+	@FXML
+	private void handleNoHacerNadaFoca(ActionEvent event) {
+		sealEncounterDecisionOverlay.setVisible(false);
+
+		if (sealEncounterFoca == null || sealEncounterPinguino == null) {
+			finalizarTurnoVisual();
+			return;
+		}
+
+		// Resolver el golpe en el controlador
+		int posAnterior = sealEncounterPinguino.getPosicion();
+		int nuevaPos = gestorPartida.resolverGolpeFoca(sealEncounterFoca, sealEncounterPinguino);
+
+		agregarEvento("💥 ¡La foca golpea a " + sealEncounterPinguino.getNombre() + "!");
+		agregarEvento("   ↪ Enviado al agujero más cercano: casilla " + nuevaPos);
+		agregarEvento("═══════════════════════");
+
+		// Pequeña animación de impacto (temblor) antes de mover
+		Circle fichaPinguino = getFicha(sealEncounterPinguinoIndice);
+		RotateTransition impacto = new RotateTransition(Duration.millis(60), fichaPinguino);
+		impacto.setFromAngle(-20);
+		impacto.setToAngle(20);
+		impacto.setCycleCount(8);
+		impacto.setAutoReverse(true);
+
+		int indicePinguino = sealEncounterPinguinoIndice;
+
+		impacto.setOnFinished(e -> {
+			currentAnimations.remove(impacto);
+			fichaPinguino.setRotate(0);
+
+			// Pausa breve antes de mover
+			PauseTransition pausa = new PauseTransition(Duration.millis(400));
+			pausa.setOnFinished(e2 -> {
+				currentAnimations.remove(pausa);
+				int posVisualFinal = Math.max(0, Math.min(nuevaPos, 49));
+				animarMovimiento(indicePinguino, posVisualFinal, () -> {
+					actualizarTodasLasFichas();
+					actualizarInventarioUI();
+					finalizarTurnoVisual();
+				});
+			});
+			currentAnimations.add(pausa);
+			pausa.play();
+		});
+
+		// Limpiar estado
+		sealEncounterFoca = null;
+		sealEncounterPinguino = null;
+
+		currentAnimations.add(impacto);
+		impacto.play();
 	}
 
 	// =========================================
