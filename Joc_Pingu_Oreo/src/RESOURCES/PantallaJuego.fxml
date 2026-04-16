@@ -54,7 +54,6 @@
                     </rowConstraints>
 
                     <children>
-                        <!-- Jugadores: fx:id para Controller + id para CSS -->
                         <Circle id="P1" fx:id="P1" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Circle id="P2" fx:id="P2" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Circle id="P3" fx:id="P3" radius="14.0" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
@@ -62,8 +61,7 @@
                     </children>
                 </GridPane>
 
-                <!-- Tarjeta Eventos (Log acumulativo con scroll) en OVERLAY DERECHO -->
-                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_RIGHT">
+                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_RIGHT" translateY="55" translateX="7">
                     <padding>
                         <Insets right="30" />
                     </padding>
@@ -73,8 +71,7 @@
                     </VBox>
                 </VBox>
 
-                <!-- Tarjeta Inventario en OVERLAY IZQUIERDO -->
-                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_LEFT">
+                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_LEFT" translateY="55" translateX="-5">
                     <padding>
                         <Insets left="30" />
                     </padding>
@@ -124,61 +121,63 @@
                 </Button>
             </StackPane>
         </center>
-
         <bottom>
-            <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER">
-                <padding>
-                    <Insets bottom="16" left="16" right="16" top="16" />
-                </padding>
-
-                <!-- Tarjeta Dado Horizontal -->
-                <HBox spacing="40" styleClass="card" alignment="CENTER">
-                    <!-- Dado Lento -->
-                    <VBox alignment="CENTER" spacing="5">
-                        <Label styleClass="card-title" text="Dado Lento" />
-                        <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
-                            <graphic>
-                                <ImageView fitWidth="90" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../imagenes/Dado lento.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Label fx:id="lblCantLento" styleClass="stat" text="Lentos: 0" />
-                    </VBox>
-
-                    <!-- Dado Normal -->
-                    <VBox alignment="CENTER" spacing="5">
-                        <Label styleClass="card-title" text="Dado Normal" />
-                        <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
-                            <graphic>
-                                <ImageView fitWidth="120" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../imagenes/Botón de tirar dado congelado.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Text fx:id="dadoResultText" styleClass="big-text" text="Ha salido: -" wrappingWidth="140" textAlignment="CENTER" />
-                    </VBox>
-
-                    <!-- Dado Rápido -->
-                    <VBox alignment="CENTER" spacing="5">
-                        <Label styleClass="card-title" text="Dado Rápido" />
-                        <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
-                            <graphic>
-                                <ImageView fitWidth="90" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../imagenes/Dado rápido.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <Label fx:id="lblCantRapido" styleClass="stat" text="Rapidos: 0" />
-                    </VBox>
-                </HBox>
-            </HBox>
+             <!-- Barra Inferior de dados -->
+             <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER" minHeight="240" prefHeight="240">
+                 <padding>
+                     <Insets bottom="16" left="16" right="16" top="16" />
+                 </padding>
+                 <HBox spacing="70" styleClass="card" alignment="CENTER">
+                     <padding>
+                         <Insets bottom="20" left="50" right="50" top="20" />
+                     </padding>
+                     <!-- Dado Lento -->
+                     <VBox alignment="CENTER" spacing="8">
+                         <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
+                             <graphic>
+                                 <ImageView fitWidth="200" preserveRatio="true">
+                                     <image>
+                                         <Image url="@../imagenes/Dado lento.png" />
+                                     </image>
+                                 </ImageView>
+                             </graphic>
+                         </Button>
+                         <VBox alignment="TOP_CENTER" minHeight="50">
+                             <Label fx:id="lblCantLento" styleClass="stat" style="-fx-font-size: 18px;" text="Lentos: 0" />
+                         </VBox>
+                     </VBox>
+                     <!-- Dado Normal -->
+                     <VBox alignment="CENTER" spacing="8">
+                         <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
+                             <graphic>
+                                 <ImageView fitWidth="250" preserveRatio="true">
+                                     <image>
+                                         <Image url="@../imagenes/Botón de tirar dado congelado.png" />
+                                     </image>
+                                 </ImageView>
+                             </graphic>
+                         </Button>
+                         <VBox alignment="TOP_CENTER" minHeight="50">
+                             <Text fx:id="dadoResultText" styleClass="stat" style="-fx-font-size: 18px;" text="Ha salido: -" textAlignment="CENTER" wrappingWidth="200" />
+                         </VBox>
+                     </VBox>
+                     <!-- Dado Rápido -->
+                     <VBox alignment="CENTER" spacing="8">
+                         <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
+                             <graphic>
+                                 <ImageView fitWidth="200" preserveRatio="true">
+                                     <image>
+                                         <Image url="@../imagenes/Dado rápido.png" />
+                                     </image>
+                                 </ImageView>
+                             </graphic>
+                         </Button>
+                         <VBox alignment="TOP_CENTER" minHeight="50">
+                             <Label fx:id="lblCantRapido" styleClass="stat" style="-fx-font-size: 18px;" text="Rapidos: 0" />
+                         </VBox>
+                     </VBox>
+                 </HBox>
+             </HBox>
         </bottom>
     </BorderPane>
 
