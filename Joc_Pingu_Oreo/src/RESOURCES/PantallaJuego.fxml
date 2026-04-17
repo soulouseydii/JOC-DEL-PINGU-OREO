@@ -275,6 +275,16 @@
         </ImageView>
     </StackPane>
 
+    <!-- Overlay de animación Cofre de Evento (se abre cuando caes en casilla Evento) -->
+    <StackPane fx:id="chestEventOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="chest-event-overlay">
+        <ImageView fx:id="chestEventImage" fitWidth="420" fitHeight="420" preserveRatio="true" StackPane.alignment="CENTER">
+            <image>
+                <Image url="@../imagenes/cofre_evento.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="chestItemLabel" text="" styleClass="chest-item-label" StackPane.alignment="CENTER" translateY="-140" />
+    </StackPane>
+
     <!-- Overlay de imagen Encuentro con Foca (aparece con animación) -->
     <StackPane fx:id="sealEncounterImageOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="seal-image-overlay">
         <ImageView fx:id="sealEncounterImage" fitWidth="500" fitHeight="500" preserveRatio="true" StackPane.alignment="CENTER">
