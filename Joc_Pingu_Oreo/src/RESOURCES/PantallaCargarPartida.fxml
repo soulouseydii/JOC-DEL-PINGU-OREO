@@ -38,9 +38,9 @@
             </padding>
 
             <!-- Panel principal -->
-            <VBox alignment="CENTER" maxWidth="540" spacing="0" styleClass="dark-panel">
+            <VBox alignment="CENTER" maxWidth="720" spacing="0" styleClass="dark-panel">
                 <padding>
-                    <Insets bottom="36" left="36" right="36" top="36" />
+                    <Insets bottom="36" left="40" right="40" top="36" />
                 </padding>
 
                 <!-- Icono + Título -->

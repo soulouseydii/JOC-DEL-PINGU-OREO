@@ -262,6 +262,18 @@
     -fx-background-image: none;
 }
 
+/* Ocultar barra horizontal de las listas oscuras */
+.dark-list .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-padding: -10;
+}
+
+/* Ocultar los botones de incremento/decremento de la barra para ganar espacio */
+.dark-list .scroll-bar:horizontal .increment-button,
+.dark-list .scroll-bar:horizontal .decrement-button {
+    -fx-padding: 0;
+}
+
 .dark-list .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: #c8eeff;
