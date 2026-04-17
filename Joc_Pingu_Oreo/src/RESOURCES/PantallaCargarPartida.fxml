@@ -38,7 +38,7 @@
             </padding>
 
             <!-- Panel principal -->
-            <VBox alignment="CENTER" maxWidth="720" spacing="0" styleClass="dark-panel">
+            <VBox fx:id="panelCargar" alignment="CENTER" maxWidth="720" spacing="0" styleClass="dark-panel">
                 <padding>
                     <Insets bottom="36" left="40" right="40" top="36" />
                 </padding>

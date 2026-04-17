@@ -16,7 +16,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import CONTROLADOR.GestorAudio;
-
+import CONTROLADOR.GestorAnimacionesVistas;
 
 public class PantallaInicio extends Application {
 
@@ -86,6 +86,9 @@ public class PantallaInicio extends Application {
         btnSalir.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
+                
+                // Animar menú en cascada al entrar
+                GestorAnimacionesVistas.animarEntradaCascada(menuPrincipal);
 
                 // Cerrar la app al pulsar ESC
                 newScene.setOnKeyPressed(event -> {
@@ -154,12 +157,14 @@ public class PantallaInicio extends Application {
         System.out.println("Opciones clicked");
         menuPrincipal.setVisible(false);
         paneOpciones.setVisible(true);
+        GestorAnimacionesVistas.animarAparicionOverlay(paneOpciones);
     }
 
     @FXML
     private void cerrarOpciones(ActionEvent event) {
         paneOpciones.setVisible(false);
         menuPrincipal.setVisible(true);
+        GestorAnimacionesVistas.animarEntradaCascada(menuPrincipal);
     }
 
     @FXML
