@@ -63,7 +63,7 @@ public class GestorBBDD {
 
             try {
                 // 1. INSERT PARTIDA
-                String sqlPartida = "INSERT INTO PARTIDA (TURNOS, JUGADOR_ACTUAL, FINALIZADA, NOMBRE_PARTIDA) VALUES (?, ?, ?, ?)";
+                String sqlPartida = "INSERT INTO PARTIDA (TURNOS, JUGADOR_ACTUAL, FINALIZADA, NOMBRE_PARTIDA, FECHA_GUARDADO) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
                 int idPartida;
 
                 try (PreparedStatement ps = con.prepareStatement(sqlPartida, new String[]{"ID_PARTIDA"})) {
@@ -115,7 +115,7 @@ public class GestorBBDD {
                 int idPartida = p.getId();
 
                 // 1. UPDATE PARTIDA
-                String sqlUpdate = "UPDATE PARTIDA SET TURNOS = ?, JUGADOR_ACTUAL = ?, FINALIZADA = ?, NOMBRE_PARTIDA = ? WHERE ID_PARTIDA = ?";
+                String sqlUpdate = "UPDATE PARTIDA SET TURNOS = ?, JUGADOR_ACTUAL = ?, FINALIZADA = ?, NOMBRE_PARTIDA = ?, FECHA_GUARDADO = CURRENT_TIMESTAMP WHERE ID_PARTIDA = ?";
                 try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
                     ps.setInt(1, CifradoBBDD.encriptarNumero(p.getTurnos()));
                     ps.setInt(2, CifradoBBDD.encriptarNumero(p.getJugadorActualIndice()));
@@ -343,11 +343,12 @@ public class GestorBBDD {
         ArrayList<String[]> lista = new ArrayList<>();
 
         try (Connection con = getConexion()) {
-            String sql = "SELECT p.ID_PARTIDA, p.TURNOS, p.FINALIZADA, p.NOMBRE_PARTIDA, " +
+            String sql = "SELECT p.ID_PARTIDA, p.TURNOS, p.FINALIZADA, p.NOMBRE_PARTIDA, p.FECHA_GUARDADO, " +
                          "(SELECT COUNT(*) FROM JUGADOR j WHERE j.ID_PARTIDA = p.ID_PARTIDA) AS NUM_JUGADORES " +
                          "FROM PARTIDA p ORDER BY p.ID_PARTIDA DESC";
 
             try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
                 while (rs.next()) {
                     String[] info = new String[2];
                     info[0] = String.valueOf(rs.getInt("ID_PARTIDA"));
@@ -361,9 +362,10 @@ public class GestorBBDD {
                         nombreReal = "Partida #" + info[0]; // Fallback partidas antiguas
                     }
 
-                    String estado = finalizada == 1 ? "Finalizada" : "En curso";
+                    Timestamp fechaGuardado = rs.getTimestamp("FECHA_GUARDADO");
+                    String fechaStr = fechaGuardado != null ? sdf.format(fechaGuardado) : "Fecha desconocida";
 
-                    info[1] = "🎮 " + nombreReal + "  |  " + numJugadores + " jugadores  |  " + estado;
+                    info[1] = "🎮 " + nombreReal + "  |  🕒 " + fechaStr + "  |  👥 " + numJugadores + " Jugadores";
 
                     lista.add(info);
                 }

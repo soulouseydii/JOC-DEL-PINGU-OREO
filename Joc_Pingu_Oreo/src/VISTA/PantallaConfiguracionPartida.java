@@ -24,6 +24,7 @@ public class PantallaConfiguracionPartida {
 
     @FXML private ComboBox<Integer> comboNumJugadores;
     @FXML private javafx.scene.control.TextField txtNombrePartida;
+    @FXML private Label lblErrorNombre;
     @FXML private HBox contenedorJugadores;
     @FXML private Button btnEmpezar;
 
@@ -290,6 +291,11 @@ public class PantallaConfiguracionPartida {
                 CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
             }
         });
+
+        // Escuchar cambios en el nombre de la partida para validar
+        txtNombrePartida.textProperty().addListener((obs, oldVal, newVal) -> {
+            verificarTodosListos();
+        });
         
         generarTarjetas();
     }
@@ -314,6 +320,12 @@ public class PantallaConfiguracionPartida {
     }
 
     private void verificarTodosListos() {
+        boolean nameEmpty = txtNombrePartida.getText().trim().isEmpty();
+        
+        // Mostrar/Ocultar error
+        lblErrorNombre.setVisible(nameEmpty);
+        lblErrorNombre.setManaged(nameEmpty);
+        
         boolean todosListos = true;
         for (TarjetaJugador tj : tarjetasActivas) {
             if (!tj.estaListo) {
@@ -321,7 +333,9 @@ public class PantallaConfiguracionPartida {
                 break;
             }
         }
-        btnEmpezar.setDisable(!todosListos);
+        
+        // El botón solo se habilita si hay nombre Y todos están listos
+        btnEmpezar.setDisable(nameEmpty || !todosListos);
     }
 
     @FXML
@@ -352,12 +366,7 @@ public class PantallaConfiguracionPartida {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
             Parent root = loader.load();
             
-            String nombrePartida = "";
-            if (txtNombrePartida != null && txtNombrePartida.getText() != null && !txtNombrePartida.getText().trim().isEmpty()) {
-                nombrePartida = txtNombrePartida.getText().trim();
-            } else {
-                nombrePartida = "Partida de " + numJugadores + " jugadores";
-            }
+            String nombrePartida = txtNombrePartida.getText().trim();
             
             PantallaJuego controller = loader.getController();
             controller.iniciarConJugadores(jugadoresConfigurados);

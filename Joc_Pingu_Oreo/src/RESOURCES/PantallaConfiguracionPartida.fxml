@@ -55,6 +55,7 @@
                     <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #c8eeff;" text="Nombre de la partida:" />
                     <javafx.scene.control.TextField fx:id="txtNombrePartida" promptText="Pingüino Aventura..." style="-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-text-fill: #d0f0ff; -fx-prompt-text-fill: rgba(160,210,255,0.35); -fx-padding: 7 10;" prefWidth="250"/>
                 </HBox>
+                <Label fx:id="lblErrorNombre" text="⚠ Debes ponerle un nombre a la partida" managed="false" visible="false" style="-fx-text-fill: #ff6e6e; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
                 
                 <Region prefHeight="15" />
 
