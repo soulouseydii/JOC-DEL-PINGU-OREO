@@ -37,10 +37,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
 
@@ -108,12 +110,12 @@ public class PantallaJuego {
 	@FXML private StackPane crushImageOverlay;
 	@FXML private ImageView crushImage;
 
-	// Tablero y fichas
+	// Tablero y fichas (StackPane para poder contener imagen o forma según el tipo)
 	@FXML private GridPane tablero;
-	@FXML private Circle P1;
-	@FXML private Circle P2;
-	@FXML private Circle P3;
-	@FXML private Circle P4;
+	@FXML private StackPane P1;
+	@FXML private StackPane P2;
+	@FXML private StackPane P3;
+	@FXML private StackPane P4;
 
 	private GestorPartida gestorPartida;
 	private int[] posiciones = new int[] {-1, -1, -1, -1};
@@ -145,6 +147,11 @@ public class PantallaJuego {
 	private Image imgOso;
 	private Image imgEvento;
 
+	// Imagen del pingüino
+	private Image imgPinguino;
+	private static final double FICHA_SIZE = 50.0;
+	private static final double FICHA_HALF = FICHA_SIZE / 2.0;
+
 	// =========================================
 	//  INICIALIZACIÓN
 	// =========================================
@@ -162,6 +169,19 @@ public class PantallaJuego {
 			imgEvento = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_evento.png"));
 		} catch (Exception e) {
 			System.out.println("Error al cargar imágenes de las casillas: " + e.getMessage());
+		}
+
+		// Cargar imágenes de personajes
+		try {
+			java.io.InputStream isPinguino = getClass().getResourceAsStream("/imagenes/pinguino/pinguino.png");
+			if (isPinguino != null) {
+				imgPinguino = new Image(isPinguino);
+				System.out.println("✓ Imagen del pingüino cargada correctamente.");
+			} else {
+				System.out.println("⚠ ERROR: No se encontró /imagenes/pinguino/pinguino.png");
+			}
+		} catch (Exception e) {
+			System.out.println("Error al cargar imagen del pingüino: " + e.getMessage());
 		}
 		
 		// Sincronizar audio con GestorAudio
@@ -223,7 +243,9 @@ public class PantallaJuego {
 		P4.setVisible(false);
 		
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
-			getFicha(i).setVisible(true);
+			StackPane ficha = getFicha(i);
+			ficha.setVisible(true);
+			asignarImagenFicha(i, jugadores.get(i));
 		}
 		
 		actualizarTodasLasFichas();
@@ -245,6 +267,46 @@ public class PantallaJuego {
 			});
 			currentAnimations.add(cpuPauseTransition);
 			cpuPauseTransition.play();
+		}
+	}
+
+	// =========================================
+	//  ASIGNACIÓN DE IMAGEN A FICHA
+	// =========================================
+
+	/**
+	 * Asigna la imagen del pingüino a la ficha o un círculo colored para la foca.
+	 */
+	private void asignarImagenFicha(int index, Jugador jugador) {
+		StackPane ficha = getFicha(index);
+		ficha.getChildren().clear(); // Limpiar el contenido actual
+		
+		if (jugador instanceof Pinguino) {
+			ImageView imgView = new ImageView();
+			if (imgPinguino != null) {
+				imgView.setImage(imgPinguino);
+				System.out.println("✓ Imagen de pingüino asignada a " + jugador.getNombre());
+			} else {
+				System.out.println("⚠ Fallback: sin imagen para pingüino " + jugador.getNombre());
+			}
+			imgView.setFitWidth(FICHA_SIZE);
+			imgView.setFitHeight(FICHA_SIZE);
+			imgView.setPreserveRatio(true);
+			ficha.getChildren().add(imgView);
+		} else if (jugador instanceof Foca) {
+			Circle circuloFoca = new Circle(14.0);
+			circuloFoca.setStyle("-fx-stroke: white; -fx-stroke-width: 3;");
+			Color color = null;
+			switch(index) {
+				case 0: color = Color.web("#2f6fed"); break;
+				case 1: color = Color.web("#ef4444"); break;
+				case 2: color = Color.web("#22c55e"); break;
+				case 3: color = Color.web("#facc15"); break;
+				default: color = Color.GRAY; break;
+			}
+			circuloFoca.setFill(color);
+			ficha.getChildren().add(circuloFoca);
+			System.out.println("✓ Ficha circular asignada a " + jugador.getNombre());
 		}
 	}
 
@@ -433,7 +495,7 @@ public class PantallaJuego {
 			tablero.getChildren().add(celdaContainer);
 		}
 
-		// Asegurar que los jugadores estén siempre por encima de las casillas
+		// Asegurar que los jugadores (ImageView) estén siempre por encima de las casillas
 		P1.toFront();
 		P2.toFront();
 		P3.toFront();
@@ -1192,7 +1254,7 @@ public class PantallaJuego {
 		agregarEvento("═══════════════════════");
 
 		// Pequeña animación de impacto (temblor) antes de mover
-		Circle fichaPinguino = getFicha(sealEncounterPinguinoIndice);
+		StackPane fichaPinguino = getFicha(sealEncounterPinguinoIndice);
 		RotateTransition impacto = new RotateTransition(Duration.millis(60), fichaPinguino);
 		impacto.setFromAngle(-20);
 		impacto.setToAngle(20);
@@ -1347,7 +1409,7 @@ public class PantallaJuego {
 	// =========================================
 	
 	private void animarMovimiento(int playerIndex, int targetPosition, Runnable alTerminar) {
-		Circle fichaObj = getFicha(playerIndex);
+		StackPane fichaObj = getFicha(playerIndex);
 		int oldPosition = posiciones[playerIndex];
 		
 		if (oldPosition == targetPosition) {
@@ -1378,12 +1440,12 @@ public class PantallaJuego {
 			double nextTy = currentTy + cellDy;
 
 			Path path = new Path();
-			path.getElements().add(new MoveTo(currentTx + fichaObj.getRadius(), currentTy + fichaObj.getRadius()));
+			path.getElements().add(new MoveTo(currentTx + FICHA_HALF, currentTy + FICHA_HALF));
 			
-			double controlX = currentTx + (cellDx / 2) + fichaObj.getRadius();
-			double controlY = Math.min(currentTy, nextTy) - 35 + fichaObj.getRadius(); // Altura del salto parabólico
+			double controlX = currentTx + (cellDx / 2) + FICHA_HALF;
+			double controlY = Math.min(currentTy, nextTy) - 35 + FICHA_HALF; // Altura del salto parabólico
 
-			path.getElements().add(new QuadCurveTo(controlX, controlY, nextTx + fichaObj.getRadius(), nextTy + fichaObj.getRadius()));
+			path.getElements().add(new QuadCurveTo(controlX, controlY, nextTx + FICHA_HALF, nextTy + FICHA_HALF));
 
 			PathTransition jump = new PathTransition();
 			jump.setNode(fichaObj);
@@ -1447,7 +1509,7 @@ public class PantallaJuego {
 		}
 	}
 	
-	private Circle getFicha(int index) {
+	private StackPane getFicha(int index) {
 		return (index == 0) ? P1 : (index == 1) ? P2 : (index == 2) ? P3 : P4;
 	}
 	
@@ -1457,7 +1519,7 @@ public class PantallaJuego {
 			Jugador j = jugadores.get(i);
 			int posVisual = Math.max(0, Math.min(j.getPosicion(), 49));
 			if (posiciones[i] != posVisual) {
-				Circle fichaObj = getFicha(i);
+				StackPane fichaObj = getFicha(i);
 				fichaObj.setTranslateX(0);
 				fichaObj.setTranslateY(0);
 				int[] coords = getCoordenadas(posVisual);
@@ -1562,11 +1624,12 @@ public class PantallaJuego {
 		P3.setVisible(false);
 		P4.setVisible(false);
 
-		// Mostrar y posicionar fichas activas
+		// Mostrar, asignar imagen y posicionar fichas activas
 		ArrayList<Jugador> jugadores = partida.getJugadores();
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
-			Circle ficha = getFicha(i);
+			StackPane ficha = getFicha(i);
 			ficha.setVisible(true);
+			asignarImagenFicha(i, jugadores.get(i));
 
 			int posVisual = Math.max(0, Math.min(jugadores.get(i).getPosicion(), 49));
 			posiciones[i] = posVisual;
