@@ -23,6 +23,7 @@ public class PantallaConfiguracionPartida {
     private double yOffset = 0;
 
     @FXML private ComboBox<Integer> comboNumJugadores;
+    @FXML private javafx.scene.control.TextField txtNombrePartida;
     @FXML private HBox contenedorJugadores;
     @FXML private Button btnEmpezar;
 
@@ -351,8 +352,16 @@ public class PantallaConfiguracionPartida {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
             Parent root = loader.load();
             
+            String nombrePartida = "";
+            if (txtNombrePartida != null && txtNombrePartida.getText() != null && !txtNombrePartida.getText().trim().isEmpty()) {
+                nombrePartida = txtNombrePartida.getText().trim();
+            } else {
+                nombrePartida = "Partida de " + numJugadores + " jugadores";
+            }
+            
             PantallaJuego controller = loader.getController();
             controller.iniciarConJugadores(jugadoresConfigurados);
+            controller.setNombrePartida(nombrePartida);
             
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

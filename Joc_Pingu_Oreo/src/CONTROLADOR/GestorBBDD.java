@@ -63,13 +63,14 @@ public class GestorBBDD {
 
             try {
                 // 1. INSERT PARTIDA
-                String sqlPartida = "INSERT INTO PARTIDA (TURNOS, JUGADOR_ACTUAL, FINALIZADA) VALUES (?, ?, ?)";
+                String sqlPartida = "INSERT INTO PARTIDA (TURNOS, JUGADOR_ACTUAL, FINALIZADA, NOMBRE_PARTIDA) VALUES (?, ?, ?, ?)";
                 int idPartida;
 
                 try (PreparedStatement ps = con.prepareStatement(sqlPartida, new String[]{"ID_PARTIDA"})) {
-                    ps.setInt(1, p.getTurnos());
-                    ps.setInt(2, p.getJugadorActualIndice());
-                    ps.setInt(3, p.isFinalizada() ? 1 : 0);
+                    ps.setInt(1, CifradoBBDD.encriptarNumero(p.getTurnos()));
+                    ps.setInt(2, CifradoBBDD.encriptarNumero(p.getJugadorActualIndice()));
+                    ps.setInt(3, p.isFinalizada() ? 1 : 0); // NUMBER(1) - no se encripta
+                    ps.setString(4, CifradoBBDD.encriptarTexto(p.getNombrePartida()));
                     ps.executeUpdate();
 
                     try (ResultSet keys = ps.getGeneratedKeys()) {
@@ -114,12 +115,13 @@ public class GestorBBDD {
                 int idPartida = p.getId();
 
                 // 1. UPDATE PARTIDA
-                String sqlUpdate = "UPDATE PARTIDA SET TURNOS = ?, JUGADOR_ACTUAL = ?, FINALIZADA = ? WHERE ID_PARTIDA = ?";
+                String sqlUpdate = "UPDATE PARTIDA SET TURNOS = ?, JUGADOR_ACTUAL = ?, FINALIZADA = ?, NOMBRE_PARTIDA = ? WHERE ID_PARTIDA = ?";
                 try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
-                    ps.setInt(1, p.getTurnos());
-                    ps.setInt(2, p.getJugadorActualIndice());
+                    ps.setInt(1, CifradoBBDD.encriptarNumero(p.getTurnos()));
+                    ps.setInt(2, CifradoBBDD.encriptarNumero(p.getJugadorActualIndice()));
                     ps.setInt(3, p.isFinalizada() ? 1 : 0);
-                    ps.setInt(4, idPartida);
+                    ps.setString(4, CifradoBBDD.encriptarTexto(p.getNombrePartida()));
+                    ps.setInt(5, idPartida);
                     ps.executeUpdate();
                 }
 
@@ -169,13 +171,13 @@ public class GestorBBDD {
 
             try (PreparedStatement ps = con.prepareStatement(sqlJugador, new String[]{"ID_JUGADOR"})) {
                 ps.setInt(1, idPartida);
-                ps.setInt(2, i);
-                ps.setString(3, j.getNombre());
-                ps.setString(4, j.getColor());
-                ps.setInt(5, j.getPosicion());
-                ps.setString(6, j instanceof Pinguino ? "PINGUINO" : "FOCA");
-                ps.setInt(7, j.getTurnosPerdidos());
-                ps.setInt(8, j instanceof Foca ? ((Foca) j).getTurnosBloqueada() : 0);
+                ps.setInt(2, CifradoBBDD.encriptarNumero(i));
+                ps.setString(3, CifradoBBDD.encriptarTexto(j.getNombre()));
+                ps.setString(4, CifradoBBDD.encriptarTexto(j.getColor()));
+                ps.setInt(5, CifradoBBDD.encriptarNumero(j.getPosicion()));
+                ps.setString(6, CifradoBBDD.encriptarTexto(j instanceof Pinguino ? "PINGUINO" : "FOCA"));
+                ps.setInt(7, CifradoBBDD.encriptarNumero(j.getTurnosPerdidos()));
+                ps.setInt(8, CifradoBBDD.encriptarNumero(j instanceof Foca ? ((Foca) j).getTurnosBloqueada() : 0));
                 ps.executeUpdate();
 
                 try (ResultSet keys = ps.getGeneratedKeys()) {
@@ -192,8 +194,8 @@ public class GestorBBDD {
                 for (Item item : ping.getInventario().getlista()) {
                     try (PreparedStatement psItem = con.prepareStatement(sqlItem)) {
                         psItem.setInt(1, idJugador);
-                        psItem.setString(2, item.getNombre());
-                        psItem.setInt(3, item.getCantidad());
+                        psItem.setString(2, CifradoBBDD.encriptarTexto(item.getNombre()));
+                        psItem.setInt(3, CifradoBBDD.encriptarNumero(item.getCantidad()));
                         psItem.executeUpdate();
                     }
                 }
@@ -207,8 +209,8 @@ public class GestorBBDD {
         for (Casilla c : p.getTablero().getListaCasillas()) {
             try (PreparedStatement ps = con.prepareStatement(sqlCasilla)) {
                 ps.setInt(1, idPartida);
-                ps.setInt(2, c.getPosicion());
-                ps.setString(3, c.getClass().getSimpleName());
+                ps.setInt(2, CifradoBBDD.encriptarNumero(c.getPosicion()));
+                ps.setString(3, CifradoBBDD.encriptarTexto(c.getClass().getSimpleName()));
                 ps.executeUpdate();
             }
         }
@@ -223,17 +225,19 @@ public class GestorBBDD {
 
             // 1. CARGAR DATOS DE LA PARTIDA
             int turnos, jugadorActual, finalizada;
+            String nombrePartida = "";
 
-            try (PreparedStatement ps = con.prepareStatement("SELECT TURNOS, JUGADOR_ACTUAL, FINALIZADA FROM PARTIDA WHERE ID_PARTIDA = ?")) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT TURNOS, JUGADOR_ACTUAL, FINALIZADA, NOMBRE_PARTIDA FROM PARTIDA WHERE ID_PARTIDA = ?")) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
                         System.out.println("No se encontro partida con ID: " + id);
                         return null;
                     }
-                    turnos = rs.getInt("TURNOS");
-                    jugadorActual = rs.getInt("JUGADOR_ACTUAL");
+                    turnos = CifradoBBDD.desencriptarNumero(rs.getInt("TURNOS"));
+                    jugadorActual = CifradoBBDD.desencriptarNumero(rs.getInt("JUGADOR_ACTUAL"));
                     finalizada = rs.getInt("FINALIZADA");
+                    nombrePartida = CifradoBBDD.desencriptarTexto(rs.getString("NOMBRE_PARTIDA"));
                 }
             }
 
@@ -245,8 +249,8 @@ public class GestorBBDD {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        int pos = rs.getInt("POSICION");
-                        String tipo = rs.getString("TIPO");
+                        int pos = CifradoBBDD.desencriptarNumero(rs.getInt("POSICION"));
+                        String tipo = CifradoBBDD.desencriptarTexto(rs.getString("TIPO"));
                         casillas.add(crearCasillaPorTipo(pos, tipo));
                     }
                 }
@@ -261,11 +265,11 @@ public class GestorBBDD {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         int idJugador = rs.getInt("ID_JUGADOR");
-                        String nombre = rs.getString("NOMBRE");
-                        String color = rs.getString("COLOR");
-                        int posicion = rs.getInt("POSICION");
-                        String tipo = rs.getString("TIPO");
-                        int turnosPerdidos = rs.getInt("TURNOS_PERDIDOS");
+                        String nombre = CifradoBBDD.desencriptarTexto(rs.getString("NOMBRE"));
+                        String color = CifradoBBDD.desencriptarTexto(rs.getString("COLOR"));
+                        int posicion = CifradoBBDD.desencriptarNumero(rs.getInt("POSICION"));
+                        String tipo = CifradoBBDD.desencriptarTexto(rs.getString("TIPO"));
+                        int turnosPerdidos = CifradoBBDD.desencriptarNumero(rs.getInt("TURNOS_PERDIDOS"));
 
                         Jugador j;
 
@@ -281,8 +285,8 @@ public class GestorBBDD {
                                 psItem.setInt(1, idJugador);
                                 try (ResultSet rsItem = psItem.executeQuery()) {
                                     while (rsItem.next()) {
-                                        String tipoItem = rsItem.getString("TIPO_ITEM");
-                                        int cantidad = rsItem.getInt("CANTIDAD");
+                                        String tipoItem = CifradoBBDD.desencriptarTexto(rsItem.getString("TIPO_ITEM"));
+                                        int cantidad = CifradoBBDD.desencriptarNumero(rsItem.getInt("CANTIDAD"));
                                         Item item = crearItemPorTipo(tipoItem);
                                         if (item != null) {
                                             item.setCantidad(cantidad);
@@ -298,7 +302,7 @@ public class GestorBBDD {
                             Foca f = new Foca(nombre, color, 0);
                             f.setPosicion(posicion);
                             f.setTurnosPerdidos(turnosPerdidos);
-                            f.setTurnosBloqueada(rs.getInt("TURNOS_BLOQUEADA"));
+                            f.setTurnosBloqueada(CifradoBBDD.desencriptarNumero(rs.getInt("TURNOS_BLOQUEADA")));
                             j = f;
                         }
 
@@ -310,6 +314,7 @@ public class GestorBBDD {
             // 4. CONSTRUIR OBJETO PARTIDA
             Partida partida = new Partida();
             partida.setId(id);
+            partida.setNombrePartida(nombrePartida);
             partida.setTurnos(turnos);
             partida.setJugadorActualIndice(jugadorActual);
             partida.setFinalizada(finalizada == 1);
@@ -338,7 +343,7 @@ public class GestorBBDD {
         ArrayList<String[]> lista = new ArrayList<>();
 
         try (Connection con = getConexion()) {
-            String sql = "SELECT p.ID_PARTIDA, p.TURNOS, p.FINALIZADA, " +
+            String sql = "SELECT p.ID_PARTIDA, p.TURNOS, p.FINALIZADA, p.NOMBRE_PARTIDA, " +
                          "(SELECT COUNT(*) FROM JUGADOR j WHERE j.ID_PARTIDA = p.ID_PARTIDA) AS NUM_JUGADORES " +
                          "FROM PARTIDA p ORDER BY p.ID_PARTIDA DESC";
 
@@ -347,14 +352,18 @@ public class GestorBBDD {
                     String[] info = new String[2];
                     info[0] = String.valueOf(rs.getInt("ID_PARTIDA"));
 
-                    int numTurnos = rs.getInt("TURNOS");
-                    int numJugadores = rs.getInt("NUM_JUGADORES");
+                    int numTurnos = CifradoBBDD.desencriptarNumero(rs.getInt("TURNOS"));
+                    int numJugadores = rs.getInt("NUM_JUGADORES"); // COUNT no está encriptado
                     int finalizada = rs.getInt("FINALIZADA");
+                    
+                    String nombreReal = CifradoBBDD.desencriptarTexto(rs.getString("NOMBRE_PARTIDA"));
+                    if (nombreReal == null || nombreReal.trim().isEmpty()) {
+                        nombreReal = "Partida #" + info[0]; // Fallback partidas antiguas
+                    }
 
                     String estado = finalizada == 1 ? "Finalizada" : "En curso";
 
-                    info[1] = "Partida #" + info[0] + "  |  " + numJugadores + " jugadores  |  " +
-                              numTurnos + " turnos  |  " + estado;
+                    info[1] = "🎮 " + nombreReal + "  |  " + numJugadores + " jugadores  |  " + estado;
 
                     lista.add(info);
                 }

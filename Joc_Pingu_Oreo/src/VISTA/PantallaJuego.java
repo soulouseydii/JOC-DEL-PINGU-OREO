@@ -248,6 +248,12 @@ public class PantallaJuego {
 		}
 	}
 
+	public void setNombrePartida(String nombrePartida) {
+		if (gestorPartida != null && gestorPartida.getPartida() != null) {
+			gestorPartida.getPartida().setNombrePartida(nombrePartida);
+		}
+	}
+
 	@FXML
 	private void handleDadoRapido(ActionEvent event) {
 		if (isPaused) return;
