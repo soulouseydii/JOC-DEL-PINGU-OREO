@@ -18,7 +18,15 @@
             <padding>
                 <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
             </padding>
-            <VBox fx:id="paneOpciones" alignment="CENTER" maxHeight="500" maxWidth="500" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, rgba(10, 30, 60, 0.97), rgba(5, 55, 90, 0.97)); -fx-background-radius: 24; -fx-border-color: rgba(130, 210, 255, 0.5); -fx-border-radius: 24; -fx-border-width: 2;" visible="false">
+            <!-- Botones del Menú Principal (centrados) -->
+            <VBox fx:id="menuPrincipal" alignment="CENTER" spacing="15" maxWidth="320" StackPane.alignment="CENTER">
+                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Nueva Partida" />
+                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Cargar Partida" />
+                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Opciones" />
+                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="58.0" maxWidth="Infinity" styleClass="btn-exit" text="Salir del Juego" />
+            </VBox>
+            <!-- Panel de Opciones (encima del menú, visible=false por defecto) -->
+            <VBox fx:id="paneOpciones" alignment="CENTER" maxHeight="500" maxWidth="500" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, rgba(10, 30, 60, 1.0), rgba(5, 55, 90, 1.0)); -fx-background-radius: 24; -fx-border-color: rgba(130, 210, 255, 0.5); -fx-border-radius: 24; -fx-border-width: 2;" visible="false">
                 <padding>
                     <Insets bottom="30" left="40" right="40" top="30" />
                 </padding>
@@ -45,13 +53,6 @@
                 </VBox>
                 
                 <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="250" style="-fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(100,180,255,0.18)); -fx-text-fill: #d0f0ff; -fx-font-size: 16; -fx-font-weight: 900; -fx-background-radius: 14; -fx-border-color: rgba(130,210,255,0.5); -fx-border-radius: 14; -fx-border-width: 1.5; -fx-cursor: hand;" text="Volver" />
-            </VBox>
-            <!-- Botones del Menú Principal (centrados) -->
-            <VBox alignment="CENTER" spacing="15" maxWidth="320" StackPane.alignment="CENTER">
-                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Nueva Partida" />
-                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Cargar Partida" />
-                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Opciones" />
-                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="58.0" maxWidth="Infinity" styleClass="btn-exit" text="Salir del Juego" />
             </VBox>
         </StackPane>
     </center>

@@ -27,6 +27,9 @@ public class PantallaInicio extends Application {
     @FXML private Button btnCreditos;
     @FXML private Button btnSalir;
 
+    // Menú principal
+    @FXML private VBox menuPrincipal;
+
     // Elementos del menú de opciones
     @FXML private VBox paneOpciones;
     @FXML private CheckBox chkMusica;
@@ -149,12 +152,14 @@ public class PantallaInicio extends Application {
     @FXML
     private void handleOpciones(ActionEvent event) {
         System.out.println("Opciones clicked");
+        menuPrincipal.setVisible(false);
         paneOpciones.setVisible(true);
     }
 
     @FXML
     private void cerrarOpciones(ActionEvent event) {
         paneOpciones.setVisible(false);
+        menuPrincipal.setVisible(true);
     }
 
     @FXML
