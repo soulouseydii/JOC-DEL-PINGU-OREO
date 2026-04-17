@@ -714,8 +714,8 @@ public class PantallaJuego {
 				// Determinar qué objeto se obtuvo
 				if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
 				else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
-				else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez(ces)!";
-				else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
+				else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+				else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola de Nieve!";
 				else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
 				else itemObtenido = "📦 Inventario lleno";
 			}
@@ -875,15 +875,11 @@ public class PantallaJuego {
 		secuencia.play();
 	}
 
-	// =========================================
 	//  ANIMACIÓN COFRE DE EVENTO
-	// =========================================
 
 	/**
-	 * Muestra la animación del cofre del evento cuando un pingüino cae en una casilla Evento.
-	 * Secuencia: cofre aparece → tiembla → se abre (escala) → item flota arriba → fade out.
-	 * @param itemNombre Texto del item obtenido que se muestra flotando sobre el cofre
-	 * @param alTerminar Runnable que se ejecuta al finalizar la animación
+	 * @param itemNombre
+	 * @param alTerminar
 	 */
 	private void mostrarEventoCofre(String itemNombre, Runnable alTerminar) {
 		// Preparar el overlay
