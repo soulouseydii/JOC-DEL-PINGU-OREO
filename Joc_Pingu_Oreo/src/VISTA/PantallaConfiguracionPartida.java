@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import MODELO.*;
+import CONTROLADOR.GestorAnimacionesVistas;
 
 public class PantallaConfiguracionPartida {
 
@@ -317,6 +318,9 @@ public class PantallaConfiguracionPartida {
             tarjetasActivas.add(tj);
             contenedorJugadores.getChildren().add(tj.root);
         }
+        
+        // Efecto cascada de entrada para las tarjetas
+        GestorAnimacionesVistas.animarEntradaCascada(contenedorJugadores);
     }
 
     private void verificarTodosListos() {

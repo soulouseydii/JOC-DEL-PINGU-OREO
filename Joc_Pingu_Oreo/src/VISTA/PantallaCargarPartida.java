@@ -14,11 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.util.ArrayList;
-import CONTROLADOR.GestorBBDD;
 import CONTROLADOR.GestorPartida;
+import CONTROLADOR.GestorBBDD;
 import MODELO.Partida;
+import CONTROLADOR.GestorAnimacionesVistas;
 
 public class PantallaCargarPartida {
 
@@ -29,6 +29,7 @@ public class PantallaCargarPartida {
     @FXML private Button btnCargar;
     @FXML private Button btnEliminar;
     @FXML private Button btnVolver;
+    @FXML private VBox panelCargar;
     @FXML private VBox overlayConfirmacion;
 
     private ObservableList<String> partidas;
@@ -44,6 +45,9 @@ public class PantallaCargarPartida {
 
         gestorBBDD = new GestorBBDD();
         cargarListaDesdeOracle();
+
+        // Aplicar animación en cascada al componente central al entrar
+        javafx.application.Platform.runLater(() -> GestorAnimacionesVistas.animarEntradaCascada(panelCargar));
     }
 
     private void cargarListaDesdeOracle() {
@@ -119,7 +123,7 @@ public class PantallaCargarPartida {
             return;
         }
 
-        overlayConfirmacion.setVisible(true);
+        GestorAnimacionesVistas.animarAparicionOverlay(overlayConfirmacion);
     }
 
     @FXML

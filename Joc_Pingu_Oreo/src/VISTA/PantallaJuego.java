@@ -46,6 +46,7 @@ import javafx.geometry.Pos;
 
 import CONTROLADOR.GestorPartida;
 import MODELO.*;
+import CONTROLADOR.GestorAnimacionesVistas;
 
 public class PantallaJuego {
 
@@ -478,6 +479,7 @@ public class PantallaJuego {
 			// Actualizar mensaje y mostrar overlay personalizado
 			saveMessageLabel.setText("Partida guardada correctamente\nID de la partida: " + idGuardado);
 			saveSuccessOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarAparicionOverlay(saveSuccessOverlay);
 			mainContainer.setDisable(true);
 			if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
 				mainContainer.getStyleClass().add("main-container-disabled");
@@ -486,6 +488,7 @@ public class PantallaJuego {
 			agregarEvento("❌ Error al guardar la partida.");
 			saveMessageLabel.setText("Error: No se pudo guardar la partida.\nComprueba la base de datos.");
 			saveSuccessOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarAparicionOverlay(saveSuccessOverlay);
 			mainContainer.setDisable(true);
 		}
 		}
@@ -534,6 +537,7 @@ public class PantallaJuego {
 		}
 		
 		menuOverlay.setVisible(true);
+		GestorAnimacionesVistas.animarAparicionOverlay(menuOverlay);
 		mainContainer.setDisable(true);
 		if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
 			mainContainer.getStyleClass().add("main-container-disabled");
@@ -557,14 +561,15 @@ public class PantallaJuego {
 	 */
 	private void reanudarJuego() {
 		isPaused = false;
-		menuOverlay.setVisible(false);
-		mainContainer.setDisable(false);
-		mainContainer.getStyleClass().remove("main-container-disabled");
-		for (Animation a : currentAnimations) {
-			if (a.getStatus() == Animation.Status.PAUSED) {
-				a.play();
+		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
+			mainContainer.setDisable(false);
+			mainContainer.getStyleClass().remove("main-container-disabled");
+			for (Animation a : currentAnimations) {
+				if (a.getStatus() == Animation.Status.PAUSED) {
+					a.play();
+				}
 			}
-		}
+		});
 	}
 
 	@FXML
@@ -573,8 +578,10 @@ public class PantallaJuego {
 		confirmationTitle.setText("VOLVER AL MENÚ");
 		confirmationMessage.setText("¿Quieres guardar la partida antes de volver al menú principal?");
 		
-		menuOverlay.setVisible(false);
-		confirmationOverlay.setVisible(true);
+		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
+			confirmationOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarAparicionOverlay(confirmationOverlay);
+		});
 	}
 
 	@FXML
@@ -583,8 +590,10 @@ public class PantallaJuego {
 		confirmationTitle.setText("SALIR DEL JUEGO");
 		confirmationMessage.setText("¿Quieres guardar la partida antes de cerrar el juego?");
 		
-		menuOverlay.setVisible(false);
-		confirmationOverlay.setVisible(true);
+		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
+			confirmationOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarAparicionOverlay(confirmationOverlay);
+		});
 	}
 
 	@FXML
@@ -633,21 +642,27 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleConfirmCancel(ActionEvent event) {
-		confirmationOverlay.setVisible(false);
-		menuOverlay.setVisible(true);
+		GestorAnimacionesVistas.animarCierreOverlay(confirmationOverlay, () -> {
+			menuOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarEntradaCascada(menuOverlay);
+		});
 	}
 
 
 	@FXML
 	private void handleMenuOptions(ActionEvent event) {
-		menuOverlay.setVisible(false);
-		optionsSubmenu.setVisible(true);
+		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
+			optionsSubmenu.setVisible(true);
+			GestorAnimacionesVistas.animarAparicionOverlay(optionsSubmenu);
+		});
 	}
 
 	@FXML
 	private void handleBackFromOptions(ActionEvent event) {
-		optionsSubmenu.setVisible(false);
-		menuOverlay.setVisible(true);
+		GestorAnimacionesVistas.animarCierreOverlay(optionsSubmenu, () -> {
+			menuOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarEntradaCascada(menuOverlay);
+		});
 	}
 
 	@FXML
