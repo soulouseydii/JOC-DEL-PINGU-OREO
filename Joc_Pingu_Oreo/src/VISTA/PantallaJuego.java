@@ -57,12 +57,9 @@ public class PantallaJuego {
 	@FXML private Text dadoResultText;
 	
 	// Inventario UI
-	@FXML private Label inventarioTitulo;
 	@FXML private Text peces_t;
 	@FXML private Text nieve_t;
 	@FXML private Text moto_t;
-	@FXML private Button btnPeces;
-	@FXML private Button btnNieve;
 	@FXML private Button btnMoto;
 	@FXML private Button btnSettings;
 	@FXML private Button btnDadoRapido;
@@ -241,8 +238,6 @@ public class PantallaJuego {
 		if (j1 instanceof Foca) {
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
-			btnPeces.setDisable(true);
-			btnNieve.setDisable(true);
 			cpuPauseTransition = new PauseTransition(Duration.millis(1500));
 			cpuPauseTransition.setOnFinished(e -> {
 				currentAnimations.remove(cpuPauseTransition);
@@ -280,8 +275,6 @@ public class PantallaJuego {
 		btnDadoRapido.setDisable(true);
 		btnDadoLento.setDisable(true);
 		btnMoto.setDisable(true);
-		btnPeces.setDisable(true);
-		btnNieve.setDisable(true);
 
 		// 1. Animación visual del botón (vibración)
 		RotateTransition rt = new RotateTransition(Duration.millis(80), botonAAnimar);
@@ -335,9 +328,6 @@ public class PantallaJuego {
 	private void actualizarInventarioUI() {
 		Jugador jActual = gestorPartida.getPartida().getJugadorActual();
 		
-		// Título del inventario con el nombre del jugador
-		inventarioTitulo.setText("Inventario - " + jActual.getNombre());
-		
 		if (jActual instanceof Pinguino) {
 			Pinguino p = (Pinguino) jActual;
 			
@@ -345,13 +335,11 @@ public class PantallaJuego {
 			int cantBolas = p.contarItem("Bola de Nieve");
 			int cantMotos = p.contarItem("Moto de Nieve");
 			
-			peces_t.setText("Peces: " + cantPeces);
-			nieve_t.setText("Bolas de nieve: " + cantBolas);
-			moto_t.setText("Moto de Nieve: " + cantMotos);
+			peces_t.setText("x " + cantPeces);
+			nieve_t.setText("x " + cantBolas);
+			moto_t.setText("x " + cantMotos);
 			
 			btnMoto.setDisable(cantMotos <= 0);
-			btnPeces.setDisable(cantPeces <= 0);
-			btnNieve.setDisable(cantBolas <= 0);
 			
 			// Dados especiales
 			int cantRapidos = jActual.getInventario().getDadosRapidos();
@@ -363,12 +351,10 @@ public class PantallaJuego {
 			btnDadoRapido.setDisable(cantRapidos <= 0);
 			btnDadoLento.setDisable(cantLentos <= 0);
 		} else {
-			peces_t.setText("Peces: -");
-			nieve_t.setText("Bolas de nieve: -");
-			moto_t.setText("Moto de Nieve: -");
+			peces_t.setText("x -");
+			nieve_t.setText("x -");
+			moto_t.setText("x -");
 			btnMoto.setDisable(true);
-			btnPeces.setDisable(true);
-			btnNieve.setDisable(true);
 			btnDadoRapido.setDisable(true);
 			btnDadoLento.setDisable(true);
 			lblCantRapido.setText("Rápido: -");
@@ -1418,8 +1404,6 @@ public class PantallaJuego {
 		// Animar el movimiento
 		dado.setDisable(true);
 		btnMoto.setDisable(true);
-		btnPeces.setDisable(true);
-		btnNieve.setDisable(true);
 		
 		int posVisualFinal = Math.max(0, Math.min(siguienteTrineo, 49));
 		animarMovimiento(indiceActual, posVisualFinal, () -> {
@@ -1448,45 +1432,7 @@ public class PantallaJuego {
 		});
 	}
 
-	// =========================================
-	//  HANDLER USAR PECES Y NIEVE
-	// =========================================
 
-	@FXML
-	private void handleUsarPeces() {
-		if (isPaused) return;
-		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
-		if (!(jugadorActual instanceof Pinguino)) return;
-		Pinguino p = (Pinguino) jugadorActual;
-		
-		if (!p.tieneItem("Pez")) {
-			agregarEvento("⚠️ " + p.getNombre() + " no tiene Peces.");
-			return;
-		}
-		
-		p.gastarItem("Pez", 1);
-		agregarEvento("───────────────────────");
-		agregarEvento("🐟 " + p.getNombre() + " usa un Pez!");
-		actualizarInventarioUI();
-	}
-
-	@FXML
-	private void handleUsarNieve() {
-		if (isPaused) return;
-		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
-		if (!(jugadorActual instanceof Pinguino)) return;
-		Pinguino p = (Pinguino) jugadorActual;
-		
-		if (!p.tieneItem("Bola de Nieve")) {
-			agregarEvento("⚠️ " + p.getNombre() + " no tiene Bolas de Nieve.");
-			return;
-		}
-		
-		p.gastarItem("Bola de Nieve", 1);
-		agregarEvento("───────────────────────");
-		agregarEvento("❄️ " + p.getNombre() + " usa una Bola de Nieve!");
-		actualizarInventarioUI();
-	}
 
 	// =========================================
 	//  ANIMACIÓN
@@ -1567,8 +1513,6 @@ public class PantallaJuego {
 			agregarEvento("═══════════════════════");
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
-			btnPeces.setDisable(true);
-			btnNieve.setDisable(true);
 		} else {
 			// Actualizar inventario para el SIGUIENTE jugador
 			actualizarInventarioUI();
@@ -1578,8 +1522,6 @@ public class PantallaJuego {
 			if (sigJ instanceof Foca) {
 				dado.setDisable(true);
 				btnMoto.setDisable(true);
-				btnPeces.setDisable(true);
-				btnNieve.setDisable(true);
 				cpuPauseTransition = new PauseTransition(Duration.millis(1500));
 				cpuPauseTransition.setOnFinished(e -> {
 					currentAnimations.remove(cpuPauseTransition);
@@ -1742,8 +1684,6 @@ public class PantallaJuego {
 		if (jActual instanceof Foca) {
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
-			btnPeces.setDisable(true);
-			btnNieve.setDisable(true);
 			PauseTransition pausa = new PauseTransition(Duration.millis(1500));
 			pausa.setOnFinished(e -> handleDado(null));
 			pausa.play();

@@ -71,37 +71,48 @@
                     </VBox>
                 </VBox>
 
-                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_LEFT" translateY="55" translateX="-5">
+                <VBox alignment="CENTER" maxWidth="250" pickOnBounds="false" StackPane.alignment="CENTER_LEFT" translateY="55" translateX="15">
                     <padding>
-                        <Insets left="30" />
+                        <Insets left="20" right="20" />
                     </padding>
-                    <VBox spacing="10" styleClass="card">
-                        <Label fx:id="inventarioTitulo" styleClass="card-title" text="Inventario - Jugador 1" />
-
+                    <VBox spacing="25" alignment="CENTER" styleClass="inventory-glass-panel">
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED">
                             <content>
-                                <VBox spacing="10">
+                                <VBox spacing="25" alignment="CENTER">
                                     <padding>
-                                        <Insets bottom="6" left="6" right="6" top="6" />
+                                        <Insets bottom="15" left="15" right="15" top="15" />
                                     </padding>
 
-                                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                        <Text fx:id="peces_t" styleClass="stat" text="Peces: 0" />
-                                        <Region HBox.hgrow="ALWAYS" />
-                                        <Button fx:id="btnPeces" onAction="#handleUsarPeces" text="Usar" />
-                                    </HBox>
+                                    <VBox alignment="CENTER" spacing="5" styleClass="inventory-item-row">
+                                        <ImageView fitWidth="160" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../imagenes/Peces.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Text fx:id="peces_t" style="-fx-font-size: 30px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
+                                    </VBox>
 
-                                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                        <Text fx:id="nieve_t" styleClass="stat" text="Bolas de nieve: 0" />
-                                        <Region HBox.hgrow="ALWAYS" />
-                                        <Button fx:id="btnNieve" onAction="#handleUsarNieve" text="Usar" />
-                                    </HBox>
+                                    <VBox alignment="CENTER" spacing="5" styleClass="inventory-item-row">
+                                        <ImageView fitWidth="160" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../imagenes/Botón bolas de nieve.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Text fx:id="nieve_t" style="-fx-font-size: 30px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
+                                    </VBox>
 
-                                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="row">
-                                        <Text fx:id="moto_t" styleClass="stat" text="Moto de Nieve: 0" />
-                                        <Region HBox.hgrow="ALWAYS" />
-                                        <Button fx:id="btnMoto" onAction="#handleUsarMoto" text="Usar" />
-                                    </HBox>
+                                    <VBox alignment="CENTER" spacing="5" styleClass="inventory-item-row">
+                                        <Button fx:id="btnMoto" onAction="#handleUsarMoto" styleClass="inventory-action-button">
+                                            <graphic>
+                                                <ImageView fitWidth="160" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../imagenes/Botón motos de nieve.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                        <Text fx:id="moto_t" style="-fx-font-size: 30px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
+                                    </VBox>
 
                                 </VBox>
                             </content>

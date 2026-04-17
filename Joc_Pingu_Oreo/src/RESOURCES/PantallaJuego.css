@@ -147,6 +147,45 @@
     -fx-scale-y: 0.95;
 }
 
+/* INVENTORY REDESIGN */
+.inventory-glass-panel {
+    -fx-background-color: linear-gradient(to bottom right, rgba(130, 200, 255, 0.15), rgba(255, 255, 255, 0.05));
+    -fx-background-radius: 25;
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0, 50, 100, 0.2), 20, 0.1, 0, 8);
+}
+
+.inventory-item-row {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.inventory-item-row:hover {
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+    -fx-effect: dropshadow(gaussian, rgba(150, 220, 255, 0.6), 15, 0.2, 0, 0);
+}
+
+.inventory-action-button {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 3);
+}
+
+.inventory-action-button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(100, 200, 255, 0.8), 20, 0.3, 0, 0);
+}
+
+.inventory-action-button:pressed {
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+}
+
 /* SCROLL */
 .objects-scroll {
     -fx-background-color: transparent;
