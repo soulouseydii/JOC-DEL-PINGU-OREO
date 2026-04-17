@@ -108,6 +108,11 @@ public class PantallaJuego {
 	@FXML private StackPane crushImageOverlay;
 	@FXML private ImageView crushImage;
 
+	// Chest event overlay (cofre del evento)
+	@FXML private StackPane chestEventOverlay;
+	@FXML private ImageView chestEventImage;
+	@FXML private Label chestItemLabel;
+
 	// Tablero y fichas
 	@FXML private GridPane tablero;
 	@FXML private Circle P1;
@@ -698,6 +703,27 @@ public class PantallaJuego {
 		
 		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
 		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
+
+		// Detectar si la casilla pisada es un Evento (para la animación del cofre)
+		boolean esEvento = false;
+		String itemObtenido = null;
+		if (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size()) {
+			Casilla casillaObj = gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada);
+			if (casillaObj instanceof Evento && jugadorActual instanceof Pinguino && diffInv != null) {
+				esEvento = true;
+				// Determinar qué objeto se obtuvo
+				if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
+				else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
+				else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez(ces)!";
+				else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
+				else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
+				else itemObtenido = "📦 Inventario lleno";
+			}
+		}
+
+		// Guardar variables para las lambdas
+		final boolean esEventoFinal = esEvento;
+		final String itemObtenidoFinal = itemObtenido;
 		
 		// Animación del movimiento del jugador (saltos parabólicos)
 		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
@@ -706,22 +732,37 @@ public class PantallaJuego {
 		if (casillaPisada >= 0 && posVisualCasilla != posVisualFinal) {
 			// HAY EFECTO de casilla (retroceso o avance): animación en 2 pasos
 			animarMovimiento(indiceActual, posVisualCasilla, () -> {
-				PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
-				pausaEfecto.setOnFinished(pausaEvt -> {
-					currentAnimations.remove(pausaEfecto);
-					animarMovimiento(indiceActual, posVisualFinal, () -> {
-						actualizarTodasLasFichas();
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+				// Si es evento, mostrar cofre antes de animar el efecto de casilla
+				Runnable continuarConEfecto = () -> {
+					PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
+					pausaEfecto.setOnFinished(pausaEvt -> {
+						currentAnimations.remove(pausaEfecto);
+						animarMovimiento(indiceActual, posVisualFinal, () -> {
+							actualizarTodasLasFichas();
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+						});
 					});
-				});
-				currentAnimations.add(pausaEfecto);
-				pausaEfecto.play();
+					currentAnimations.add(pausaEfecto);
+					pausaEfecto.play();
+				};
+				if (esEventoFinal) {
+					mostrarEventoCofre(itemObtenidoFinal, continuarConEfecto);
+				} else {
+					continuarConEfecto.run();
+				}
 			});
 		} else {
 			// Movimiento normal directo a la casilla final
 			animarMovimiento(indiceActual, posVisualFinal, () -> {
 				actualizarTodasLasFichas();
-				comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+				// Si es evento, mostrar cofre antes de continuar
+				if (esEventoFinal) {
+					mostrarEventoCofre(itemObtenidoFinal, () -> {
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+					});
+				} else {
+					comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+				}
 			});
 		}
 	}
@@ -832,6 +873,109 @@ public class PantallaJuego {
 
 		currentAnimations.add(secuencia);
 		secuencia.play();
+	}
+
+	// =========================================
+	//  ANIMACIÓN COFRE DE EVENTO
+	// =========================================
+
+	/**
+	 * Muestra la animación del cofre del evento cuando un pingüino cae en una casilla Evento.
+	 * Secuencia: cofre aparece → tiembla → se abre (escala) → item flota arriba → fade out.
+	 * @param itemNombre Texto del item obtenido que se muestra flotando sobre el cofre
+	 * @param alTerminar Runnable que se ejecuta al finalizar la animación
+	 */
+	private void mostrarEventoCofre(String itemNombre, Runnable alTerminar) {
+		// Preparar el overlay
+		chestEventImage.setOpacity(0);
+		chestEventImage.setScaleX(0.4);
+		chestEventImage.setScaleY(0.4);
+		chestEventImage.setRotate(0);
+		chestItemLabel.setOpacity(0);
+		chestItemLabel.setTranslateY(0);
+		chestItemLabel.setText(itemNombre != null ? itemNombre : "");
+		chestEventOverlay.setVisible(true);
+
+		// === PASO 1: Cofre aparece con zoom-in + fade ===
+		FadeTransition fadeIn = new FadeTransition(Duration.millis(500), chestEventImage);
+		fadeIn.setFromValue(0);
+		fadeIn.setToValue(1);
+
+		ScaleTransition zoomIn = new ScaleTransition(Duration.millis(500), chestEventImage);
+		zoomIn.setFromX(0.4);
+		zoomIn.setFromY(0.4);
+		zoomIn.setToX(1.0);
+		zoomIn.setToY(1.0);
+
+		ParallelTransition entrada = new ParallelTransition(fadeIn, zoomIn);
+
+		// === PASO 2: Cofre tiembla (shake) ===
+		SequentialTransition chestShake = new SequentialTransition();
+		for (int i = 0; i < 6; i++) {
+			RotateTransition r = new RotateTransition(Duration.millis(60), chestEventImage);
+			r.setToAngle(i % 2 == 0 ? 5 : -5);
+			chestShake.getChildren().add(r);
+		}
+		RotateTransition resetRotate = new RotateTransition(Duration.millis(60), chestEventImage);
+		resetRotate.setToAngle(0);
+		chestShake.getChildren().add(resetRotate);
+
+		// === PASO 3: Cofre se abre (escala vertical + brillo dorado) ===
+		ScaleTransition openY = new ScaleTransition(Duration.millis(350), chestEventImage);
+		openY.setToX(1.1);
+		openY.setToY(1.15);
+
+		ScaleTransition settle = new ScaleTransition(Duration.millis(200), chestEventImage);
+		settle.setToX(1.05);
+		settle.setToY(1.05);
+
+		// === PASO 4: Item aparece y flota hacia arriba ===
+		FadeTransition itemFadeIn = new FadeTransition(Duration.millis(400), chestItemLabel);
+		itemFadeIn.setFromValue(0);
+		itemFadeIn.setToValue(1);
+
+		TranslateTransition itemFloat = new TranslateTransition(Duration.millis(800), chestItemLabel);
+		itemFloat.setFromY(0);
+		itemFloat.setToY(-80);
+
+		ParallelTransition itemAppear = new ParallelTransition(itemFadeIn, itemFloat);
+
+		// === PASO 5: Mantener visible ===
+		PauseTransition hold = new PauseTransition(Duration.millis(1200));
+
+		// === PASO 6: Fade out de todo ===
+		FadeTransition fadeOutChest = new FadeTransition(Duration.millis(400), chestEventImage);
+		fadeOutChest.setToValue(0);
+
+		FadeTransition fadeOutItem = new FadeTransition(Duration.millis(400), chestItemLabel);
+		fadeOutItem.setToValue(0);
+
+		ParallelTransition fadeOutAll = new ParallelTransition(fadeOutChest, fadeOutItem);
+
+		// Secuencia completa
+		SequentialTransition secuenciaEvento = new SequentialTransition(
+			entrada,                                    // Cofre aparece
+			new PauseTransition(Duration.millis(200)),  // Breve pausa
+			chestShake,                                 // Cofre tiembla
+			openY,                                      // Cofre se abre
+			settle,                                     // Cofre se estabiliza
+			itemAppear,                                 // Item flota
+			hold,                                       // Mantener
+			fadeOutAll                                   // Desaparecer
+		);
+
+		secuenciaEvento.setOnFinished(e -> {
+			currentAnimations.remove(secuenciaEvento);
+			chestEventOverlay.setVisible(false);
+			chestEventImage.setScaleX(1);
+			chestEventImage.setScaleY(1);
+			chestEventImage.setRotate(0);
+			chestItemLabel.setTranslateY(0);
+			if (alTerminar != null) alTerminar.run();
+		});
+
+		currentAnimations.add(secuenciaEvento);
+		secuenciaEvento.play();
 	}
 
 	// =========================================

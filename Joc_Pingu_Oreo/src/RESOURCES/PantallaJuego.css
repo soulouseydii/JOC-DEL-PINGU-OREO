@@ -416,3 +416,16 @@
     -fx-background-color: rgba(0, 0, 0, 0.70);
 }
 
+/* CHEST EVENT OVERLAY (cofre del evento) */
+.chest-event-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.72);
+}
+
+/* Label that shows the obtained item floating upward */
+.chest-item-label {
+    -fx-font-size: 32px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(80, 200, 255, 0.95), 25, 0.6, 0, 0);
+}
+
