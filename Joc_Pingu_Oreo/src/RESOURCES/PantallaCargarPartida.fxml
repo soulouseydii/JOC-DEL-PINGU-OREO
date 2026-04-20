@@ -16,11 +16,11 @@
     <top>
         <VBox>
             <!-- Barra de título premium -->
-            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="36.0" style="-fx-background-color: linear-gradient(to right, rgba(5,15,35,0.98), rgba(5,55,90,0.95)); -fx-border-color: transparent transparent rgba(130,210,255,0.3) transparent; -fx-border-width: 0 0 1 0;">
+            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="40.0" style="-fx-background-color: rgba(2, 8, 20, 0.9); -fx-border-color: transparent transparent rgba(0, 200, 255, 0.5) transparent; -fx-border-width: 0 0 2 0;">
                 <padding>
                     <Insets bottom="6" left="16" right="8" top="6" />
                 </padding>
-                <Label text="❄  El Juego del Pinguino — Cargar Partida" style="-fx-text-fill: rgba(200,230,255,0.7); -fx-font-size: 13px; -fx-font-weight: bold;" />
+                <Label text="❄  EL JUEGO DEL PINGÜINO — CARGAR PARTIDA" style="-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-font-weight: 900; -fx-effect: dropshadow(gaussian, rgba(0, 200, 255, 0.5), 5, 0.2, 0, 0);" />
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox spacing="4" alignment="CENTER">
                     <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
@@ -78,14 +78,14 @@
             </VBox>
 
             <!-- Overlay de Confirmación -->
-            <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: transparent;">
-                <VBox alignment="CENTER" maxWidth="380" spacing="20" styleClass="dark-panel">
+            <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: rgba(0, 5, 15, 0.65);">
+                <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="dark-panel">
                     <padding>
-                        <Insets bottom="32" left="32" right="32" top="32" />
+                        <Insets bottom="40" left="36" right="36" top="40" />
                     </padding>
-                    <Label text="⚠" style="-fx-font-size: 36px;" />
-                    <Label text="¿ELIMINAR PARTIDA?" styleClass="panel-title" style="-fx-font-size: 20px;" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: #b0deff;" text="Esta acción no se puede deshacer." wrapText="true" />
+                    <Label text="⚠" style="-fx-font-size: 42px; -fx-text-fill: #ff6e6e; -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.6), 15, 0.5, 0, 0);" />
+                    <Label text="¿ELIMINAR PARTIDA?" styleClass="panel-title" style="-fx-font-size: 22px;" />
+                    <Label style="-fx-font-size: 15px; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-alignment: center;" text="Esta acción no se puede deshacer." wrapText="true" />
                     <HBox spacing="16" alignment="CENTER">
                         <Button onAction="#confirmarBorrado" styleClass="dark-btn-danger" text="Sí, eliminar" prefWidth="130" prefHeight="40" />
                         <Button onAction="#cancelarBorrado" styleClass="dark-btn-secondary" text="Cancelar" prefWidth="110" prefHeight="40" />

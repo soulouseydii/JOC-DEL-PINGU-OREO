@@ -13,11 +13,11 @@
 <BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaConfiguracionPartida">
     <top>
         <VBox>
-            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="36.0" style="-fx-background-color: linear-gradient(to right, rgba(5,15,35,0.98), rgba(5,55,90,0.95)); -fx-border-color: transparent transparent rgba(130,210,255,0.3) transparent; -fx-border-width: 0 0 1 0;">
+            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="40.0" style="-fx-background-color: rgba(2, 8, 20, 0.9); -fx-border-color: transparent transparent rgba(0, 200, 255, 0.5) transparent; -fx-border-width: 0 0 2 0;">
                 <padding>
                     <Insets bottom="6" left="16" right="8" top="6" />
                 </padding>
-                <Label text="❄  El Juego del Pinguino — Nueva Partida" style="-fx-text-fill: rgba(200,230,255,0.7); -fx-font-size: 13px; -fx-font-weight: bold;" />
+                <Label text="❄  EL JUEGO DEL PINGÜINO — NUEVA PARTIDA" style="-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-font-weight: 900; -fx-effect: dropshadow(gaussian, rgba(0, 200, 255, 0.5), 5, 0.2, 0, 0);" />
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox spacing="4" alignment="CENTER">
                     <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
@@ -51,17 +51,17 @@
                 <Region prefHeight="22" />
 
                 <!-- Nombre de la partida -->
-                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.04); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 14 24;">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #c8eeff;" text="Nombre de la partida:" />
-                    <javafx.scene.control.TextField fx:id="txtNombrePartida" promptText="Pingüino Aventura..." style="-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-text-fill: #d0f0ff; -fx-prompt-text-fill: rgba(160,210,255,0.35); -fx-padding: 7 10;" prefWidth="250"/>
+                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 12; -fx-border-color: rgba(100,200,255,0.5); -fx-border-radius: 12; -fx-border-width: 2; -fx-padding: 14 24;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #ffffff;" text="Nombre de la partida:" />
+                    <javafx.scene.control.TextField fx:id="txtNombrePartida" promptText="Pingüino Aventura..." styleClass="dark-field" prefWidth="250"/>
                 </HBox>
-                <Label fx:id="lblErrorNombre" text="⚠ Debes ponerle un nombre a la partida" managed="false" visible="false" style="-fx-text-fill: #ff6e6e; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
+                <Label fx:id="lblErrorNombre" text="⚠ Debes ponerle un nombre a la partida" managed="false" visible="false" style="-fx-text-fill: #ff6e6e; -fx-font-size: 13px; -fx-font-weight: 900; -fx-padding: 8 0 0 0; -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.5), 5, 0.2, 0, 0);"/>
                 
                 <Region prefHeight="15" />
 
                 <!-- Selector de número de jugadores -->
-                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.04); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 14 24;">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #c8eeff;" text="Número de Jugadores:" />
+                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 12; -fx-border-color: rgba(100,200,255,0.5); -fx-border-radius: 12; -fx-border-width: 2; -fx-padding: 14 24;">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #ffffff;" text="Número de Jugadores:" />
                     <ComboBox fx:id="comboNumJugadores" onAction="#onNumJugadoresChanged" prefWidth="110.0" styleClass="dark-combo" />
                 </HBox>
 

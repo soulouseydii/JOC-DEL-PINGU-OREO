@@ -189,27 +189,27 @@
 /* ================================================ */
 
 .dark-panel {
-    -fx-background-color: linear-gradient(to bottom right, rgba(8, 20, 50, 0.97), rgba(5, 50, 85, 0.97));
+    -fx-background-color: linear-gradient(to bottom right, rgba(6, 12, 28, 0.92), rgba(2, 25, 48, 0.96));
     -fx-background-radius: 28;
-    -fx-border-color: rgba(130, 210, 255, 0.45);
-    -fx-border-width: 1.5;
+    -fx-border-color: rgba(90, 200, 255, 0.7);
+    -fx-border-width: 2;
     -fx-border-radius: 28;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 50, 0.2, 0, 15);
+    -fx-effect: dropshadow(gaussian, rgba(0, 50, 100, 0.9), 60, 0.3, 0, 15);
     -fx-alignment: center;
 }
 
 /* PANEL TITLES */
 .panel-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 26px;
     -fx-font-weight: 900;
-    -fx-text-fill: #d0f0ff;
-    -fx-effect: dropshadow(gaussian, rgba(100,200,255,0.5), 10, 0.3, 0, 0);
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,200,255,0.8), 15, 0.4, 0, 0);
 }
 
 .panel-subtitle {
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: rgba(160, 210, 255, 0.6);
+    -fx-text-fill: rgba(220, 240, 255, 0.85);
 }
 
 .section-label {
@@ -229,36 +229,37 @@
 .form-label {
     -fx-font-size: 11px;
     -fx-font-weight: 900;
-    -fx-text-fill: rgba(130, 210, 255, 0.7);
+    -fx-text-fill: #ffffff;
     -fx-padding: 0 0 2 2;
 }
 
 .dark-field {
-    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 10;
-    -fx-border-color: rgba(130, 210, 255, 0.3);
+    -fx-border-color: rgba(100, 200, 255, 0.5);
     -fx-border-radius: 10;
-    -fx-border-width: 1.5;
-    -fx-text-fill: #d0f0ff;
-    -fx-prompt-text-fill: rgba(160, 210, 255, 0.35);
+    -fx-border-width: 2;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
     -fx-padding: 10 14;
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-background-image: none;
 }
 
 .dark-field:focused {
-    -fx-border-color: rgba(130, 210, 255, 0.75);
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-effect: dropshadow(gaussian, rgba(100, 200, 255, 0.25), 8, 0, 0, 0);
+    -fx-border-color: rgba(0, 220, 255, 1.0);
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-effect: dropshadow(gaussian, rgba(0, 180, 255, 0.6), 12, 0, 0, 0);
 }
 
 /* DARK LIST */
 .dark-list {
-    -fx-background-color: rgba(255, 255, 255, 0.04);
+    -fx-background-color: rgba(0, 30, 60, 0.4);
     -fx-background-radius: 12;
-    -fx-border-color: rgba(130, 210, 255, 0.25);
+    -fx-border-color: rgba(100, 200, 255, 0.5);
     -fx-border-radius: 12;
-    -fx-border-width: 1;
+    -fx-border-width: 2;
     -fx-background-image: none;
 }
 
@@ -276,38 +277,39 @@
 
 .dark-list .list-cell {
     -fx-background-color: transparent;
-    -fx-text-fill: #c8eeff;
-    -fx-padding: 10 14;
-    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 12 16;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-border-color: transparent transparent rgba(130,210,255,0.1) transparent;
+    -fx-border-color: transparent transparent rgba(150,220,255,0.2) transparent;
     -fx-border-width: 0 0 1 0;
 }
 
 .dark-list .list-cell:selected {
-    -fx-background-color: rgba(100, 180, 255, 0.2);
-    -fx-text-fill: white;
-    -fx-border-color: transparent transparent rgba(130,210,255,0.15) transparent;
+    -fx-background-color: linear-gradient(to right, rgba(0, 150, 255, 0.5), rgba(0, 100, 200, 0.3));
+    -fx-text-fill: #ffffff;
+    -fx-border-color: rgba(0, 220, 255, 0.8) transparent rgba(0, 220, 255, 0.8) transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,180,255,0.4), 10, 0, 0, 0);
 }
 
-.dark-list .list-cell:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.07);
+.dark-list .list-cell:hover:not(:selected) {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* DARK COMBO */
 .dark-combo {
-    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 10;
-    -fx-border-color: rgba(130, 210, 255, 0.35);
+    -fx-border-color: rgba(100, 200, 255, 0.5);
     -fx-border-radius: 10;
-    -fx-border-width: 1.5;
+    -fx-border-width: 2;
     -fx-background-image: none;
 }
 
 .dark-combo .list-cell {
     -fx-background-color: transparent;
-    -fx-text-fill: #d0f0ff;
-    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
 
@@ -316,90 +318,92 @@
 }
 
 .dark-combo .arrow {
-    -fx-background-color: rgba(130, 210, 255, 0.6);
+    -fx-background-color: #ffffff;
 }
 
 /* DARK BUTTONS */
 .dark-btn-primary {
     -fx-background-image: none;
-    -fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8));
+    -fx-background-color: linear-gradient(to bottom right, rgba(0, 150, 255, 0.8), rgba(0, 80, 180, 0.95));
     -fx-background-radius: 14;
-    -fx-border-color: rgba(130, 210, 255, 0.6);
-    -fx-border-width: 1.5;
+    -fx-border-color: rgba(255, 255, 255, 0.8);
+    -fx-border-width: 2;
     -fx-border-radius: 14;
-    -fx-text-fill: #d0f0ff;
+    -fx-text-fill: #ffffff;
     -fx-font-weight: 900;
-    -fx-font-size: 15px;
+    -fx-font-size: 16px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,100,255,0.3), 12, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0,180,255,0.6), 15, 0.4, 0, 4);
 }
 
 .dark-btn-primary:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(50,130,230,0.75), rgba(20,80,180,0.9));
-    -fx-border-color: rgba(180, 230, 255, 0.85);
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
-    -fx-effect: dropshadow(gaussian, rgba(0,150,255,0.55), 18, 0, 0, 4);
+    -fx-background-color: linear-gradient(to bottom right, rgba(20, 180, 255, 1.0), rgba(0, 100, 220, 1.0));
+    -fx-border-color: #ffffff;
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+    -fx-effect: dropshadow(gaussian, rgba(0,200,255,0.8), 20, 0.5, 0, 5);
 }
 
 .dark-btn-primary:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
 }
 
 .dark-btn-primary:disabled {
-    -fx-opacity: 0.35;
+    -fx-opacity: 0.3;
     -fx-cursor: default;
+    -fx-effect: none;
 }
 
 .dark-btn-secondary {
     -fx-background-image: none;
-    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 14;
-    -fx-border-color: rgba(130, 210, 255, 0.35);
-    -fx-border-width: 1.5;
+    -fx-border-color: rgba(200, 230, 255, 0.6);
+    -fx-border-width: 2;
     -fx-border-radius: 14;
-    -fx-text-fill: rgba(180, 220, 255, 0.85);
+    -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
 }
 
 .dark-btn-secondary:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.12);
-    -fx-border-color: rgba(180, 230, 255, 0.6);
-    -fx-scale-x: 1.02;
-    -fx-scale-y: 1.02;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: #ffffff;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
 
 .dark-btn-secondary:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
 }
 
 .dark-btn-danger {
     -fx-background-image: none;
-    -fx-background-color: linear-gradient(to bottom right, rgba(180,30,30,0.55), rgba(120,10,10,0.75));
+    -fx-background-color: linear-gradient(to bottom right, rgba(200, 20, 20, 0.7), rgba(120, 0, 0, 0.85));
     -fx-background-radius: 14;
-    -fx-border-color: rgba(255, 140, 140, 0.5);
-    -fx-border-width: 1.5;
+    -fx-border-color: rgba(255, 100, 100, 0.8);
+    -fx-border-width: 2;
     -fx-border-radius: 14;
-    -fx-text-fill: #ffc8c8;
+    -fx-text-fill: #ffffff;
     -fx-font-weight: 900;
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(200,0,0,0.25), 10, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(220,0,0,0.5), 12, 0.3, 0, 3);
 }
 
 .dark-btn-danger:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(220,50,50,0.75), rgba(160,20,20,0.9));
-    -fx-border-color: rgba(255, 180, 180, 0.8);
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
-    -fx-effect: dropshadow(gaussian, rgba(220,50,50,0.5), 16, 0, 0, 3);
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 40, 40, 0.85), rgba(180, 0, 0, 1.0));
+    -fx-border-color: #ffffff;
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.7), 20, 0.4, 0, 4);
 }
 
 .dark-btn-danger:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
 }
