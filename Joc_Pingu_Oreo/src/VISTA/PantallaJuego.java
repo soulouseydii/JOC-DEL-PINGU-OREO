@@ -275,6 +275,9 @@ public class PantallaJuego {
 	public void setNombrePartida(String nombrePartida) {
 		if (gestorPartida != null && gestorPartida.getPartida() != null) {
 			gestorPartida.getPartida().setNombrePartida(nombrePartida);
+		}
+	}
+
 	// =========================================
 	//  ASIGNACIÓN DE IMAGEN A FICHA
 	// =========================================
