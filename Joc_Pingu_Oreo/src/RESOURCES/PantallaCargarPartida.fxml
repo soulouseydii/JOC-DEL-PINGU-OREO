@@ -78,7 +78,7 @@
             </VBox>
 
             <!-- Overlay de Confirmación -->
-            <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: rgba(0, 0, 10, 0.75);">
+            <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: transparent;">
                 <VBox alignment="CENTER" maxWidth="380" spacing="20" styleClass="dark-panel">
                     <padding>
                         <Insets bottom="32" left="32" right="32" top="32" />
