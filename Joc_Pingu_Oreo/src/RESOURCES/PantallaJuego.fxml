@@ -294,6 +294,18 @@
         </ImageView>
         <Label fx:id="chestItemLabel" text="" styleClass="chest-item-label" StackPane.alignment="CENTER" translateY="-140" />
     </StackPane>
+    
+    <!-- Overlay de animación Casilla Sorpresa (varios interrogantes flotando) -->
+    <StackPane fx:id="surpriseEventOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="surprise-event-overlay">
+        <children>
+            <Label fx:id="surpriseMark1" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark2" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark3" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark4" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark5" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseResultLabel" text="" styleClass="surprise-result-label" StackPane.alignment="CENTER" />
+        </children>
+    </StackPane>
 
     <!-- Overlay de imagen Encuentro con Foca (aparece con animación) -->
     <StackPane fx:id="sealEncounterImageOverlay" alignment="CENTER" visible="false" mouseTransparent="true" styleClass="seal-image-overlay">

@@ -113,6 +113,11 @@ public class PantallaJuego {
 	@FXML private ImageView chestEventImage;
 	@FXML private Label chestItemLabel;
 
+	// Surprise event overlay (interrogantes)
+	@FXML private StackPane surpriseEventOverlay;
+	@FXML private Label surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5;
+	@FXML private Label surpriseResultLabel;
+
 	// Tablero y fichas
 	// Tablero y fichas (StackPane para poder contener imagen o forma según el tipo)
 	@FXML private GridPane tablero;
@@ -150,6 +155,7 @@ public class PantallaJuego {
 	private Image imgSueloQuebradizo;
 	private Image imgOso;
 	private Image imgEvento;
+	private Image imgSorpresa;
 
 	// Imagen del pingüino
 	private Image imgPinguino;
@@ -171,6 +177,7 @@ public class PantallaJuego {
 			imgSueloQuebradizo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_SueloQuebradizo.png"));
 			imgOso = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_oso.png"));
 			imgEvento = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_evento.png"));
+			imgSorpresa = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_sorpresa.png"));
 		} catch (Exception e) {
 			System.out.println("Error al cargar imágenes de las casillas: " + e.getMessage());
 		}
@@ -450,6 +457,7 @@ public class PantallaJuego {
 			case "SueloQuebradizo": return imgSueloQuebradizo != null ? imgSueloQuebradizo : imgNormal;
 			case "Oso": return imgOso != null ? imgOso : imgNormal;
 			case "Evento": return imgEvento != null ? imgEvento : imgNormal;
+			case "Sorpresa": return imgSorpresa != null ? imgSorpresa : imgNormal;
 			case "Normal":
 			default: return imgNormal;
 		}
@@ -737,6 +745,7 @@ public class PantallaJuego {
 
 		// Capturar inventario ANTES del turno para detectar qué se ganó
 		int pecesAntes = 0, bolasAntes = 0, motosAntes = 0, rapidosAntes = 0, lentosAntes = 0;
+		int turnosBloqueadaAntes = 0;
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino p = (Pinguino) jugadorActual;
 			pecesAntes    = p.contarItem("Pez");
@@ -744,6 +753,8 @@ public class PantallaJuego {
 			motosAntes    = p.contarItem("Moto de Nieve");
 			rapidosAntes  = p.getInv().getDadosRapidos();
 			lentosAntes   = p.getInv().getDadosLentos();
+		} else if (jugadorActual instanceof Foca) {
+			turnosBloqueadaAntes = ((Foca) jugadorActual).getTurnosBloqueada();
 		}
 
 		gestorPartida.ejecutarTurnoCompleto(dadoEspecial);
@@ -768,25 +779,70 @@ public class PantallaJuego {
 		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
 		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
 
-		// Detectar si la casilla pisada es un Evento (para la animación del cofre)
+		// Detectar si la casilla pisada es un Evento/Sorpresa (para la animación del cofre o interrogantes)
 		boolean esEvento = false;
+		boolean esSorpresa = false;
 		String itemObtenido = null;
 		if (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size()) {
 			Casilla casillaObj = gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada);
-			if (casillaObj instanceof Evento && jugadorActual instanceof Pinguino && diffInv != null) {
-				esEvento = true;
-				// Determinar qué objeto se obtuvo
-				if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
-				else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
-				else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
-				else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola de Nieve!";
-				else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
-				else itemObtenido = "📦 Inventario lleno";
+			
+			if (casillaObj instanceof Evento || casillaObj instanceof Sorpresa) {
+				// DETERMINAR SI ACTIVAR ANIMACION Y QUÉ TEXTO MOSTRAR
+				
+				if (casillaObj instanceof Evento && jugadorActual instanceof Pinguino) {
+					esEvento = true;
+					// Determinar qué objeto se obtuvo buscando en diffInv
+					if (diffInv != null && (diffInv[0]>0 || diffInv[1]>0 || diffInv[2]>0 || diffInv[3]>0 || diffInv[4]>0)) {
+						if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
+						else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
+						else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+						else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola de Nieve!";
+						else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
+					} else {
+						itemObtenido = "📦 Inventario lleno";
+					}
+				} else if (casillaObj instanceof Sorpresa) {
+					// Lógica para SORPRESA (Pinguino o Foca)
+					esSorpresa = true; // Siempre mostramos interrogantes al caer aquí
+					
+					if (jugadorActual instanceof Pinguino) {
+						if (diffInv != null && (diffInv[0]>0 || diffInv[1]>0 || diffInv[2]>0 || diffInv[3]>0 || diffInv[4]>0)) {
+							if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
+							else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
+							else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+							else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
+							else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
+						} else if (jugadorActual.getPosicion() > casillaPisada) {
+							itemObtenido = "🛷 ¡Un Trineo!";
+						} else if (jugadorActual.getPosicion() < casillaPisada) {
+							if (jugadorActual.getPosicion() == 0) itemObtenido = "🐻 ¡El OSO!";
+							else itemObtenido = "🕳️ ¡Un Agujero!";
+						} else if (jugadorActual.getTurnosPerdidos() > 0) {
+							itemObtenido = "🧊 ¡Atascado!";
+						} else {
+							itemObtenido = "❓ ¡Nada!";
+						}
+					} else if (jugadorActual instanceof Foca) {
+						Foca f = (Foca) jugadorActual;
+						if (f.getPosicion() > casillaPisada) {
+							itemObtenido = "↗️ ¡Impulso Accidental!";
+						} else if (f.getPosicion() < casillaPisada) {
+							if (f.getPosicion() == 0) itemObtenido = "🐻 ¡Susto del Oso!";
+							else itemObtenido = "🕳️ ¡Agujero!";
+						} else if (f.getTurnosBloqueada() > turnosBloqueadaAntes) {
+							if (f.getTurnosBloqueada() - turnosBloqueadaAntes == 1) itemObtenido = "🐟 ¡Muchos Peces!";
+							else itemObtenido = "❄️ ¡Trampa de Nieve!";
+						} else {
+							itemObtenido = "❓ ¡Nada!";
+						}
+					}
+				}
 			}
 		}
 
 		// Guardar variables para las lambdas
 		final boolean esEventoFinal = esEvento;
+		final boolean esSorpresaFinal = esSorpresa;
 		final String itemObtenidoFinal = itemObtenido;
 		
 		// Animación del movimiento del jugador (saltos parabólicos)
@@ -811,6 +867,8 @@ public class PantallaJuego {
 				};
 				if (esEventoFinal) {
 					mostrarEventoCofre(itemObtenidoFinal, continuarConEfecto);
+				} else if (esSorpresaFinal) {
+					mostrarEventoSorpresa(itemObtenidoFinal, continuarConEfecto);
 				} else {
 					continuarConEfecto.run();
 				}
@@ -822,6 +880,10 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de continuar
 				if (esEventoFinal) {
 					mostrarEventoCofre(itemObtenidoFinal, () -> {
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+					});
+				} else if (esSorpresaFinal) {
+					mostrarEventoSorpresa(itemObtenidoFinal, () -> {
 						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 					});
 				} else {
@@ -1036,6 +1098,78 @@ public class PantallaJuego {
 
 		currentAnimations.add(secuenciaEvento);
 		secuenciaEvento.play();
+	}
+
+	/**
+	 * Muestra una animación especial para la casilla Sorpresa:
+	 * Varios interrogantes (?) flotando y un texto central con el resultado.
+	 */
+	private void mostrarEventoSorpresa(String resultadoTexto, Runnable alTerminar) {
+		// Resetear estado
+		surpriseEventOverlay.setVisible(true);
+		surpriseResultLabel.setText(resultadoTexto);
+		surpriseResultLabel.setOpacity(0);
+		surpriseResultLabel.setScaleX(0.5);
+		surpriseResultLabel.setScaleY(0.5);
+
+		Label[] marks = {surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5};
+		ParallelTransition marksAnim = new ParallelTransition();
+
+		for (int i = 0; i < marks.length; i++) {
+			Label mark = marks[i];
+			mark.setOpacity(0);
+			mark.setTranslateX((Math.random() - 0.5) * 600);
+			mark.setTranslateY((Math.random() - 0.5) * 400);
+			mark.setRotate((Math.random() - 0.5) * 60);
+
+			FadeTransition fi = new FadeTransition(Duration.millis(400), mark);
+			fi.setToValue(0.4);
+
+			TranslateTransition tt = new TranslateTransition(Duration.millis(1500), mark);
+			tt.setByY((Math.random() - 0.5) * 100);
+			tt.setByX((Math.random() - 0.5) * 100);
+			tt.setCycleCount(1);
+
+			RotateTransition rt = new RotateTransition(Duration.millis(1500), mark);
+			rt.setByAngle((Math.random() - 0.5) * 40);
+
+			marksAnim.getChildren().addAll(fi, tt, rt);
+		}
+
+		// Animación del texto central
+		FadeTransition textFade = new FadeTransition(Duration.millis(500), surpriseResultLabel);
+		textFade.setDelay(Duration.millis(300));
+		textFade.setToValue(1);
+
+		ScaleTransition textZoom = new ScaleTransition(Duration.millis(500), surpriseResultLabel);
+		textZoom.setDelay(Duration.millis(300));
+		textZoom.setToX(1.0);
+		textZoom.setToY(1.0);
+		
+		ParallelTransition textAnim = new ParallelTransition(textFade, textZoom);
+
+		// Pausa para leer
+		PauseTransition hold = new PauseTransition(Duration.millis(1800));
+
+		// Desvanecer todo
+		FadeTransition fadeOut = new FadeTransition(Duration.millis(500), surpriseEventOverlay);
+		fadeOut.setToValue(0);
+
+		SequentialTransition total = new SequentialTransition(
+			new ParallelTransition(marksAnim, textAnim),
+			hold,
+			fadeOut
+		);
+
+		total.setOnFinished(e -> {
+			currentAnimations.remove(total);
+			surpriseEventOverlay.setVisible(false);
+			surpriseEventOverlay.setOpacity(1); // Reset para la próxima vez
+			if (alTerminar != null) alTerminar.run();
+		});
+
+		currentAnimations.add(total);
+		total.play();
 	}
 
 	// =========================================
@@ -1696,6 +1830,41 @@ public class PantallaJuego {
 							agregarEvento("   ↪ ¡Ha encontrado una Moto de Nieve! 🏍️");
 						else
 							agregarEvento("   ↪ El inventario está lleno, no cabe nada.");
+					}
+					break;
+				case "Sorpresa":
+					agregarEvento("❓ ¡CASILLA SORPRESA en la casilla " + posicion + "!");
+					if (jugador instanceof Pinguino) {
+						Pinguino p = (Pinguino) jugador;
+						if (diffInv != null && (diffInv[0]>0 || diffInv[1]>0 || diffInv[2]>0 || diffInv[3]>0 || diffInv[4]>0)) {
+							// Caso Items
+							if (diffInv[3] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡DADO RÁPIDO! 🎲⚡");
+							else if (diffInv[4] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡DADO LENTO! 🎲🐢");
+							else if (diffInv[0] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡Pez! 🐟");
+							else if (diffInv[1] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡" + diffInv[1] + " Bola(s) de Nieve! ❄️");
+							else if (diffInv[2] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡Moto de Nieve! 🏍️");
+						} else if (p.getPosicion() > posicion) {
+							agregarEvento("   ↪ ¡Sorpresa! ¡Has encontrado un TRINEO! 🛷");
+							agregarEvento("      ↪ Avanza hasta la casilla " + p.getPosicion());
+						} else if (p.getPosicion() < posicion && p.getPosicion() >= 0) {
+							if (p.getPosicion() == 0)
+								agregarEvento("   ↪ ¡Sorpresa! ¡Un OSO! 🐻 Vuelve a Inicio.");
+							else
+								agregarEvento("   ↪ ¡Sorpresa! ¡Un AGUJERO! 🕳️ Retrocede a la casilla " + p.getPosicion());
+						} else if (p.getTurnosPerdidos() > 0) {
+							agregarEvento("   ↪ ¡Sorpresa! ¡SUELO QUEBRADIZO! 🧊");
+							agregarEvento("      ↪ Te has quedado atascado. Pierdes 1 turno.");
+						} else {
+							agregarEvento("   ↪ ¡Sorpresa! ...pero no pasa nada. Es una casilla normal. 🧊");
+						}
+					} else if (jugador instanceof Foca) {
+						if (jugador.getPosicion() == 0 && posicion != 0) {
+							agregarEvento("   ↪ 🐻 ¡Un Oso asusta a la Foca! Vuelve a Inicio.");
+						} else {
+							// Para foca, no tenemos diffInv de items, asique miramos diferencias de posicion u otros efectos
+							// pero por simplicidad mostramos mensaje generico o el resultado directo
+							agregarEvento("   ↪ ¡La foca experimenta un evento inesperado!");
+						}
 					}
 					break;
 				default:
