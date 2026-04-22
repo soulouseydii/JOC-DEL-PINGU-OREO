@@ -154,13 +154,14 @@ public class PantallaJuego {
 	private Image imgTrineo;
 	private Image imgSueloQuebradizo;
 	private Image imgOso;
+	private Image imgAtaqueOso;
 	private Image imgEvento;
 	private Image imgSorpresa;
 
 	// Imagen del pingüino (fallback por defecto)
 	private Image imgPinguinoDefault;
 	private Image imgFocaDefault;
-	private static final double FICHA_SIZE = 50.0;
+	private static final double FICHA_SIZE = 70.0;
 	private static final double FICHA_HALF = FICHA_SIZE / 2.0;
 
 	// =========================================
@@ -177,6 +178,7 @@ public class PantallaJuego {
 			imgTrineo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_trineo.png"));
 			imgSueloQuebradizo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_SueloQuebradizo.png"));
 			imgOso = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_oso.png"));
+			imgAtaqueOso = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_ataque_oso.png"));
 			imgEvento = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_evento.png"));
 			imgSorpresa = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_sorpresa.png"));
 		} catch (Exception e) {
@@ -860,6 +862,9 @@ public class PantallaJuego {
 		final boolean esEventoFinal = esEvento;
 		final boolean esSorpresaFinal = esSorpresa;
 		final String itemObtenidoFinal = itemObtenido;
+		final boolean esOsoFinal = (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() && 
+			(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass().getSimpleName().equals("Oso") ||
+			(itemObtenido != null && (itemObtenido.contains("Oso") || itemObtenido.contains("OSO")))));
 		
 		// Animación del movimiento del jugador (saltos parabólicos)
 		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
@@ -870,16 +875,20 @@ public class PantallaJuego {
 			animarMovimiento(indiceActual, posVisualCasilla, () -> {
 				// Si es evento, mostrar cofre antes de animar el efecto de casilla
 				Runnable continuarConEfecto = () -> {
-					PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
-					pausaEfecto.setOnFinished(pausaEvt -> {
-						currentAnimations.remove(pausaEfecto);
-						animarMovimiento(indiceActual, posVisualFinal, () -> {
-							actualizarTodasLasFichas();
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+					if (esOsoFinal) {
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
+					} else {
+						PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
+						pausaEfecto.setOnFinished(pausaEvt -> {
+							currentAnimations.remove(pausaEfecto);
+							animarMovimiento(indiceActual, posVisualFinal, () -> {
+								actualizarTodasLasFichas();
+								comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+							});
 						});
-					});
-					currentAnimations.add(pausaEfecto);
-					pausaEfecto.play();
+						currentAnimations.add(pausaEfecto);
+						pausaEfecto.play();
+					}
 				};
 				if (esEventoFinal) {
 					mostrarEventoCofre(itemObtenidoFinal, continuarConEfecto);
@@ -899,14 +908,72 @@ public class PantallaJuego {
 						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 					});
 				} else if (esSorpresaFinal) {
-					mostrarEventoSorpresa(itemObtenidoFinal, () -> {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
-					});
+					if (esOsoFinal) {
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
+					} else {
+						mostrarEventoSorpresa(itemObtenidoFinal, () -> {
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+						});
+					}
 				} else {
-					comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+					if (esOsoFinal) {
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
+					} else {
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+					}
 				}
 			});
 		}
+	}
+
+	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual) {
+		ImageView imgViewCasilla = getImageViewCasilla(indiceCasilla);
+		Image imgOsoAntigua = null;
+		
+		if (imgViewCasilla != null && imgAtaqueOso != null) {
+			imgOsoAntigua = imgViewCasilla.getImage();
+			imgViewCasilla.setImage(imgAtaqueOso);
+			StackPane ficha = getFicha(indiceJugador);
+			TranslateTransition shake = new TranslateTransition(Duration.millis(50), ficha);
+			shake.setByX(8);
+			shake.setCycleCount(10);
+			shake.setAutoReverse(true);
+			shake.play();
+		}
+		
+		PauseTransition pausa = new PauseTransition(Duration.millis(1200));
+		final Image imgFinalBackup = imgOsoAntigua;
+		pausa.setOnFinished(e -> {
+			currentAnimations.remove(pausa);
+			if (imgViewCasilla != null && imgFinalBackup != null) {
+				imgViewCasilla.setImage(imgFinalBackup);
+			}
+			animarMovimiento(indiceJugador, posFinal, () -> {
+				actualizarTodasLasFichas();
+				comprobarAplastamientoYContinuar(jugadorActual, indiceJugador);
+			});
+		});
+		currentAnimations.add(pausa);
+		pausa.play();
+	}
+	
+	private ImageView getImageViewCasilla(int indexCasilla) {
+		int count = 0;
+		for (javafx.scene.Node node : tablero.getChildren()) {
+			if (TAG_CASILLA_TEXT.equals(node.getUserData())) {
+				if (count == indexCasilla) {
+					if (node instanceof StackPane) {
+						for (javafx.scene.Node child : ((StackPane) node).getChildren()) {
+							if (child instanceof ImageView) {
+								return (ImageView) child;
+							}
+						}
+					}
+				}
+				count++;
+			}
+		}
+		return null;
 	}
 
 	// =========================================
@@ -920,6 +987,13 @@ public class PantallaJuego {
 	 * Si no, continúa con comprobarFocaYFinalizar.
 	 */
 	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual) {
+        if (!(jugadorActual instanceof Foca)) {
+            // Un pingüino nunca aplasta empujando por el tablero
+            gestorPartida.getUltimosPinguinosAplastados().clear();
+            comprobarFocaYFinalizar(jugadorActual, indiceActual);
+            return;
+        }
+
 		ArrayList<Pinguino> aplastados = gestorPartida.getUltimosPinguinosAplastados();
 
 		if (aplastados != null && !aplastados.isEmpty()) {
@@ -1806,21 +1880,21 @@ public class PantallaJuego {
 					ficha.setTranslateY(0);
 				} else if (numOcupantes == 2) {
 					// 2 ocupantes: uno a la izq, otro a la der
-					ficha.setTranslateX(ocupanteIndex == 0 ? -12 : 12);
+					ficha.setTranslateX(ocupanteIndex == 0 ? -16 : 16);
 					ficha.setTranslateY(0);
 				} else if (numOcupantes == 3) {
 					// 3 ocupantes: triangulo
 					if (ocupanteIndex == 0) {
 						ficha.setTranslateX(0);
-						ficha.setTranslateY(-12);
+						ficha.setTranslateY(-16);
 					} else {
-						ficha.setTranslateX(ocupanteIndex == 1 ? -12 : 12);
-						ficha.setTranslateY(12);
+						ficha.setTranslateX(ocupanteIndex == 1 ? -16 : 16);
+						ficha.setTranslateY(16);
 					}
 				} else {
 					// 4 ocupantes: cuadrado
-					ficha.setTranslateX(ocupanteIndex % 2 == 0 ? -12 : 12);
-					ficha.setTranslateY(ocupanteIndex < 2 ? -12 : 12);
+					ficha.setTranslateX(ocupanteIndex % 2 == 0 ? -16 : 16);
+					ficha.setTranslateY(ocupanteIndex < 2 ? -16 : 16);
 				}
 			}
 		}

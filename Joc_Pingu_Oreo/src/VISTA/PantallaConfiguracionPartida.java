@@ -67,12 +67,12 @@ public class PantallaConfiguracionPartida {
         public TarjetaJugador(int numero) {
             root = new StackPane();
             root.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(8,20,50,0.97), rgba(5,50,85,0.97)); -fx-background-radius: 18; -fx-border-color: rgba(130,210,255,0.45); -fx-border-radius: 18; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.15, 0, 8);");
-            root.setPrefWidth(220);
+            root.setPrefWidth(280);
 
             bgImage = new javafx.scene.image.ImageView();
             bgImage.setOpacity(0.12);
-            bgImage.setFitWidth(400);
-            bgImage.setFitHeight(400);
+            bgImage.setFitWidth(500);
+            bgImage.setFitHeight(500);
             bgImage.setPreserveRatio(true);
 
             StackPane bgContainer = new StackPane(bgImage);
@@ -137,7 +137,7 @@ public class PantallaConfiguracionPartida {
             btnRight.setStyle("-fx-cursor: hand; -fx-font-weight: 900; -fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-text-fill: #d0f0ff; -fx-padding: 4 12;");
             
             lblSkinActual = new Label("");
-            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-color: rgba(100,180,255,0.15); -fx-background-radius: 6; -fx-border-color: rgba(130,210,255,0.25); -fx-border-radius: 6; -fx-border-width: 1; -fx-text-fill: #c8eeff; -fx-font-size: 12px; -fx-min-width: 140; -fx-min-height: 120; -fx-alignment: center;");
+            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-color: rgba(100,180,255,0.15); -fx-background-radius: 6; -fx-border-color: rgba(130,210,255,0.25); -fx-border-radius: 6; -fx-border-width: 1; -fx-text-fill: #c8eeff; -fx-font-size: 12px; -fx-min-width: 180; -fx-min-height: 160; -fx-alignment: center;");
             
             Label lblSkinHeader = new Label("SKIN:");
             lblSkinHeader.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
@@ -285,8 +285,8 @@ public class PantallaConfiguracionPartida {
                         String ruta = currentSkinType.equals("Pinguino") ? "/imagenes/pinguino/" + nuevaSkin : "/imagenes/foca/" + nuevaSkin;
                         javafx.scene.image.Image img = new javafx.scene.image.Image(getClass().getResourceAsStream(ruta));
                         javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(img);
-                        iv.setFitWidth(100);
-                        iv.setFitHeight(100);
+                        iv.setFitWidth(150);
+                        iv.setFitHeight(150);
                         iv.setPreserveRatio(true);
                         lblSkinActual.setGraphic(iv);
                         lblSkinActual.setText("");

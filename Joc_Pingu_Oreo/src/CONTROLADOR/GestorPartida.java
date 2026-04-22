@@ -133,15 +133,20 @@ public class GestorPartida {
             casillaFoca.realizarAccion(partida, f);
             
             // REGLA: Detectar pingüinos en casillas INTERMEDIAS (aplastados)
-            // (entre posicionAnterior+1 y posicionDado-1, NO la casilla final)
             // El efecto se aplica desde la VISTA después de la animación visual.
             ultimosPinguinosAplastados.clear();
-            for (int casilla = posicionAnterior + 1; casilla < ultimaCasillaPisada; casilla++) {
-                for (Jugador j : partida.getJugadores()) {
-                    if (j instanceof Pinguino && j.getPosicion() == casilla) {
-                        Pinguino p = (Pinguino) j;
-                        System.out.println("¡La foca ha pasado por encima de " + p.getNombre() + " en la casilla " + casilla + "!");
-                        ultimosPinguinosAplastados.add(p);
+            // SOLO evaluamos si la foca avanzó realmente (y no retrocedió por un oso u agujero)
+            if (f.getPosicion() > posicionAnterior) {
+                for (int casilla = posicionAnterior + 1; casilla < ultimaCasillaPisada; casilla++) {
+                    for (Jugador j : partida.getJugadores()) {
+                        if (j instanceof Pinguino && j.getPosicion() == casilla) {
+                            Pinguino p = (Pinguino) j;
+                            // REGLA: Solo aplasta si el pingüino tiene al menos un objeto o dado especial
+                            if (p.contarTotalObjetos() > 0 || p.getInv().getTotalDadosEspeciales() > 0) {
+                                System.out.println("¡La foca ha pasado por encima de " + p.getNombre() + " en la casilla " + casilla + "!");
+                                ultimosPinguinosAplastados.add(p);
+                            }
+                        }
                     }
                 }
             }
