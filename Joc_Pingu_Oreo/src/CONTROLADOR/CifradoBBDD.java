@@ -27,9 +27,7 @@ public class CifradoBBDD {
         if (textoCifrado == null || textoCifrado.trim().isEmpty()) return textoCifrado;
         try {
             SecretKeySpec secretKey = new SecretKeySpec(CLAVE_SECRETA.getBytes(StandardCharsets.UTF_8), "AES");
-            Cipher cipher = Cipher.getInstance("AES/DECRYPT_MODE", secretKey); // Error in previous version: should be Cipher.DECRYPT_MODE
-            // Wait, previous version was correct in the logic but the string was AES/ECB/PKCS5Padding
-            cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             byte[] decodificado = Base64.getDecoder().decode(textoCifrado);
             byte[] bytesDesencriptados = cipher.doFinal(decodificado);
@@ -44,7 +42,7 @@ public class CifradoBBDD {
     }
 
     public static int desencriptarNumero(int numeroOfuscado) {
-        if (numeroOfuscado < 500) { // Fallback para partidas no encriptadas
+        if (numeroOfuscado < 500) { 
             return numeroOfuscado; 
         }
         return numeroOfuscado ^ MASCARA_NUMERICA;

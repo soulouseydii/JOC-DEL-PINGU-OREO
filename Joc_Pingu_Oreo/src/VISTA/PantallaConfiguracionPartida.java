@@ -15,6 +15,8 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import MODELO.*;
 import CONTROLADOR.GestorAnimacionesVistas;
 
@@ -38,7 +40,21 @@ public class PantallaConfiguracionPartida {
     private List<TarjetaJugador> tarjetasActivas = new ArrayList<>();
 
     private boolean isSkinUnica(String skin) {
+        // Solo el pingüino default y la foca default se pueden repetir
         return !skin.equals("pinguino.png") && !skin.equals("foca_default.png");
+    }
+
+    private void notificarNuevasSkins() {
+        for (TarjetaJugador tj : tarjetasActivas) {
+            if (!tj.estaListo) {
+                // Si su skin actual acaba de ser ocupada por otro, la movemos a la siguiente disponible
+                String skinActual = tj.getCurrentSkin();
+                if (skinsSeleccionadas.contains(skinActual) && isSkinUnica(skinActual)) {
+                    tj.cambiarSkin(1);
+                }
+                tj.actualizarSkinDisplay();
+            }
+        }
     }
 
     private class TarjetaJugador {
@@ -147,6 +163,7 @@ public class PantallaConfiguracionPartida {
                 currentSkinType = isCpu ? "Foca" : "Pinguino";
                 currentSkinIndex = 0;
                 actualizarSkinDisplay();
+                
                 if (isCpu) {
                     estaListo = true;
                     btnListo.setDisable(true);
@@ -189,7 +206,6 @@ public class PantallaConfiguracionPartida {
                     cajaCarousel.setDisable(true);
                     lblEstado.setText("✓ LISTO");
                     lblEstado.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
-                    skinsSeleccionadas.add(getCurrentSkin());
                     verificarTodosListos();
                 } else {
                     lblEstado.setText("Faltan datos");
@@ -197,9 +213,8 @@ public class PantallaConfiguracionPartida {
             });
 
             lblSelloListo = new Label("LISTO");
-            lblSelloListo.setStyle("-fx-font-size: 55px; -fx-font-weight: 900; -fx-text-fill: rgba(100, 255, 130, 0.9); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.95), 12, 0.6, 0, 0); -fx-background-color: rgba(100, 255, 130, 0.12); -fx-background-radius: 12; -fx-padding: 0 15; -fx-border-color: rgba(100, 255, 130, 0.25); -fx-border-width: 2; -fx-border-radius: 12;");
-            lblSelloListo.setRotate(-35);
-            lblSelloListo.setStyle("-fx-text-fill: rgba(34, 197, 94, 0.5); -fx-font-size: 40px; -fx-font-weight: 900; -fx-rotate: -20; -fx-border-color: rgba(34, 197, 94, 0.5); -fx-border-width: 4; -fx-padding: 5 15;");
+            lblSelloListo.setStyle("-fx-text-fill: rgba(34, 197, 94, 0.5); -fx-font-size: 40px; -fx-font-weight: 900; -fx-border-color: rgba(34, 197, 94, 0.5); -fx-border-width: 4; -fx-padding: 5 15; -fx-background-color: rgba(100, 255, 130, 0.05); -fx-background-radius: 8;");
+            lblSelloListo.setRotate(-20);
             lblSelloListo.setVisible(false);
 
             content.getChildren().addAll(lblTitulo, comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
@@ -210,14 +225,29 @@ public class PantallaConfiguracionPartida {
 
         private void cambiarSkin(int dir) {
             String[] skins = currentSkinType.equals("Pinguino") ? SKINS_PINGUINO : SKINS_FOCA;
-            currentSkinIndex = (currentSkinIndex + dir + skins.length) % skins.length;
+            int initialIndex = currentSkinIndex;
+            int attempts = 0;
+            
+            do {
+                currentSkinIndex = (currentSkinIndex + dir + skins.length) % skins.length;
+                attempts++;
+                // Buscamos una skin que no esté ocupada (si es única) o que sea la default
+            } while (skinsSeleccionadas.contains(skins[currentSkinIndex]) && isSkinUnica(skins[currentSkinIndex]) && attempts < skins.length);
+            
             actualizarSkinDisplay();
         }
 
         private void actualizarSkinDisplay() {
             String skin = getCurrentSkin();
-            lblSkinActual.setGraphic(new javafx.scene.image.ImageView(new javafx.scene.image.Image("/imagenes/" + skin, 100, 100, true, true)));
-            bgImage.setImage(new javafx.scene.image.Image("/imagenes/" + skin));
+            String subfolder = currentSkinType.equals("Pinguino") ? "pinguino/" : "foca/";
+            String path = "/imagenes/" + subfolder + skin;
+            
+            try {
+                lblSkinActual.setGraphic(new javafx.scene.image.ImageView(new javafx.scene.image.Image(getClass().getResourceAsStream(path), 100, 100, true, true)));
+                bgImage.setImage(new javafx.scene.image.Image(getClass().getResourceAsStream(path)));
+            } catch (Exception e) {
+                System.err.println("No se pudo cargar la imagen: " + path);
+            }
         }
 
         public String getCurrentSkin() {
@@ -226,6 +256,7 @@ public class PantallaConfiguracionPartida {
         }
     }
 
+    @FXML
     public void initialize() {
         comboNumJugadores.getItems().addAll(2, 3, 4);
         comboNumJugadores.setValue(2);

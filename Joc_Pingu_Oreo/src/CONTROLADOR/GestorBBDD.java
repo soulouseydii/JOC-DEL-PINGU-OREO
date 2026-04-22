@@ -16,6 +16,13 @@ public class GestorBBDD {
         this.password = Main.DB_PASS;
     }
 
+    public String getUrlBBDD() { return urlBBDD; }
+    public void setUrlBBDD(String urlBBDD) { this.urlBBDD = urlBBDD; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
     private Connection getConexion() throws SQLException {
         return DriverManager.getConnection(this.urlBBDD, this.username, this.password);
     }
@@ -301,6 +308,7 @@ public class GestorBBDD {
             case "Agujero":         return new Agujero(posicion);
             case "Evento":          return new Evento(posicion);
             case "SueloQuebradizo": return new SueloQuebradizo(posicion);
+            case "Sorpresa":        return new Sorpresa(posicion);
             default:                return new Normal(posicion);
         }
     }

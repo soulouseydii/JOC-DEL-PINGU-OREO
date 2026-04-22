@@ -563,9 +563,8 @@ public class PantallaJuego {
 			saveMessageLabel.setText("Error: No se pudo guardar la partida.\nComprueba la base de datos.");
 			saveSuccessOverlay.setVisible(true);
 			GestorAnimacionesVistas.animarAparicionOverlay(saveSuccessOverlay);
-			mainContainer.setDisable(true);
 		}
-		}
+	}
 	
 
 	@FXML
