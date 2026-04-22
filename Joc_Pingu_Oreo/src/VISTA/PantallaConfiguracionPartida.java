@@ -241,13 +241,22 @@ public class PantallaConfiguracionPartida {
                         skinsSeleccionadas.add(getCurrentSkin());
                     }
                     lblSelloListo.setVisible(true);
+                    
+                    // Animación de impacto (asomarse desde grande a normal)
+                    javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(300), lblSelloListo);
+                    st.setFromX(2.5);
+                    st.setFromY(2.5);
+                    st.setToX(1.0);
+                    st.setToY(1.0);
+                    st.play();
+                    
                     notificarNuevasSkins();
                     verificarTodosListos();
                 }
             });
 
             lblSelloListo = new Label("LISTO");
-            lblSelloListo.setStyle("-fx-font-size: 45px; -fx-font-weight: 900; -fx-text-fill: rgba(100, 255, 130, 0.35); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 0);");
+            lblSelloListo.setStyle("-fx-font-size: 55px; -fx-font-weight: 900; -fx-text-fill: rgba(100, 255, 130, 0.9); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.95), 12, 0.6, 0, 0); -fx-background-color: rgba(100, 255, 130, 0.12); -fx-background-radius: 12; -fx-padding: 0 15; -fx-border-color: rgba(100, 255, 130, 0.25); -fx-border-width: 2; -fx-border-radius: 12;");
             lblSelloListo.setRotate(-35);
             lblSelloListo.setVisible(false);
             lblSelloListo.setMouseTransparent(true);
