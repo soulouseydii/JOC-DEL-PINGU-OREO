@@ -86,7 +86,7 @@ public class Sorpresa extends Casilla {
 			
 		} else if (jugador instanceof Foca) {
 			Foca f = (Foca) jugador;
-			int prob = random.nextInt(10);
+			int prob = random.nextInt(5); // Solo 5 posibilidades (Oso, Agujero, Suelo, Normal, Trineo)
 			
 			switch (prob) {
 				case 0:
@@ -107,22 +107,6 @@ public class Sorpresa extends Casilla {
 				case 4:
 					System.out.println("¡Sorpresa! La Foca cae en un Trineo! Avanza rápidamente.");
 					new Trineo(getPosicion()).realizarAccion(partida, f);
-					break;
-				case 5:
-					System.out.println("¡Sorpresa! La Foca encuentra un rastro de peces y pierde 1 turno comiendo.");
-					f.setTurnosBloqueada(f.getTurnosBloqueada() + 1);
-					break;
-				case 6:
-					System.out.println("¡Sorpresa! Una trampa de bolas de nieve cae sobre la foca, bloqueandola 2 turnos.");
-					f.setTurnosBloqueada(f.getTurnosBloqueada() + 2);
-					break;
-				case 7:
-				case 8:
-				case 9:
-					// Avanza accidentalmente 3 casillas
-					System.out.println("¡Sorpresa! La foca rebota en un bloque de hielo y avanza accidentalmente!!");
-					int nPos = f.getPosicion() + 3;
-					f.setPosicion(nPos > 49 ? 49 : nPos);
 					break;
 			}
 		}
