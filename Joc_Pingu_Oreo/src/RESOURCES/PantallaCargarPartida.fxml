@@ -4,95 +4,115 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 
-<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaCargarPartida">
-    <top>
-        <VBox>
-            <!-- Barra de título premium -->
-            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="40.0" style="-fx-background-color: rgba(2, 8, 20, 0.9); -fx-border-color: transparent transparent rgba(0, 200, 255, 0.5) transparent; -fx-border-width: 0 0 2 0;">
-                <padding>
-                    <Insets bottom="6" left="16" right="8" top="6" />
-                </padding>
-                <Label text="❄  EL JUEGO DEL PINGÜINO — CARGAR PARTIDA" style="-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-font-weight: 900; -fx-effect: dropshadow(gaussian, rgba(0, 200, 255, 0.5), 5, 0.2, 0, 0);" />
-                <Region HBox.hgrow="ALWAYS" />
-                <HBox spacing="4" alignment="CENTER">
-                    <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
-                    <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 12px;" text="⬜" />
-                    <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: rgba(200,50,50,0.3); -fx-text-fill: rgba(255,180,180,0.9); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 10; -fx-border-color: transparent; -fx-font-weight: bold;" text="✕" />
-                </HBox>
-            </HBox>
-        </VBox>
-    </top>
+<AnchorPane styleClass="screen" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaCargarPartida">
 
-    <center>
-        <StackPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, rgba(5,15,35,0.0), rgba(5,25,55,0.0));">
-            <padding>
-                <Insets bottom="40" left="40" right="40" top="30" />
-            </padding>
+    <!-- AURORA BOREAL -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" prefHeight="350">
+        <Region styleClass="aurora-path-1" />
+        <Region styleClass="aurora-path-2" />
+        <Region styleClass="aurora-path-3" />
+        <Region styleClass="aurora-path-4" />
+    </StackPane>
 
-            <!-- Panel principal -->
-            <VBox fx:id="panelCargar" alignment="CENTER" maxWidth="720" spacing="0" styleClass="dark-panel">
-                <padding>
-                    <Insets bottom="36" left="40" right="40" top="36" />
-                </padding>
+    <!-- HIELO INFERIOR -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" prefHeight="250">
+        <Region styleClass="ice-poly-1" />
+        <Region styleClass="ice-poly-2" />
+        <AnchorPane>
+            <Region styleClass="ice-poly-detail-1" layoutX="320" layoutY="60" prefWidth="50" prefHeight="35" />
+            <Region styleClass="ice-poly-detail-2" layoutX="600" layoutY="30" prefWidth="40" prefHeight="20" />
+            <Line startX="0" startY="0" endX="1920" endY="0" stroke="rgba(94,207,255,0.06)" layoutY="180"/>
+        </AnchorPane>
+    </StackPane>
 
-                <!-- Icono + Título -->
-                <VBox alignment="CENTER" spacing="6" style="-fx-padding: 0 0 24 0;">
-                    <ImageView fitWidth="90" fitHeight="90" preserveRatio="true">
-                        <image>
-                            <Image url="@../imagenes/icono_oreo.png" />
-                        </image>
-                    </ImageView>
-                    <Label text="CARGAR PARTIDA" styleClass="panel-title" />
-                    <Label text="Selecciona una partida guardada para continuar" styleClass="panel-subtitle" />
-                </VBox>
-
-                <!-- Separador decorativo -->
-                <Region prefHeight="1" maxWidth="400" style="-fx-background-color: rgba(130,210,255,0.25);" />
-                <Region prefHeight="20" />
-
-                <!-- Lista de partidas -->
-                <Label text="PARTIDAS DISPONIBLES" styleClass="section-label" />
-                <Region prefHeight="8" />
-                <ListView fx:id="listaPartidas" prefHeight="220.0" styleClass="dark-list" />
-
-                <Region prefHeight="24" />
-
-                <!-- Botones de acción -->
-                <HBox spacing="14" alignment="CENTER">
-                    <Button fx:id="btnCargar" onAction="#handleCargar" styleClass="dark-btn-primary" text="▶  Cargar Partida" prefWidth="180" prefHeight="44" />
-                    <Button fx:id="btnEliminar" onAction="#handleEliminar" styleClass="dark-btn-danger" text="🗑  Eliminar" prefWidth="140" prefHeight="44" />
-                </HBox>
-
-                <Region prefHeight="14" />
-
-                <!-- Botón volver -->
-                <Button fx:id="btnVolver" maxWidth="Infinity" onAction="#handleVolver" styleClass="dark-btn-secondary" text="← Volver al Menú Principal" prefHeight="40" />
-            </VBox>
-
-            <!-- Overlay de Confirmación -->
-            <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: rgba(0, 5, 15, 0.65);">
-                <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="dark-panel">
+    <BorderPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <top>
+            <VBox>
+                <!-- Barra de título -->
+                <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="40.0" style="-fx-background-color: rgba(2, 8, 20, 0.9); -fx-border-color: transparent transparent rgba(0, 200, 255, 0.5) transparent; -fx-border-width: 0 0 2 0;">
                     <padding>
-                        <Insets bottom="40" left="36" right="36" top="40" />
+                        <Insets bottom="6" left="16" right="8" top="6" />
                     </padding>
-                    <Label text="⚠" style="-fx-font-size: 42px; -fx-text-fill: #ff6e6e; -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.6), 15, 0.5, 0, 0);" />
-                    <Label text="¿ELIMINAR PARTIDA?" styleClass="panel-title" style="-fx-font-size: 22px;" />
-                    <Label style="-fx-font-size: 15px; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-alignment: center;" text="Esta acción no se puede deshacer." wrapText="true" />
-                    <HBox spacing="16" alignment="CENTER">
-                        <Button onAction="#confirmarBorrado" styleClass="dark-btn-danger" text="Sí, eliminar" prefWidth="130" prefHeight="40" />
-                        <Button onAction="#cancelarBorrado" styleClass="dark-btn-secondary" text="Cancelar" prefWidth="110" prefHeight="40" />
+                    <Label text="❄  CARGAR PARTIDA" style="-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-font-weight: 900; -fx-effect: dropshadow(gaussian, rgba(0, 200, 255, 0.5), 5, 0.2, 0, 0);" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <HBox spacing="4" alignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
+                        <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 12px;" text="⬜" />
+                        <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: rgba(200,50,50,0.3); -fx-text-fill: rgba(255,180,180,0.9); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 10; -fx-border-color: transparent; -fx-font-weight: bold;" text="✕" />
                     </HBox>
-                </VBox>
+                </HBox>
             </VBox>
+        </top>
 
-        </StackPane>
-    </center>
-</BorderPane>
+        <center>
+            <StackPane prefHeight="700.0" prefWidth="1000.0">
+                <padding>
+                    <Insets bottom="40" left="40" right="40" top="30" />
+                </padding>
+
+                <!-- Panel principal -->
+                <VBox fx:id="panelCargar" alignment="CENTER" maxWidth="720" styleClass="side-card, overlay-settings">
+                    <padding>
+                        <Insets bottom="36" left="40" right="40" top="36" />
+                    </padding>
+
+                    <!-- Título -->
+                    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 0 0 24 0;">
+                        <VBox alignment="CENTER" spacing="-10">
+                            <Label text="EL JUEGO DEL" styleClass="pingu-logo-top" style="-fx-font-size: 24px;" />
+                            <Label text="PINGÜINO" styleClass="pingu-logo-bottom" style="-fx-font-size: 48px;" />
+                        </VBox>
+                        <Label text="Selecciona una partida guardada para continuar" styleClass="logo-sub" />
+                    </VBox>
+
+                    <!-- Separador -->
+                    <Region prefHeight="1" maxWidth="400" styleClass="divider" style="-fx-background-color: rgba(94,207,255,0.2);" />
+                    <Region prefHeight="20" />
+
+                    <!-- Lista de partidas -->
+                    <Label text="P A R T I D A S   D I S P O N I B L E S" styleClass="side-card-title" />
+                    <Region prefHeight="8" />
+                    <ListView fx:id="listaPartidas" prefHeight="220.0" prefWidth="500" styleClass="polar-list" />
+
+                    <Region prefHeight="30" />
+
+                    <!-- Botones de acción -->
+                    <HBox spacing="14" alignment="CENTER">
+                        <Button fx:id="btnEliminar" onAction="#handleEliminar" styleClass="menu-btn" text="🗑  E L I M I N A R" prefWidth="200" />
+                        <Button fx:id="btnCargar" onAction="#handleCargar" styleClass="menu-btn, primary" text="▶  C A R G A R" prefWidth="250" />
+                    </HBox>
+
+                    <Region prefHeight="20" />
+
+                    <!-- Botón volver -->
+                    <Button fx:id="btnVolver" onAction="#handleVolver" styleClass="menu-btn" text="V O L V E R" prefWidth="250" />
+                </VBox>
+
+                <!-- Overlay de Confirmación -->
+                <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: rgba(0, 5, 15, 0.75);">
+                    <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="side-card, overlay-settings">
+                        <padding>
+                            <Insets bottom="40" left="36" right="36" top="40" />
+                        </padding>
+                        <Label text="⚠" style="-fx-font-size: 42px; -fx-text-fill: #ff6e6e; -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.6), 15, 0.5, 0, 0);" />
+                        <Label text="¿ELIMINAR PARTIDA?" styleClass="logo-main, word-roll" style="-fx-font-size: 22px; -fx-effect: none;" />
+                        <Label style="-fx-font-size: 15px; -fx-text-fill: #ffffff; -fx-alignment: center;" text="Esta acción no se puede deshacer." />
+                        <HBox spacing="16" alignment="CENTER">
+                            <Button onAction="#confirmarBorrado" styleClass="menu-btn" style="-fx-text-fill: #ff6e6e; -fx-border-color: rgba(255,100,100,0.5);" text="S Í,  E L I M I N A R" prefWidth="180" />
+                            <Button onAction="#cancelarBorrado" styleClass="menu-btn, primary" text="C A N C E L A R" prefWidth="180" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+            </StackPane>
+        </center>
+    </BorderPane>
+</AnchorPane>

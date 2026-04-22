@@ -1,8 +1,31 @@
 .root {
-    -fx-font-family: "System";
-    -fx-background-image: url('../imagenes/Tablero.png');
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
+    -fx-font-family: "Verdana";
+    -fx-background-color: #020810;
+}
+
+/* ==================== BACKGROUND ELEMENTS ==================== */
+.aurora-path-1 {
+    -fx-shape: "M0 80 Q200 20 400 60 Q600 100 800 40 Q800 0 0 0 Z";
+    -fx-background-color: rgba(13,79,60,0.18);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+.aurora-path-2 {
+    -fx-shape: "M0 120 Q250 55 450 90 Q650 125 800 65 Q800 0 0 0 Z";
+    -fx-background-color: rgba(26,13,79,0.14);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+.aurora-path-3 {
+    -fx-shape: "M0 60 Q180 110 380 75 Q560 40 800 85 Q800 0 0 0 Z";
+    -fx-background-color: rgba(10,61,92,0.16);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+
+.star {
+    -fx-background-color: white;
+    -fx-background-radius: 50%;
 }
 
 /* MENU */
@@ -14,9 +37,28 @@
 
 /* TABLERO */
 .board {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-    -fx-border-color: transparent;
+    -fx-background-color: rgba(5, 15, 35, 0.4);
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(94, 207, 255, 0.2);
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 30, 0, 0, 10);
+}
+
+.polar-cell {
+    -fx-background-color: rgba(94, 207, 255, 0.05);
+    -fx-border-color: rgba(94, 207, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-margin: 2;
+}
+
+.polar-cell:hover {
+    -fx-background-color: rgba(94, 207, 255, 0.15);
+    -fx-border-color: rgba(94, 207, 255, 0.4);
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.3), 10, 0, 0, 0);
 }
 
 /* TEXTOS DEL TABLERO */
@@ -71,9 +113,18 @@
 .stat {
     -fx-font-size: 18px;
     -fx-font-weight: 900;
-    -fx-fill: #ffffff;
-    -fx-text-fill: #ffffff;
+    -fx-fill: #5ecfff;
+    -fx-text-fill: #5ecfff;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 5, 0.5, 0, 2);
+}
+
+.side-card {
+    -fx-background-color: rgba(5, 15, 35, 0.75);
+    -fx-border-color: rgba(94, 207, 255, 0.25);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 0, 5);
 }
 
 /* LOG DE EVENTOS (TextArea) */
@@ -100,7 +151,7 @@
     -fx-background-color: transparent;
 }
 
-.events-log .scroll-pane > .viewport {
+.events-log .scroll-pane>.viewport {
     -fx-background-color: transparent;
 }
 
@@ -124,10 +175,10 @@
     -fx-background-radius: 10;
     -fx-padding: 8 14;
     -fx-cursor: hand;
-    -fx-background-image: url('../imagenes/fondo_botones.png');
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(94, 207, 255, 0.1);
+    -fx-border-color: rgba(94, 207, 255, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
@@ -137,10 +188,8 @@
 }
 
 .button.primary {
-    -fx-background-image: url('../imagenes/fondo_botones.png');
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-color: transparent;
+    -fx-background-color: rgba(94, 207, 255, 0.2);
+    -fx-border-color: rgba(94, 207, 255, 0.5);
     -fx-text-fill: white;
 }
 
@@ -282,13 +331,13 @@
 
 /* OVERLAY MENU - DARK ARCTIC THEME */
 .overlay-menu {
-    -fx-background-color: linear-gradient(to bottom right, rgba(10, 30, 60, 0.97), rgba(5, 55, 90, 0.97));
-    -fx-background-radius: 28;
-    -fx-border-color: rgba(130, 210, 255, 0.55);
-    -fx-border-width: 2;
-    -fx-border-radius: 28;
-    -fx-padding: 40;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 50, 0.3, 0, 15);
+    -fx-background-color: rgba(5, 15, 35, 0.92);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(94, 207, 255, 0.3);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-padding: 45;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 60, 0.4, 0, 0);
 }
 
 .main-container-disabled {
@@ -296,11 +345,13 @@
 }
 
 .menu-title {
-    -fx-font-size: 34px;
+    -fx-font-family: "Verdana";
+    -fx-font-size: 32px;
     -fx-font-weight: 900;
-    -fx-text-fill: #d0f0ff;
-    -fx-padding: 0 0 10 0;
-    -fx-effect: dropshadow(gaussian, rgba(100, 200, 255, 0.6), 12, 0.4, 0, 0);
+    -fx-text-fill: #e8f8ff;
+    -fx-letter-spacing: 5px;
+    -fx-padding: 0 0 15 0;
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.8), 20, 0.5, 0, 0);
 }
 
 /* CUSTOM CONTROLS FOR OPTIONS */
@@ -337,26 +388,26 @@
 }
 
 .menu-button-alt {
-    -fx-background-image: none;
-    -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.08), rgba(100, 180, 255, 0.15));
-    -fx-background-radius: 16;
-    -fx-border-color: rgba(130, 210, 255, 0.5);
-    -fx-border-width: 1.5;
-    -fx-border-radius: 16;
-    -fx-text-fill: #d0f0ff;
-    -fx-font-weight: 900;
-    -fx-font-size: 17px;
-    -fx-padding: 11 28;
+    -fx-background-color: rgba(6, 20, 42, 0.7);
+    -fx-background-radius: 4;
+    -fx-border-color: rgba(94, 207, 255, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-text-fill: #c8eeff;
+    -fx-font-weight: 700;
+    -fx-font-size: 16px;
+    -fx-padding: 12 40;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 150, 255, 0.2), 8, 0, 0, 2);
+    -fx-transition: all 0.2s;
 }
 
 .menu-button-alt:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.18), rgba(100, 200, 255, 0.35));
-    -fx-border-color: rgba(180, 230, 255, 0.85);
-    -fx-scale-x: 1.04;
-    -fx-scale-y: 1.04;
-    -fx-effect: dropshadow(gaussian, rgba(0, 180, 255, 0.5), 14, 0, 0, 3);
+    -fx-border-color: rgba(94, 207, 255, 0.7);
+    -fx-text-fill: #ffffff;
+    -fx-background-color: rgba(6, 20, 42, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.7), 15, 0.4, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
 .menu-button-alt:pressed {
@@ -420,13 +471,13 @@
 
 /* CUSTOM SAVE OVERLAY (OPAQUE) */
 .save-overlay {
-    -fx-background-color: linear-gradient(to bottom right, #1a365d, #0c4a6e);
-    -fx-background-radius: 24;
-    -fx-border-color: #74b9ff;
-    -fx-border-width: 3;
-    -fx-border-radius: 24;
-    -fx-padding: 40;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 40, 0, 0, 20);
+    -fx-background-color: rgba(5, 15, 35, 0.94);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(94, 207, 255, 0.4);
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-padding: 45;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 60, 0.4, 0, 0);
 }
 
 .save-overlay .menu-title {
@@ -435,11 +486,13 @@
 }
 
 .save-message-text {
-    -fx-font-size: 15px;
+    -fx-font-family: "Verdana";
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e0f2f1;
+    -fx-text-fill: #b0deff;
     -fx-text-alignment: center;
-    -fx-padding: 10 20;
+    -fx-padding: 15 25;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 2, 0, 0, 1);
 }
 
 /* SEAL ENCOUNTER IMAGE OVERLAY */

@@ -1,409 +1,336 @@
-.root {
-    -fx-font-family: "System";
-    -fx-background-image: url('../imagenes/Fondo_Menu.png');
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
+/* ================================================ */
+/*        POLAR ROLL CLONE (PIXEL PERFECT)          */
+/*        Basado en HTML Prototype exacto           */
+/* ================================================ */
+
+.screen {
+    -fx-font-family: 'Verdana'; /* Sustituto de Rajdhani */
+    -fx-background-color: #020810;
 }
 
-/* MENU */
-.menu-bar {
-    -fx-background-color: white;
-    -fx-border-color: #e6e7ee;
-    -fx-border-width: 0 0 1 0;
+/* ==================== SVG BACKGROUNDS ==================== */
+.aurora-path-1 {
+    -fx-shape: "M0 80 Q200 20 400 60 Q600 100 800 40 Q800 0 0 0 Z";
+    -fx-background-color: rgba(13,79,60,0.18);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+.aurora-path-2 {
+    -fx-shape: "M0 120 Q250 55 450 90 Q650 125 800 65 Q800 0 0 0 Z";
+    -fx-background-color: rgba(26,13,79,0.14);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+.aurora-path-3 {
+    -fx-shape: "M0 60 Q180 110 380 75 Q560 40 800 85 Q800 0 0 0 Z";
+    -fx-background-color: rgba(10,61,92,0.16);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+.aurora-path-4 {
+    -fx-shape: "M0 100 Q300 150 500 110 Q700 70 800 120 Q800 0 0 0 Z";
+    -fx-background-color: rgba(13,79,60,0.08);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
 }
 
-/* CARD */
-.card {
-    -fx-background-color: white;
-    -fx-background-radius: 16;
-    -fx-border-color: #e6e7ee;
-    -fx-border-radius: 16;
-
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.10), 16, 0.15, 0, 2);
+.ice-poly-1 {
+    -fx-shape: "M 0 150 L 0 90 L 40 60 L 80 85 L 130 45 L 180 75 L 240 30 L 290 65 L 350 20 L 400 55 L 450 15 L 510 50 L 570 25 L 620 60 L 670 35 L 720 70 L 760 42 L 800 70 L 800 150 Z";
+    -fx-background-color: #030e1e;
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+.ice-poly-2 {
+    -fx-shape: "M 0 150 L 0 100 L 40 75 L 80 95 L 130 60 L 180 90 L 240 50 L 290 80 L 350 40 L 400 70 L 450 30 L 510 65 L 570 40 L 620 75 L 670 50 L 720 85 L 760 55 L 800 80 L 800 150 Z";
+    -fx-background-color: rgba(10,30,60,0.6);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
 }
 
-.ice-card {
-    -fx-background-color: linear-gradient(to bottom right, rgba(10, 30, 60, 0.95), rgba(5, 55, 90, 0.92));
-    -fx-background-radius: 22;
-    -fx-border-color: rgba(130, 210, 255, 0.5);
-    -fx-border-width: 2;
-    -fx-border-radius: 22;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 25, 0.2, 0, 8);
+.ice-poly-detail-1 {
+    -fx-shape: "M 0 30 L -20 0 L 5 15 L 30 -5 L 20 30 Z";
+    -fx-background-color: rgba(94,207,255,0.08);
+    -fx-border-color: rgba(94,207,255,0.25);
+    -fx-border-width: 0.5;
+}
+.ice-poly-detail-2 {
+    -fx-shape: "M 18 15 L 0 0 L 23 8 L 38 0 L 33 18 Z";
+    -fx-background-color: rgba(94,207,255,0.06);
+    -fx-border-color: rgba(94,207,255,0.2);
+    -fx-border-width: 0.5;
 }
 
-/* TITLES */
-.title {
-    -fx-font-size: 26px;
-    -fx-font-weight: 800;
-    -fx-text-fill: #1f2330;
-    -fx-alignment: center;
+/* ==================== LOGO AREA ==================== */
+.logo-area {
+    -fx-padding: 0 0 10 0;
 }
-
-.subtitle {
+.logo-eyebrow {
     -fx-font-size: 13px;
-    -fx-opacity: 0.65;
+    -fx-font-weight: 700;
+    -fx-letter-spacing: 5px; /* JavaFX approximation */
+    -fx-text-fill: #5ecfff;
+    -fx-opacity: 0.7;
+    -fx-padding: 0 0 5 0;
 }
-
-/* FIELDS */
-.field-label {
+.logo-main {
+    -fx-font-family: 'Times New Roman', serif; /* Sustituto de Cinzel */
+    -fx-font-weight: 900;
+    -fx-font-size: 78px;
+    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.9), 30, 0.4, 0, 0);
+}
+.word-polar {
+    -fx-text-fill: #e8f8ff;
+}
+.word-roll {
+    -fx-text-fill: #5ecfff;
+    -fx-font-size: 85px;
+}
+.logo-oreo-dot {
+    -fx-background-color: #f0ebe0;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+    -fx-max-width: 12;
+    -fx-max-height: 12;
+    -fx-effect: dropshadow(gaussian, rgba(240,235,224,0.8), 10, 0.5, 0, 0);
+    -fx-translate-x: 5;
+}
+.logo-sub {
     -fx-font-size: 12px;
-    -fx-opacity: 0.75;
-    -fx-font-weight: bold;
+    -fx-text-fill: #4a9bbf;
+    -fx-letter-spacing: 3px;
+    -fx-padding: 10 0 0 0;
+}
+.divider {
+    -fx-background-color: linear-gradient(to right, transparent, rgba(94,207,255,0.5), transparent);
+    -fx-pref-height: 1;
+    -fx-max-width: 400;
 }
 
-.field {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-border-color: #e6e7ee;
-    -fx-background-color: #fbfbfe;
-    -fx-padding: 10 12;
+/* ==================== SIDE CARDS ==================== */
+.side-card {
+    -fx-background-color: rgba(5,15,35,0.75);
+    -fx-border-color: rgba(94,207,255,0.15);
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 15;
 }
-
-/* BUTTONS (GLACIER ICE STYLE - DARK) */
-.button {
-    -fx-background-radius: 16;
-    -fx-border-radius: 16;
+.overlay-settings {
+    -fx-background-color: rgba(5,15,35,0.95);
+    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 30, 0.5, 0, 10);
+}
+.side-card-title {
+    -fx-font-size: 10px;
+    -fx-text-fill: #4a9bbf;
+    -fx-letter-spacing: 3px;
+    -fx-border-color: transparent transparent rgba(94,207,255,0.12) transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 5 0;
+    -fx-margin: 0 0 8 0;
+}
+.player-token {
+    -fx-alignment: center-left;
+    -fx-spacing: 12;
+    -fx-padding: 4 0;
+}
+.token-circle {
+    -fx-pref-width: 26;
+    -fx-pref-height: 26;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
     -fx-border-width: 1.5;
-    -fx-padding: 8 18;
-    -fx-cursor: hand;
-    -fx-background-image: none;
-    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(100, 180, 255, 0.15));
-    -fx-border-color: rgba(130, 210, 255, 0.55);
-    -fx-text-fill: #d0f0ff;
-    -fx-font-weight: 900;
-    -fx-font-size: 20px;
-    -fx-effect: dropshadow(gaussian, rgba(0,150,255,0.2), 10, 0, 0, 4);
 }
-
-.button:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.18), rgba(100, 200, 255, 0.35));
-    -fx-border-color: rgba(180, 230, 255, 0.85);
-    -fx-scale-x: 1.04;
-    -fx-scale-y: 1.04;
-    -fx-effect: dropshadow(gaussian, rgba(0,180,255,0.5), 14, 0, 0, 3);
+.token-cpu {
+    -fx-border-color: rgba(255,183,77,0.5);
+    -fx-background-color: rgba(26,14,0,0.8);
 }
-
-.button:pressed {
-    -fx-scale-x: 0.97;
-    -fx-scale-y: 0.97;
+.token-p1 {
+    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-background-color: rgba(0,15,35,0.8);
 }
-
-.button.primary {
-    -fx-background-image: none;
+.token-p2 {
+    -fx-border-color: rgba(165,214,167,0.4);
+    -fx-background-color: rgba(0,15,10,0.8);
 }
-
-.button.primary:hover {
-    -fx-opacity: 1.0;
-}
-
-/* BOTON SALIR (ICE STYLE ROJO-OSCURO) */
-.btn-exit {
-    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(220, 60, 60, 0.25));
-    -fx-border-color: rgba(255, 160, 160, 0.6);
-    -fx-text-fill: #ffc8c8;
-    -fx-effect: dropshadow(gaussian, rgba(200,50,50,0.2), 10, 0, 0, 4);
-}
-
-.btn-exit:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.18), rgba(220, 60, 60, 0.45));
-    -fx-border-color: rgba(255, 200, 200, 0.85);
-    -fx-effect: dropshadow(gaussian, rgba(220,80,80,0.5), 14, 0, 0, 3);
-}
-
-/* Hint */
-.hint {
+.token-name {
     -fx-font-size: 12px;
-    -fx-opacity: 0.6;
+    -fx-text-fill: rgba(200,230,255,0.8);
+    -fx-letter-spacing: 1px;
 }
-
-/* ========================================= */
-/*       ESTILOS PARA ALERTAS (NATIVAS)      */
-/* ========================================= */
-
-.dialog-pane {
-    -fx-background-color: linear-gradient(to bottom right, #ffffff, #e3f2fd);
-    -fx-background-radius: 0;
-    -fx-border-color: #3498db;
-    -fx-border-width: 2;
-    -fx-padding: 0;
-    -fx-effect: null;
+.token-type {
+    -fx-font-size: 9px;
+    -fx-text-fill: rgba(94,207,255,0.4);
+    -fx-letter-spacing: 2px;
 }
-
-.dialog-pane > .container {
-    -fx-background-color: transparent;
+.stat-row {
+    -fx-alignment: center-left;
+    -fx-spacing: 10;
+    -fx-padding: 4 0;
 }
-
-.dialog-pane:header-panel {
-    -fx-background-color: #2980b9;
-    -fx-padding: 20;
+.stat-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(150,200,230,0.6);
+    -fx-letter-spacing: 2px;
 }
-
-.dialog-pane:header-panel .label {
-    -fx-text-fill: white;
-    -fx-font-weight: 900;
-    -fx-font-size: 20px;
-}
-
-.dialog-pane .content {
-    -fx-padding: 30 25;
-    -fx-background-color: transparent;
-}
-
-.dialog-pane .content.label {
-    -fx-text-fill: #1a365d;
-    -fx-font-weight: bold;
-    -fx-font-size: 16px;
-}
-
-.dialog-pane .button-bar {
-    -fx-padding: 15 20 20 20;
-    -fx-background-color: transparent;
-}
-
-.dialog-pane .button {
-    -fx-background-radius: 12;
-    -fx-padding: 10 12;
-    -fx-background-color: #3498db;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
+.stat-val {
     -fx-font-size: 13px;
-    -fx-min-width: 110px;
-    -fx-cursor: hand;
-    -fx-background-image: none; 
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
+    -fx-font-weight: 700;
+    -fx-text-fill: #5ecfff;
+}
+.news-text {
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(150,200,230,0.65);
+}
+.news-text-cyan {
+    -fx-text-fill: rgba(94,207,255,0.4);
 }
 
-.dialog-pane .button:hover {
-    -fx-background-color: #2c3e50;
-    -fx-scale-x: 1.08;
-    -fx-scale-y: 1.08;
-}
-
-.dialog-pane .button:pressed {
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
-}
-
-/* ================================================ */
-/*        DARK ARCTIC PANEL SYSTEM                  */
-/* ================================================ */
-
-.dark-panel {
-    -fx-background-color: linear-gradient(to bottom right, rgba(6, 12, 28, 0.92), rgba(2, 25, 48, 0.96));
-    -fx-background-radius: 28;
-    -fx-border-color: rgba(90, 200, 255, 0.7);
-    -fx-border-width: 2;
-    -fx-border-radius: 28;
-    -fx-effect: dropshadow(gaussian, rgba(0, 50, 100, 0.9), 60, 0.3, 0, 15);
-    -fx-alignment: center;
-}
-
-/* PANEL TITLES */
-.panel-title {
-    -fx-font-size: 26px;
-    -fx-font-weight: 900;
-    -fx-text-fill: #ffffff;
-    -fx-effect: dropshadow(gaussian, rgba(0,200,255,0.8), 15, 0.4, 0, 0);
-}
-
-.panel-subtitle {
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-text-fill: rgba(220, 240, 255, 0.85);
-}
-
-.section-label {
-    -fx-font-size: 12px;
-    -fx-font-weight: 900;
-    -fx-text-fill: rgba(130, 210, 255, 0.7);
-    -fx-padding: 0 0 4 2;
-}
-
-.panel-hint {
-    -fx-font-size: 12px;
-    -fx-text-fill: rgba(160, 200, 255, 0.45);
-    -fx-text-alignment: center;
-}
-
-/* FORM ELEMENTS */
-.form-label {
-    -fx-font-size: 11px;
-    -fx-font-weight: 900;
-    -fx-text-fill: #ffffff;
-    -fx-padding: 0 0 2 2;
-}
-
-.dark-field {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 10;
-    -fx-border-color: rgba(100, 200, 255, 0.5);
-    -fx-border-radius: 10;
-    -fx-border-width: 2;
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
-    -fx-padding: 10 14;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
+/* ==================== MENÚ BOTONES ==================== */
+.menu-btn {
     -fx-background-image: none;
-}
-
-.dark-field:focused {
-    -fx-border-color: rgba(0, 220, 255, 1.0);
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-effect: dropshadow(gaussian, rgba(0, 180, 255, 0.6), 12, 0, 0, 0);
-}
-
-/* DARK LIST */
-.dark-list {
-    -fx-background-color: rgba(0, 30, 60, 0.4);
-    -fx-background-radius: 12;
-    -fx-border-color: rgba(100, 200, 255, 0.5);
-    -fx-border-radius: 12;
-    -fx-border-width: 2;
-    -fx-background-image: none;
-}
-
-/* Ocultar barra horizontal de las listas oscuras */
-.dark-list .scroll-bar:horizontal {
-    -fx-opacity: 0;
-    -fx-padding: -10;
-}
-
-/* Ocultar los botones de incremento/decremento de la barra para ganar espacio */
-.dark-list .scroll-bar:horizontal .increment-button,
-.dark-list .scroll-bar:horizontal .decrement-button {
-    -fx-padding: 0;
-}
-
-.dark-list .list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #ffffff;
-    -fx-padding: 12 16;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-border-color: transparent transparent rgba(150,220,255,0.2) transparent;
-    -fx-border-width: 0 0 1 0;
-}
-
-.dark-list .list-cell:selected {
-    -fx-background-color: linear-gradient(to right, rgba(0, 150, 255, 0.5), rgba(0, 100, 200, 0.3));
-    -fx-text-fill: #ffffff;
-    -fx-border-color: rgba(0, 220, 255, 0.8) transparent rgba(0, 220, 255, 0.8) transparent;
-    -fx-effect: dropshadow(gaussian, rgba(0,180,255,0.4), 10, 0, 0, 0);
-}
-
-.dark-list .list-cell:hover:not(:selected) {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-}
-
-/* DARK COMBO */
-.dark-combo {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 10;
-    -fx-border-color: rgba(100, 200, 255, 0.5);
-    -fx-border-radius: 10;
-    -fx-border-width: 2;
-    -fx-background-image: none;
-}
-
-.dark-combo .list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-}
-
-.dark-combo .arrow-button {
-    -fx-background-color: transparent;
-}
-
-.dark-combo .arrow {
-    -fx-background-color: #ffffff;
-}
-
-/* DARK BUTTONS */
-.dark-btn-primary {
-    -fx-background-image: none;
-    -fx-background-color: linear-gradient(to bottom right, rgba(0, 150, 255, 0.8), rgba(0, 80, 180, 0.95));
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(255, 255, 255, 0.8);
-    -fx-border-width: 2;
-    -fx-border-radius: 14;
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: 900;
+    -fx-background-color: rgba(6,20,42,0.7);
+    -fx-background-insets: 0;
+    -fx-border-color: rgba(94,207,255,0.25);
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-text-fill: #c8eeff;
+    -fx-font-weight: 700;
     -fx-font-size: 16px;
+    -fx-letter-spacing: 3px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,180,255,0.6), 15, 0.4, 0, 4);
+    -fx-transition: all 0.2s;
+    -fx-padding: 10 0;
+}
+.menu-btn:hover {
+    -fx-border-color: rgba(94,207,255,0.7);
+    -fx-text-fill: #fff;
+    -fx-background-color: rgba(6,20,42,0.9);
+    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.8), 12, 0.4, 0, 0);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+.menu-btn.primary {
+    -fx-border-color: rgba(94,207,255,0.6);
+    -fx-background-color: rgba(10,40,70,0.85);
+    -fx-text-fill: #fff;
+    -fx-font-size: 18px;
+}
+.menu-btn.primary:hover {
+    -fx-background-color: rgba(15,55,95,0.95);
+    -fx-border-color: #5ecfff;
+    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.5), 20, 0.5, 0, 0);
+}
+.text-muted {
+    -fx-text-fill: rgba(200,230,255,0.5);
+    -fx-font-size: 13px;
 }
 
-.dark-btn-primary:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(20, 180, 255, 1.0), rgba(0, 100, 220, 1.0));
-    -fx-border-color: #ffffff;
-    -fx-scale-x: 1.04;
-    -fx-scale-y: 1.04;
-    -fx-effect: dropshadow(gaussian, rgba(0,200,255,0.8), 20, 0.5, 0, 5);
+/* ==================== FOOTER ==================== */
+.version-tag {
+    -fx-font-size: 9px;
+    -fx-letter-spacing: 3px;
+    -fx-text-fill: rgba(94,207,255,0.3);
+}
+.oreo-stamp {
+    -fx-alignment: center;
+    -fx-spacing: 2;
+    -fx-opacity: 0.45;
+}
+.oreo-stack {
+    -fx-alignment: center;
+    -fx-spacing: 1;
+}
+.oreo-dark {
+    -fx-pref-width: 22;
+    -fx-pref-height: 22;
+    -fx-background-radius: 50%;
+    -fx-background-color: #111;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 50%;
+}
+.oreo-cream {
+    -fx-pref-width: 22;
+    -fx-pref-height: 7;
+    -fx-background-color: #f0ebe0;
+    -fx-background-radius: 3;
+}
+.oreo-text {
+    -fx-font-size: 7px;
+    -fx-letter-spacing: 4px;
+    -fx-text-fill: rgba(240,235,224,0.6);
 }
 
-.dark-btn-primary:pressed {
-    -fx-scale-x: 0.96;
-    -fx-scale-y: 0.96;
-}
-
-.dark-btn-primary:disabled {
-    -fx-opacity: 0.3;
-    -fx-cursor: default;
-    -fx-effect: none;
-}
-
-.dark-btn-secondary {
-    -fx-background-image: none;
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(200, 230, 255, 0.6);
-    -fx-border-width: 2;
-    -fx-border-radius: 14;
+/* ==================== CONTROLES EXTRAS (INPUTS/LISTS) ==================== */
+.polar-field {
+    -fx-background-color: rgba(5,15,35,0.8);
+    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
     -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+    -fx-font-family: 'Verdana';
+    -fx-padding: 8 12;
 }
-
-.dark-btn-secondary:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-border-color: #ffffff;
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
+.polar-combo {
+    -fx-background-color: rgba(5,15,35,0.8);
+    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
 }
-
-.dark-btn-secondary:pressed {
-    -fx-scale-x: 0.96;
-    -fx-scale-y: 0.96;
-}
-
-.dark-btn-danger {
-    -fx-background-image: none;
-    -fx-background-color: linear-gradient(to bottom right, rgba(200, 20, 20, 0.7), rgba(120, 0, 0, 0.85));
-    -fx-background-radius: 14;
-    -fx-border-color: rgba(255, 100, 100, 0.8);
-    -fx-border-width: 2;
-    -fx-border-radius: 14;
+.polar-combo .list-cell {
     -fx-text-fill: #ffffff;
+    -fx-font-family: 'Verdana';
+    -fx-background-color: transparent;
+}
+.polar-combo .list-view {
+    -fx-background-color: rgba(5,15,35,0.95);
+    -fx-border-color: rgba(94,207,255,0.5);
+}
+.polar-combo .list-view .list-cell:hover {
+    -fx-background-color: rgba(94,207,255,0.3);
+}
+.polar-list {
+    -fx-background-color: rgba(5,15,35,0.5);
+    -fx-border-color: rgba(94,207,255,0.3);
+    -fx-border-radius: 4;
+    -fx-control-inner-background: transparent;
+}
+.polar-list .list-cell {
+    -fx-text-fill: #c8eeff;
+    -fx-font-family: 'Verdana';
+    -fx-padding: 10;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(94,207,255,0.1) transparent;
+}
+.polar-list .list-cell:selected {
+    -fx-background-color: rgba(94,207,255,0.2);
+    -fx-text-fill: #ffffff;
+}
+
+/* ==================== SLIDERS ==================== */
+.polar-slider .track {
+    -fx-background-color: rgba(94,207,255,0.15);
+}
+.polar-slider .thumb {
+    -fx-background-color: #5ecfff;
+    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.6), 8, 0.4, 0, 0);
+}
+
+/* ==================== LOGO PINGU SIMULADO ==================== */
+.pingu-logo-top {
+    -fx-font-family: 'Verdana';
     -fx-font-weight: 900;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(220,0,0,0.5), 12, 0.3, 0, 3);
+    -fx-font-size: 38px;
+    -fx-text-fill: linear-gradient(to bottom, #ffffff, #7ae2ff);
+    -fx-effect: dropshadow(gaussian, #0088cc, 5, 1.0, 0, 2) dropshadow(gaussian, #002244, 10, 0.5, 0, 4);
+    -fx-translate-y: 10;
 }
 
-.dark-btn-danger:hover {
-    -fx-background-color: linear-gradient(to bottom right, rgba(255, 40, 40, 0.85), rgba(180, 0, 0, 1.0));
-    -fx-border-color: #ffffff;
-    -fx-scale-x: 1.04;
-    -fx-scale-y: 1.04;
-    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.7), 20, 0.4, 0, 4);
-}
-
-.dark-btn-danger:pressed {
-    -fx-scale-x: 0.96;
-    -fx-scale-y: 0.96;
+.pingu-logo-bottom {
+    -fx-font-family: 'Verdana';
+    -fx-font-weight: 900;
+    -fx-font-size: 85px;
+    -fx-text-fill: linear-gradient(to bottom, #ffffff, #61d4ff);
+    -fx-effect: dropshadow(gaussian, #ffffff, 3, 1.0, 0, 0) dropshadow(gaussian, #0088cc, 8, 1.0, 0, 4) dropshadow(gaussian, #002244, 15, 0.6, 0, 8);
+    -fx-letter-spacing: -2px;
 }
