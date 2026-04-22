@@ -5,55 +5,222 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
-<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaInicio">
+<AnchorPane fx:id="sceneRoot" prefHeight="700.0" prefWidth="1123.0" styleClass="screen" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaInicio">
 
-    <center>
-        <StackPane prefHeight="700.0" prefWidth="1123.0">
+    <!-- AURORA BOREAL (Líneas Curvas) -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" prefHeight="350">
+        <Region styleClass="aurora-path-1" />
+        <Region styleClass="aurora-path-2" />
+        <Region styleClass="aurora-path-3" />
+        <Region styleClass="aurora-path-4" />
+    </StackPane>
+
+    <!-- HIELO INFERIOR (Ice Ground SVG) -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" prefHeight="250">
+        <Region styleClass="ice-poly-1" />
+        <Region styleClass="ice-poly-2" />
+        <AnchorPane>
+            <Region styleClass="ice-poly-detail-1" layoutX="320" layoutY="60" prefWidth="50" prefHeight="35" />
+            <Region styleClass="ice-poly-detail-2" layoutX="600" layoutY="30" prefWidth="40" prefHeight="20" />
+            <Line startX="0" startY="0" endX="1920" endY="0" stroke="rgba(94,207,255,0.06)" layoutY="180"/>
+        </AnchorPane>
+    </StackPane>
+
+    <!-- FOOTER ELEMENTS (Debajo del menú principal para no taparlo) -->
+    <Label text="v0.9.2 — Early Access" styleClass="version-tag" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="25" />
+    <VBox styleClass="oreo-stamp" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="25">
+        <VBox styleClass="oreo-stack">
+            <Region styleClass="oreo-dark" />
+            <Region styleClass="oreo-cream" />
+            <Region styleClass="oreo-dark" />
+        </VBox>
+        <Label text="O R E O   S T U D I O S" styleClass="oreo-text" />
+    </VBox>
+
+    <!-- CONTENEDOR CENTRAL: Centra verticalmente las 3 columnas -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <HBox fx:id="menuPrincipal" alignment="CENTER" maxHeight="500">
             <padding>
-                <Insets bottom="28.0" left="28.0" right="28.0" top="28.0" />
+                <Insets left="50" right="50" />
             </padding>
-            <!-- Botones del Menú Principal (centrados) -->
-            <VBox fx:id="menuPrincipal" alignment="CENTER" spacing="15" maxWidth="320" StackPane.alignment="CENTER">
-                <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Nueva Partida" />
-                <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Cargar Partida" />
-                <Button fx:id="btnOpciones" onAction="#handleOpciones" prefHeight="58.0" maxWidth="Infinity" styleClass="primary" text="Opciones" />
-                <Button fx:id="btnSalir" onAction="#handleSalir" prefHeight="58.0" maxWidth="Infinity" styleClass="btn-exit" text="Salir del Juego" />
-            </VBox>
-            <!-- Panel de Opciones (encima del menú, visible=false por defecto) -->
-            <VBox fx:id="paneOpciones" alignment="CENTER" maxHeight="500" maxWidth="500" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, rgba(10, 30, 60, 1.0), rgba(5, 55, 90, 1.0)); -fx-background-radius: 24; -fx-border-color: rgba(130, 210, 255, 0.5); -fx-border-radius: 24; -fx-border-width: 2;" visible="false">
-                <padding>
-                    <Insets bottom="30" left="40" right="40" top="30" />
-                </padding>
-                <Label style="-fx-font-size: 30; -fx-font-weight: 900; -fx-text-fill: #d0f0ff; -fx-effect: dropshadow(gaussian, rgba(100,200,255,0.5), 10, 0.4, 0, 0);" text="OPCIONES" />
-                
-                <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 15;">
-                    <Label style="-fx-font-size: 18; -fx-font-weight: 900; -fx-text-fill: rgba(130,210,255,0.85);" text="AUDIO" />
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <CheckBox fx:id="chkMusica" onAction="#handleChkMusica" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Música" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Slider fx:id="sliderMusica" max="100" onMouseReleased="#handleSliderMusica" prefWidth="150" value="50" />
+            
+            <!-- COLUMNA IZQUIERDA (Jugadores y Stats) -->
+            <VBox spacing="10" alignment="CENTER_LEFT" prefWidth="250" HBox.hgrow="NEVER">
+                <!-- Tarjeta Jugadores -->
+                <VBox styleClass="side-card">
+                    <Label styleClass="side-card-title" text="J U G A D O R E S" />
+                    
+                    <HBox styleClass="player-token">
+                        <StackPane styleClass="token-circle, token-cpu">
+                            <Label text="🦭" style="-fx-font-size: 14px;" />
+                        </StackPane>
+                        <VBox>
+                            <Label text="CPU Ártica" styleClass="token-name" />
+                            <Label text="Foca / IA" styleClass="token-type" />
+                        </VBox>
                     </HBox>
-                    <HBox alignment="CENTER_LEFT" spacing="20">
-                        <CheckBox fx:id="chkSonido" onAction="#handleChkSonido" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Efectos de Sonido" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Slider fx:id="sliderSonido" max="100" onMouseReleased="#handleSliderSonido" prefWidth="150" value="50" />
+                    
+                    <HBox styleClass="player-token">
+                        <StackPane styleClass="token-circle, token-p1">
+                            <Label text="🐧" style="-fx-font-size: 14px;" />
+                        </StackPane>
+                        <VBox>
+                            <Label text="Jugador 1" styleClass="token-name" />
+                            <Label text="Pingüino" styleClass="token-type" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox styleClass="player-token">
+                        <StackPane styleClass="token-circle, token-p2">
+                            <Label text="🐧" style="-fx-font-size: 14px;" />
+                        </StackPane>
+                        <VBox>
+                            <Label text="Jugador 2" styleClass="token-name" />
+                            <Label text="Pingüino" styleClass="token-type" />
+                        </VBox>
                     </HBox>
                 </VBox>
 
-                <VBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: rgba(255,255,255,0.05); -fx-background-radius: 12; -fx-border-color: rgba(130,210,255,0.2); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 15;">
-                    <Label style="-fx-font-size: 18; -fx-font-weight: 900; -fx-text-fill: rgba(130,210,255,0.85);" text="VISUAL" />
-                    <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Animaciones" />
-                    <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" style="-fx-font-size: 15; -fx-text-fill: #c8eeff;" text="Pantalla Completa" />
+                <!-- Tarjeta Partida Rápida -->
+                <VBox styleClass="side-card">
+                    <Label styleClass="side-card-title" text="P A R T I D A   R Á P I D A" />
+                    <HBox styleClass="stat-row">
+                        <Label text="C A S I L L A S" styleClass="stat-label" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="50" styleClass="stat-val" />
+                    </HBox>
+                    <HBox styleClass="stat-row">
+                        <Label text="M O D O" styleClass="stat-label" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="Clásico" styleClass="stat-val" style="-fx-text-fill: #a78bff;" />
+                    </HBox>
+                    <HBox styleClass="stat-row">
+                        <Label text="V E L O C I D A D" styleClass="stat-label" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="Normal" styleClass="stat-val" style="-fx-text-fill: #ffb74d;" />
+                    </HBox>
                 </VBox>
-                
-                <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="250" style="-fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(100,180,255,0.18)); -fx-text-fill: #d0f0ff; -fx-font-size: 16; -fx-font-weight: 900; -fx-background-radius: 14; -fx-border-color: rgba(130,210,255,0.5); -fx-border-radius: 14; -fx-border-width: 1.5; -fx-cursor: hand;" text="Volver" />
             </VBox>
-        </StackPane>
-    </center>
-</BorderPane>
+
+            <!-- ESPACIO FLEXIBLE -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- COLUMNA CENTRAL (Logo y Botones) -->
+            <VBox alignment="CENTER" spacing="0" minWidth="450">
+                <VBox alignment="CENTER" styleClass="logo-area" spacing="10">
+                    <Label text="❄   O R E O   S T U D I O S   P R E S E N T A   ❄" styleClass="logo-eyebrow" />
+                    
+                    <!-- LOGO RECREADO EN CSS -->
+                    <VBox alignment="CENTER" spacing="-15">
+                        <Label text="EL JUEGO DEL" styleClass="pingu-logo-top" />
+                        <Label text="PINGÜINO" styleClass="pingu-logo-bottom" />
+                    </VBox>
+                    
+                    <Label text="E L   T A B L E R O   D E L   F I N   D E L   M U N D O" styleClass="logo-sub" />
+                </VBox>
+
+                <Region styleClass="divider" />
+                <Region prefHeight="20" /> <!-- Separación extra -->
+
+                <VBox alignment="CENTER" spacing="12" styleClass="menu-list">
+                    <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" styleClass="menu-btn, primary" prefWidth="380" prefHeight="55" text="▶   N U E V A   P A R T I D A" />
+                    <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" styleClass="menu-btn" prefWidth="380" prefHeight="55" text="C A R G A R   P A R T I D A" />
+                    <Button fx:id="btnOpciones" onAction="#handleOpciones" styleClass="menu-btn, text-muted" prefWidth="380" prefHeight="55" text="A J U S T E S" />
+                    <Button fx:id="btnSalir" onAction="#handleSalir" styleClass="menu-btn, text-muted" prefWidth="380" prefHeight="55" text="S A L I R" />
+                </VBox>
+            </VBox>
+
+            <!-- ESPACIO FLEXIBLE -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- COLUMNA DERECHA (Récords y Noticias) -->
+            <VBox spacing="10" alignment="CENTER_RIGHT" prefWidth="250" HBox.hgrow="NEVER">
+                <VBox styleClass="side-card">
+                    <Label styleClass="side-card-title" text="R É C O R D S   G L O B A L E S" />
+                    <HBox styleClass="stat-row">
+                        <Label text="# 1" styleClass="stat-label" style="-fx-text-fill: rgba(255,210,100,0.6);" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="IceMaster99" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                    </HBox>
+                    <HBox styleClass="stat-row">
+                        <Label text="# 2" styleClass="stat-label" style="-fx-text-fill: rgba(180,180,180,0.6);" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="PolarKing" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                    </HBox>
+                    <HBox styleClass="stat-row">
+                        <Label text="# 3" styleClass="stat-label" style="-fx-text-fill: rgba(200,140,80,0.6);" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="Blizzard_7" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                    </HBox>
+                </VBox>
+
+                <VBox styleClass="side-card">
+                    <Label styleClass="side-card-title" text="N O V E D A D E S" />
+                    <Label text="v0.9.2 — Nuevas casillas de&#10;tormenta" styleClass="news-text" />
+                    <Label text="Modo torneo próximamente" styleClass="news-text, news-text-cyan" />
+                </VBox>
+
+                <VBox styleClass="side-card">
+                    <Label styleClass="side-card-title" text="P R Ó X I M O   T O R N E O" />
+                    <HBox styleClass="stat-row">
+                        <Label text="J U G A D O R E S" styleClass="stat-label" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="128" styleClass="stat-val" />
+                    </HBox>
+                    <HBox styleClass="stat-row">
+                        <Label text="I N I C I O" styleClass="stat-label" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="Viernes" styleClass="stat-val" style="-fx-text-fill: #a78bff;" />
+                    </HBox>
+                </VBox>
+            </VBox>
+
+        </HBox>
+    </StackPane>
+
+
+    <!-- PANEL AJUSTES (OVERLAY) -->
+    <StackPane fx:id="paneOpciones" visible="false" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" style="-fx-background-color: transparent;">
+        <VBox alignment="CENTER" maxHeight="480" maxWidth="500" spacing="20" styleClass="side-card, overlay-settings">
+            <padding>
+                <Insets bottom="30" left="40" right="40" top="30" />
+            </padding>
+            <Label text="A J U S T E S" style="-fx-text-fill: #5ecfff; -fx-font-family: 'Verdana'; -fx-font-weight: 900; -fx-font-size: 28px; -fx-letter-spacing: 5px;" />
+            <Region styleClass="divider" style="-fx-min-height: 1; -fx-background-color: rgba(94,207,255,0.2);" />
+            
+            <VBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="A U D I O" styleClass="side-card-title" />
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <CheckBox fx:id="chkMusica" onAction="#handleChkMusica" selected="true" styleClass="stat-val" text="Música Ambiental" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Slider fx:id="sliderMusica" max="100" onMouseReleased="#handleSliderMusica" prefWidth="180" value="50" styleClass="polar-slider" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <CheckBox fx:id="chkSonido" onAction="#handleChkSonido" selected="true" styleClass="stat-val" text="Efectos de Sonido" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Slider fx:id="sliderSonido" max="100" onMouseReleased="#handleSliderSonido" prefWidth="180" value="50" styleClass="polar-slider" />
+                </HBox>
+            </VBox>
+
+            <VBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="V I S U A L" styleClass="side-card-title" />
+                <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" styleClass="stat-val" text="Animaciones y Partículas" />
+                <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="stat-val" text="Pantalla Completa" />
+            </VBox>
+            
+            <Region prefHeight="15" />
+            <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="300" styleClass="menu-btn, primary" text="G U A R D A R" />
+        </VBox>
+    </StackPane>
+
+</AnchorPane>

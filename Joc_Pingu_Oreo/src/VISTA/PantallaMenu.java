@@ -82,15 +82,11 @@ public class PantallaMenu extends Application {
             try {
             	FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
                 Parent pantallaJuegoRoot = loader.load();
-                Scene pantallaJuegoScene = new Scene(pantallaJuegoRoot);
-
-                // Get the current stage using the event
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(pantallaJuegoScene);
+                Scene scene = ((Node) event.getSource()).getScene();
+                scene.setRoot(pantallaJuegoRoot);
+                
+                Stage stage = (Stage) scene.getWindow();
                 stage.setTitle("Pantalla de Juego");
-                // Forzar re-maximización al cambiar de escena
-                stage.setMaximized(false);
-                stage.setMaximized(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

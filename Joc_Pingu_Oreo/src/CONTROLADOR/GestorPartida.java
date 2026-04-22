@@ -96,7 +96,12 @@ public class GestorPartida {
         // Comprobacion de turnos perdidos (SueloQuebradizo)
         if (jActual.getTurnosPerdidos() > 0) {
             jActual.setTurnosPerdidos(jActual.getTurnosPerdidos() - 1);
-            System.out.println(jActual.getNombre() + " pierde este turno por el suelo quebradizo. Turnos perdidos restantes: " + jActual.getTurnosPerdidos());
+            System.out.println(jActual.getNombre() + " pierde este turno. Turnos perdidos restantes: " + jActual.getTurnosPerdidos());
+            
+            // RESETEAR variables de movimiento para que la vista no haga nada
+            ultimoResultadoDado = 0;
+            ultimaCasillaPisada = jActual.getPosicion();
+            
             siguienteTurno();
             return;
         }
@@ -109,8 +114,13 @@ public class GestorPartida {
             
             // Comprobar bloqueo por pez
             if (f.getTurnosBloqueada() > 0) {
-                System.out.println("La foca está bloqueada. Turnos restantes: " + f.getTurnosBloqueada());
+                System.out.println("La foca está bloqueada por comer peces. Turnos restantes: " + f.getTurnosBloqueada());
                 f.reducirBloqueo();
+                
+                // RESETEAR variables de movimiento para que la vista no haga nada
+                ultimoResultadoDado = 0;
+                ultimaCasillaPisada = f.getPosicion();
+
                 siguienteTurno();
                 return;
             }
@@ -361,8 +371,16 @@ public class GestorPartida {
      * Devuelve el primer Pingüino encontrado o null.
      */
     public Pinguino detectarPinguinoEnCasillaFoca(Foca foca) {
+        return detectarPinguinoEnPosicion(foca.getPosicion());
+    }
+
+    /**
+     * Detecta si hay un Pingüino en una posición específica.
+     * Devuelve el primer Pingüino encontrado o null.
+     */
+    public Pinguino detectarPinguinoEnPosicion(int posicion) {
         for (Jugador j : partida.getJugadores()) {
-            if (j instanceof Pinguino && j.getPosicion() == foca.getPosicion()) {
+            if (j instanceof Pinguino && j.getPosicion() == posicion) {
                 return (Pinguino) j;
             }
         }
