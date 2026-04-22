@@ -223,31 +223,13 @@ public class PantallaConfiguracionPartida {
             actualizarSkinDisplay();
         }
 
-        private void cambiarSkin(int dir) {
-            String[] skins = currentSkinType.equals("Pinguino") ? SKINS_PINGUINO : SKINS_FOCA;
-            int initialIndex = currentSkinIndex;
-            int attempts = 0;
-            
-            do {
-                currentSkinIndex = (currentSkinIndex + dir + skins.length) % skins.length;
-                attempts++;
-                // Buscamos una skin que no esté ocupada (si es única) o que sea la default
-            } while (skinsSeleccionadas.contains(skins[currentSkinIndex]) && isSkinUnica(skins[currentSkinIndex]) && attempts < skins.length);
-            
-            actualizarSkinDisplay();
+        private String[] getSkinArray() {
+            return currentSkinType.equals("Pinguino") ? SKINS_PINGUINO : SKINS_FOCA;
         }
 
         private void actualizarSkinDisplay() {
             String skin = getCurrentSkin();
-            String subfolder = currentSkinType.equals("Pinguino") ? "pinguino/" : "foca/";
-            String path = "/imagenes/" + subfolder + skin;
-            
-            try {
-                lblSkinActual.setGraphic(new javafx.scene.image.ImageView(new javafx.scene.image.Image(getClass().getResourceAsStream(path), 100, 100, true, true)));
-                bgImage.setImage(new javafx.scene.image.Image(getClass().getResourceAsStream(path)));
-            } catch (Exception e) {
-                System.err.println("No se pudo cargar la imagen: " + path);
-            }
+            animarCambioSkin(skin);
         }
 
         public String getCurrentSkin() {

@@ -901,21 +901,15 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de animar el efecto de casilla
 				Runnable continuarConEfecto = () -> {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
 					} else {
 						PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
 						pausaEfecto.setOnFinished(pausaEvt -> {
 							currentAnimations.remove(pausaEfecto);
 							animarMovimiento(indiceActual, posVisualFinal, () -> {
 								actualizarTodasLasFichas();
-								comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+								comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 							});
-					PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
-					pausaEfecto.setOnFinished(pausaEvt -> {
-						currentAnimations.remove(pausaEfecto);
-						animarMovimiento(indiceActual, posVisualFinal, () -> {
-							actualizarTodasLasFichas();
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 						});
 						currentAnimations.add(pausaEfecto);
 						pausaEfecto.play();
@@ -940,29 +934,24 @@ public class PantallaJuego {
 					});
 				} else if (esSorpresaFinal) {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
 					} else {
 						mostrarEventoSorpresa(itemObtenidoFinal, () -> {
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 						});
 					}
 				} else {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
 					} else {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
-					}
-					mostrarEventoSorpresa(itemObtenidoFinal, () -> {
 						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
-					});
-				} else {
-					comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+					}
 				}
 			});
 		}
 	}
 
-	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual) {
+	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		ImageView imgViewCasilla = getImageViewCasilla(indiceCasilla);
 		Image imgOsoAntigua = null;
 		
@@ -986,7 +975,7 @@ public class PantallaJuego {
 			}
 			animarMovimiento(indiceJugador, posFinal, () -> {
 				actualizarTodasLasFichas();
-				comprobarAplastamientoYContinuar(jugadorActual, indiceJugador);
+				comprobarAplastamientoYContinuar(jugadorActual, indiceJugador, pEncLanding, esRetrocesoFoca);
 			});
 		});
 		currentAnimations.add(pausa);
@@ -1022,15 +1011,14 @@ public class PantallaJuego {
 	 * Si hay aplastados, muestra la animación y aplica el efecto.
 	 * Si no, continúa con comprobarFocaYFinalizar.
 	 */
-	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual) {
+	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
         if (!(jugadorActual instanceof Foca)) {
             // Un pingüino nunca aplasta empujando por el tablero
             gestorPartida.getUltimosPinguinosAplastados().clear();
-            comprobarFocaYFinalizar(jugadorActual, indiceActual);
+            comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
             return;
         }
 
-	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		ArrayList<Pinguino> aplastados = gestorPartida.getUltimosPinguinosAplastados();
 
 		if (aplastados != null && !aplastados.isEmpty()) {
