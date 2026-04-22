@@ -123,10 +123,10 @@
                     <!-- LOGO RECREADO EN CSS -->
                     <VBox alignment="CENTER" spacing="-15">
                         <Label text="EL JUEGO DEL" styleClass="pingu-logo-top" />
-                        <Label text="PINGÜINO" styleClass="pingu-logo-bottom" />
+                        <Label text="P I N G Ü I N O" styleClass="pingu-logo-bottom" />
                     </VBox>
                     
-                    <Label text="E L   T A B L E R O   D E L   F I N   D E L   M U N D O" styleClass="logo-sub" />
+                    <Label text="O R E O" styleClass="logo-sub" />
                 </VBox>
 
                 <Region styleClass="divider" />
@@ -219,7 +219,7 @@
             </VBox>
             
             <Region prefHeight="15" />
-            <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="300" styleClass="menu-btn, primary" text="G U A R D A R" />
+            <Button onAction="#cerrarOpciones" prefHeight="45" prefWidth="300" styleClass="menu-btn, primary" text="V O L V E R" />
         </VBox>
     </StackPane>
 
