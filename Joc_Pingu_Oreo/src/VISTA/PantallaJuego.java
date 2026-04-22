@@ -157,8 +157,9 @@ public class PantallaJuego {
 	private Image imgEvento;
 	private Image imgSorpresa;
 
-	// Imagen del pingüino
-	private Image imgPinguino;
+	// Imagen del pingüino (fallback por defecto)
+	private Image imgPinguinoDefault;
+	private Image imgFocaDefault;
 	private static final double FICHA_SIZE = 50.0;
 	private static final double FICHA_HALF = FICHA_SIZE / 2.0;
 
@@ -182,17 +183,24 @@ public class PantallaJuego {
 			System.out.println("Error al cargar imágenes de las casillas: " + e.getMessage());
 		}
 
-		// Cargar imágenes de personajes
+		// Cargar imágenes de personajes (fallback por defecto)
 		try {
 			java.io.InputStream isPinguino = getClass().getResourceAsStream("/imagenes/pinguino/pinguino.png");
 			if (isPinguino != null) {
-				imgPinguino = new Image(isPinguino);
-				System.out.println("✓ Imagen del pingüino cargada correctamente.");
+				imgPinguinoDefault = new Image(isPinguino);
+				System.out.println("✓ Imagen del pingüino default cargada correctamente.");
 			} else {
 				System.out.println("⚠ ERROR: No se encontró /imagenes/pinguino/pinguino.png");
 			}
+			java.io.InputStream isFoca = getClass().getResourceAsStream("/imagenes/foca/foca_default.png");
+			if (isFoca != null) {
+				imgFocaDefault = new Image(isFoca);
+				System.out.println("✓ Imagen de la foca default cargada correctamente.");
+			} else {
+				System.out.println("⚠ ERROR: No se encontró /imagenes/foca/foca_default.png");
+			}
 		} catch (Exception e) {
-			System.out.println("Error al cargar imagen del pingüino: " + e.getMessage());
+			System.out.println("Error al cargar imágenes de personajes: " + e.getMessage());
 		}
 		
 		// Sincronizar audio con GestorAudio
@@ -290,39 +298,47 @@ public class PantallaJuego {
 	// =========================================
 
 	/**
-	 * Asigna la imagen del pingüino a la ficha o un círculo colored para la foca.
+	 * Carga la imagen de skin de un jugador según su getColor() (nombre de archivo).
+	 * Devuelve la imagen cargada o el fallback por defecto.
+	 */
+	private Image cargarSkinJugador(Jugador jugador) {
+		String skinFile = jugador.getColor();
+		if (skinFile != null && skinFile.endsWith(".png")) {
+			try {
+				String carpeta = (jugador instanceof Pinguino) ? "/imagenes/pinguino/" : "/imagenes/foca/";
+				java.io.InputStream is = getClass().getResourceAsStream(carpeta + skinFile);
+				if (is != null) {
+					Image img = new Image(is);
+					System.out.println("✓ Skin '" + skinFile + "' cargada para " + jugador.getNombre());
+					return img;
+				}
+			} catch (Exception e) {
+				System.out.println("⚠ Error cargando skin '" + skinFile + "': " + e.getMessage());
+			}
+		}
+		// Fallback
+		return (jugador instanceof Pinguino) ? imgPinguinoDefault : imgFocaDefault;
+	}
+
+	/**
+	 * Asigna la imagen de la skin elegida a la ficha del jugador.
 	 */
 	private void asignarImagenFicha(int index, Jugador jugador) {
 		StackPane ficha = getFicha(index);
-		ficha.getChildren().clear(); // Limpiar el contenido actual
+		ficha.getChildren().clear();
 		
-		if (jugador instanceof Pinguino) {
-			ImageView imgView = new ImageView();
-			if (imgPinguino != null) {
-				imgView.setImage(imgPinguino);
-				System.out.println("✓ Imagen de pingüino asignada a " + jugador.getNombre());
-			} else {
-				System.out.println("⚠ Fallback: sin imagen para pingüino " + jugador.getNombre());
-			}
-			imgView.setFitWidth(FICHA_SIZE);
-			imgView.setFitHeight(FICHA_SIZE);
-			imgView.setPreserveRatio(true);
-			ficha.getChildren().add(imgView);
-		} else if (jugador instanceof Foca) {
-			Circle circuloFoca = new Circle(14.0);
-			circuloFoca.setStyle("-fx-stroke: white; -fx-stroke-width: 3;");
-			Color color = null;
-			switch(index) {
-				case 0: color = Color.web("#2f6fed"); break;
-				case 1: color = Color.web("#ef4444"); break;
-				case 2: color = Color.web("#22c55e"); break;
-				case 3: color = Color.web("#facc15"); break;
-				default: color = Color.GRAY; break;
-			}
-			circuloFoca.setFill(color);
-			ficha.getChildren().add(circuloFoca);
-			System.out.println("✓ Ficha circular asignada a " + jugador.getNombre());
+		Image skinImg = cargarSkinJugador(jugador);
+		ImageView imgView = new ImageView();
+		if (skinImg != null) {
+			imgView.setImage(skinImg);
+			System.out.println("✓ Ficha con skin asignada a " + jugador.getNombre());
+		} else {
+			System.out.println("⚠ Fallback: sin imagen para " + jugador.getNombre());
 		}
+		imgView.setFitWidth(FICHA_SIZE);
+		imgView.setFitHeight(FICHA_SIZE);
+		imgView.setPreserveRatio(true);
+		ficha.getChildren().add(imgView);
 	}
 
 	@FXML
@@ -1758,14 +1774,54 @@ public class PantallaJuego {
 			int posVisual = Math.max(0, Math.min(j.getPosicion(), 49));
 			if (posiciones[i] != posVisual) {
 				StackPane fichaObj = getFicha(i);
-				fichaObj.setTranslateX(0);
-				fichaObj.setTranslateY(0);
 				int[] coords = getCoordenadas(posVisual);
 				GridPane.setColumnIndex(fichaObj, coords[0]);
 				GridPane.setRowIndex(fichaObj, coords[1]);
 				GridPane.setHalignment(fichaObj, javafx.geometry.HPos.CENTER);
 				GridPane.setValignment(fichaObj, javafx.geometry.VPos.CENTER);
 				posiciones[i] = posVisual;
+			}
+		}
+		
+		// Recalcular posiciones (TranslateX, Y) para evitar que se pisen
+		java.util.Map<Integer, java.util.List<Integer>> casillasOcupadas = new java.util.HashMap<>();
+		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+			int pos = posiciones[i];
+			if (!casillasOcupadas.containsKey(pos)) {
+				casillasOcupadas.put(pos, new java.util.ArrayList<>());
+			}
+			casillasOcupadas.get(pos).add(i);
+		}
+		
+		for (Integer pos : casillasOcupadas.keySet()) {
+			java.util.List<Integer> ocupantes = casillasOcupadas.get(pos);
+			int numOcupantes = ocupantes.size();
+			
+			for (int ocupanteIndex = 0; ocupanteIndex < numOcupantes; ocupanteIndex++) {
+				int playerIndex = ocupantes.get(ocupanteIndex);
+				StackPane ficha = getFicha(playerIndex);
+				
+				if (numOcupantes == 1) {
+					ficha.setTranslateX(0);
+					ficha.setTranslateY(0);
+				} else if (numOcupantes == 2) {
+					// 2 ocupantes: uno a la izq, otro a la der
+					ficha.setTranslateX(ocupanteIndex == 0 ? -12 : 12);
+					ficha.setTranslateY(0);
+				} else if (numOcupantes == 3) {
+					// 3 ocupantes: triangulo
+					if (ocupanteIndex == 0) {
+						ficha.setTranslateX(0);
+						ficha.setTranslateY(-12);
+					} else {
+						ficha.setTranslateX(ocupanteIndex == 1 ? -12 : 12);
+						ficha.setTranslateY(12);
+					}
+				} else {
+					// 4 ocupantes: cuadrado
+					ficha.setTranslateX(ocupanteIndex % 2 == 0 ? -12 : 12);
+					ficha.setTranslateY(ocupanteIndex < 2 ? -12 : 12);
+				}
 			}
 		}
 	}
