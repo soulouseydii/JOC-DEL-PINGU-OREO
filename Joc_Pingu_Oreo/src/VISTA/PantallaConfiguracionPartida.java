@@ -32,15 +32,22 @@ public class PantallaConfiguracionPartida {
     private int numJugadores = 2; // Default
     
     // Arrays de skins disponibles
-    private static final String[] SKINS_PINGUINO = {"Pingu Azul", "Pingu Rojo", "Pingu Verde", "Pingu Amarillo"};
-    private static final String[] SKINS_FOCA = {"Foca Azul", "Foca Roja", "Foca Verde", "Foca Amarilla"};
+    private static final String[] SKINS_PINGUINO = {"pinguino.png", "pinguino_cool.png", "pinguino_corredor.png", "pinguino_corredor2.png", "pinguino_oreo.png"};
+    private static final String[] SKINS_FOCA = {"foca_default.png", "foca_oreo.png", "foca_pirata.png", "foca_rey.png", "foca_robot.png"};
 
     // Referencia de las skins que ya han sido confirmadas por jugadores "listos"
     private java.util.Set<String> skinsSeleccionadas = new java.util.HashSet<>();
 
+    private boolean isSkinUnica(String skin) {
+        return !skin.equals("pinguino.png") && !skin.equals("foca_default.png");
+    }
+
     // Clase interna para manejar cada tarjeta de jugador de forma independiente 
     private class TarjetaJugador {
-        VBox root;
+        StackPane root;
+        VBox content;
+        javafx.scene.image.ImageView bgImage;
+        Label lblSelloListo;
         ComboBox<String> comboTipo;
         VBox cajaLogin;
         TextField txtUsuario;
@@ -58,10 +65,32 @@ public class PantallaConfiguracionPartida {
         String currentSkinType = "Pinguino"; // Pinguino o Foca
 
         public TarjetaJugador(int numero) {
-            root = new VBox(10);
-            root.setAlignment(Pos.CENTER);
-            root.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(8,20,50,0.97), rgba(5,50,85,0.97)); -fx-background-radius: 18; -fx-padding: 18; -fx-border-color: rgba(130,210,255,0.45); -fx-border-radius: 18; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.15, 0, 8);");
+            root = new StackPane();
+            root.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(8,20,50,0.97), rgba(5,50,85,0.97)); -fx-background-radius: 18; -fx-border-color: rgba(130,210,255,0.45); -fx-border-radius: 18; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.15, 0, 8);");
             root.setPrefWidth(220);
+
+            bgImage = new javafx.scene.image.ImageView();
+            bgImage.setOpacity(0.12);
+            bgImage.setFitWidth(400);
+            bgImage.setFitHeight(400);
+            bgImage.setPreserveRatio(true);
+
+            StackPane bgContainer = new StackPane(bgImage);
+            bgContainer.setPrefSize(0, 0);
+            bgContainer.setMinSize(0, 0);
+            bgContainer.setMaxSize(0, 0);
+            bgContainer.setMouseTransparent(true);
+
+            javafx.scene.shape.Rectangle clipRect = new javafx.scene.shape.Rectangle();
+            clipRect.widthProperty().bind(root.widthProperty());
+            clipRect.heightProperty().bind(root.heightProperty());
+            clipRect.setArcWidth(36);
+            clipRect.setArcHeight(36);
+            root.setClip(clipRect);
+
+            content = new VBox(10);
+            content.setAlignment(Pos.CENTER);
+            content.setPadding(new Insets(18));
 
             Label lblTitulo = new Label("Jugador " + numero);
             lblTitulo.setStyle("-fx-font-weight: 900; -fx-font-size: 17px; -fx-text-fill: #d0f0ff; -fx-effect: dropshadow(gaussian, rgba(100,200,255,0.4), 8, 0.3, 0, 0);");
@@ -108,7 +137,7 @@ public class PantallaConfiguracionPartida {
             btnRight.setStyle("-fx-cursor: hand; -fx-font-weight: 900; -fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-border-radius: 8; -fx-text-fill: #d0f0ff; -fx-padding: 4 12;");
             
             lblSkinActual = new Label("");
-            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-color: rgba(100,180,255,0.15); -fx-background-radius: 6; -fx-border-color: rgba(130,210,255,0.25); -fx-border-radius: 6; -fx-border-width: 1; -fx-text-fill: #c8eeff; -fx-font-size: 12px; -fx-min-width: 110; -fx-alignment: center;");
+            lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-color: rgba(100,180,255,0.15); -fx-background-radius: 6; -fx-border-color: rgba(130,210,255,0.25); -fx-border-radius: 6; -fx-border-width: 1; -fx-text-fill: #c8eeff; -fx-font-size: 12px; -fx-min-width: 140; -fx-min-height: 120; -fx-alignment: center;");
             
             Label lblSkinHeader = new Label("SKIN:");
             lblSkinHeader.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
@@ -126,6 +155,7 @@ public class PantallaConfiguracionPartida {
                 estaListo = false;
                 btnListo.setText("Listo");
                 btnListo.setDisable(false);
+                lblSelloListo.setVisible(false);
                 
                 if (comboTipo.getValue().equals("CPU (Foca)")) {
                     currentSkinType = "Foca";
@@ -181,6 +211,7 @@ public class PantallaConfiguracionPartida {
                     
                     // Liberar skin
                     skinsSeleccionadas.remove(getCurrentSkin());
+                    lblSelloListo.setVisible(false);
                     notificarNuevasSkins();
                     verificarTodosListos();
                 } else {
@@ -206,15 +237,25 @@ public class PantallaConfiguracionPartida {
                     comboTipo.setDisable(true);
                     
                     // Registrar skin ocupada
-                    skinsSeleccionadas.add(getCurrentSkin());
+                    if (isSkinUnica(getCurrentSkin())) {
+                        skinsSeleccionadas.add(getCurrentSkin());
+                    }
+                    lblSelloListo.setVisible(true);
                     notificarNuevasSkins();
                     verificarTodosListos();
                 }
             });
 
+            lblSelloListo = new Label("LISTO");
+            lblSelloListo.setStyle("-fx-font-size: 45px; -fx-font-weight: 900; -fx-text-fill: rgba(100, 255, 130, 0.35); -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 0, 0);");
+            lblSelloListo.setRotate(-35);
+            lblSelloListo.setVisible(false);
+            lblSelloListo.setMouseTransparent(true);
+
             Label lblTipoHeader = new Label("TIPO:");
             lblTipoHeader.setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px; -fx-font-weight: 900;");
-            root.getChildren().addAll(lblTitulo, lblTipoHeader, comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
+            content.getChildren().addAll(lblTitulo, lblTipoHeader, comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
+            root.getChildren().addAll(bgContainer, content, lblSelloListo);
             actualizarSkinLibre(); // Inicializar
         }
         
@@ -230,7 +271,29 @@ public class PantallaConfiguracionPartida {
             javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(100), lblSkinActual);
             st.setToX(0);
             st.setOnFinished(e -> {
-                lblSkinActual.setText(nuevaSkin);
+                if (nuevaSkin.endsWith(".png")) {
+                    try {
+                        String ruta = currentSkinType.equals("Pinguino") ? "/imagenes/pinguino/" + nuevaSkin : "/imagenes/foca/" + nuevaSkin;
+                        javafx.scene.image.Image img = new javafx.scene.image.Image(getClass().getResourceAsStream(ruta));
+                        javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(img);
+                        iv.setFitWidth(100);
+                        iv.setFitHeight(100);
+                        iv.setPreserveRatio(true);
+                        lblSkinActual.setGraphic(iv);
+                        lblSkinActual.setText("");
+                        
+                        bgImage.setImage(img);
+                    } catch (Exception ex) {
+                        lblSkinActual.setText(nuevaSkin);
+                        lblSkinActual.setGraphic(null);
+                        bgImage.setImage(null);
+                    }
+                } else {
+                    lblSkinActual.setText(nuevaSkin);
+                    lblSkinActual.setGraphic(null);
+                    bgImage.setImage(null);
+                }
+
                 javafx.animation.ScaleTransition st2 = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(100), lblSkinActual);
                 st2.setToX(1.0);
                 st2.play();
@@ -246,10 +309,12 @@ public class PantallaConfiguracionPartida {
             
             for (int i = 0; i < n; i++) {
                 offset = (offset + delta + n) % n;
-                if (!skinsSeleccionadas.contains(skins[offset])) {
+                if (!skinsSeleccionadas.contains(skins[offset]) || !isSkinUnica(skins[offset])) {
                     if (estaListo) {
                         skinsSeleccionadas.remove(oldSkin);
-                        skinsSeleccionadas.add(skins[offset]);
+                        if (isSkinUnica(skins[offset])) {
+                            skinsSeleccionadas.add(skins[offset]);
+                        }
                         notificarNuevasSkins();
                     }
                     currentSkinIndex = offset;
@@ -262,7 +327,7 @@ public class PantallaConfiguracionPartida {
         public void actualizarSkinLibre() {
             if (estaListo) return; // Si ya estaba listo, no cambia
             String skin = getCurrentSkin();
-            if (skinsSeleccionadas.contains(skin)) {
+            if (skinsSeleccionadas.contains(skin) && isSkinUnica(skin)) {
                 cambiarSkin(1); // Mover al siguiente libre
             } else {
                 animarCambioSkin(skin);
