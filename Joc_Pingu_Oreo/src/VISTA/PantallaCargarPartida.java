@@ -46,8 +46,21 @@ public class PantallaCargarPartida {
         gestorBBDD = new GestorBBDD();
         cargarListaDesdeOracle();
 
-        // Aplicar animación en cascada al componente central al entrar
-        javafx.application.Platform.runLater(() -> GestorAnimacionesVistas.animarEntradaCascada(panelCargar));
+        // Aplicar animación en cascada al componente central al entrar y configurar ESC
+        javafx.application.Platform.runLater(() -> {
+            GestorAnimacionesVistas.animarEntradaCascada(panelCargar);
+            if (panelCargar.getScene() != null) {
+                panelCargar.getScene().setOnKeyPressed(event -> {
+                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                        if (overlayConfirmacion.isVisible()) {
+                            cancelarBorrado(null);
+                        } else {
+                            handleVolver(null);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void cargarListaDesdeOracle() {
@@ -101,12 +114,11 @@ public class PantallaCargarPartida {
             PantallaJuego controller = loader.getController();
             controller.cargarPartidaGuardada(partidaCargada);
 
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+            
+            Stage stage = (Stage) scene.getWindow();
             stage.setTitle("Juego Pingu Oreo - Partida Cargada");
-            stage.setMaximized(false);
-            stage.setMaximized(true);
 
         } catch (Exception e) {
             System.out.println("Error al abrir PantallaJuego: " + e.getMessage());
@@ -162,13 +174,11 @@ public class PantallaCargarPartida {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+            
+            Stage stage = (Stage) scene.getWindow();
             stage.setTitle("Inicio Pingu Oreo");
-            stage.setMaximized(false);
-            stage.setMaximized(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

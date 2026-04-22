@@ -471,6 +471,7 @@ public class PantallaJuego {
 			
 			StackPane celdaContainer = new StackPane();
 			celdaContainer.setUserData(TAG_CASILLA_TEXT);
+			celdaContainer.getStyleClass().add("polar-cell");
 			
 			Image img = getImagenParaCasilla(casilla);
 			if (img != null) {
@@ -566,13 +567,11 @@ public class PantallaJuego {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaCargarPartida.fxml"));
 			Parent root = loader.load();
-			Scene scene = new Scene(root);
-
-			Stage stage = (Stage) tablero.getScene().getWindow();
-			stage.setScene(scene);
+			Scene scene = tablero.getScene();
+			scene.setRoot(root);
+			
+			Stage stage = (Stage) scene.getWindow();
 			stage.setTitle("Cargar Partida");
-			stage.setMaximized(false);
-			stage.setMaximized(true);
 		} catch (Exception e) {
 			System.out.println("Error al abrir pantalla de cargar partida: " + e.getMessage());
 			e.printStackTrace();
@@ -664,11 +663,8 @@ public class PantallaJuego {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
 				Parent root = loader.load();
-				Scene scene = new Scene(root);
-				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-				stage.setScene(scene);
-				stage.setMaximized(false);
-				stage.setMaximized(true);
+				Scene scene = ((Node) event.getSource()).getScene();
+				scene.setRoot(root);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -684,11 +680,8 @@ public class PantallaJuego {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
 				Parent root = loader.load();
-				Scene scene = new Scene(root);
-				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-				stage.setScene(scene);
-				stage.setMaximized(false);
-				stage.setMaximized(true);
+				Scene scene = ((Node) event.getSource()).getScene();
+				scene.setRoot(root);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -700,8 +693,7 @@ public class PantallaJuego {
 	@FXML
 	private void handleConfirmCancel(ActionEvent event) {
 		GestorAnimacionesVistas.animarCierreOverlay(confirmationOverlay, () -> {
-			menuOverlay.setVisible(true);
-			GestorAnimacionesVistas.animarEntradaCascada(menuOverlay);
+			GestorAnimacionesVistas.animarAparicionOverlay(menuOverlay);
 		});
 	}
 
@@ -717,8 +709,7 @@ public class PantallaJuego {
 	@FXML
 	private void handleBackFromOptions(ActionEvent event) {
 		GestorAnimacionesVistas.animarCierreOverlay(optionsSubmenu, () -> {
-			menuOverlay.setVisible(true);
-			GestorAnimacionesVistas.animarEntradaCascada(menuOverlay);
+			GestorAnimacionesVistas.animarAparicionOverlay(menuOverlay);
 		});
 	}
 

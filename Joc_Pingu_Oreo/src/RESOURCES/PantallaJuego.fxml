@@ -21,6 +21,16 @@
 <?import javafx.scene.text.Text?>
 
 <StackPane stylesheets="@PantallaJuego.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaJuego" styleClass="root">
+    <Region styleClass="aurora-path-1" mouseTransparent="true" />
+    <Region styleClass="aurora-path-2" mouseTransparent="true" />
+    <Region styleClass="aurora-path-3" mouseTransparent="true" />
+    
+    <Region styleClass="star" maxWidth="2" maxHeight="2" translateX="-400" translateY="-300" mouseTransparent="true" />
+    <Region styleClass="star" maxWidth="2" maxHeight="2" translateX="350" translateY="-250" mouseTransparent="true" />
+    <Region styleClass="star" maxWidth="3" maxHeight="3" translateX="-200" translateY="-350" mouseTransparent="true" />
+    <Region styleClass="star" maxWidth="2" maxHeight="2" translateX="500" translateY="-100" mouseTransparent="true" />
+    <Region styleClass="star" maxWidth="3" maxHeight="3" translateX="-550" translateY="50" mouseTransparent="true" />
+
     <BorderPane fx:id="mainContainer">
 
         <center>
@@ -65,7 +75,8 @@
                     <padding>
                         <Insets right="30" />
                     </padding>
-                    <VBox spacing="10" styleClass="events-container">
+                    <VBox spacing="10" styleClass="side-card">
+                        <Label text="EVENTOS DEL SISTEMA" styleClass="side-card-title" style="-fx-font-size: 10px; -fx-text-fill: #4a9bbf; -fx-letter-spacing: 3px;" />
                         <TextArea fx:id="eventosLog" editable="false" prefHeight="400" minHeight="350" wrapText="true" styleClass="events-log" VBox.vgrow="ALWAYS" promptText="Los eventos del juego apareceran aqui..." />
                     </VBox>
                 </VBox>
@@ -74,7 +85,8 @@
                     <padding>
                         <Insets left="20" right="20" />
                     </padding>
-                    <VBox spacing="15" alignment="CENTER" styleClass="inventory-panel">
+                    <VBox spacing="15" alignment="CENTER" styleClass="side-card">
+                        <Label text="INVENTARIO POLAR" styleClass="side-card-title" style="-fx-font-size: 10px; -fx-text-fill: #4a9bbf; -fx-letter-spacing: 3px;" />
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED">
                             <content>
                                 <VBox spacing="10" alignment="CENTER">

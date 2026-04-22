@@ -4,83 +4,110 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 
-<BorderPane styleClass="root" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaConfiguracionPartida">
-    <top>
-        <VBox>
-            <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="40.0" style="-fx-background-color: rgba(2, 8, 20, 0.9); -fx-border-color: transparent transparent rgba(0, 200, 255, 0.5) transparent; -fx-border-width: 0 0 2 0;">
-                <padding>
-                    <Insets bottom="6" left="16" right="8" top="6" />
-                </padding>
-                <Label text="❄  EL JUEGO DEL PINGÜINO — NUEVA PARTIDA" style="-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-font-weight: 900; -fx-effect: dropshadow(gaussian, rgba(0, 200, 255, 0.5), 5, 0.2, 0, 0);" />
-                <Region HBox.hgrow="ALWAYS" />
-                <HBox spacing="4" alignment="CENTER">
-                    <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
-                    <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 12px;" text="⬜" />
-                    <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: rgba(200,50,50,0.3); -fx-text-fill: rgba(255,180,180,0.9); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 10; -fx-border-color: transparent; -fx-font-weight: bold;" text="✕" />
+<AnchorPane styleClass="screen" stylesheets="@PantallaMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VISTA.PantallaConfiguracionPartida">
+
+    <!-- AURORA BOREAL -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" prefHeight="350">
+        <Region styleClass="aurora-path-1" />
+        <Region styleClass="aurora-path-2" />
+        <Region styleClass="aurora-path-3" />
+        <Region styleClass="aurora-path-4" />
+    </StackPane>
+
+    <!-- HIELO INFERIOR -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" prefHeight="250">
+        <Region styleClass="ice-poly-1" />
+        <Region styleClass="ice-poly-2" />
+        <AnchorPane>
+            <Region styleClass="ice-poly-detail-1" layoutX="320" layoutY="60" prefWidth="50" prefHeight="35" />
+            <Region styleClass="ice-poly-detail-2" layoutX="600" layoutY="30" prefWidth="40" prefHeight="20" />
+            <Line startX="0" startY="0" endX="1920" endY="0" stroke="rgba(94,207,255,0.06)" layoutY="180"/>
+        </AnchorPane>
+    </StackPane>
+
+    <BorderPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <top>
+            <VBox>
+                <HBox alignment="CENTER_LEFT" onMouseDragged="#onTitleBarDragged" onMousePressed="#onTitleBarPressed" prefHeight="40.0" style="-fx-background-color: rgba(2, 8, 20, 0.9); -fx-border-color: transparent transparent rgba(0, 200, 255, 0.5) transparent; -fx-border-width: 0 0 2 0;">
+                    <padding>
+                        <Insets bottom="6" left="16" right="8" top="6" />
+                    </padding>
+                    <Label text="❄  NUEVA PARTIDA" style="-fx-text-fill: #ffffff; -fx-font-size: 13px; -fx-font-weight: 900; -fx-effect: dropshadow(gaussian, rgba(0, 200, 255, 0.5), 5, 0.2, 0, 0);" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <HBox spacing="4" alignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#minimizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 13px;" text="—" />
+                        <Button mnemonicParsing="false" onAction="#maximizarVentana" style="-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: rgba(200,230,255,0.7); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 8; -fx-border-color: transparent; -fx-font-size: 12px;" text="⬜" />
+                        <Button mnemonicParsing="false" onAction="#cerrarVentana" style="-fx-background-color: rgba(200,50,50,0.3); -fx-text-fill: rgba(255,180,180,0.9); -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 2 10; -fx-border-color: transparent; -fx-font-weight: bold;" text="✕" />
+                    </HBox>
                 </HBox>
-            </HBox>
-        </VBox>
-    </top>
-
-    <center>
-        <StackPane prefHeight="700.0" prefWidth="1200.0">
-            <padding>
-                <Insets bottom="36" left="40" right="40" top="28" />
-            </padding>
-
-            <VBox alignment="CENTER" maxWidth="1050" spacing="0" styleClass="dark-panel">
-                <padding>
-                    <Insets bottom="36" left="40" right="40" top="36" />
-                </padding>
-
-                <!-- Encabezado -->
-                <VBox alignment="CENTER" spacing="6" style="-fx-padding: 0 0 20 0;">
-                    <Label text="🎮" style="-fx-font-size: 40px;" />
-                    <Label text="NUEVA PARTIDA" styleClass="panel-title" />
-                    <Label text="Configura los jugadores antes de empezar" styleClass="panel-subtitle" />
-                </VBox>
-
-                <!-- Separador -->
-                <Region prefHeight="1" maxWidth="600" style="-fx-background-color: rgba(130,210,255,0.25);" />
-                <Region prefHeight="22" />
-
-                <!-- Nombre de la partida -->
-                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 12; -fx-border-color: rgba(100,200,255,0.5); -fx-border-radius: 12; -fx-border-width: 2; -fx-padding: 14 24;">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #ffffff;" text="Nombre de la partida:" />
-                    <javafx.scene.control.TextField fx:id="txtNombrePartida" promptText="Pingüino Aventura..." styleClass="dark-field" prefWidth="250"/>
-                </HBox>
-                <Label fx:id="lblErrorNombre" text="⚠ Debes ponerle un nombre a la partida" managed="false" visible="false" style="-fx-text-fill: #ff6e6e; -fx-font-size: 13px; -fx-font-weight: 900; -fx-padding: 8 0 0 0; -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.5), 5, 0.2, 0, 0);"/>
-                
-                <Region prefHeight="15" />
-
-                <!-- Selector de número de jugadores -->
-                <HBox spacing="18" alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 12; -fx-border-color: rgba(100,200,255,0.5); -fx-border-radius: 12; -fx-border-width: 2; -fx-padding: 14 24;">
-                    <Label style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #ffffff;" text="Número de Jugadores:" />
-                    <ComboBox fx:id="comboNumJugadores" onAction="#onNumJugadoresChanged" prefWidth="110.0" styleClass="dark-combo" />
-                </HBox>
-
-                <Region prefHeight="22" />
-
-                <!-- Tarjetas de jugadores (dinámicas) -->
-                <HBox fx:id="contenedorJugadores" spacing="18" alignment="CENTER" VBox.vgrow="ALWAYS" />
-
-                <Region prefHeight="24" />
-
-                <!-- Botones finales -->
-                <HBox spacing="16" alignment="CENTER">
-                    <Button fx:id="btnEmpezar" onAction="#handleEmpezar" disable="true" styleClass="dark-btn-primary" text="▶  Empezar Partida" prefWidth="220" prefHeight="48" />
-                </HBox>
-
-                <Region prefHeight="12" />
-                <Button fx:id="btnVolver" maxWidth="260" onAction="#handleVolver" styleClass="dark-btn-secondary" text="← Volver al Menú" prefHeight="40" />
             </VBox>
+        </top>
 
-        </StackPane>
-    </center>
-</BorderPane>
+        <center>
+            <StackPane prefHeight="700.0" prefWidth="1200.0">
+                <padding>
+                    <Insets bottom="36" left="40" right="40" top="28" />
+                </padding>
+
+                <!-- Panel central transparente premium -->
+                <VBox alignment="CENTER" maxWidth="900" styleClass="side-card, overlay-settings">
+                    <padding>
+                        <Insets bottom="36" left="40" right="40" top="36" />
+                    </padding>
+
+                    <!-- Encabezado -->
+                    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 0 0 20 0;">
+                        <VBox alignment="CENTER" spacing="-10">
+                            <Label text="EL JUEGO DEL" styleClass="pingu-logo-top" style="-fx-font-size: 24px;" />
+                            <Label text="PINGÜINO" styleClass="pingu-logo-bottom" style="-fx-font-size: 48px;" />
+                        </VBox>
+                        <Label text="Configura los jugadores antes de empezar" styleClass="logo-sub" />
+                    </VBox>
+
+                    <!-- Separador -->
+                    <Region prefHeight="1" maxWidth="600" styleClass="divider" style="-fx-background-color: rgba(94,207,255,0.2);" />
+                    <Region prefHeight="30" />
+
+                    <!-- Opciones de Configuración -->
+                    <HBox alignment="CENTER" spacing="40">
+                        <!-- Nombre -->
+                        <VBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="N O M B R E   P A R T I D A" styleClass="side-card-title" />
+                            <javafx.scene.control.TextField fx:id="txtNombrePartida" promptText="Aventura Polar..." styleClass="polar-field" prefWidth="250"/>
+                        </VBox>
+
+                        <!-- Jugadores -->
+                        <VBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="J U G A D O R E S" styleClass="side-card-title" />
+                            <ComboBox fx:id="comboNumJugadores" onAction="#onNumJugadoresChanged" prefWidth="120.0" styleClass="polar-combo" />
+                        </VBox>
+                    </HBox>
+                    
+                    <Label fx:id="lblErrorNombre" text="⚠ Debes ponerle un nombre a la partida" managed="false" visible="false" style="-fx-text-fill: #ff6e6e; -fx-font-size: 13px; -fx-font-weight: 900; -fx-padding: 8 0 0 0;"/>
+                    
+                    <Region prefHeight="30" />
+
+                    <!-- Tarjetas de jugadores dinámicas -->
+                    <HBox fx:id="contenedorJugadores" spacing="20" alignment="CENTER" VBox.vgrow="ALWAYS" />
+
+                    <Region prefHeight="40" />
+
+                    <!-- Botones finales -->
+                    <HBox spacing="20" alignment="CENTER">
+                        <Button fx:id="btnVolver" onAction="#handleVolver" styleClass="menu-btn" text="V O L V E R" prefWidth="200" />
+                        <Button fx:id="btnEmpezar" onAction="#handleEmpezar" disable="true" styleClass="menu-btn, primary" text="▶  E M P E Z A R" prefWidth="250" />
+                    </HBox>
+
+                </VBox>
+            </StackPane>
+        </center>
+    </BorderPane>
+</AnchorPane>

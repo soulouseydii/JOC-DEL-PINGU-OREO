@@ -12,11 +12,19 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.StageStyle;
 import javafx.application.Application;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import CONTROLADOR.GestorAudio;
 import CONTROLADOR.GestorAnimacionesVistas;
+import javafx.animation.TranslateTransition;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+import java.util.Random;
 
 public class PantallaInicio extends Application {
 
@@ -27,11 +35,13 @@ public class PantallaInicio extends Application {
     @FXML private Button btnCreditos;
     @FXML private Button btnSalir;
 
+    @FXML private AnchorPane sceneRoot;
+
     // Menú principal
-    @FXML private VBox menuPrincipal;
+    @FXML private HBox menuPrincipal;
 
     // Elementos del menú de opciones
-    @FXML private VBox paneOpciones;
+    @FXML private StackPane paneOpciones;
     @FXML private CheckBox chkMusica;
     @FXML private Slider sliderMusica;
     @FXML private CheckBox chkSonido;
@@ -82,6 +92,8 @@ public class PantallaInicio extends Application {
         GestorAudio gestorAudio = GestorAudio.getInstance();
         gestorAudio.playMusicaFondo();
         
+        crearNieveProcedural();
+        
         // Aplicar efectos visuales y sonoros a los botones cuando la escena esté lista
         btnSalir.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -112,20 +124,60 @@ public class PantallaInicio extends Application {
         }
     }
 
+    private void crearNieveProcedural() {
+        if (sceneRoot == null) return;
+        
+        Random random = new Random();
+        int count = 18; // 18 snowflakes as in the HTML
+        
+        for (int i = 0; i < count; i++) {
+            Label copo = new Label("·");
+            
+            // Random size: 4px to 10px
+            double size = 4 + random.nextDouble() * 6;
+            copo.setStyle("-fx-font-size: " + size + "px;");
+            
+            // Random color
+            int r = 180 + random.nextInt(40);
+            int g = 210 + random.nextInt(30);
+            int b = 255;
+            double a = 0.2 + random.nextDouble() * 0.4;
+            copo.setTextFill(Color.rgb(r, g, b, a));
+            
+            copo.setMouseTransparent(true);
+            
+            // Add behind UI elements (aurora is index 1-4, background is 0)
+            sceneRoot.getChildren().add(5, copo); 
+            
+            // Random X position bound to window width
+            double xPercent = random.nextDouble();
+            copo.translateXProperty().bind(sceneRoot.widthProperty().multiply(xPercent));
+            copo.setLayoutY(-20);
+            
+            // Animation down
+            double durationSeconds = 6 + random.nextDouble() * 10;
+            TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), copo);
+            transition.setFromY(0);
+            transition.setToY(1500); // Ensures it goes off screen on full HD monitors
+            transition.setCycleCount(TranslateTransition.INDEFINITE);
+            
+            // Delay or playFrom to scatter them immediately
+            transition.playFrom(Duration.seconds(random.nextDouble() * durationSeconds));
+        }
+    }
+
     @FXML
     private void handleNuevaPartida(ActionEvent event) {
         System.out.println("Nueva Partida clicked");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaConfiguracionPartida.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
+            
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+            
+            Stage stage = (Stage) scene.getWindow();
             stage.setTitle("Configuración Pingu Oreo");
-            // Forzar re-maximización al cambiar de escena
-            stage.setMaximized(false);
-            stage.setMaximized(true);
         } catch (Exception e) {
             System.out.println("No se pudo cargar PantallaConfiguracionPartida.fxml");
             e.printStackTrace();
@@ -138,14 +190,12 @@ public class PantallaInicio extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaCargarPartida.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root);
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
+            
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+            
+            Stage stage = (Stage) scene.getWindow();
             stage.setTitle("Cargar Partida - Pingu Oreo");
-            // Forzar re-maximización al cambiar de escena
-            stage.setMaximized(false);
-            stage.setMaximized(true);
         } catch (Exception e) {
             System.out.println("No se pudo cargar PantallaCargarPartida.fxml");
             e.printStackTrace();
