@@ -97,7 +97,7 @@
                 </VBox>
 
                 <!-- Overlay de Confirmación -->
-                <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: rgba(0, 5, 15, 0.75);">
+                <VBox fx:id="overlayConfirmacion" alignment="CENTER" visible="false" style="-fx-background-color: transparent;">
                     <VBox alignment="CENTER" maxWidth="420" spacing="24" styleClass="side-card, overlay-settings">
                         <padding>
                             <Insets bottom="40" left="36" right="36" top="40" />
@@ -106,7 +106,7 @@
                         <Label text="¿ELIMINAR PARTIDA?" styleClass="logo-main, word-roll" style="-fx-font-size: 22px; -fx-effect: none;" />
                         <Label style="-fx-font-size: 15px; -fx-text-fill: #ffffff; -fx-alignment: center;" text="Esta acción no se puede deshacer." />
                         <HBox spacing="16" alignment="CENTER">
-                            <Button onAction="#confirmarBorrado" styleClass="menu-btn" style="-fx-text-fill: #ff6e6e; -fx-border-color: rgba(255,100,100,0.5);" text="S Í,  E L I M I N A R" prefWidth="180" />
+                            <Button onAction="#confirmarBorrado" styleClass="menu-btn" style="-fx-text-fill: #ff6e6e; -fx-border-color: rgba(255,100,100,0.5);" text="E L I M I N A R" prefWidth="180" />
                             <Button onAction="#cancelarBorrado" styleClass="menu-btn, primary" text="C A N C E L A R" prefWidth="180" />
                         </HBox>
                     </VBox>
