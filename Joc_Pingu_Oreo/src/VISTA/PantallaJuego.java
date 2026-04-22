@@ -90,6 +90,10 @@ public class PantallaJuego {
 	@FXML private VBox saveSuccessOverlay;
 	@FXML private Label saveMessageLabel;
 
+	// Game End Overlay
+	@FXML private VBox gameEndOverlay;
+	@FXML private Label winnerNameLabel;
+
 	// Snowball Fight overlays
 	@FXML private StackPane snowballFightImageOverlay;
 	@FXML private ImageView snowballFightImage;
@@ -533,6 +537,11 @@ public class PantallaJuego {
 			agregarEvento("💾 Partida guardada correctamente! (ID: " + idGuardado + ")");
 			agregarEvento("═══════════════════════");
 
+			// Si estamos en la pantalla de fin de partida, ocultarla temporalmente
+			if (gameEndOverlay.isVisible()) {
+				gameEndOverlay.setVisible(false);
+			}
+
 			// Actualizar mensaje y mostrar overlay personalizado
 			saveMessageLabel.setText("Partida guardada correctamente\nID de la partida: " + idGuardado);
 			saveSuccessOverlay.setVisible(true);
@@ -543,6 +552,12 @@ public class PantallaJuego {
 			}
 		} else {
 			agregarEvento("❌ Error al guardar la partida.");
+			
+			// Si estamos en la pantalla de fin de partida, ocultarla temporalmente
+			if (gameEndOverlay.isVisible()) {
+				gameEndOverlay.setVisible(false);
+			}
+
 			saveMessageLabel.setText("Error: No se pudo guardar la partida.\nComprueba la base de datos.");
 			saveSuccessOverlay.setVisible(true);
 			GestorAnimacionesVistas.animarAparicionOverlay(saveSuccessOverlay);
@@ -554,7 +569,12 @@ public class PantallaJuego {
 	@FXML
 	private void handleCloseSaveOverlay() {
 		saveSuccessOverlay.setVisible(false);
-		if (!isPaused) {
+		
+		// Si la partida ha terminado, volver a mostrar el overlay de fin de partida
+		if (gestorPartida.getPartida().isFinalizada()) {
+			gameEndOverlay.setVisible(true);
+			GestorAnimacionesVistas.animarAparicionOverlay(gameEndOverlay);
+		} else if (!isPaused) {
 			mainContainer.setDisable(false);
 			mainContainer.getStyleClass().remove("main-container-disabled");
 		}
@@ -776,8 +796,13 @@ public class PantallaJuego {
 			};
 		}
 		
-		dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
-		registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
+		if (resultadoDado == 0) {
+			dadoResultText.setText(jugadorActual.getNombre() + " ha perdido el turno.");
+			agregarEvento("🚫 " + jugadorActual.getNombre() + " no puede mover este turno.");
+		} else {
+			dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
+			registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
+		}
 
 		// Detectar si la casilla pisada es un Evento/Sorpresa (para la animación del cofre o interrogantes)
 		boolean esEvento = false;
@@ -825,13 +850,10 @@ public class PantallaJuego {
 					} else if (jugadorActual instanceof Foca) {
 						Foca f = (Foca) jugadorActual;
 						if (f.getPosicion() > casillaPisada) {
-							itemObtenido = "↗️ ¡Impulso Accidental!";
+							itemObtenido = "🛷 ¡Trineo!";
 						} else if (f.getPosicion() < casillaPisada) {
-							if (f.getPosicion() == 0) itemObtenido = "🐻 ¡Susto del Oso!";
+							if (f.getPosicion() == 0) itemObtenido = "🐻 ¡Oso!";
 							else itemObtenido = "🕳️ ¡Agujero!";
-						} else if (f.getTurnosBloqueada() > turnosBloqueadaAntes) {
-							if (f.getTurnosBloqueada() - turnosBloqueadaAntes == 1) itemObtenido = "🐟 ¡Muchos Peces!";
-							else itemObtenido = "❄️ ¡Trampa de Nieve!";
 						} else {
 							itemObtenido = "❓ ¡Nada!";
 						}
@@ -844,11 +866,24 @@ public class PantallaJuego {
 		final boolean esEventoFinal = esEvento;
 		final boolean esSorpresaFinal = esSorpresa;
 		final String itemObtenidoFinal = itemObtenido;
+
+		// Determinar si hay encuentro con foca en la casilla de aterrizaje (landing)
+		Pinguino pEncLanding = null;
+		boolean esRetrocesoFoca = false;
+		if (jugadorActual instanceof Foca) {
+			pEncLanding = gestorPartida.detectarPinguinoEnPosicion(casillaPisada);
+			if (posNueva < casillaPisada) {
+				esRetrocesoFoca = true;
+			}
+		}
 		
+		final Pinguino finalPEncLanding = pEncLanding;
+		final boolean finalEsRetrocesoFoca = esRetrocesoFoca;
+
 		// Animación del movimiento del jugador (saltos parabólicos)
 		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
 		int posVisualFinal = Math.max(0, Math.min(posNueva, 49));
-		
+
 		if (casillaPisada >= 0 && posVisualCasilla != posVisualFinal) {
 			// HAY EFECTO de casilla (retroceso o avance): animación en 2 pasos
 			animarMovimiento(indiceActual, posVisualCasilla, () -> {
@@ -859,7 +894,7 @@ public class PantallaJuego {
 						currentAnimations.remove(pausaEfecto);
 						animarMovimiento(indiceActual, posVisualFinal, () -> {
 							actualizarTodasLasFichas();
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 						});
 					});
 					currentAnimations.add(pausaEfecto);
@@ -880,14 +915,14 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de continuar
 				if (esEventoFinal) {
 					mostrarEventoCofre(itemObtenidoFinal, () -> {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 					});
 				} else if (esSorpresaFinal) {
 					mostrarEventoSorpresa(itemObtenidoFinal, () -> {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 					});
 				} else {
-					comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
+					comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
 				}
 			});
 		}
@@ -903,7 +938,7 @@ public class PantallaJuego {
 	 * Si hay aplastados, muestra la animación y aplica el efecto.
 	 * Si no, continúa con comprobarFocaYFinalizar.
 	 */
-	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual) {
+	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		ArrayList<Pinguino> aplastados = gestorPartida.getUltimosPinguinosAplastados();
 
 		if (aplastados != null && !aplastados.isEmpty()) {
@@ -913,10 +948,10 @@ public class PantallaJuego {
 			}
 
 			// Mostrar la animación visual, después continuar
-			mostrarEventoAplastamiento(aplastados, jugadorActual, indiceActual);
+			mostrarEventoAplastamiento(aplastados, jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
 		} else {
 			// No hay aplastados → continuar con el check de foca en casilla final
-			comprobarFocaYFinalizar(jugadorActual, indiceActual);
+			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
 		}
 	}
 
@@ -925,7 +960,7 @@ public class PantallaJuego {
 	 * (squash + shake). Después de ~1.5s, registra los eventos en el log
 	 * y continúa con el flujo normal.
 	 */
-	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual) {
+	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		// Preparar la imagen para la animación
 		crushImage.setOpacity(0);
 		crushImage.setScaleX(1.3);
@@ -994,7 +1029,7 @@ public class PantallaJuego {
 			actualizarTodasLasFichas();
 
 			// Continuar con el flujo normal: check foca en casilla final
-			comprobarFocaYFinalizar(jugadorActual, indiceActual);
+			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
 		});
 
 		currentAnimations.add(secuencia);
@@ -1182,7 +1217,7 @@ public class PantallaJuego {
 	 * Si es así, lanza la secuencia visual de guerra de bolas de nieve.
 	 * Si no, finaliza el turno normalmente.
 	 */
-	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual) {
+	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		// ── CASO 1: El jugador actual es un Pingüino → comprobar si hay foca ──
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino pActual = (Pinguino) jugadorActual;
@@ -1206,7 +1241,13 @@ public class PantallaJuego {
 		// ── CASO 2: El jugador actual es una Foca → comprobar si hay pingüino ──
 		if (jugadorActual instanceof Foca) {
 			Foca fActual = (Foca) jugadorActual;
-			Pinguino pEncontrado = gestorPartida.detectarPinguinoEnCasillaFoca(fActual);
+			
+			// REGLA: Solo trigger si hubo encuentro en el landing o si no fue un retroceso
+			Pinguino pEncontrado = pEncLanding;
+			
+			if (pEncontrado == null && !esRetrocesoFoca) {
+				pEncontrado = gestorPartida.detectarPinguinoEnCasillaFoca(fActual);
+			}
 
 			if (pEncontrado != null && fActual.getPosicion() != 0) {
 				// Guardar estado del encuentro
@@ -1215,7 +1256,7 @@ public class PantallaJuego {
 				sealEncounterPinguinoIndice = getIndiceJugador(pEncontrado);
 
 				agregarEvento("═══════════════════════");
-				agregarEvento("🦭 ¡La foca cae en la casilla de " + pEncontrado.getNombre() + " (casilla " + fActual.getPosicion() + ")!");
+				agregarEvento("🦭 ¡La foca se encuentra con " + pEncontrado.getNombre() + "!");
 
 				// Lanzar la secuencia visual del encuentro con foca
 				mostrarEventoEncuentroFoca();
@@ -1725,6 +1766,7 @@ public class PantallaJuego {
 			agregarEvento("═══════════════════════");
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
+			mostrarVentanaFinPartida();
 		} else {
 			// Actualizar inventario para el SIGUIENTE jugador
 			actualizarInventarioUI();
@@ -1744,6 +1786,59 @@ public class PantallaJuego {
 			} else {
 				dado.setDisable(false);
 			}
+		}
+	}
+	
+	/**
+	 * Muestra la ventana modal de fin de partida.
+	 */
+	private void mostrarVentanaFinPartida() {
+		isPaused = true;
+		
+		// Detener animaciones en curso
+		for (Animation a : currentAnimations) {
+			if (a.getStatus() == Animation.Status.RUNNING) {
+				a.pause();
+			}
+		}
+
+		Jugador ganador = gestorPartida.getPartida().getGanador();
+		if (ganador != null) {
+			winnerNameLabel.setText("Ganador: " + ganador.getNombre());
+		}
+
+		gameEndOverlay.setVisible(true);
+		GestorAnimacionesVistas.animarAparicionOverlay(gameEndOverlay);
+		
+		mainContainer.setDisable(true);
+		if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
+			mainContainer.getStyleClass().add("main-container-disabled");
+		}
+	}
+
+	/**
+	 * Guarda la partida al finalizar el juego.
+	 */
+	@FXML
+	private void guardarPartidaFinal(ActionEvent event) {
+		handleSaveGame();
+	}
+
+	/**
+	 * Vuelve al menú principal al finalizar el juego.
+	 */
+	@FXML
+	private void volverAlMenuFinal(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
+			Parent root = loader.load();
+			Scene scene = new Scene(root);
+			Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+			stage.setScene(scene);
+			stage.setMaximized(false);
+			stage.setMaximized(true);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -1778,7 +1873,9 @@ public class PantallaJuego {
 		Tablero t = gestorPartida.getPartida().getTablero();
 		
 		agregarEvento("───────────────────────");
-		agregarEvento("🎲 " + jugador.getNombre() + " tira el dado: " + dado);
+		if (dado > 0) {
+			agregarEvento("🎲 " + jugador.getNombre() + " avanza " + dado + " casillas.");
+		}
 		
 		if (posicion >= 0 && posicion < t.getListaCasillas().size()) {
 			Casilla casilla = t.getListaCasillas().get(posicion);

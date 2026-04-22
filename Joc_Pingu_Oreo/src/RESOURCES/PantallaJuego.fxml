@@ -344,6 +344,19 @@
             <Button maxWidth="220.0" onAction="#handleCloseSaveOverlay" styleClass="menu-button-alt" text="Aceptar" />
         </children>
     </VBox>
+    
+    <!-- Overlay Fin de Partida -->
+    <VBox fx:id="gameEndOverlay" alignment="CENTER" maxHeight="450.0" maxWidth="500.0" mouseTransparent="false" spacing="20.0" styleClass="overlay-menu" visible="false" StackPane.alignment="CENTER">
+        <children>
+            <Label styleClass="menu-title" text="GANADOR DE LA PARTIDA" />
+            <Label fx:id="winnerNameLabel" styleClass="confirmation-text" text="Nombre del Ganador" wrapText="true" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+            
+            <VBox spacing="15.0" alignment="CENTER">
+                <Button maxWidth="320.0" onAction="#guardarPartidaFinal" styleClass="menu-button-alt" text="Guardar partida" />
+                <Button maxWidth="320.0" onAction="#volverAlMenuFinal" styleClass="menu-button-alt" text="Volver al menú" />
+            </VBox>
+        </children>
+    </VBox>
 
 </StackPane>
 
