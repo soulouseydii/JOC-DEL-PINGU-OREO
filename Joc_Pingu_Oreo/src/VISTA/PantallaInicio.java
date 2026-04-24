@@ -52,19 +52,7 @@ public class PantallaInicio extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            String rutaFxml = "/RESOURCES/PantallaInicio.fxml"; 
-            java.net.URL url = getClass().getResource(rutaFxml);
-            
-            if (url == null) {
-                System.out.println("No encuentra el FXML en la ruta: " + rutaFxml);
-                primaryStage.setTitle("Fallo FXML - Inicio");
-                primaryStage.show();
-                return;
-            }
-
-            Parent root = FXMLLoader.load(url);
-            Scene scene = new Scene(root);
-
+            // Configurar ventana sin bordes y maximizada
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setTitle("Inicio Pingu Oreo");
             try {
@@ -72,9 +60,54 @@ public class PantallaInicio extends Application {
             } catch (Exception e) {
                 System.out.println("No se pudo cargar el icono del juego");
             }
-            primaryStage.setScene(scene);
+
+            // Crear y mostrar la pantalla de carga primero
+            PantallaCarga pantallaCarga = new PantallaCarga(() -> {
+                // Este callback se ejecuta cuando la carga termina
+                cargarMenuPrincipal(primaryStage);
+            });
+
+            Scene escenaCarga = pantallaCarga.crearEscena();
+            primaryStage.setScene(escenaCarga);
             primaryStage.setMaximized(true);
             primaryStage.show();
+
+            System.out.println("Pantalla de carga mostrada.");
+
+        } catch (Exception e) {
+            System.out.println("Error al iniciar la pantalla de carga");
+            e.printStackTrace();
+            // Fallback: intentar cargar directamente el menú principal
+            cargarMenuPrincipal(primaryStage);
+        }
+    }
+
+    /**
+     * Carga el menú principal desde el FXML y lo muestra en el Stage.
+     * Se llama automáticamente cuando la pantalla de carga finaliza.
+     */
+    private void cargarMenuPrincipal(Stage stage) {
+        try {
+            String rutaFxml = "/RESOURCES/PantallaInicio.fxml"; 
+            java.net.URL url = getClass().getResource(rutaFxml);
+            
+            if (url == null) {
+                System.out.println("No encuentra el FXML en la ruta: " + rutaFxml);
+                return;
+            }
+
+            Parent root = FXMLLoader.load(url);
+
+            // Reutilizar la escena existente para mantener el estado maximizado
+            Scene escenaActual = stage.getScene();
+            if (escenaActual != null) {
+                escenaActual.setRoot(root);
+            } else {
+                stage.setScene(new Scene(root));
+            }
+
+            // Forzar que el stage se mantenga maximizado
+            stage.setMaximized(true);
             
             System.out.println("El diseño fxml de inicio se ha cargado.");
 
