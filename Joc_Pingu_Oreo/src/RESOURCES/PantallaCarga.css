@@ -1,0 +1,139 @@
+/* ================================================ */
+/*        PANTALLA DE CARGA - POLAR ROLL             */
+/*        Estilo coherente con PantallaMenu.css      */
+/* ================================================ */
+
+/* FONDO PRINCIPAL */
+.pantalla-carga {
+    -fx-background-color: #020810;
+    -fx-font-family: 'Verdana';
+}
+
+/* AURORA BOREAL (reutiliza mismos estilos) */
+.aurora-carga-1 {
+    -fx-shape: "M0 80 Q200 20 400 60 Q600 100 800 40 Q800 0 0 0 Z";
+    -fx-background-color: rgba(13, 79, 60, 0.22);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+
+.aurora-carga-2 {
+    -fx-shape: "M0 120 Q250 55 450 90 Q650 125 800 65 Q800 0 0 0 Z";
+    -fx-background-color: rgba(26, 13, 79, 0.18);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+
+.aurora-carga-3 {
+    -fx-shape: "M0 60 Q180 110 380 75 Q560 40 800 85 Q800 0 0 0 Z";
+    -fx-background-color: rgba(10, 61, 92, 0.20);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+
+/* HIELO INFERIOR */
+.hielo-carga-1 {
+    -fx-shape: "M 0 150 L 0 90 L 40 60 L 80 85 L 130 45 L 180 75 L 240 30 L 290 65 L 350 20 L 400 55 L 450 15 L 510 50 L 570 25 L 620 60 L 670 35 L 720 70 L 760 42 L 800 70 L 800 150 Z";
+    -fx-background-color: #030e1e;
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+
+.hielo-carga-2 {
+    -fx-shape: "M 0 150 L 0 100 L 40 75 L 80 95 L 130 60 L 180 90 L 240 50 L 290 80 L 350 40 L 400 70 L 450 30 L 510 65 L 570 40 L 620 75 L 670 50 L 720 85 L 760 55 L 800 80 L 800 150 Z";
+    -fx-background-color: rgba(10, 30, 60, 0.6);
+    -fx-scale-shape: true;
+    -fx-position-shape: true;
+}
+
+/* TÍTULO DEL JUEGO */
+.carga-titulo-superior {
+    -fx-font-family: 'Verdana';
+    -fx-font-weight: 900;
+    -fx-font-size: 28px;
+    -fx-text-fill: linear-gradient(to bottom, #ffffff, #7ae2ff);
+    -fx-effect: dropshadow(gaussian, #0088cc, 5, 1.0, 0, 2) dropshadow(gaussian, #002244, 10, 0.5, 0, 4);
+}
+
+.carga-titulo-inferior {
+    -fx-font-family: 'Verdana';
+    -fx-font-weight: 700;
+    -fx-font-size: 62px;
+    -fx-text-fill: linear-gradient(to bottom, #ffffff, #61d4ff);
+    -fx-effect: dropshadow(gaussian, #ffffff, 3, 1.0, 0, 0) dropshadow(gaussian, #0088cc, 8, 1.0, 0, 4) dropshadow(gaussian, #002244, 15, 0.6, 0, 8);
+    -fx-letter-spacing: -2px;
+}
+
+/* TEXTO "CARGANDO..." */
+.texto-cargando {
+    -fx-font-family: 'Verdana';
+    -fx-font-weight: 700;
+    -fx-font-size: 16px;
+    -fx-text-fill: #5ecfff;
+    -fx-letter-spacing: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.6), 10, 0.4, 0, 0);
+}
+
+/* SUBTEXTO INFERIOR */
+.texto-subtitulo-carga {
+    -fx-font-family: 'Verdana';
+    -fx-font-weight: 700;
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(94, 207, 255, 0.5);
+    -fx-letter-spacing: 4px;
+}
+
+/* BARRA DE PROGRESO (fondo) */
+.barra-progreso-fondo {
+    -fx-background-color: rgba(94, 207, 255, 0.08);
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(94, 207, 255, 0.2);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+/* BARRA DE PROGRESO (relleno animado) */
+.barra-progreso-relleno {
+    -fx-background-color: linear-gradient(to right, rgba(94, 207, 255, 0.3), rgba(94, 207, 255, 0.8), rgba(130, 220, 255, 0.9));
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.7), 12, 0.5, 0, 0);
+}
+
+/* SELLO OREO (footer) */
+.oreo-carga-stack {
+    -fx-alignment: center;
+    -fx-spacing: 1;
+}
+
+.oreo-carga-dark {
+    -fx-pref-width: 18;
+    -fx-pref-height: 18;
+    -fx-max-width: 70;
+    -fx-max-height: 18;
+    -fx-background-radius: 50%;
+    -fx-background-color: #111;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 50%;
+}
+
+.oreo-carga-cream {
+    -fx-pref-width: 18;
+    -fx-pref-height: 5;
+    -fx-max-width: 64;
+    -fx-max-height: 18;
+    -fx-background-color: #f0ebe0;
+    -fx-background-radius: 3;
+}
+
+.oreo-carga-text {
+    -fx-font-size: 7px;
+    -fx-letter-spacing: 4px;
+    -fx-text-fill: rgba(240, 235, 224, 0.4);
+}
+
+/* VERSIÓN */
+.version-carga {
+    -fx-font-size: 9px;
+    -fx-letter-spacing: 3px;
+    -fx-text-fill: rgba(94, 207, 255, 0.2);
+}
