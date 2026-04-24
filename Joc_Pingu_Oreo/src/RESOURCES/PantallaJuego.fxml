@@ -37,11 +37,11 @@
             <StackPane>
                 <!-- Margen estéticamente equilibrado para separar el tablero de los bordes de la pantalla -->
                 <padding>
-                    <Insets bottom="60" left="60" right="60" top="60" />
+                    <Insets bottom="40" left="40" right="40" top="40" />
                 </padding>
 
                 <!-- El tablero de las 50 casillas. Scalea automáticamente su contenido. -->
-                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" translateY="60" maxWidth="1050" maxHeight="480">
+                <GridPane fx:id="tablero" gridLinesVisible="false" styleClass="board" StackPane.alignment="CENTER" translateY="50" maxWidth="1250" maxHeight="580">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="10.0" />
                         <ColumnConstraints percentWidth="10.0" />
@@ -71,9 +71,9 @@
                     </children>
                 </GridPane>
 
-                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_RIGHT" translateY="75" translateX="7">
+                <VBox alignment="CENTER_LEFT" maxWidth="310" pickOnBounds="false" StackPane.alignment="CENTER_RIGHT" translateY="75" translateX="35">
                     <padding>
-                        <Insets right="30" />
+                        <Insets right="5" />
                     </padding>
                     <VBox spacing="10" styleClass="side-card">
                         <Label text="EVENTOS DEL SISTEMA" styleClass="side-card-title" style="-fx-font-size: 10px; -fx-text-fill: #4a9bbf; -fx-letter-spacing: 3px;" />
