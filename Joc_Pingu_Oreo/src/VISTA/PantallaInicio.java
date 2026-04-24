@@ -91,25 +91,24 @@ public class PantallaInicio extends Application {
             String rutaFxml = "/RESOURCES/PantallaInicio.fxml"; 
             java.net.URL url = getClass().getResource(rutaFxml);
             
-            if (url == null) {
-                System.out.println("No encuentra el FXML en la ruta: " + rutaFxml);
-                return;
-            }
+            if (url != null) {
+                Parent root = FXMLLoader.load(url);
 
-            Parent root = FXMLLoader.load(url);
+                // Reutilizar la escena existente para mantener el estado maximizado
+                Scene escenaActual = stage.getScene();
+                if (escenaActual != null) {
+                    escenaActual.setRoot(root);
+                } else {
+                    stage.setScene(new Scene(root));
+                }
 
-            // Reutilizar la escena existente para mantener el estado maximizado
-            Scene escenaActual = stage.getScene();
-            if (escenaActual != null) {
-                escenaActual.setRoot(root);
+                // Forzar que el stage se mantenga maximizado
+                stage.setMaximized(true);
+                
+                System.out.println("El diseño fxml de inicio se ha cargado.");
             } else {
-                stage.setScene(new Scene(root));
+                System.out.println("No encuentra el FXML en la ruta: " + rutaFxml);
             }
-
-            // Forzar que el stage se mantenga maximizado
-            stage.setMaximized(true);
-            
-            System.out.println("El diseño fxml de inicio se ha cargado.");
 
         } catch (Exception e) {
             System.out.println("No se ha podido cargar el diseño fxml de inicio");
@@ -158,44 +157,44 @@ public class PantallaInicio extends Application {
     }
 
     private void crearNieveProcedural() {
-        if (sceneRoot == null) return;
-        
-        Random random = new Random();
-        int count = 18; // 18 snowflakes as in the HTML
-        
-        for (int i = 0; i < count; i++) {
-            Label copo = new Label("·");
+        if (sceneRoot != null) {
+            Random random = new Random();
+            int count = 18; // 18 snowflakes as in the HTML
             
-            // Random size: 4px to 10px
-            double size = 4 + random.nextDouble() * 6;
-            copo.setStyle("-fx-font-size: " + size + "px;");
-            
-            // Random color
-            int r = 180 + random.nextInt(40);
-            int g = 210 + random.nextInt(30);
-            int b = 255;
-            double a = 0.2 + random.nextDouble() * 0.4;
-            copo.setTextFill(Color.rgb(r, g, b, a));
-            
-            copo.setMouseTransparent(true);
-            
-            // Add behind UI elements (aurora is index 1-4, background is 0)
-            sceneRoot.getChildren().add(5, copo); 
-            
-            // Random X position bound to window width
-            double xPercent = random.nextDouble();
-            copo.translateXProperty().bind(sceneRoot.widthProperty().multiply(xPercent));
-            copo.setLayoutY(-20);
-            
-            // Animation down
-            double durationSeconds = 6 + random.nextDouble() * 10;
-            TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), copo);
-            transition.setFromY(0);
-            transition.setToY(1500); // Ensures it goes off screen on full HD monitors
-            transition.setCycleCount(TranslateTransition.INDEFINITE);
-            
-            // Delay or playFrom to scatter them immediately
-            transition.playFrom(Duration.seconds(random.nextDouble() * durationSeconds));
+            for (int i = 0; i < count; i++) {
+                Label copo = new Label("·");
+                
+                // Random size: 4px to 10px
+                double size = 4 + random.nextDouble() * 6;
+                copo.setStyle("-fx-font-size: " + size + "px;");
+                
+                // Random color
+                int r = 180 + random.nextInt(40);
+                int g = 210 + random.nextInt(30);
+                int b = 255;
+                double a = 0.2 + random.nextDouble() * 0.4;
+                copo.setTextFill(Color.rgb(r, g, b, a));
+                
+                copo.setMouseTransparent(true);
+                
+                // Add behind UI elements (aurora is index 1-4, background is 0)
+                sceneRoot.getChildren().add(5, copo); 
+                
+                // Random X position bound to window width
+                double xPercent = random.nextDouble();
+                copo.translateXProperty().bind(sceneRoot.widthProperty().multiply(xPercent));
+                copo.setLayoutY(-20);
+                
+                // Animation down
+                double durationSeconds = 6 + random.nextDouble() * 10;
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), copo);
+                transition.setFromY(0);
+                transition.setToY(1500); // Ensures it goes off screen on full HD monitors
+                transition.setCycleCount(TranslateTransition.INDEFINITE);
+                
+                // Delay or playFrom to scatter them immediately
+                transition.playFrom(Duration.seconds(random.nextDouble() * durationSeconds));
+            }
         }
     }
 

@@ -93,7 +93,7 @@ public class GestorPartida {
         
         System.out.println("--- COMIENZA EL TURNO DE: " + jActual.getNombre() + " ---");
 
-        // Comprobacion de turnos perdidos (SueloQuebradizo)
+        // 1. Comprobacion de turnos perdidos (SueloQuebradizo)
         if (jActual.getTurnosPerdidos() > 0) {
             jActual.setTurnosPerdidos(jActual.getTurnosPerdidos() - 1);
             System.out.println(jActual.getNombre() + " pierde este turno. Turnos perdidos restantes: " + jActual.getTurnosPerdidos());
@@ -103,128 +103,89 @@ public class GestorPartida {
             ultimaCasillaPisada = jActual.getPosicion();
             
             siguienteTurno();
-            return;
-        }
+        } 
+        else {
+            // El jugador puede realizar su turno
+            boolean haGanado = false;
 
-        // ============================
-        //  TURNO DE LA FOCA
-        // ============================
-        if (jActual instanceof Foca) {
-            Foca f = (Foca) jActual;
-            
-            // Comprobar bloqueo por pez
-            if (f.getTurnosBloqueada() > 0) {
-                System.out.println("La foca está bloqueada por comer peces. Turnos restantes: " + f.getTurnosBloqueada());
-                f.reducirBloqueo();
+            // CASO FOCA
+            if (jActual instanceof Foca) {
+                Foca f = (Foca) jActual;
                 
-                // RESETEAR variables de movimiento para que la vista no haga nada
-                ultimoResultadoDado = 0;
-                ultimaCasillaPisada = f.getPosicion();
-
-                siguienteTurno();
-                return;
-            }
-            
-            // Guardamos la posición antes de mover para comprobar casillas intermedias
-            int posicionAnterior = f.getPosicion();
-            
-            // La foca tira el dado y se mueve
-            int pasosFoca = tirarDado(f, dadoEspecial);
-            ultimoResultadoDado = pasosFoca;
-            System.out.println(f.getNombre() + " ha sacado un " + pasosFoca);
-            gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
-            System.out.println("Nueva posición de la foca: " + f.getPosicion());
-            
-            // Guardamos la casilla donde cayó ANTES del efecto
-            ultimaCasillaPisada = f.getPosicion();
-            
-            // REGLA CRÍTICA: comprobar si la foca llegó a la casilla final.
-            // Si es así, la partida termina INMEDIATAMENTE sin ejecutar ningún evento.
-            int casillaFinalFoca = partida.getTablero().getListaCasillas().size() - 1;
-            if (f.getPosicion() >= casillaFinalFoca) {
-                partida.setFinalizada(true);
-                partida.setGanador(f);
-                System.out.println("¡TENEMOS UN GANADOR (FOCA): " + f.getNombre() + "!");
-                return;
-            }
-            
-            // Solo si NO es la casilla final, ejecutamos la acción de la casilla.
-            Casilla casillaFoca = partida.getTablero().getListaCasillas().get(f.getPosicion());
-            casillaFoca.realizarAccion(partida, f);
-            
-            // REGLA: Detectar pingüinos en casillas INTERMEDIAS (aplastados)
-            // El efecto se aplica desde la VISTA después de la animación visual.
-            ultimosPinguinosAplastados.clear();
-            // SOLO evaluamos si la foca avanzó realmente (y no retrocedió por un oso u agujero)
-            if (f.getPosicion() > posicionAnterior) {
-                for (int casilla = posicionAnterior + 1; casilla < ultimaCasillaPisada; casilla++) {
-                    for (Jugador j : partida.getJugadores()) {
-                        if (j instanceof Pinguino && j.getPosicion() == casilla) {
-                            Pinguino p = (Pinguino) j;
-                            // REGLA: Solo aplasta si el pingüino tiene al menos un objeto o dado especial
-                            if (p.contarTotalObjetos() > 0 || p.getInv().getTotalDadosEspeciales() > 0) {
-                                System.out.println("¡La foca ha pasado por encima de " + p.getNombre() + " en la casilla " + casilla + "!");
-                                ultimosPinguinosAplastados.add(p);
+                if (f.getTurnosBloqueada() > 0) {
+                    System.out.println("La foca está bloqueada (" + f.getTurnosBloqueada() + " turnos)");
+                    f.reducirBloqueo();
+                    ultimoResultadoDado = 0;
+                    ultimaCasillaPisada = f.getPosicion();
+                    siguienteTurno();
+                } 
+                else {
+                    int posicionAnterior = f.getPosicion();
+                    int pasosFoca = tirarDado(f, dadoEspecial);
+                    ultimoResultadoDado = pasosFoca;
+                    gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
+                    ultimaCasillaPisada = f.getPosicion();
+                    
+                    int casillaFinalFoca = partida.getTablero().getListaCasillas().size() - 1;
+                    if (f.getPosicion() >= casillaFinalFoca) {
+                        haGanado = true;
+                    } 
+                    else {
+                        // Acción de casilla
+                        Casilla c = partida.getTablero().getListaCasillas().get(f.getPosicion());
+                        c.realizarAccion(partida, f);
+                        
+                        // Detectar aplastados si avanzó
+                        ultimosPinguinosAplastados.clear();
+                        if (f.getPosicion() > posicionAnterior) {
+                            for (int casilla = posicionAnterior + 1; casilla < ultimaCasillaPisada; casilla++) {
+                                for (Jugador j : partida.getJugadores()) {
+                                    if (j instanceof Pinguino && j.getPosicion() == casilla) {
+                                        Pinguino p = (Pinguino) j;
+                                        if (p.contarTotalObjetos() > 0 || p.getInv().getTotalDadosEspeciales() > 0) {
+                                            ultimosPinguinosAplastados.add(p);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            } 
+            // CASO PINGÜINO
+            else if (jActual instanceof Pinguino) {
+                int pasos = tirarDado(jActual, dadoEspecial);
+                ultimoResultadoDado = pasos;
+                gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
+                ultimaCasillaPisada = jActual.getPosicion();
+                
+                int casillaFinal = partida.getTablero().getListaCasillas().size() - 1;
+                if (jActual.getPosicion() >= casillaFinal) {
+                    haGanado = true;
+                } 
+                else {
+                    Casilla c = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
+                    c.realizarAccion(partida, jActual);
+                }
             }
-            
-            // REGLA: La interacción foca-pingüino en casilla FINAL
-            // se maneja ahora desde la VISTA (PantallaJuego) para mostrar
-            // la animación visual y el diálogo de decisión.
 
-        // ============================
-        //  TURNO DEL PINGÜINO
-        // ============================
-        } else if (jActual instanceof Pinguino) {
-            Pinguino pActual = (Pinguino) jActual;
-            
-            int pasos = tirarDado(jActual, dadoEspecial);
-            ultimoResultadoDado = pasos;
-            System.out.println(jActual.getNombre() + " ha sacado un " + pasos);
-            gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
-            System.out.println("Nueva posición: " + jActual.getPosicion());
-            
-            // Guardamos la posición ANTES del efecto de casilla para la Vista
-            ultimaCasillaPisada = jActual.getPosicion();
-            
-            // REGLA CRÍTICA: comprobar primero si llegó a la casilla final.
-            // Si es así, la partida termina INMEDIATAMENTE sin ejecutar ningún evento.
-            int casillaFinal = partida.getTablero().getListaCasillas().size() - 1;
-            if (jActual.getPosicion() >= casillaFinal) {
+            // FINALIZACIÓN DEL TURNO
+            if (haGanado) {
                 partida.setFinalizada(true);
                 partida.setGanador(jActual);
                 System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
-                // NO ejecutar la acción de la casilla final ni llamar a siguienteTurno.
-                return;
+            } 
+            else {
+                // Solo pasamos turno si no ha ganado y si no era una foca bloqueada (que ya llamó a siguienteTurno arriba)
+                // Para simplificar, si no ha ganado y el método no ha terminado, pasamos turno.
+                // Pero cuidado con la Foca que ya lo llama. Rediseño:
+                if (!(jActual instanceof Foca && ((Foca)jActual).getTurnosBloqueada() + 1 > 0 && ultimoResultadoDado == 0)) {
+                   // Si el resultado dado es > 0 significa que ha movido, si es 0 y no estaba en "turnos perdidos"
+                   // es que era una foca bloqueada.
+                   // Vamos a hacerlo más simple: si no es el bloqueado de arriba, pasa turno.
+                   siguienteTurno();
+                }
             }
-            
-            // Solo si NO es la casilla final, ejecutamos la acción de la casilla.
-            Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
-            casillaDondeCae.realizarAccion(partida, jActual);
-            
-            // REGLA: La interacción pingüino-foca en la misma casilla
-            // se maneja ahora desde la VISTA (PantallaJuego) para mostrar
-            // la animación visual y el diálogo de decisión.
-            
-            // REGLA PvP: La detección de otro pingüino en la misma casilla
-            // se maneja ahora desde la VISTA (PantallaJuego) para mostrar
-            // la animación visual y el diálogo de decisión.
-        }
-
-        // Verificamos si ha ganado el jugador actual (tras el posible efecto de casilla)
-        // Nota: si el jugador era Pingüino y llegó a la casilla final, ya hemos retornado arriba.
-        // Esta comprobación cubre el caso de la Foca y cualquier otro movimiento adicional.
-        int casillaFinalPost = partida.getTablero().getListaCasillas().size() - 1;
-        if (jActual.getPosicion() >= casillaFinalPost) {
-            partida.setFinalizada(true);
-            partida.setGanador(jActual);
-            System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
-        } else {
-            // Si no gana, pasamos al siguiente turno
-            siguienteTurno();
         }
     }
     

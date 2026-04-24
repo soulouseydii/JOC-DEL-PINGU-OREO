@@ -19,14 +19,18 @@ public class GestorJugador {
 	public void jugadorUsaItem(Jugador j, String nombreItem, Tablero t) {
 		System.out.println(j.getNombre() + " está intentando usar: " + nombreItem);
 	
-	//Bucle para recorrer el inventario del jugador y buscar item
-	for (int i = 0; i < j.getInventario().getlista().size(); i++) {
+	// Variable para saber si hemos encontrado el item
+	boolean encontrado = false;
+	
+	// Bucle para recorrer el inventario del jugador y buscar item
+	for (int i = 0; i < j.getInventario().getlista().size() && !encontrado; i++) {
 		
-		//Si el nombre del item coincide 
+		// Si el nombre del item coincide 
 		if (j.getInventario().getlista().get(i).getNombre().equalsIgnoreCase(nombreItem)) {
+			encontrado = true;
 			System.out.println(j.getNombre() + " ha usado " + nombreItem + "!");
 			
-			//Aqui va el efecto del item
+			// Aqui va el efecto del item
 			switch (nombreItem.toLowerCase()) {
 				case "dado rapido":
 					int avanceRapido = (int) (Math.random() * 6) + 5;
@@ -51,13 +55,15 @@ public class GestorJugador {
 					break;
 				}
 			
-			
-			//Una vez usado lo elimina del inventario y se sale
+			// Una vez usado lo elimina del inventario
 			j.getInventario().getlista().remove(i);
-			return;
 		}
 	}
-	System.out.println(j.getNombre() + " no tiene ese item en el inventario.");
+	
+	// Si no se encontró el item, mostramos mensaje
+	if (!encontrado) {
+		System.out.println(j.getNombre() + " no tiene ese item en el inventario.");
+	}
 	}
 	
 	// ----------------

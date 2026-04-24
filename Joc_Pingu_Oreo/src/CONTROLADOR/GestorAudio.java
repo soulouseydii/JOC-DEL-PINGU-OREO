@@ -96,33 +96,34 @@ public class GestorAudio {
     }
 
     public static void configurarBotonEfectos(Button b) {
-        if (b.getProperties().containsKey("efectosConfigurados")) return;
-        b.getProperties().put("efectosConfigurados", true);
+        if (!b.getProperties().containsKey("efectosConfigurados")) {
+            b.getProperties().put("efectosConfigurados", true);
 
-        b.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-             GestorAudio.getInstance().playSonidoHover();
-             if (b.getScaleX() <= 1.01) { // Para no sobreescribir botones que ya tienen escalas grandes
-                 b.setScaleX(1.05);
-                 b.setScaleY(1.05);
-             }
-             b.setStyle("-fx-cursor: hand; " + (b.getStyle() != null ? b.getStyle() : ""));
-        });
-        b.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
-             if (b.getScaleX() > 1.01 && b.getScaleX() <= 1.06) {
-                 b.setScaleX(1.0);
-                 b.setScaleY(1.0);
-             }
-        });
+            b.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
+                 GestorAudio.getInstance().playSonidoHover();
+                 if (b.getScaleX() <= 1.01) { // Para no sobreescribir botones que ya tienen escalas grandes
+                     b.setScaleX(1.05);
+                     b.setScaleY(1.05);
+                 }
+                 b.setStyle("-fx-cursor: hand; " + (b.getStyle() != null ? b.getStyle() : ""));
+            });
+            b.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
+                 if (b.getScaleX() > 1.01 && b.getScaleX() <= 1.06) {
+                     b.setScaleX(1.0);
+                     b.setScaleY(1.0);
+                 }
+            });
+        }
     }
 
     public static void aplicarEfectosATodosLosBotones(Node nodo) {
-        if (nodo == null) return;
-        
-        if (nodo instanceof Button) {
-            configurarBotonEfectos((Button) nodo);
-        } else if (nodo instanceof Parent) {
-            for (Node hijo : ((Parent) nodo).getChildrenUnmodifiable()) {
-                aplicarEfectosATodosLosBotones(hijo);
+        if (nodo != null) {
+            if (nodo instanceof Button) {
+                configurarBotonEfectos((Button) nodo);
+            } else if (nodo instanceof Parent) {
+                for (Node hijo : ((Parent) nodo).getChildrenUnmodifiable()) {
+                    aplicarEfectosATodosLosBotones(hijo);
+                }
             }
         }
     }

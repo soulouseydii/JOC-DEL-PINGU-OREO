@@ -10,68 +10,70 @@ import javafx.util.Duration;
 public class GestorAnimacionesVistas {
 
     public static void animarEntradaCascada(Parent container) {
-        if (container == null) return;
-        animarNodosEnCascada(container.getChildrenUnmodifiable().toArray(new Node[0]), 0);
+        if (container != null) {
+            animarNodosEnCascada(container.getChildrenUnmodifiable().toArray(new Node[0]), 0);
+        }
     }
 
     public static void animarNodosEnCascada(Node[] nodos, int delayInicialMillis) {
         int delayOffset = delayInicialMillis;
 
         for (Node nodo : nodos) {
-            if (!nodo.isVisible() || !nodo.isManaged()) continue;
+            if (nodo.isVisible() && nodo.isManaged()) {
 
-            nodo.setOpacity(0.0);
-            nodo.setTranslateY(25); 
+                nodo.setOpacity(0.0);
+                nodo.setTranslateY(25); 
 
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(350), nodo);
-            fadeIn.setToValue(1.0);
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(350), nodo);
+                fadeIn.setToValue(1.0);
 
-            TranslateTransition slideUp = new TranslateTransition(Duration.millis(450), nodo);
-            slideUp.setToY(0);
+                TranslateTransition slideUp = new TranslateTransition(Duration.millis(450), nodo);
+                slideUp.setToY(0);
 
-            ParallelTransition pt = new ParallelTransition(fadeIn, slideUp);
-            pt.setDelay(Duration.millis(delayOffset));
-            pt.play();
+                ParallelTransition pt = new ParallelTransition(fadeIn, slideUp);
+                pt.setDelay(Duration.millis(delayOffset));
+                pt.play();
 
-            delayOffset += 50; 
+                delayOffset += 50; 
+            }
         }
     }
 
     public static void animarAparicionOverlay(Node overlayContainer) {
-        if (overlayContainer == null) return;
-        
-        overlayContainer.setOpacity(0);
-        overlayContainer.setScaleX(0.8);
-        overlayContainer.setScaleY(0.8);
-        overlayContainer.setVisible(true);
+        if (overlayContainer != null) {
+            overlayContainer.setOpacity(0);
+            overlayContainer.setScaleX(0.8);
+            overlayContainer.setScaleY(0.8);
+            overlayContainer.setVisible(true);
 
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(200), overlayContainer);
-        fadeIn.setToValue(1.0);
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(200), overlayContainer);
+            fadeIn.setToValue(1.0);
 
-        javafx.animation.ScaleTransition bounce = new javafx.animation.ScaleTransition(Duration.millis(300), overlayContainer);
-        bounce.setToX(1.0);
-        bounce.setToY(1.0);
-        bounce.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
+            javafx.animation.ScaleTransition bounce = new javafx.animation.ScaleTransition(Duration.millis(300), overlayContainer);
+            bounce.setToX(1.0);
+            bounce.setToY(1.0);
+            bounce.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
 
-        ParallelTransition pt = new ParallelTransition(fadeIn, bounce);
-        pt.play();
+            ParallelTransition pt = new ParallelTransition(fadeIn, bounce);
+            pt.play();
+        }
     }
 
     public static void animarCierreOverlay(Node overlayContainer, Runnable onFinished) {
-        if (overlayContainer == null) return;
+        if (overlayContainer != null) {
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(200), overlayContainer);
+            fadeOut.setToValue(0.0);
 
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(200), overlayContainer);
-        fadeOut.setToValue(0.0);
+            javafx.animation.ScaleTransition scaleDown = new javafx.animation.ScaleTransition(Duration.millis(200), overlayContainer);
+            scaleDown.setToX(0.8);
+            scaleDown.setToY(0.8);
 
-        javafx.animation.ScaleTransition scaleDown = new javafx.animation.ScaleTransition(Duration.millis(200), overlayContainer);
-        scaleDown.setToX(0.8);
-        scaleDown.setToY(0.8);
-
-        ParallelTransition pt = new ParallelTransition(fadeOut, scaleDown);
-        pt.setOnFinished(e -> {
-            overlayContainer.setVisible(false);
-            if (onFinished != null) onFinished.run();
-        });
-        pt.play();
+            ParallelTransition pt = new ParallelTransition(fadeOut, scaleDown);
+            pt.setOnFinished(e -> {
+                overlayContainer.setVisible(false);
+                if (onFinished != null) onFinished.run();
+            });
+            pt.play();
+        }
     }
 }
