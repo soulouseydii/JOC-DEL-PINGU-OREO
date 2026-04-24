@@ -846,13 +846,15 @@ public class PantallaJuego {
 							else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
 							else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
 							else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
+						} else if (diffInv != null && (diffInv[0]<0 || diffInv[1]<0 || diffInv[2]<0 || diffInv[3]<0 || diffInv[4]<0)) {
+							itemObtenido = "📉 ¡Objeto perdido!";
 						} else if (jugadorActual.getPosicion() > casillaPisada) {
 							itemObtenido = "🛷 ¡Un Trineo!";
 						} else if (jugadorActual.getPosicion() < casillaPisada) {
 							if (jugadorActual.getPosicion() == 0) itemObtenido = "🐻 ¡El OSO!";
 							else itemObtenido = "🕳️ ¡Un Agujero!";
 						} else if (jugadorActual.getTurnosPerdidos() > 0) {
-							itemObtenido = "🧊 ¡Atascado!";
+							itemObtenido = "🧊 ¡Atascado / Resbalón!";
 						} else {
 							itemObtenido = "❓ ¡Nada!";
 						}
@@ -878,6 +880,10 @@ public class PantallaJuego {
 		final boolean esOsoFinal = (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() && 
 			(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass().getSimpleName().equals("Oso") ||
 			(itemObtenido != null && (itemObtenido.contains("Oso") || itemObtenido.contains("OSO")))));
+		
+		final boolean esAgujeroFinal = (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() && 
+			(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass().getSimpleName().equals("Agujero") ||
+			(itemObtenido != null && itemObtenido.contains("Agujero"))));
 
 		// Determinar si hay encuentro con foca en la casilla de aterrizaje (landing)
 		Pinguino pEncLanding = null;
@@ -903,6 +909,10 @@ public class PantallaJuego {
 				Runnable continuarConEfecto = () -> {
 					if (esOsoFinal) {
 						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
+					} else if (esAgujeroFinal) {
+						animarCaidaYSalidaAgujero(indiceActual, casillaPisada, posVisualFinal, () -> {
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+						});
 					} else {
 						PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
 						pausaEfecto.setOnFinished(pausaEvt -> {
@@ -955,11 +965,13 @@ public class PantallaJuego {
 	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		ImageView imgViewCasilla = getImageViewCasilla(indiceCasilla);
 		Image imgOsoAntigua = null;
+		StackPane ficha = getFicha(indiceJugador);
 		
 		if (imgViewCasilla != null && imgAtaqueOso != null) {
 			imgOsoAntigua = imgViewCasilla.getImage();
 			imgViewCasilla.setImage(imgAtaqueOso);
-			StackPane ficha = getFicha(indiceJugador);
+			
+			// Temblor de pánico antes del golpe
 			TranslateTransition shake = new TranslateTransition(Duration.millis(50), ficha);
 			shake.setByX(8);
 			shake.setCycleCount(10);
@@ -967,22 +979,113 @@ public class PantallaJuego {
 			shake.play();
 		}
 		
-		PauseTransition pausa = new PauseTransition(Duration.millis(1200));
+		PauseTransition pausa = new PauseTransition(Duration.millis(1000));
 		final Image imgFinalBackup = imgOsoAntigua;
+		
 		pausa.setOnFinished(e -> {
 			currentAnimations.remove(pausa);
 			if (imgViewCasilla != null && imgFinalBackup != null) {
 				imgViewCasilla.setImage(imgFinalBackup);
 			}
-			animarMovimiento(indiceJugador, posFinal, () -> {
-				actualizarTodasLasFichas();
-				comprobarAplastamientoYContinuar(jugadorActual, indiceJugador, pEncLanding, esRetrocesoFoca);
+			
+			// --- ANIMACIÓN DE VUELO (Impacto del Oso) ---
+			// 1. Sale volando: gira, se encoge y desaparece
+			RotateTransition rt = new RotateTransition(Duration.millis(700), ficha);
+			rt.setByAngle(720); // Dos vueltas completas
+			
+			ScaleTransition st = new ScaleTransition(Duration.millis(700), ficha);
+			st.setToX(0.1);
+			st.setToY(0.1);
+			
+			FadeTransition ft = new FadeTransition(Duration.millis(700), ficha);
+			ft.setToValue(0);
+			
+			ParallelTransition vuelo = new ParallelTransition(rt, st, ft);
+			
+			vuelo.setOnFinished(e2 -> {
+				// 2. Reposicionar instantáneamente al inicio
+				posiciones[indiceJugador] = 0;
+				int[] coords = getCoordenadas(0);
+				GridPane.setColumnIndex(ficha, coords[0]);
+				GridPane.setRowIndex(ficha, coords[1]);
+				
+				// 3. Reaparecer con un rebote de impacto en el inicio
+				ficha.setRotate(0);
+				ficha.setScaleX(1.8); // Aparece un poco más grande por el impacto
+				ficha.setScaleY(1.8);
+				
+				ScaleTransition stLand = new ScaleTransition(Duration.millis(400), ficha);
+				stLand.setToX(1.0);
+				stLand.setToY(1.0);
+				
+				FadeTransition ftLand = new FadeTransition(Duration.millis(300), ficha);
+				ftLand.setToValue(1);
+				
+				ParallelTransition aterrizaje = new ParallelTransition(stLand, ftLand);
+				aterrizaje.setOnFinished(e3 -> {
+					actualizarTodasLasFichas();
+					comprobarAplastamientoYContinuar(jugadorActual, indiceJugador, pEncLanding, esRetrocesoFoca);
+				});
+				aterrizaje.play();
 			});
+			
+			vuelo.play();
 		});
+		
 		currentAnimations.add(pausa);
 		pausa.play();
 	}
 	
+	private void animarCaidaYSalidaAgujero(int indexJugador, int posHole, int posExit, Runnable alTerminar) {
+		StackPane ficha = getFicha(indexJugador);
+		
+		// 1. Caída: Encogerse y desaparecer en el agujero actual
+		ScaleTransition stFall = new ScaleTransition(Duration.millis(500), ficha);
+		stFall.setToX(0.1);
+		stFall.setToY(0.1);
+		
+		FadeTransition ftFall = new FadeTransition(Duration.millis(500), ficha);
+		ftFall.setToValue(0);
+		
+		ParallelTransition fall = new ParallelTransition(stFall, ftFall);
+		
+		fall.setOnFinished(e -> {
+			// 2. Teletransporte invisible al nuevo agujero
+			posiciones[indexJugador] = posExit;
+			int[] coords = getCoordenadas(posExit);
+			GridPane.setColumnIndex(ficha, coords[0]);
+			GridPane.setRowIndex(ficha, coords[1]);
+			
+			// 3. Salida: Aparecer y salir disparado
+			ficha.setOpacity(0);
+			ficha.setScaleX(0.1);
+			ficha.setScaleY(0.1);
+			
+			FadeTransition ftRise = new FadeTransition(Duration.millis(300), ficha);
+			ftRise.setToValue(1);
+			
+			ScaleTransition stRise = new ScaleTransition(Duration.millis(400), ficha);
+			stRise.setToX(1.0);
+			stRise.setToY(1.0);
+			
+			TranslateTransition jump = new TranslateTransition(Duration.millis(500), ficha);
+			jump.setFromY(0);
+			jump.setByY(-100);
+			jump.setCycleCount(2);
+			jump.setAutoReverse(true);
+			
+			ParallelTransition rise = new ParallelTransition(ftRise, stRise, jump);
+			rise.setOnFinished(e2 -> {
+				ficha.setTranslateY(0);
+				actualizarTodasLasFichas();
+				if (alTerminar != null) alTerminar.run();
+			});
+			rise.play();
+		});
+		
+		fall.play();
+	}
+
 	private ImageView getImageViewCasilla(int indexCasilla) {
 		int count = 0;
 		for (javafx.scene.Node node : tablero.getChildren()) {
@@ -1677,7 +1780,7 @@ public class PantallaJuego {
 			pausa.setOnFinished(e2 -> {
 				currentAnimations.remove(pausa);
 				int posVisualFinal = Math.max(0, Math.min(nuevaPos, 49));
-				animarMovimiento(indicePinguino, posVisualFinal, () -> {
+				animarCaidaYSalidaAgujero(indicePinguino, posAnterior, posVisualFinal, () -> {
 					actualizarTodasLasFichas();
 					actualizarInventarioUI();
 					finalizarTurnoVisual();
@@ -2071,8 +2174,11 @@ public class PantallaJuego {
 							else
 								agregarEvento("   ↪ ¡Sorpresa! ¡Un AGUJERO! 🕳️ Retrocede a la casilla " + p.getPosicion());
 						} else if (p.getTurnosPerdidos() > 0) {
-							agregarEvento("   ↪ ¡Sorpresa! ¡SUELO QUEBRADIZO! 🧊");
+							agregarEvento("   ↪ ¡Sorpresa! ¡Resbalón! 🧊");
 							agregarEvento("      ↪ Te has quedado atascado. Pierdes 1 turno.");
+						} else if (diffInv != null && (diffInv[0]<0 || diffInv[1]<0 || diffInv[2]<0)) {
+							agregarEvento("   ↪ ¡Sorpresa! ¡Mala suerte! 📉");
+							agregarEvento("      ↪ Se te ha caído un objeto del inventario.");
 						} else {
 							agregarEvento("   ↪ ¡Sorpresa! ...pero no pasa nada. Es una casilla normal. 🧊");
 						}

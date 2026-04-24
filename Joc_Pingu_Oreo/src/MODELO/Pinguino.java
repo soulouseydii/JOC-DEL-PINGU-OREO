@@ -234,6 +234,28 @@ public class Pinguino extends Jugador {
 		
 		System.out.println(getNombre() + " ha perdido todo su inventario (" + total + " objetos, " + dadosEsp + " dados especiales).");
 	}
-	
+
+	/**
+	 * Pierde UN objeto aleatorio del inventario (solo una unidad).
+	 * Devuelve el nombre del objeto perdido para mostrarlo en la interfaz.
+	 */
+	public String perderObjetoAleatorio() {
+		if (getInventario().getlista().isEmpty()) {
+			return "nada (inventario vacío)";
+		}
+
+		java.util.Random random = new java.util.Random();
+		int indice = random.nextInt(getInventario().getlista().size());
+		Item item = getInventario().getlista().get(indice);
+		String nombrePerdido = item.getNombre();
+
+		item.setCantidad(item.getCantidad() - 1);
+		if (item.getCantidad() <= 0) {
+			getInventario().getlista().remove(indice);
+		}
+		
+		System.out.println(getNombre() + " ha perdido un(a) " + nombrePerdido + "!");
+		return nombrePerdido;
+	}
 	
 }

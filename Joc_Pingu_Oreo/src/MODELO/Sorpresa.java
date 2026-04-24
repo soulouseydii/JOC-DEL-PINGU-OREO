@@ -19,7 +19,7 @@ public class Sorpresa extends Casilla {
 
 		if (jugador instanceof Pinguino) {
 			Pinguino p = (Pinguino) jugador;
-			int prob = random.nextInt(10); // 10 posibilidades (10% cada una)
+			int prob = random.nextInt(12); // 12 posibilidades (incluyendo perder turno y objeto)
 			
 			switch (prob) {
 				case 0:
@@ -81,6 +81,16 @@ public class Sorpresa extends Casilla {
 					} else {
 						System.out.println("¡Sorpresa! Encontró un dado lento, pero el inventario está lleno.");
 					}
+					break;
+				case 10:
+					// NUEVO: Perder turno
+					System.out.println("¡Sorpresa! " + p.getNombre() + " se ha resbalado y pierde un turno.");
+					p.setTurnosPerdidos(p.getTurnosPerdidos() + 1);
+					break;
+				case 11:
+					// NUEVO: Perder objeto aleatorio
+					System.out.println("¡Sorpresa! A " + p.getNombre() + " se le ha caído algo...");
+					p.perderObjetoAleatorio();
 					break;
 			}
 			

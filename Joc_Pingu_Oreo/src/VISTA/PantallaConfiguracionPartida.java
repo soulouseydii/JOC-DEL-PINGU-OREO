@@ -50,9 +50,8 @@ public class PantallaConfiguracionPartida {
                 // Si su skin actual acaba de ser ocupada por otro, la movemos a la siguiente disponible
                 String skinActual = tj.getCurrentSkin();
                 if (skinsSeleccionadas.contains(skinActual) && isSkinUnica(skinActual)) {
-                    tj.cambiarSkin(1);
+                    tj.cambiarSkin(1); // cambiarSkin ya gestiona la animación interna
                 }
-                tj.actualizarSkinDisplay();
             }
         }
     }
@@ -179,36 +178,59 @@ public class PantallaConfiguracionPartida {
             });
 
             btnListo.setOnAction(e -> {
-                String user = txtUsuario.getText();
-                String pass = txtPassword.getText();
-                if (user != null && !user.trim().isEmpty() && pass != null && !pass.trim().isEmpty()) {
-                    estaListo = true;
-                    btnListo.setDisable(true);
-                    txtUsuario.setDisable(true);
-                    txtPassword.setDisable(true);
-                    comboTipo.setDisable(true);
+                if (!estaListo) {
+                    // Lógica para ponerse LISTO
+                    String user = txtUsuario.getText();
+                    String pass = txtPassword.getText();
+                    boolean esCpu = comboTipo.getValue().equals("CPU (Foca)");
                     
-                    // Registrar skin ocupada
-                    if (isSkinUnica(getCurrentSkin())) {
-                        skinsSeleccionadas.add(getCurrentSkin());
+                    if (esCpu || (user != null && !user.trim().isEmpty() && pass != null && !pass.trim().isEmpty())) {
+                        estaListo = true;
+                        btnListo.setText("✎  Modificar");
+                        btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(200,80,80,0.6), rgba(140,30,30,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(255,130,130,0.6); -fx-text-fill: #ffd0d0; -fx-font-weight: 900; -fx-cursor: hand;");
+                        
+                        txtUsuario.setDisable(true);
+                        txtPassword.setDisable(true);
+                        comboTipo.setDisable(true);
+                        cajaCarousel.setDisable(true);
+                        
+                        // Registrar skin ocupada
+                        if (isSkinUnica(getCurrentSkin())) {
+                            skinsSeleccionadas.add(getCurrentSkin());
+                        }
+                        lblSelloListo.setVisible(true);
+                        
+                        // Animación de impacto
+                        javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(300), lblSelloListo);
+                        st.setFromX(2.5); st.setFromY(2.5);
+                        st.setToX(1.0); st.setToY(1.0);
+                        st.play();
+                        
+                        notificarNuevasSkins();
+                        lblEstado.setText("✓ LISTO");
+                        lblEstado.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
+                        verificarTodosListos();
+                    } else {
+                        lblEstado.setText("Faltan datos");
                     }
-                    lblSelloListo.setVisible(true);
-                    
-                    // Animación de impacto (asomarse desde grande a normal)
-                    javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(300), lblSelloListo);
-                    st.setFromX(2.5);
-                    st.setFromY(2.5);
-                    st.setToX(1.0);
-                    st.setToY(1.0);
-                    st.play();
-                    
-                    notificarNuevasSkins();
-                    cajaCarousel.setDisable(true);
-                    lblEstado.setText("✓ LISTO");
-                    lblEstado.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
-                    verificarTodosListos();
                 } else {
-                    lblEstado.setText("Faltan datos");
+                    // Lógica para volver a MODIFICAR
+                    estaListo = false;
+                    btnListo.setText("✓  Listo");
+                    btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.6); -fx-text-fill: #d0f0ff; -fx-font-weight: 900; -fx-cursor: hand;");
+                    
+                    txtUsuario.setDisable(false);
+                    txtPassword.setDisable(false);
+                    comboTipo.setDisable(false);
+                    cajaCarousel.setDisable(false);
+                    
+                    // Liberar skin
+                    skinsSeleccionadas.remove(getCurrentSkin());
+                    lblSelloListo.setVisible(false);
+                    
+                    lblEstado.setText("Modificando...");
+                    lblEstado.setStyle("-fx-text-fill: rgba(255,200,100,0.9); -fx-font-weight: bold;");
+                    verificarTodosListos();
                 }
             });
 
