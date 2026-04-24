@@ -138,7 +138,17 @@ public class GestorPartida {
             // Guardamos la casilla donde cayó ANTES del efecto
             ultimaCasillaPisada = f.getPosicion();
             
-            // Ejecutar la acción de la casilla donde ha caído la foca
+            // REGLA CRÍTICA: comprobar si la foca llegó a la casilla final.
+            // Si es así, la partida termina INMEDIATAMENTE sin ejecutar ningún evento.
+            int casillaFinalFoca = partida.getTablero().getListaCasillas().size() - 1;
+            if (f.getPosicion() >= casillaFinalFoca) {
+                partida.setFinalizada(true);
+                partida.setGanador(f);
+                System.out.println("¡TENEMOS UN GANADOR (FOCA): " + f.getNombre() + "!");
+                return;
+            }
+            
+            // Solo si NO es la casilla final, ejecutamos la acción de la casilla.
             Casilla casillaFoca = partida.getTablero().getListaCasillas().get(f.getPosicion());
             casillaFoca.realizarAccion(partida, f);
             
@@ -180,7 +190,18 @@ public class GestorPartida {
             // Guardamos la posición ANTES del efecto de casilla para la Vista
             ultimaCasillaPisada = jActual.getPosicion();
             
-            // Ejecutar la accion de la casilla donde ha caido
+            // REGLA CRÍTICA: comprobar primero si llegó a la casilla final.
+            // Si es así, la partida termina INMEDIATAMENTE sin ejecutar ningún evento.
+            int casillaFinal = partida.getTablero().getListaCasillas().size() - 1;
+            if (jActual.getPosicion() >= casillaFinal) {
+                partida.setFinalizada(true);
+                partida.setGanador(jActual);
+                System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
+                // NO ejecutar la acción de la casilla final ni llamar a siguienteTurno.
+                return;
+            }
+            
+            // Solo si NO es la casilla final, ejecutamos la acción de la casilla.
             Casilla casillaDondeCae = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
             casillaDondeCae.realizarAccion(partida, jActual);
             
@@ -193,8 +214,11 @@ public class GestorPartida {
             // la animación visual y el diálogo de decisión.
         }
 
-        // Verificamos si ha ganado el jugador actual
-        if (jActual.getPosicion() >= 49) {
+        // Verificamos si ha ganado el jugador actual (tras el posible efecto de casilla)
+        // Nota: si el jugador era Pingüino y llegó a la casilla final, ya hemos retornado arriba.
+        // Esta comprobación cubre el caso de la Foca y cualquier otro movimiento adicional.
+        int casillaFinalPost = partida.getTablero().getListaCasillas().size() - 1;
+        if (jActual.getPosicion() >= casillaFinalPost) {
             partida.setFinalizada(true);
             partida.setGanador(jActual);
             System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");

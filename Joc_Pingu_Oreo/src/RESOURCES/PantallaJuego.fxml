@@ -315,6 +315,16 @@
             <Label fx:id="surpriseMark3" text="?" styleClass="surprise-mark" />
             <Label fx:id="surpriseMark4" text="?" styleClass="surprise-mark" />
             <Label fx:id="surpriseMark5" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark6" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark7" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark8" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark9" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark10" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark11" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark12" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark13" text="?" styleClass="surprise-mark" />
+            <Label fx:id="surpriseMark14" text="?" styleClass="surprise-mark" />
+
             <Label fx:id="surpriseResultLabel" text="" styleClass="surprise-result-label" StackPane.alignment="CENTER" />
         </children>
     </StackPane>

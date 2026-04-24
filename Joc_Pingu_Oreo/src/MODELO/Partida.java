@@ -28,7 +28,7 @@ public class Partida {
 
 		ArrayList<Casilla> casillas = new ArrayList<Casilla>();
 
-		// Posición 0: Start (Normal)
+		// Posición 0: INICIO — siempre Normal. 
 		casillas.add(new Normal(0));
 
 		Random rand = new Random();
@@ -63,7 +63,8 @@ public class Partida {
 			tiposGenerados.addAll(zonaActual);
 		}
 
-		// Posiciones 1-48: casillas ya pre-balanceadas
+
+		// Las posiciones 0 (inicio) y 49 (final) siempre son Normal.
 		for (int i = 1; i < 49; i++) {
 			int tipo = tiposGenerados.get(i - 1);
 
@@ -98,7 +99,7 @@ public class Partida {
 			System.out.println("Pos " + i + " → " + c.getClass().getSimpleName());
 		}
 
-		// Posición 49: Finish (Normal) — última casilla del tablero
+		// Posición 49: FIN — siempre Normal.
 		casillas.add(new Normal(49));
 
 		this.tablero.setListaCasillas(casillas);

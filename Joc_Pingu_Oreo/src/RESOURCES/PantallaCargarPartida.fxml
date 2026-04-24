@@ -66,7 +66,7 @@
 
                     <!-- Título -->
                     <VBox alignment="CENTER" spacing="10" style="-fx-padding: 0 0 24 0;">
-                        <VBox alignment="CENTER" spacing="-10">
+                        <VBox alignment="CENTER" spacing="4">
                             <Label text="EL JUEGO DEL" styleClass="pingu-logo-top" style="-fx-font-size: 24px;" />
                             <Label text="PINGÜINO" styleClass="pingu-logo-bottom" style="-fx-font-size: 48px;" />
                         </VBox>

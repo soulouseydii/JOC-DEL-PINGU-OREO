@@ -119,7 +119,8 @@ public class PantallaJuego {
 
 	// Surprise event overlay (interrogantes)
 	@FXML private StackPane surpriseEventOverlay;
-	@FXML private Label surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5;
+	@FXML private Label surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5, surpriseMark6, surpriseMark7, surpriseMark8, 
+	surpriseMark9,surpriseMark10,surpriseMark11,surpriseMark12,surpriseMark13,surpriseMark14;
 	@FXML private Label surpriseResultLabel;
 
 	// Tablero y fichas
@@ -1227,7 +1228,7 @@ public class PantallaJuego {
 		surpriseResultLabel.setScaleX(0.5);
 		surpriseResultLabel.setScaleY(0.5);
 
-		Label[] marks = {surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5};
+		Label[] marks = {surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5, surpriseMark6, surpriseMark7, surpriseMark8};
 		ParallelTransition marksAnim = new ParallelTransition();
 
 		for (int i = 0; i < marks.length; i++) {

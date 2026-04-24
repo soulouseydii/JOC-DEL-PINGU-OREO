@@ -323,7 +323,6 @@
     -fx-font-size: 38px;
     -fx-text-fill: linear-gradient(to bottom, #ffffff, #7ae2ff);
     -fx-effect: dropshadow(gaussian, #0088cc, 5, 1.0, 0, 2) dropshadow(gaussian, #002244, 10, 0.5, 0, 4);
-    -fx-translate-y: 10;
 }
 
 .pingu-logo-bottom {

@@ -121,7 +121,7 @@
                     <Label text="❄   O R E O   S T U D I O S   P R E S E N T A   ❄" styleClass="logo-eyebrow" />
                     
                     <!-- LOGO RECREADO EN CSS -->
-                    <VBox alignment="CENTER" spacing="-15">
+                    <VBox alignment="CENTER" spacing="-1">
                         <Label text="EL JUEGO DEL" styleClass="pingu-logo-top" />
                         <Label text="P I N G Ü I N O" styleClass="pingu-logo-bottom" />
                     </VBox>
