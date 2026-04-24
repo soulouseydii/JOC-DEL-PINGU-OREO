@@ -8,7 +8,6 @@ public class SueloQuebradizo extends Casilla {
 
 	public SueloQuebradizo(int posicion) {
 		super(posicion, "SueloQuebradizo");
-		// TODO Auto-generated constructor stub
 	}	
 	
 	/* METODO REALIZAR ACCIÓN*/

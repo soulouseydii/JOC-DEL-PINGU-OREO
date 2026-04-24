@@ -99,7 +99,6 @@ public class PantallaMenu extends Application {
     @FXML
     private void handleRegister() {
         System.out.println("Register pressed");
-        // TODO
     }
 
 

@@ -248,22 +248,17 @@ public class PantallaInicio extends Application {
 
     @FXML
     private void handleChkAnimaciones(ActionEvent event) {
-        // TODO: Implement animations system later
-        // TODO: Apply changes in real time later
-        // TODO: Save settings persistently later
     }
 
     @FXML
     private void handleChkPantallaCompleta(ActionEvent event) {
         Stage stage = (Stage) paneOpciones.getScene().getWindow();
         stage.setMaximized(chkPantallaCompleta.isSelected());
-        // TODO: Save settings persistently later
     }
 
     @FXML
     private void handleCreditos(ActionEvent event) {
         System.out.println("Créditos clicked");
-        // TODO: Implementar pantalla de créditos
     }
 
     @FXML
