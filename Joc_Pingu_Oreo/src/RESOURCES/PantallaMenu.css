@@ -4,32 +4,36 @@
 /* ================================================ */
 
 .screen {
-    -fx-font-family: 'Verdana'; /* Sustituto de Rajdhani */
+    -fx-font-family: 'Verdana';
+    /* Sustituto de Rajdhani */
     -fx-background-color: #020810;
 }
 
 /* ==================== SVG BACKGROUNDS ==================== */
 .aurora-path-1 {
     -fx-shape: "M0 80 Q200 20 400 60 Q600 100 800 40 Q800 0 0 0 Z";
-    -fx-background-color: rgba(13,79,60,0.18);
+    -fx-background-color: rgba(13, 79, 60, 0.18);
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
+
 .aurora-path-2 {
     -fx-shape: "M0 120 Q250 55 450 90 Q650 125 800 65 Q800 0 0 0 Z";
-    -fx-background-color: rgba(26,13,79,0.14);
+    -fx-background-color: rgba(26, 13, 79, 0.14);
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
+
 .aurora-path-3 {
     -fx-shape: "M0 60 Q180 110 380 75 Q560 40 800 85 Q800 0 0 0 Z";
-    -fx-background-color: rgba(10,61,92,0.16);
+    -fx-background-color: rgba(10, 61, 92, 0.16);
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
+
 .aurora-path-4 {
     -fx-shape: "M0 100 Q300 150 500 110 Q700 70 800 120 Q800 0 0 0 Z";
-    -fx-background-color: rgba(13,79,60,0.08);
+    -fx-background-color: rgba(13, 79, 60, 0.08);
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
@@ -40,23 +44,25 @@
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
+
 .ice-poly-2 {
     -fx-shape: "M 0 150 L 0 100 L 40 75 L 80 95 L 130 60 L 180 90 L 240 50 L 290 80 L 350 40 L 400 70 L 450 30 L 510 65 L 570 40 L 620 75 L 670 50 L 720 85 L 760 55 L 800 80 L 800 150 Z";
-    -fx-background-color: rgba(10,30,60,0.6);
+    -fx-background-color: rgba(10, 30, 60, 0.6);
     -fx-scale-shape: true;
     -fx-position-shape: true;
 }
 
 .ice-poly-detail-1 {
     -fx-shape: "M 0 30 L -20 0 L 5 15 L 30 -5 L 20 30 Z";
-    -fx-background-color: rgba(94,207,255,0.08);
-    -fx-border-color: rgba(94,207,255,0.25);
+    -fx-background-color: rgba(94, 207, 255, 0.08);
+    -fx-border-color: rgba(94, 207, 255, 0.25);
     -fx-border-width: 0.5;
 }
+
 .ice-poly-detail-2 {
     -fx-shape: "M 18 15 L 0 0 L 23 8 L 38 0 L 33 18 Z";
-    -fx-background-color: rgba(94,207,255,0.06);
-    -fx-border-color: rgba(94,207,255,0.2);
+    -fx-background-color: rgba(94, 207, 255, 0.06);
+    -fx-border-color: rgba(94, 207, 255, 0.2);
     -fx-border-width: 0.5;
 }
 
@@ -64,27 +70,34 @@
 .logo-area {
     -fx-padding: 0 0 10 0;
 }
+
 .logo-eyebrow {
     -fx-font-size: 13px;
     -fx-font-weight: 700;
-    -fx-letter-spacing: 5px; /* JavaFX approximation */
+    -fx-letter-spacing: 5px;
+    /* JavaFX approximation */
     -fx-text-fill: #5ecfff;
     -fx-opacity: 0.7;
     -fx-padding: 0 0 5 0;
 }
+
 .logo-main {
-    -fx-font-family: 'Times New Roman', serif; /* Sustituto de Cinzel */
+    -fx-font-family: 'Times New Roman', serif;
+    /* Sustituto de Cinzel */
     -fx-font-weight: 900;
     -fx-font-size: 78px;
-    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.9), 30, 0.4, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.9), 30, 0.4, 0, 0);
 }
+
 .word-polar {
     -fx-text-fill: #e8f8ff;
 }
+
 .word-roll {
     -fx-text-fill: #5ecfff;
     -fx-font-size: 85px;
 }
+
 .logo-oreo-dot {
     -fx-background-color: #f0ebe0;
     -fx-background-radius: 50%;
@@ -92,48 +105,54 @@
     -fx-pref-height: 12;
     -fx-max-width: 12;
     -fx-max-height: 12;
-    -fx-effect: dropshadow(gaussian, rgba(240,235,224,0.8), 10, 0.5, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(240, 235, 224, 0.8), 10, 0.5, 0, 0);
     -fx-translate-x: 5;
 }
+
 .logo-sub {
     -fx-font-size: 12px;
     -fx-text-fill: #4a9bbf;
     -fx-letter-spacing: 3px;
     -fx-padding: 10 0 0 0;
 }
+
 .divider {
-    -fx-background-color: linear-gradient(to right, transparent, rgba(94,207,255,0.5), transparent);
+    -fx-background-color: linear-gradient(to right, transparent, rgba(94, 207, 255, 0.5), transparent);
     -fx-pref-height: 1;
     -fx-max-width: 400;
 }
 
 /* ==================== SIDE CARDS ==================== */
 .side-card {
-    -fx-background-color: rgba(5,15,35,0.75);
-    -fx-border-color: rgba(94,207,255,0.15);
+    -fx-background-color: rgba(5, 15, 35, 0.75);
+    -fx-border-color: rgba(94, 207, 255, 0.15);
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-padding: 15;
 }
+
 .overlay-settings {
-    -fx-background-color: rgba(5,15,35,0.95);
-    -fx-border-color: rgba(94,207,255,0.5);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 30, 0.5, 0, 10);
+    -fx-background-color: rgba(5, 15, 35, 0.95);
+    -fx-border-color: rgba(94, 207, 255, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 30, 0.5, 0, 10);
 }
+
 .side-card-title {
     -fx-font-size: 10px;
     -fx-text-fill: #4a9bbf;
     -fx-letter-spacing: 3px;
-    -fx-border-color: transparent transparent rgba(94,207,255,0.12) transparent;
+    -fx-border-color: transparent transparent rgba(94, 207, 255, 0.12) transparent;
     -fx-border-width: 0 0 1 0;
     -fx-padding: 0 0 5 0;
     -fx-margin: 0 0 8 0;
 }
+
 .player-token {
     -fx-alignment: center-left;
     -fx-spacing: 12;
     -fx-padding: 4 0;
 }
+
 .token-circle {
     -fx-pref-width: 26;
     -fx-pref-height: 26;
@@ -141,57 +160,67 @@
     -fx-border-radius: 50%;
     -fx-border-width: 1.5;
 }
+
 .token-cpu {
-    -fx-border-color: rgba(255,183,77,0.5);
-    -fx-background-color: rgba(26,14,0,0.8);
+    -fx-border-color: rgba(255, 183, 77, 0.5);
+    -fx-background-color: rgba(26, 14, 0, 0.8);
 }
+
 .token-p1 {
-    -fx-border-color: rgba(94,207,255,0.5);
-    -fx-background-color: rgba(0,15,35,0.8);
+    -fx-border-color: rgba(94, 207, 255, 0.5);
+    -fx-background-color: rgba(0, 15, 35, 0.8);
 }
+
 .token-p2 {
-    -fx-border-color: rgba(165,214,167,0.4);
-    -fx-background-color: rgba(0,15,10,0.8);
+    -fx-border-color: rgba(165, 214, 167, 0.4);
+    -fx-background-color: rgba(0, 15, 10, 0.8);
 }
+
 .token-name {
     -fx-font-size: 12px;
-    -fx-text-fill: rgba(200,230,255,0.8);
+    -fx-text-fill: rgba(200, 230, 255, 0.8);
     -fx-letter-spacing: 1px;
 }
+
 .token-type {
     -fx-font-size: 9px;
-    -fx-text-fill: rgba(94,207,255,0.4);
+    -fx-text-fill: rgba(94, 207, 255, 0.4);
     -fx-letter-spacing: 2px;
 }
+
 .stat-row {
     -fx-alignment: center-left;
     -fx-spacing: 10;
     -fx-padding: 4 0;
 }
+
 .stat-label {
     -fx-font-size: 10px;
-    -fx-text-fill: rgba(150,200,230,0.6);
+    -fx-text-fill: rgba(150, 200, 230, 0.6);
     -fx-letter-spacing: 2px;
 }
+
 .stat-val {
     -fx-font-size: 13px;
     -fx-font-weight: 700;
     -fx-text-fill: #5ecfff;
 }
+
 .news-text {
     -fx-font-size: 10px;
-    -fx-text-fill: rgba(150,200,230,0.65);
+    -fx-text-fill: rgba(150, 200, 230, 0.65);
 }
+
 .news-text-cyan {
-    -fx-text-fill: rgba(94,207,255,0.4);
+    -fx-text-fill: rgba(94, 207, 255, 0.4);
 }
 
 /* ==================== MENÚ BOTONES ==================== */
 .menu-btn {
     -fx-background-image: none;
-    -fx-background-color: rgba(6,20,42,0.7);
+    -fx-background-color: rgba(6, 20, 42, 0.7);
     -fx-background-insets: 0;
-    -fx-border-color: rgba(94,207,255,0.25);
+    -fx-border-color: rgba(94, 207, 255, 0.25);
     -fx-border-radius: 3;
     -fx-background-radius: 3;
     -fx-text-fill: #c8eeff;
@@ -202,27 +231,31 @@
     -fx-transition: all 0.2s;
     -fx-padding: 10 0;
 }
+
 .menu-btn:hover {
-    -fx-border-color: rgba(94,207,255,0.7);
+    -fx-border-color: rgba(94, 207, 255, 0.7);
     -fx-text-fill: #fff;
-    -fx-background-color: rgba(6,20,42,0.9);
-    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.8), 12, 0.4, 0, 0);
+    -fx-background-color: rgba(6, 20, 42, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.8), 12, 0.4, 0, 0);
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
 }
+
 .menu-btn.primary {
-    -fx-border-color: rgba(94,207,255,0.6);
-    -fx-background-color: rgba(10,40,70,0.85);
+    -fx-border-color: rgba(94, 207, 255, 0.6);
+    -fx-background-color: rgba(10, 40, 70, 0.85);
     -fx-text-fill: #fff;
     -fx-font-size: 18px;
 }
+
 .menu-btn.primary:hover {
-    -fx-background-color: rgba(15,55,95,0.95);
+    -fx-background-color: rgba(15, 55, 95, 0.95);
     -fx-border-color: #5ecfff;
-    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.5), 20, 0.5, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.5), 20, 0.5, 0, 0);
 }
+
 .text-muted {
-    -fx-text-fill: rgba(200,230,255,0.5);
+    -fx-text-fill: rgba(200, 230, 255, 0.5);
     -fx-font-size: 13px;
 }
 
@@ -230,90 +263,103 @@
 .version-tag {
     -fx-font-size: 9px;
     -fx-letter-spacing: 3px;
-    -fx-text-fill: rgba(94,207,255,0.3);
+    -fx-text-fill: rgba(94, 207, 255, 0.3);
 }
+
 .oreo-stamp {
     -fx-alignment: center;
     -fx-spacing: 2;
     -fx-opacity: 0.45;
 }
+
 .oreo-stack {
     -fx-alignment: center;
     -fx-spacing: 1;
 }
+
 .oreo-dark {
     -fx-pref-width: 22;
     -fx-pref-height: 22;
     -fx-background-radius: 50%;
     -fx-background-color: #111;
-    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-radius: 50%;
 }
+
 .oreo-cream {
     -fx-pref-width: 22;
     -fx-pref-height: 7;
     -fx-background-color: #f0ebe0;
     -fx-background-radius: 3;
 }
+
 .oreo-text {
     -fx-font-size: 7px;
     -fx-letter-spacing: 4px;
-    -fx-text-fill: rgba(240,235,224,0.6);
+    -fx-text-fill: rgba(240, 235, 224, 0.6);
 }
 
 /* ==================== CONTROLES EXTRAS (INPUTS/LISTS) ==================== */
 .polar-field {
-    -fx-background-color: rgba(5,15,35,0.8);
-    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-background-color: rgba(5, 15, 35, 0.8);
+    -fx-border-color: rgba(94, 207, 255, 0.5);
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Verdana';
     -fx-padding: 8 12;
 }
+
 .polar-combo {
-    -fx-background-color: rgba(5,15,35,0.8);
-    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-background-color: rgba(5, 15, 35, 0.8);
+    -fx-border-color: rgba(94, 207, 255, 0.5);
     -fx-border-radius: 4;
     -fx-background-radius: 4;
 }
+
 .polar-combo .list-cell {
     -fx-text-fill: #ffffff;
     -fx-font-family: 'Verdana';
     -fx-background-color: transparent;
 }
+
 .polar-combo .list-view {
-    -fx-background-color: rgba(5,15,35,0.95);
-    -fx-border-color: rgba(94,207,255,0.5);
+    -fx-background-color: rgba(5, 15, 35, 0.95);
+    -fx-border-color: rgba(94, 207, 255, 0.5);
 }
+
 .polar-combo .list-view .list-cell:hover {
-    -fx-background-color: rgba(94,207,255,0.3);
+    -fx-background-color: rgba(94, 207, 255, 0.3);
 }
+
 .polar-list {
-    -fx-background-color: rgba(5,15,35,0.5);
-    -fx-border-color: rgba(94,207,255,0.3);
+    -fx-background-color: rgba(5, 15, 35, 0.5);
+    -fx-border-color: rgba(94, 207, 255, 0.3);
     -fx-border-radius: 4;
     -fx-control-inner-background: transparent;
 }
+
 .polar-list .list-cell {
     -fx-text-fill: #c8eeff;
     -fx-font-family: 'Verdana';
     -fx-padding: 10;
     -fx-background-color: transparent;
-    -fx-border-color: transparent transparent rgba(94,207,255,0.1) transparent;
+    -fx-border-color: transparent transparent rgba(94, 207, 255, 0.1) transparent;
 }
+
 .polar-list .list-cell:selected {
-    -fx-background-color: rgba(94,207,255,0.2);
+    -fx-background-color: rgba(94, 207, 255, 0.2);
     -fx-text-fill: #ffffff;
 }
 
 /* ==================== SLIDERS ==================== */
 .polar-slider .track {
-    -fx-background-color: rgba(94,207,255,0.15);
+    -fx-background-color: rgba(94, 207, 255, 0.15);
 }
+
 .polar-slider .thumb {
     -fx-background-color: #5ecfff;
-    -fx-effect: dropshadow(gaussian, rgba(94,207,255,0.6), 8, 0.4, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.6), 8, 0.4, 0, 0);
 }
 
 /* ==================== LOGO PINGU SIMULADO ==================== */
@@ -323,6 +369,7 @@
     -fx-font-size: 38px;
     -fx-text-fill: linear-gradient(to bottom, #ffffff, #7ae2ff);
     -fx-effect: dropshadow(gaussian, #0088cc, 5, 1.0, 0, 2) dropshadow(gaussian, #002244, 10, 0.5, 0, 4);
+    -fx-translate-y: 10;
 }
 
 .pingu-logo-bottom {
