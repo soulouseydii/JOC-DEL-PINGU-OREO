@@ -52,87 +52,137 @@ import CONTROLADOR.GestorAnimacionesVistas;
 
 public class PantallaJuego {
 
-
 	// Botón dado
-	@FXML private Button dado;
-	
+	@FXML
+	private Button dado;
+
 	// Textos UI
-	@FXML private Text dadoResultText;
-	
+	@FXML
+	private Text dadoResultText;
+
 	// Inventario UI
-	@FXML private Text peces_t;
-	@FXML private Text nieve_t;
-	@FXML private Text moto_t;
-	@FXML private Button btnMoto;
-	@FXML private Button btnSettings;
-	@FXML private Button btnDadoRapido;
-	@FXML private Button btnDadoLento;
-	@FXML private Label lblCantRapido;
-	@FXML private Label lblCantLento;
-	
+	@FXML
+	private Text peces_t;
+	@FXML
+	private Text nieve_t;
+	@FXML
+	private Text moto_t;
+	@FXML
+	private Button btnMoto;
+	@FXML
+	private Button btnSettings;
+	@FXML
+	private Button btnDadoRapido;
+	@FXML
+	private Button btnDadoLento;
+	@FXML
+	private Label lblCantRapido;
+	@FXML
+	private Label lblCantLento;
+
 	// Log de eventos
-	@FXML private TextArea eventosLog;
+	@FXML
+	private TextArea eventosLog;
 
 	// Contenedores para Overlay
-	@FXML private BorderPane mainContainer;
-	@FXML private VBox menuOverlay;
-	@FXML private VBox optionsSubmenu;
-	@FXML private CheckBox checkMusica;
-	@FXML private Slider sliderVolumen;
-	@FXML private CheckBox checkSonidos;
-	@FXML private Slider sliderSonidos;
-	@FXML private CheckBox chkPantallaCompleta;
-	@FXML private VBox confirmationOverlay;
-	@FXML private Label confirmationTitle;
-	@FXML private Label confirmationMessage;
+	@FXML
+	private BorderPane mainContainer;
+	@FXML
+	private VBox menuOverlay;
+	@FXML
+	private VBox optionsSubmenu;
+	@FXML
+	private CheckBox checkMusica;
+	@FXML
+	private Slider sliderVolumen;
+	@FXML
+	private CheckBox checkSonidos;
+	@FXML
+	private Slider sliderSonidos;
+	@FXML
+	private CheckBox chkPantallaCompleta;
+	@FXML
+	private VBox confirmationOverlay;
+	@FXML
+	private Label confirmationTitle;
+	@FXML
+	private Label confirmationMessage;
 
 	// Save Success Overlay
-	@FXML private VBox saveSuccessOverlay;
-	@FXML private Label saveMessageLabel;
+	@FXML
+	private VBox saveSuccessOverlay;
+	@FXML
+	private Label saveMessageLabel;
 
 	// Game End Overlay
-	@FXML private VBox gameEndOverlay;
-	@FXML private Label winnerNameLabel;
+	@FXML
+	private VBox gameEndOverlay;
+	@FXML
+	private Label winnerNameLabel;
 
 	// Snowball Fight overlays
-	@FXML private StackPane snowballFightImageOverlay;
-	@FXML private ImageView snowballFightImage;
-	@FXML private VBox snowballDecisionOverlay;
-	@FXML private Label snowballDecisionMessage;
+	@FXML
+	private StackPane snowballFightImageOverlay;
+	@FXML
+	private ImageView snowballFightImage;
+	@FXML
+	private VBox snowballDecisionOverlay;
+	@FXML
+	private Label snowballDecisionMessage;
 
 	// Seal Encounter overlays
-	@FXML private StackPane sealEncounterImageOverlay;
-	@FXML private ImageView sealEncounterImage;
-	@FXML private VBox sealEncounterDecisionOverlay;
-	@FXML private Button btnSobornarFoca;
-	@FXML private Label sealEncounterMessage;
-	@FXML private Button btnSealInfo;
+	@FXML
+	private StackPane sealEncounterImageOverlay;
+	@FXML
+	private ImageView sealEncounterImage;
+	@FXML
+	private VBox sealEncounterDecisionOverlay;
+	@FXML
+	private Button btnSobornarFoca;
+	@FXML
+	private Label sealEncounterMessage;
+	@FXML
+	private Button btnSealInfo;
 
 	// Crush (seal passing over) overlay
-	@FXML private StackPane crushImageOverlay;
-	@FXML private ImageView crushImage;
+	@FXML
+	private StackPane crushImageOverlay;
+	@FXML
+	private ImageView crushImage;
 
 	// Chest event overlay (cofre del evento)
-	@FXML private StackPane chestEventOverlay;
-	@FXML private ImageView chestEventImage;
-	@FXML private Label chestItemLabel;
+	@FXML
+	private StackPane chestEventOverlay;
+	@FXML
+	private ImageView chestEventImage;
+	@FXML
+	private Label chestItemLabel;
 
 	// Surprise event overlay (interrogantes)
-	@FXML private StackPane surpriseEventOverlay;
-	@FXML private Label surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5, surpriseMark6, surpriseMark7, surpriseMark8, 
-	surpriseMark9,surpriseMark10,surpriseMark11,surpriseMark12,surpriseMark13,surpriseMark14;
-	@FXML private Label surpriseResultLabel;
+	@FXML
+	private StackPane surpriseEventOverlay;
+	@FXML
+	private Label surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5, surpriseMark6,
+			surpriseMark7, surpriseMark8,
+			surpriseMark9, surpriseMark10, surpriseMark11, surpriseMark12, surpriseMark13, surpriseMark14;
+	@FXML
+	private Label surpriseResultLabel;
 
 	// Tablero y fichas
 	// Tablero y fichas (StackPane para poder contener imagen o forma según el tipo)
-	@FXML private GridPane tablero;
-	@FXML private StackPane P1;
-	@FXML private StackPane P2;
-	@FXML private StackPane P3;
-	@FXML private StackPane P4;
+	@FXML
+	private GridPane tablero;
+	@FXML
+	private StackPane P1;
+	@FXML
+	private StackPane P2;
+	@FXML
+	private StackPane P3;
+	@FXML
+	private StackPane P4;
 
 	private GestorPartida gestorPartida;
-	private int[] posiciones = new int[] {-1, -1, -1, -1};
+	private int[] posiciones = new int[] { -1, -1, -1, -1 };
 	private boolean isPaused = false;
 	private PauseTransition cpuPauseTransition;
 	private List<Animation> currentAnimations = new ArrayList<>();
@@ -140,7 +190,10 @@ public class PantallaJuego {
 	private static final int ROWS = 5;
 	private static final String TAG_CASILLA_TEXT = "CASILLA_TEXT";
 
-	private enum ConfirmAction { BACK_TO_MENU, EXIT_GAME }
+	private enum ConfirmAction {
+		BACK_TO_MENU, EXIT_GAME
+	}
+
 	private ConfirmAction pendingAction;
 
 	// PvP snowball fight state
@@ -170,18 +223,19 @@ public class PantallaJuego {
 	private static final double FICHA_HALF = FICHA_SIZE / 2.0;
 
 	// =========================================
-	//  INICIALIZACIÓN
+	// INICIALIZACIÓN
 	// =========================================
 
 	@FXML
 	private void initialize() {
 		gestorPartida = new GestorPartida();
-		
+
 		try {
 			imgNormal = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_normal.png"));
 			imgAgujero = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_agujero.png"));
 			imgTrineo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_trineo.png"));
-			imgSueloQuebradizo = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_SueloQuebradizo.png"));
+			imgSueloQuebradizo = new Image(
+					getClass().getResourceAsStream("/imagenes_casillas/casilla_SueloQuebradizo.png"));
 			imgOso = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_oso.png"));
 			imgAtaqueOso = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_ataque_oso.png"));
 			imgEvento = new Image(getClass().getResourceAsStream("/imagenes_casillas/casilla_evento.png"));
@@ -209,7 +263,7 @@ public class PantallaJuego {
 		} catch (Exception e) {
 			System.out.println("Error al cargar imágenes de personajes: " + e.getMessage());
 		}
-		
+
 		// Sincronizar audio con GestorAudio
 		CONTROLADOR.GestorAudio gestorAudio = CONTROLADOR.GestorAudio.getInstance();
 		if (checkMusica != null) {
@@ -243,13 +297,13 @@ public class PantallaJuego {
 		sealTooltip.setShowDelay(Duration.millis(100));
 		sealTooltip.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 		btnSealInfo.setTooltip(sealTooltip);
-		
+
 		// Clipping bounds del tablero principal
 		javafx.scene.shape.Rectangle clipRect = new javafx.scene.shape.Rectangle();
 		clipRect.widthProperty().bind(tablero.widthProperty());
 		clipRect.heightProperty().bind(tablero.heightProperty());
 		tablero.setClip(clipRect);
-		
+
 		// Aplicar efectos visuales y sonoros a los botones cuando la escena esté lista
 		tablero.sceneProperty().addListener((obs, oldScene, newScene) -> {
 			if (newScene != null) {
@@ -261,33 +315,34 @@ public class PantallaJuego {
 	public void iniciarConJugadores(ArrayList<Jugador> jugadores) {
 		gestorPartida.nuevaPartida(jugadores);
 		mostrarTiposDeCasillasEnTablero(gestorPartida.getPartida().getTablero());
-		
+
 		// Ocultar fichas que no participen visualmente
 		P1.setVisible(false);
 		P2.setVisible(false);
 		P3.setVisible(false);
 		P4.setVisible(false);
-		
+
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
 			StackPane ficha = getFicha(i);
 			ficha.setVisible(true);
 			asignarImagenFicha(i, jugadores.get(i));
 		}
-		
+
 		actualizarTodasLasFichas();
-		
+
 		actualizarInventarioUI();
-		
+
 		Jugador j1 = gestorPartida.getPartida().getJugadorActual();
 		agregarEvento("🎮 ¡El juego ha comenzado! Turno de " + j1.getNombre());
-		
+
 		if (j1 instanceof Foca) {
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
 			cpuPauseTransition = new PauseTransition(Duration.millis(1500));
 			cpuPauseTransition.setOnFinished(e -> {
 				currentAnimations.remove(cpuPauseTransition);
-				if (!isPaused) handleDado(null);
+				if (!isPaused)
+					handleDado(null);
 			});
 			currentAnimations.add(cpuPauseTransition);
 			cpuPauseTransition.play();
@@ -301,11 +356,12 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  ASIGNACIÓN DE IMAGEN A FICHA
+	// ASIGNACIÓN DE IMAGEN A FICHA
 	// =========================================
 
 	/**
-	 * Carga la imagen de skin de un jugador según su getColor() (nombre de archivo).
+	 * Carga la imagen de skin de un jugador según su getColor() (nombre de
+	 * archivo).
 	 * Devuelve la imagen cargada o el fallback por defecto.
 	 */
 	private Image cargarSkinJugador(Jugador jugador) {
@@ -333,7 +389,7 @@ public class PantallaJuego {
 	private void asignarImagenFicha(int index, Jugador jugador) {
 		StackPane ficha = getFicha(index);
 		ficha.getChildren().clear();
-		
+
 		Image skinImg = cargarSkinJugador(jugador);
 		ImageView imgView = new ImageView();
 		if (skinImg != null) {
@@ -350,7 +406,8 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleDadoRapido(ActionEvent event) {
-		if (isPaused) return;
+		if (isPaused)
+			return;
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoRapido();
 		ejecutarAnimacionDado(new Dado("Rapido"), btnDadoRapido);
@@ -358,7 +415,8 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleDadoLento(ActionEvent event) {
-		if (isPaused) return;
+		if (isPaused)
+			return;
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoLento();
 		ejecutarAnimacionDado(new Dado("Lento"), btnDadoLento);
@@ -380,7 +438,9 @@ public class PantallaJuego {
 		// 2. Animación de cambio de números en el texto
 		Timeline timeline = new Timeline();
 		for (int i = 0; i < 10; i++) {
-			final int tempNum = (int)(Math.random() * (dadoEspecial != null ? (dadoEspecial.getMax() - dadoEspecial.getMin() + 1) : 6)) + (dadoEspecial != null ? dadoEspecial.getMin() : 1);
+			final int tempNum = (int) (Math.random()
+					* (dadoEspecial != null ? (dadoEspecial.getMax() - dadoEspecial.getMin() + 1) : 6))
+					+ (dadoEspecial != null ? dadoEspecial.getMin() : 1);
 			KeyFrame kf = new KeyFrame(Duration.millis(i * 100), e -> {
 				dadoResultText.setText("Girando... " + tempNum);
 			});
@@ -402,7 +462,7 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  LOG DE EVENTOS
+	// LOG DE EVENTOS
 	// =========================================
 
 	private void agregarEvento(String mensaje) {
@@ -416,32 +476,32 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  INVENTARIO UI
+	// INVENTARIO UI
 	// =========================================
-	
+
 	private void actualizarInventarioUI() {
 		Jugador jActual = gestorPartida.getPartida().getJugadorActual();
-		
+
 		if (jActual instanceof Pinguino) {
 			Pinguino p = (Pinguino) jActual;
-			
+
 			int cantPeces = p.contarItem("Pez");
 			int cantBolas = p.contarItem("Bola de Nieve");
 			int cantMotos = p.contarItem("Moto de Nieve");
-			
+
 			peces_t.setText("x " + cantPeces);
 			nieve_t.setText("x " + cantBolas);
 			moto_t.setText("x " + cantMotos);
-			
+
 			btnMoto.setDisable(cantMotos <= 0);
-			
+
 			// Dados especiales
 			int cantRapidos = jActual.getInventario().getDadosRapidos();
 			int cantLentos = jActual.getInventario().getDadosLentos();
-			
+
 			lblCantRapido.setText("Rápido: " + cantRapidos);
 			lblCantLento.setText("Lento: " + cantLentos);
-			
+
 			btnDadoRapido.setDisable(cantRapidos <= 0);
 			btnDadoLento.setDisable(cantLentos <= 0);
 		} else {
@@ -457,7 +517,7 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  TABLERO Y COORDENADAS
+	// TABLERO Y COORDENADAS
 	// =========================================
 
 	private int[] getCoordenadas(int posicion) {
@@ -469,20 +529,27 @@ public class PantallaJuego {
 		} else {
 			col = (COLUMNS - 1) - (posReal % COLUMNS);
 		}
-		return new int[]{col, fila};
+		return new int[] { col, fila };
 	}
 
 	private Image getImagenParaCasilla(Casilla casilla) {
 		String tipo = casilla.getClass().getSimpleName();
 		switch (tipo) {
-			case "Agujero": return imgAgujero != null ? imgAgujero : imgNormal;
-			case "Trineo": return imgTrineo != null ? imgTrineo : imgNormal;
-			case "SueloQuebradizo": return imgSueloQuebradizo != null ? imgSueloQuebradizo : imgNormal;
-			case "Oso": return imgOso != null ? imgOso : imgNormal;
-			case "Evento": return imgEvento != null ? imgEvento : imgNormal;
-			case "Sorpresa": return imgSorpresa != null ? imgSorpresa : imgNormal;
+			case "Agujero":
+				return imgAgujero != null ? imgAgujero : imgNormal;
+			case "Trineo":
+				return imgTrineo != null ? imgTrineo : imgNormal;
+			case "SueloQuebradizo":
+				return imgSueloQuebradizo != null ? imgSueloQuebradizo : imgNormal;
+			case "Oso":
+				return imgOso != null ? imgOso : imgNormal;
+			case "Evento":
+				return imgEvento != null ? imgEvento : imgNormal;
+			case "Sorpresa":
+				return imgSorpresa != null ? imgSorpresa : imgNormal;
 			case "Normal":
-			default: return imgNormal;
+			default:
+				return imgNormal;
 		}
 	}
 
@@ -491,18 +558,19 @@ public class PantallaJuego {
 
 		for (int i = 0; i < 50 && i < t.getListaCasillas().size(); i++) {
 			Casilla casilla = t.getListaCasillas().get(i);
-			
+
 			StackPane celdaContainer = new StackPane();
 			celdaContainer.setUserData(TAG_CASILLA_TEXT);
 			celdaContainer.getStyleClass().add("polar-cell");
-			
+
 			Image img = getImagenParaCasilla(casilla);
 			if (img != null) {
 				ImageView imgView = new ImageView(img);
 				imgView.setPreserveRatio(true);
-				// Permitir que el contenedor se encoja rompiendo la dependencia del tamaño de la imagen original
+				// Permitir que el contenedor se encoja rompiendo la dependencia del tamaño de
+				// la imagen original
 				celdaContainer.setMinSize(0, 0);
-				
+
 				imgView.fitWidthProperty().bind(celdaContainer.widthProperty().multiply(1.00));
 				imgView.fitHeightProperty().bind(celdaContainer.heightProperty().multiply(1.00));
 				celdaContainer.getChildren().add(imgView);
@@ -526,7 +594,8 @@ public class PantallaJuego {
 			tablero.getChildren().add(celdaContainer);
 		}
 
-		// Asegurar que los jugadores (ImageView) estén siempre por encima de las casillas
+		// Asegurar que los jugadores (ImageView) estén siempre por encima de las
+		// casillas
 		P1.toFront();
 		P2.toFront();
 		P3.toFront();
@@ -534,7 +603,7 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  MENÚ GUARDADO / CARGA (Desde Pause)
+	// MENÚ GUARDADO / CARGA (Desde Pause)
 	// =========================================
 
 	/**
@@ -572,7 +641,7 @@ public class PantallaJuego {
 			}
 		} else {
 			agregarEvento("❌ Error al guardar la partida.");
-			
+
 			// Si estamos en la pantalla de fin de partida, ocultarla temporalmente
 			if (gameEndOverlay.isVisible()) {
 				gameEndOverlay.setVisible(false);
@@ -583,12 +652,11 @@ public class PantallaJuego {
 			GestorAnimacionesVistas.animarAparicionOverlay(saveSuccessOverlay);
 		}
 	}
-	
 
 	@FXML
 	private void handleCloseSaveOverlay() {
 		saveSuccessOverlay.setVisible(false);
-		
+
 		// Si la partida ha terminado, volver a mostrar el overlay de fin de partida
 		if (gestorPartida.getPartida().isFinalizada()) {
 			gameEndOverlay.setVisible(true);
@@ -599,7 +667,6 @@ public class PantallaJuego {
 		}
 	}
 
-
 	@FXML
 	private void handleLoadGame() {
 		try {
@@ -607,7 +674,7 @@ public class PantallaJuego {
 			Parent root = loader.load();
 			Scene scene = tablero.getScene();
 			scene.setRoot(root);
-			
+
 			Stage stage = (Stage) scene.getWindow();
 			stage.setTitle("Cargar Partida");
 		} catch (Exception e) {
@@ -617,19 +684,19 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  HANDLER CONFIGURACIÓN (Overlay)
+	// HANDLER CONFIGURACIÓN (Overlay)
 	// =========================================
 
 	@FXML
 	private void handleSettingsClick(ActionEvent event) {
 		isPaused = true;
-		
+
 		for (Animation a : currentAnimations) {
 			if (a.getStatus() == Animation.Status.RUNNING) {
 				a.pause();
 			}
 		}
-		
+
 		menuOverlay.setVisible(true);
 		GestorAnimacionesVistas.animarAparicionOverlay(menuOverlay);
 		mainContainer.setDisable(true);
@@ -671,7 +738,7 @@ public class PantallaJuego {
 		pendingAction = ConfirmAction.BACK_TO_MENU;
 		confirmationTitle.setText("VOLVER AL MENÚ");
 		confirmationMessage.setText("¿Quieres guardar la partida antes de volver al menú principal?");
-		
+
 		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
 			confirmationOverlay.setVisible(true);
 			GestorAnimacionesVistas.animarAparicionOverlay(confirmationOverlay);
@@ -683,7 +750,7 @@ public class PantallaJuego {
 		pendingAction = ConfirmAction.EXIT_GAME;
 		confirmationTitle.setText("SALIR DEL JUEGO");
 		confirmationMessage.setText("¿Quieres guardar la partida antes de cerrar el juego?");
-		
+
 		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
 			confirmationOverlay.setVisible(true);
 			GestorAnimacionesVistas.animarAparicionOverlay(confirmationOverlay);
@@ -695,7 +762,7 @@ public class PantallaJuego {
 		// Guardar la partida
 		handleSaveGame();
 		confirmationOverlay.setVisible(false);
-		
+
 		// Ejecutar la accion pendiente
 		if (pendingAction == ConfirmAction.BACK_TO_MENU) {
 			try {
@@ -735,7 +802,6 @@ public class PantallaJuego {
 		});
 	}
 
-
 	@FXML
 	private void handleMenuOptions(ActionEvent event) {
 		GestorAnimacionesVistas.animarCierreOverlay(menuOverlay, () -> {
@@ -757,14 +823,14 @@ public class PantallaJuego {
 		stage.setMaximized(chkPantallaCompleta.isSelected());
 	}
 
+	// =========================================
+	// HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
+	// =========================================
 
-	// =========================================
-	//  HANDLER DEL DADO — ANIMACIÓN EN 2 PASOS
-	// =========================================
-	
 	@FXML
 	private void handleDado(ActionEvent event) {
-		if (isPaused) return;
+		if (isPaused)
+			return;
 		ejecutarAnimacionDado(null, dado);
 	}
 
@@ -777,17 +843,17 @@ public class PantallaJuego {
 		int turnosBloqueadaAntes = 0;
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino p = (Pinguino) jugadorActual;
-			pecesAntes    = p.contarItem("Pez");
-			bolasAntes    = p.contarItem("Bola de Nieve");
-			motosAntes    = p.contarItem("Moto de Nieve");
-			rapidosAntes  = p.getInv().getDadosRapidos();
-			lentosAntes   = p.getInv().getDadosLentos();
+			pecesAntes = p.contarItem("Pez");
+			bolasAntes = p.contarItem("Bola de Nieve");
+			motosAntes = p.contarItem("Moto de Nieve");
+			rapidosAntes = p.getInv().getDadosRapidos();
+			lentosAntes = p.getInv().getDadosLentos();
 		} else if (jugadorActual instanceof Foca) {
 			turnosBloqueadaAntes = ((Foca) jugadorActual).getTurnosBloqueada();
 		}
 
 		gestorPartida.ejecutarTurnoCompleto(dadoEspecial);
-		
+
 		int posNueva = jugadorActual.getPosicion();
 		int resultadoDado = gestorPartida.getUltimoResultadoDado();
 		int casillaPisada = gestorPartida.getUltimaCasillaPisada();
@@ -796,15 +862,15 @@ public class PantallaJuego {
 		int[] diffInv = null;
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino p = (Pinguino) jugadorActual;
-			diffInv = new int[]{
-				p.contarItem("Pez")          - pecesAntes,
-				p.contarItem("Bola de Nieve")- bolasAntes,
-				p.contarItem("Moto de Nieve")- motosAntes,
-				p.getInv().getDadosRapidos() - rapidosAntes,
-				p.getInv().getDadosLentos()  - lentosAntes
+			diffInv = new int[] {
+					p.contarItem("Pez") - pecesAntes,
+					p.contarItem("Bola de Nieve") - bolasAntes,
+					p.contarItem("Moto de Nieve") - motosAntes,
+					p.getInv().getDadosRapidos() - rapidosAntes,
+					p.getInv().getDadosLentos() - lentosAntes
 			};
 		}
-		
+
 		if (resultadoDado == 0) {
 			dadoResultText.setText(jugadorActual.getNombre() + " ha perdido el turno.");
 			agregarEvento("🚫 " + jugadorActual.getNombre() + " no puede mover este turno.");
@@ -813,46 +879,62 @@ public class PantallaJuego {
 			registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
 		}
 
-		// Detectar si la casilla pisada es un Evento/Sorpresa (para la animación del cofre o interrogantes)
+		// Detectar si la casilla pisada es un Evento/Sorpresa (para la animación del
+		// cofre o interrogantes)
 		boolean esEvento = false;
 		boolean esSorpresa = false;
 		String itemObtenido = null;
 		if (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size()) {
 			Casilla casillaObj = gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada);
-			
+
 			if (casillaObj instanceof Evento || casillaObj instanceof Sorpresa) {
 				// DETERMINAR SI ACTIVAR ANIMACION Y QUÉ TEXTO MOSTRAR
-				
+
 				if (casillaObj instanceof Evento && jugadorActual instanceof Pinguino) {
 					esEvento = true;
 					// Determinar qué objeto se obtuvo buscando en diffInv
-					if (diffInv != null && (diffInv[0]>0 || diffInv[1]>0 || diffInv[2]>0 || diffInv[3]>0 || diffInv[4]>0)) {
-						if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
-						else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
-						else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
-						else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola de Nieve!";
-						else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
+					if (diffInv != null && (diffInv[0] > 0 || diffInv[1] > 0 || diffInv[2] > 0 || diffInv[3] > 0
+							|| diffInv[4] > 0)) {
+						if (diffInv[3] > 0)
+							itemObtenido = "🎲⚡ ¡Dado Rápido!";
+						else if (diffInv[4] > 0)
+							itemObtenido = "🎲🐢 ¡Dado Lento!";
+						else if (diffInv[0] > 0)
+							itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+						else if (diffInv[1] > 0)
+							itemObtenido = "❄️ ¡" + diffInv[1] + " Bola de Nieve!";
+						else if (diffInv[2] > 0)
+							itemObtenido = "🏍️ ¡Moto de Nieve!";
 					} else {
 						itemObtenido = "📦 Inventario lleno";
 					}
 				} else if (casillaObj instanceof Sorpresa) {
 					// Lógica para SORPRESA (Pinguino o Foca)
 					esSorpresa = true; // Siempre mostramos interrogantes al caer aquí
-					
+
 					if (jugadorActual instanceof Pinguino) {
-						if (diffInv != null && (diffInv[0]>0 || diffInv[1]>0 || diffInv[2]>0 || diffInv[3]>0 || diffInv[4]>0)) {
-							if (diffInv[3] > 0) itemObtenido = "🎲⚡ ¡Dado Rápido!";
-							else if (diffInv[4] > 0) itemObtenido = "🎲🐢 ¡Dado Lento!";
-							else if (diffInv[0] > 0) itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
-							else if (diffInv[1] > 0) itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
-							else if (diffInv[2] > 0) itemObtenido = "🏍️ ¡Moto de Nieve!";
-						} else if (diffInv != null && (diffInv[0]<0 || diffInv[1]<0 || diffInv[2]<0 || diffInv[3]<0 || diffInv[4]<0)) {
+						if (diffInv != null && (diffInv[0] > 0 || diffInv[1] > 0 || diffInv[2] > 0 || diffInv[3] > 0
+								|| diffInv[4] > 0)) {
+							if (diffInv[3] > 0)
+								itemObtenido = "🎲⚡ ¡Dado Rápido!";
+							else if (diffInv[4] > 0)
+								itemObtenido = "🎲🐢 ¡Dado Lento!";
+							else if (diffInv[0] > 0)
+								itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+							else if (diffInv[1] > 0)
+								itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
+							else if (diffInv[2] > 0)
+								itemObtenido = "🏍️ ¡Moto de Nieve!";
+						} else if (diffInv != null && (diffInv[0] < 0 || diffInv[1] < 0 || diffInv[2] < 0
+								|| diffInv[3] < 0 || diffInv[4] < 0)) {
 							itemObtenido = "📉 ¡Objeto perdido!";
 						} else if (jugadorActual.getPosicion() > casillaPisada) {
 							itemObtenido = "🛷 ¡Un Trineo!";
 						} else if (jugadorActual.getPosicion() < casillaPisada) {
-							if (jugadorActual.getPosicion() == 0) itemObtenido = "🐻 ¡El OSO!";
-							else itemObtenido = "🕳️ ¡Un Agujero!";
+							if (jugadorActual.getPosicion() == 0)
+								itemObtenido = "🐻 ¡El OSO!";
+							else
+								itemObtenido = "🕳️ ¡Un Agujero!";
 						} else if (jugadorActual.getTurnosPerdidos() > 0) {
 							itemObtenido = "🧊 ¡Atascado / Resbalón!";
 						} else {
@@ -863,8 +945,10 @@ public class PantallaJuego {
 						if (f.getPosicion() > casillaPisada) {
 							itemObtenido = "🛷 ¡Trineo!";
 						} else if (f.getPosicion() < casillaPisada) {
-							if (f.getPosicion() == 0) itemObtenido = "🐻 ¡Oso!";
-							else itemObtenido = "🕳️ ¡Agujero!";
+							if (f.getPosicion() == 0)
+								itemObtenido = "🐻 ¡Oso!";
+							else
+								itemObtenido = "🕳️ ¡Agujero!";
 						} else {
 							itemObtenido = "❓ ¡Nada!";
 						}
@@ -877,13 +961,17 @@ public class PantallaJuego {
 		final boolean esEventoFinal = esEvento;
 		final boolean esSorpresaFinal = esSorpresa;
 		final String itemObtenidoFinal = itemObtenido;
-		final boolean esOsoFinal = (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() && 
-			(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass().getSimpleName().equals("Oso") ||
-			(itemObtenido != null && (itemObtenido.contains("Oso") || itemObtenido.contains("OSO")))));
-		
-		final boolean esAgujeroFinal = (casillaPisada >= 0 && casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() && 
-			(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass().getSimpleName().equals("Agujero") ||
-			(itemObtenido != null && itemObtenido.contains("Agujero"))));
+		final boolean esOsoFinal = (casillaPisada >= 0
+				&& casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() &&
+				(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass()
+						.getSimpleName().equals("Oso") ||
+						(itemObtenido != null && (itemObtenido.contains("Oso") || itemObtenido.contains("OSO")))));
+
+		final boolean esAgujeroFinal = (casillaPisada >= 0
+				&& casillaPisada < gestorPartida.getPartida().getTablero().getListaCasillas().size() &&
+				(gestorPartida.getPartida().getTablero().getListaCasillas().get(casillaPisada).getClass()
+						.getSimpleName().equals("Agujero") ||
+						(itemObtenido != null && itemObtenido.contains("Agujero"))));
 
 		// Determinar si hay encuentro con foca en la casilla de aterrizaje (landing)
 		Pinguino pEncLanding = null;
@@ -894,7 +982,7 @@ public class PantallaJuego {
 				esRetrocesoFoca = true;
 			}
 		}
-		
+
 		final Pinguino finalPEncLanding = pEncLanding;
 		final boolean finalEsRetrocesoFoca = esRetrocesoFoca;
 
@@ -908,10 +996,12 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de animar el efecto de casilla
 				Runnable continuarConEfecto = () -> {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual,
+								finalPEncLanding, finalEsRetrocesoFoca);
 					} else if (esAgujeroFinal) {
 						animarCaidaYSalidaAgujero(indiceActual, casillaPisada, posVisualFinal, () -> {
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
+									finalEsRetrocesoFoca);
 						});
 					} else {
 						PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
@@ -919,7 +1009,8 @@ public class PantallaJuego {
 							currentAnimations.remove(pausaEfecto);
 							animarMovimiento(indiceActual, posVisualFinal, () -> {
 								actualizarTodasLasFichas();
-								comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+								comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
+										finalEsRetrocesoFoca);
 							});
 						});
 						currentAnimations.add(pausaEfecto);
@@ -941,36 +1032,42 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de continuar
 				if (esEventoFinal) {
 					mostrarEventoCofre(itemObtenidoFinal, () -> {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
+								finalEsRetrocesoFoca);
 					});
 				} else if (esSorpresaFinal) {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual,
+								finalPEncLanding, finalEsRetrocesoFoca);
 					} else {
 						mostrarEventoSorpresa(itemObtenidoFinal, () -> {
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
+									finalEsRetrocesoFoca);
 						});
 					}
 				} else {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual, finalPEncLanding, finalEsRetrocesoFoca);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual,
+								finalPEncLanding, finalEsRetrocesoFoca);
 					} else {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding, finalEsRetrocesoFoca);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
+								finalEsRetrocesoFoca);
 					}
 				}
 			});
 		}
 	}
 
-	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
+	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual,
+			Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		ImageView imgViewCasilla = getImageViewCasilla(indiceCasilla);
 		Image imgOsoAntigua = null;
 		StackPane ficha = getFicha(indiceJugador);
-		
+
 		if (imgViewCasilla != null && imgAtaqueOso != null) {
 			imgOsoAntigua = imgViewCasilla.getImage();
 			imgViewCasilla.setImage(imgAtaqueOso);
-			
+
 			// Temblor de pánico antes del golpe
 			TranslateTransition shake = new TranslateTransition(Duration.millis(50), ficha);
 			shake.setByX(8);
@@ -978,49 +1075,49 @@ public class PantallaJuego {
 			shake.setAutoReverse(true);
 			shake.play();
 		}
-		
+
 		PauseTransition pausa = new PauseTransition(Duration.millis(1000));
 		final Image imgFinalBackup = imgOsoAntigua;
-		
+
 		pausa.setOnFinished(e -> {
 			currentAnimations.remove(pausa);
 			if (imgViewCasilla != null && imgFinalBackup != null) {
 				imgViewCasilla.setImage(imgFinalBackup);
 			}
-			
+
 			// --- ANIMACIÓN DE VUELO (Impacto del Oso) ---
 			// 1. Sale volando: gira, se encoge y desaparece
 			RotateTransition rt = new RotateTransition(Duration.millis(700), ficha);
 			rt.setByAngle(720); // Dos vueltas completas
-			
+
 			ScaleTransition st = new ScaleTransition(Duration.millis(700), ficha);
 			st.setToX(0.1);
 			st.setToY(0.1);
-			
+
 			FadeTransition ft = new FadeTransition(Duration.millis(700), ficha);
 			ft.setToValue(0);
-			
+
 			ParallelTransition vuelo = new ParallelTransition(rt, st, ft);
-			
+
 			vuelo.setOnFinished(e2 -> {
 				// 2. Reposicionar instantáneamente al inicio
 				posiciones[indiceJugador] = 0;
 				int[] coords = getCoordenadas(0);
 				GridPane.setColumnIndex(ficha, coords[0]);
 				GridPane.setRowIndex(ficha, coords[1]);
-				
+
 				// 3. Reaparecer con un rebote de impacto en el inicio
 				ficha.setRotate(0);
 				ficha.setScaleX(1.8); // Aparece un poco más grande por el impacto
 				ficha.setScaleY(1.8);
-				
+
 				ScaleTransition stLand = new ScaleTransition(Duration.millis(400), ficha);
 				stLand.setToX(1.0);
 				stLand.setToY(1.0);
-				
+
 				FadeTransition ftLand = new FadeTransition(Duration.millis(300), ficha);
 				ftLand.setToValue(1);
-				
+
 				ParallelTransition aterrizaje = new ParallelTransition(stLand, ftLand);
 				aterrizaje.setOnFinished(e3 -> {
 					actualizarTodasLasFichas();
@@ -1028,61 +1125,62 @@ public class PantallaJuego {
 				});
 				aterrizaje.play();
 			});
-			
+
 			vuelo.play();
 		});
-		
+
 		currentAnimations.add(pausa);
 		pausa.play();
 	}
-	
+
 	private void animarCaidaYSalidaAgujero(int indexJugador, int posHole, int posExit, Runnable alTerminar) {
 		StackPane ficha = getFicha(indexJugador);
-		
+
 		// 1. Caída: Encogerse y desaparecer en el agujero actual
 		ScaleTransition stFall = new ScaleTransition(Duration.millis(500), ficha);
 		stFall.setToX(0.1);
 		stFall.setToY(0.1);
-		
+
 		FadeTransition ftFall = new FadeTransition(Duration.millis(500), ficha);
 		ftFall.setToValue(0);
-		
+
 		ParallelTransition fall = new ParallelTransition(stFall, ftFall);
-		
+
 		fall.setOnFinished(e -> {
 			// 2. Teletransporte invisible al nuevo agujero
 			posiciones[indexJugador] = posExit;
 			int[] coords = getCoordenadas(posExit);
 			GridPane.setColumnIndex(ficha, coords[0]);
 			GridPane.setRowIndex(ficha, coords[1]);
-			
+
 			// 3. Salida: Aparecer y salir disparado
 			ficha.setOpacity(0);
 			ficha.setScaleX(0.1);
 			ficha.setScaleY(0.1);
-			
+
 			FadeTransition ftRise = new FadeTransition(Duration.millis(300), ficha);
 			ftRise.setToValue(1);
-			
+
 			ScaleTransition stRise = new ScaleTransition(Duration.millis(400), ficha);
 			stRise.setToX(1.0);
 			stRise.setToY(1.0);
-			
+
 			TranslateTransition jump = new TranslateTransition(Duration.millis(500), ficha);
 			jump.setFromY(0);
 			jump.setByY(-100);
 			jump.setCycleCount(2);
 			jump.setAutoReverse(true);
-			
+
 			ParallelTransition rise = new ParallelTransition(ftRise, stRise, jump);
 			rise.setOnFinished(e2 -> {
 				ficha.setTranslateY(0);
 				actualizarTodasLasFichas();
-				if (alTerminar != null) alTerminar.run();
+				if (alTerminar != null)
+					alTerminar.run();
 			});
 			rise.play();
 		});
-		
+
 		fall.play();
 	}
 
@@ -1106,7 +1204,7 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  APLASTAMIENTO (Foca pasa por encima)
+	// APLASTAMIENTO (Foca pasa por encima)
 	// =========================================
 
 	/**
@@ -1115,13 +1213,14 @@ public class PantallaJuego {
 	 * Si hay aplastados, muestra la animación y aplica el efecto.
 	 * Si no, continúa con comprobarFocaYFinalizar.
 	 */
-	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
-        if (!(jugadorActual instanceof Foca)) {
-            // Un pingüino nunca aplasta empujando por el tablero
-            gestorPartida.getUltimosPinguinosAplastados().clear();
-            comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
-            return;
-        }
+	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding,
+			boolean esRetrocesoFoca) {
+		if (!(jugadorActual instanceof Foca)) {
+			// Un pingüino nunca aplasta empujando por el tablero
+			gestorPartida.getUltimosPinguinosAplastados().clear();
+			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
+			return;
+		}
 
 		ArrayList<Pinguino> aplastados = gestorPartida.getUltimosPinguinosAplastados();
 
@@ -1144,7 +1243,8 @@ public class PantallaJuego {
 	 * (squash + shake). Después de ~1.5s, registra los eventos en el log
 	 * y continúa con el flujo normal.
 	 */
-	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
+	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual,
+			Pinguino pEncLanding, boolean esRetrocesoFoca) {
 		// Preparar la imagen para la animación
 		crushImage.setOpacity(0);
 		crushImage.setScaleX(1.3);
@@ -1193,8 +1293,7 @@ public class PantallaJuego {
 		fadeOut.setToValue(0);
 
 		SequentialTransition secuencia = new SequentialTransition(
-			impacto, new ParallelTransition(rebote1, shakeSeq), rebote2, espera, fadeOut
-		);
+				impacto, new ParallelTransition(rebote1, shakeSeq), rebote2, espera, fadeOut);
 
 		secuencia.setOnFinished(e -> {
 			currentAnimations.remove(secuencia);
@@ -1205,7 +1304,7 @@ public class PantallaJuego {
 			// Registrar en el log
 			agregarEvento("═══════════════════════");
 			for (Pinguino p : aplastados) {
-				agregarEvento("💥 Una foca ha aplastado a " + p.getNombre() + " y ha perdido todos sus objetos.");
+				agregarEvento("💥 Una foca ha aplastado a " + p.getNombre() + " y ha perdido la mitad de sus objetos.");
 			}
 			agregarEvento("═══════════════════════");
 
@@ -1220,7 +1319,7 @@ public class PantallaJuego {
 		secuencia.play();
 	}
 
-	//  ANIMACIÓN COFRE DE EVENTO
+	// ANIMACIÓN COFRE DE EVENTO
 
 	/**
 	 * @param itemNombre
@@ -1295,14 +1394,14 @@ public class PantallaJuego {
 
 		// Secuencia completa
 		SequentialTransition secuenciaEvento = new SequentialTransition(
-			entrada,                                    // Cofre aparece
-			new PauseTransition(Duration.millis(200)),  // Breve pausa
-			chestShake,                                 // Cofre tiembla
-			openY,                                      // Cofre se abre
-			settle,                                     // Cofre se estabiliza
-			itemAppear,                                 // Item flota
-			hold,                                       // Mantener
-			fadeOutAll                                   // Desaparecer
+				entrada, // Cofre aparece
+				new PauseTransition(Duration.millis(200)), // Breve pausa
+				chestShake, // Cofre tiembla
+				openY, // Cofre se abre
+				settle, // Cofre se estabiliza
+				itemAppear, // Item flota
+				hold, // Mantener
+				fadeOutAll // Desaparecer
 		);
 
 		secuenciaEvento.setOnFinished(e -> {
@@ -1312,7 +1411,8 @@ public class PantallaJuego {
 			chestEventImage.setScaleY(1);
 			chestEventImage.setRotate(0);
 			chestItemLabel.setTranslateY(0);
-			if (alTerminar != null) alTerminar.run();
+			if (alTerminar != null)
+				alTerminar.run();
 		});
 
 		currentAnimations.add(secuenciaEvento);
@@ -1331,8 +1431,9 @@ public class PantallaJuego {
 		surpriseResultLabel.setScaleX(0.5);
 		surpriseResultLabel.setScaleY(0.5);
 
-		Label[] marks = {surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5, surpriseMark6, surpriseMark7, surpriseMark8, 
-				surpriseMark9,surpriseMark10,surpriseMark11,surpriseMark12,surpriseMark13,surpriseMark14};
+		Label[] marks = { surpriseMark1, surpriseMark2, surpriseMark3, surpriseMark4, surpriseMark5, surpriseMark6,
+				surpriseMark7, surpriseMark8,
+				surpriseMark9, surpriseMark10, surpriseMark11, surpriseMark12, surpriseMark13, surpriseMark14 };
 		ParallelTransition marksAnim = new ParallelTransition();
 
 		for (int i = 0; i < marks.length; i++) {
@@ -1365,7 +1466,7 @@ public class PantallaJuego {
 		textZoom.setDelay(Duration.millis(300));
 		textZoom.setToX(1.0);
 		textZoom.setToY(1.0);
-		
+
 		ParallelTransition textAnim = new ParallelTransition(textFade, textZoom);
 
 		// Pausa para leer
@@ -1376,16 +1477,16 @@ public class PantallaJuego {
 		fadeOut.setToValue(0);
 
 		SequentialTransition total = new SequentialTransition(
-			new ParallelTransition(marksAnim, textAnim),
-			hold,
-			fadeOut
-		);
+				new ParallelTransition(marksAnim, textAnim),
+				hold,
+				fadeOut);
 
 		total.setOnFinished(e -> {
 			currentAnimations.remove(total);
 			surpriseEventOverlay.setVisible(false);
 			surpriseEventOverlay.setOpacity(1); // Reset para la próxima vez
-			if (alTerminar != null) alTerminar.run();
+			if (alTerminar != null)
+				alTerminar.run();
 		});
 
 		currentAnimations.add(total);
@@ -1393,7 +1494,7 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  GUERRA DE BOLAS DE NIEVE (PvP)
+	// GUERRA DE BOLAS DE NIEVE (PvP)
 	// =========================================
 
 	/**
@@ -1402,20 +1503,25 @@ public class PantallaJuego {
 	 * Si es así, lanza la secuencia visual de guerra de bolas de nieve.
 	 * Si no, finaliza el turno normalmente.
 	 */
-	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding, boolean esRetrocesoFoca) {
+	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding,
+			boolean esRetrocesoFoca) {
 		// ── CASO 1: El jugador actual es un Pingüino → comprobar si hay foca ──
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino pActual = (Pinguino) jugadorActual;
 			Foca foca = gestorPartida.detectarFoca(pActual);
 
-			if (foca != null && pActual.getPosicion() != 0) {
+			// Solo hay encuentro si NO es la casilla 0 Y el pingüino tiene algo que perder
+			// o dar
+			if (foca != null && pActual.getPosicion() != 0
+					&& (pActual.contarTotalObjetos() > 0 || pActual.getInv().getTotalDadosEspeciales() > 0)) {
 				// Guardar estado del encuentro
 				sealEncounterFoca = foca;
 				sealEncounterPinguino = pActual;
 				sealEncounterPinguinoIndice = indiceActual;
 
 				agregarEvento("═══════════════════════");
-				agregarEvento("🦭 ¡" + pActual.getNombre() + " se encuentra con la foca en la casilla " + pActual.getPosicion() + "!");
+				agregarEvento("🦭 ¡" + pActual.getNombre() + " se encuentra con la foca en la casilla "
+						+ pActual.getPosicion() + "!");
 
 				// Lanzar la secuencia visual del encuentro con foca
 				mostrarEventoEncuentroFoca();
@@ -1426,15 +1532,18 @@ public class PantallaJuego {
 		// ── CASO 2: El jugador actual es una Foca → comprobar si hay pingüino ──
 		if (jugadorActual instanceof Foca) {
 			Foca fActual = (Foca) jugadorActual;
-			
+
 			// REGLA: Solo trigger si hubo encuentro en el landing o si no fue un retroceso
 			Pinguino pEncontrado = pEncLanding;
-			
+
 			if (pEncontrado == null && !esRetrocesoFoca) {
 				pEncontrado = gestorPartida.detectarPinguinoEnCasillaFoca(fActual);
 			}
 
-			if (pEncontrado != null && fActual.getPosicion() != 0) {
+			// Solo hay encuentro si se encontró un pingüino Y no es la casilla 0 Y el
+			// pingüino tiene algo que perder o dar
+			if (pEncontrado != null && fActual.getPosicion() != 0
+					&& (pEncontrado.contarTotalObjetos() > 0 || pEncontrado.getInv().getTotalDadosEspeciales() > 0)) {
 				// Guardar estado del encuentro
 				sealEncounterFoca = fActual;
 				sealEncounterPinguino = pEncontrado;
@@ -1462,13 +1571,13 @@ public class PantallaJuego {
 	private void comprobarPvPYFinalizar(Jugador jugadorActual, int indiceActual) {
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino atacante = (Pinguino) jugadorActual;
-			
+
 			// En la primera casilla (inicio) no hay guerra de bolas de nieve
 			if (atacante.getPosicion() == 0) {
 				finalizarTurnoVisual();
 				return;
 			}
-			
+
 			Pinguino defensor = gestorPartida.detectarPvP(atacante);
 
 			if (defensor != null) {
@@ -1478,7 +1587,8 @@ public class PantallaJuego {
 				pvpIndiceAtacante = indiceActual;
 
 				agregarEvento("═══════════════════════");
-				agregarEvento("⚔️ ¡" + atacante.getNombre() + " y " + defensor.getNombre() + " se encuentran en la casilla " + atacante.getPosicion() + "!");
+				agregarEvento("⚔️ ¡" + atacante.getNombre() + " y " + defensor.getNombre()
+						+ " se encuentran en la casilla " + atacante.getPosicion() + "!");
 
 				// Lanzar la secuencia visual
 				mostrarEventoGuerraBolasNieve();
@@ -1491,7 +1601,8 @@ public class PantallaJuego {
 
 	/**
 	 * Muestra la imagen guerra_bolas_nieve.png en el centro de la pantalla
-	 * con una animación de fade-in + zoom. Después de ~1.5s, muestra el diálogo de decisión.
+	 * con una animación de fade-in + zoom. Después de ~1.5s, muestra el diálogo de
+	 * decisión.
 	 */
 	private void mostrarEventoGuerraBolasNieve() {
 		// Preparar la imagen para la animación
@@ -1538,7 +1649,8 @@ public class PantallaJuego {
 	 * Si el defensor es una Foca (CPU), auto-ignora.
 	 */
 	private void mostrarDecisionGuerraBolasNieve() {
-		// Si el defensor es CPU (Foca), no debería ocurrir, pero por seguridad auto-ignoramos
+		// Si el defensor es CPU (Foca), no debería ocurrir, pero por seguridad
+		// auto-ignoramos
 		if (pvpDefensor == null || !(pvpDefensor instanceof Pinguino)) {
 			finalizarTurnoVisual();
 			return;
@@ -1548,10 +1660,10 @@ public class PantallaJuego {
 		int bolasDefensor = pvpDefensor.contarItem("Bola de Nieve");
 
 		snowballDecisionMessage.setText(
-			pvpDefensor.getNombre() + ", ¿quieres iniciar una guerra de bolas de nieve contra " + pvpAtacante.getNombre() + "?\n\n" +
-			"Tus bolas de nieve: " + bolasDefensor + "\n" +
-			"Bolas de " + pvpAtacante.getNombre() + ": " + bolasAtacante
-		);
+				pvpDefensor.getNombre() + ", ¿quieres iniciar una guerra de bolas de nieve contra "
+						+ pvpAtacante.getNombre() + "?\n\n" +
+						"Tus bolas de nieve: " + bolasDefensor + "\n" +
+						"Bolas de " + pvpAtacante.getNombre() + ": " + bolasAtacante);
 
 		snowballDecisionOverlay.setVisible(true);
 	}
@@ -1572,7 +1684,8 @@ public class PantallaJuego {
 		int bolasAtacante = resultado[2];
 		int bolasDefensor = resultado[3];
 
-		agregarEvento("🎯 " + pvpAtacante.getNombre() + " (" + bolasAtacante + " bolas) vs " + pvpDefensor.getNombre() + " (" + bolasDefensor + " bolas)");
+		agregarEvento("🎯 " + pvpAtacante.getNombre() + " (" + bolasAtacante + " bolas) vs " + pvpDefensor.getNombre()
+				+ " (" + bolasDefensor + " bolas)");
 
 		if (ganador == 0) {
 			// Atacante gana → defensor retrocede
@@ -1619,7 +1732,8 @@ public class PantallaJuego {
 	private void handleSnowballIgnore(ActionEvent event) {
 		snowballDecisionOverlay.setVisible(false);
 
-		agregarEvento("🕊️ " + pvpDefensor.getNombre() + " decide ignorar a " + pvpAtacante.getNombre() + ". No pasa nada.");
+		agregarEvento(
+				"🕊️ " + pvpDefensor.getNombre() + " decide ignorar a " + pvpAtacante.getNombre() + ". No pasa nada.");
 		agregarEvento("═══════════════════════");
 
 		// Limpiar estado PvP
@@ -1635,18 +1749,20 @@ public class PantallaJuego {
 	private int getIndiceJugador(Jugador j) {
 		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
 		for (int i = 0; i < jugadores.size(); i++) {
-			if (jugadores.get(i) == j) return i;
+			if (jugadores.get(i) == j)
+				return i;
 		}
 		return 0;
 	}
 
 	// =========================================
-	//  ENCUENTRO CON LA FOCA
+	// ENCUENTRO CON LA FOCA
 	// =========================================
 
 	/**
 	 * Muestra la imagen encuentro_foca.png en el centro de la pantalla
-	 * con una animación de fade-in + zoom. Después de ~1.5s, muestra el diálogo de decisión.
+	 * con una animación de fade-in + zoom. Después de ~1.5s, muestra el diálogo de
+	 * decisión.
 	 */
 	private void mostrarEventoEncuentroFoca() {
 		// Preparar la imagen para la animación
@@ -1710,10 +1826,9 @@ public class PantallaJuego {
 		}
 
 		sealEncounterMessage.setText(
-			sealEncounterPinguino.getNombre() + " se ha encontrado con la foca.\n\n" +
-			"Peces disponibles: " + cantPeces + "\n" +
-			"¿Qué quieres hacer?"
-		);
+				sealEncounterPinguino.getNombre() + " se ha encontrado con la foca.\n\n" +
+						"Peces disponibles: " + cantPeces + "\n" +
+						"¿Qué quieres hacer?");
 
 		sealEncounterDecisionOverlay.setVisible(true);
 	}
@@ -1731,7 +1846,8 @@ public class PantallaJuego {
 		gestorPartida.resolverSobornoFoca(sealEncounterFoca, sealEncounterPinguino);
 
 		agregarEvento("🐟 " + sealEncounterPinguino.getNombre() + " soborna a la foca con un pez.");
-		agregarEvento("   ↪ La foca queda bloqueada 2 turnos. ¡" + sealEncounterPinguino.getNombre() + " se queda en su casilla!");
+		agregarEvento("   ↪ La foca queda bloqueada 2 turnos. ¡" + sealEncounterPinguino.getNombre()
+				+ " se queda en su casilla!");
 		agregarEvento("═══════════════════════");
 
 		actualizarInventarioUI();
@@ -1799,62 +1915,64 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  HANDLER USAR MOTO DE NIEVE
+	// HANDLER USAR MOTO DE NIEVE
 	// =========================================
-	
+
 	@FXML
 	private void handleUsarMoto() {
-		if (isPaused) return;
-		
+		if (isPaused)
+			return;
+
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
-		
-		if (!(jugadorActual instanceof Pinguino)) return;
+
+		if (!(jugadorActual instanceof Pinguino))
+			return;
 		Pinguino p = (Pinguino) jugadorActual;
-		
+
 		// Verificar que tiene Moto de Nieve
 		if (!p.tieneItem("Moto de Nieve")) {
 			agregarEvento("⚠️ " + p.getNombre() + " no tiene Moto de Nieve.");
 			return;
 		}
-		
+
 		// Buscar el siguiente trineo desde la posición actual
 		int siguienteTrineo = gestorPartida.getPartida().getTablero().buscarSiguienteTrineo(p.getPosicion());
-		
+
 		if (siguienteTrineo == -1) {
 			agregarEvento("⚠️ No hay trineos más adelante. La Moto de Nieve no se puede usar ahora.");
 			return;
 		}
-		
+
 		// Gastar la moto
 		p.gastarItem("Moto de Nieve", 1);
-		
+
 		// Guardar posición anterior para la animación
 		int posAnterior = p.getPosicion();
-		
+
 		// Mover al siguiente trineo
 		p.setPosicion(siguienteTrineo);
-		
+
 		agregarEvento("───────────────────────");
 		agregarEvento("🏍️ " + p.getNombre() + " usa la Moto de Nieve!");
 		agregarEvento("   ↪ Avanza de casilla " + posAnterior + " a casilla " + siguienteTrineo + " (Trineo)");
-		
+
 		// Animar el movimiento
 		dado.setDisable(true);
 		btnMoto.setDisable(true);
-		
+
 		int posVisualFinal = Math.max(0, Math.min(siguienteTrineo, 49));
 		animarMovimiento(indiceActual, posVisualFinal, () -> {
 			// Ahora ejecutamos la acción del trineo (que avanza al siguiente trineo)
 			Casilla casillaTrineo = gestorPartida.getPartida().getTablero().getListaCasillas().get(siguienteTrineo);
 			casillaTrineo.realizarAccion(gestorPartida.getPartida(), p);
-			
+
 			// Si el trineo lo movió más adelante, animar también eso
 			int posTrasTrineoEfecto = p.getPosicion();
 			if (posTrasTrineoEfecto != siguienteTrineo) {
 				int posVisualTrineo = Math.max(0, Math.min(posTrasTrineoEfecto, 49));
 				agregarEvento("🛷 ¡El trineo lo lleva hasta la casilla " + posTrasTrineoEfecto + "!");
-				
+
 				PauseTransition pausa = new PauseTransition(Duration.millis(300));
 				pausa.setOnFinished(e2 -> {
 					animarMovimiento(indiceActual, posVisualTrineo, () -> {
@@ -1870,18 +1988,17 @@ public class PantallaJuego {
 		});
 	}
 
-
-
 	// =========================================
-	//  ANIMACIÓN
+	// ANIMACIÓN
 	// =========================================
-	
+
 	private void animarMovimiento(int playerIndex, int targetPosition, Runnable alTerminar) {
 		StackPane fichaObj = getFicha(playerIndex);
 		int oldPosition = posiciones[playerIndex];
-		
+
 		if (oldPosition == targetPosition) {
-			if (alTerminar != null) alTerminar.run();
+			if (alTerminar != null)
+				alTerminar.run();
 			return;
 		}
 
@@ -1909,7 +2026,7 @@ public class PantallaJuego {
 
 			Path path = new Path();
 			path.getElements().add(new MoveTo(currentTx + FICHA_HALF, currentTy + FICHA_HALF));
-			
+
 			double controlX = currentTx + (cellDx / 2) + FICHA_HALF;
 			double controlY = Math.min(currentTy, nextTy) - 35 + FICHA_HALF; // Altura del salto parabólico
 
@@ -1931,19 +2048,20 @@ public class PantallaJuego {
 			currentAnimations.remove(sequence);
 			fichaObj.setTranslateX(0);
 			fichaObj.setTranslateY(0);
-			
+
 			int[] finalCoords = getCoordenadas(targetPosition);
 			GridPane.setRowIndex(fichaObj, finalCoords[1]);
 			GridPane.setColumnIndex(fichaObj, finalCoords[0]);
 			GridPane.setHalignment(fichaObj, javafx.geometry.HPos.CENTER);
 			GridPane.setValignment(fichaObj, javafx.geometry.VPos.CENTER);
-			if (alTerminar != null) alTerminar.run();
+			if (alTerminar != null)
+				alTerminar.run();
 		});
 
 		currentAnimations.add(sequence);
 		sequence.play();
 	}
-	
+
 	private void finalizarTurnoVisual() {
 		if (gestorPartida.getPartida().isFinalizada()) {
 			agregarEvento("═══════════════════════");
@@ -1957,14 +2075,15 @@ public class PantallaJuego {
 			actualizarInventarioUI();
 			Jugador sigJ = gestorPartida.getPartida().getJugadorActual();
 			agregarEvento("▶ Turno de " + sigJ.getNombre());
-			
+
 			if (sigJ instanceof Foca) {
 				dado.setDisable(true);
 				btnMoto.setDisable(true);
 				cpuPauseTransition = new PauseTransition(Duration.millis(1500));
 				cpuPauseTransition.setOnFinished(e -> {
 					currentAnimations.remove(cpuPauseTransition);
-					if (!isPaused) handleDado(null);
+					if (!isPaused)
+						handleDado(null);
 				});
 				currentAnimations.add(cpuPauseTransition);
 				cpuPauseTransition.play();
@@ -1973,13 +2092,13 @@ public class PantallaJuego {
 			}
 		}
 	}
-	
+
 	/**
 	 * Muestra la ventana modal de fin de partida.
 	 */
 	private void mostrarVentanaFinPartida() {
 		isPaused = true;
-		
+
 		// Detener animaciones en curso
 		for (Animation a : currentAnimations) {
 			if (a.getStatus() == Animation.Status.RUNNING) {
@@ -1994,7 +2113,7 @@ public class PantallaJuego {
 
 		gameEndOverlay.setVisible(true);
 		GestorAnimacionesVistas.animarAparicionOverlay(gameEndOverlay);
-		
+
 		mainContainer.setDisable(true);
 		if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
 			mainContainer.getStyleClass().add("main-container-disabled");
@@ -2026,11 +2145,11 @@ public class PantallaJuego {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private StackPane getFicha(int index) {
 		return (index == 0) ? P1 : (index == 1) ? P2 : (index == 2) ? P3 : P4;
 	}
-	
+
 	private void actualizarTodasLasFichas() {
 		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
@@ -2046,7 +2165,7 @@ public class PantallaJuego {
 				posiciones[i] = posVisual;
 			}
 		}
-		
+
 		// Recalcular posiciones (TranslateX, Y) para evitar que se pisen
 		java.util.Map<Integer, java.util.List<Integer>> casillasOcupadas = new java.util.HashMap<>();
 		for (int i = 0; i < jugadores.size() && i < 4; i++) {
@@ -2056,15 +2175,15 @@ public class PantallaJuego {
 			}
 			casillasOcupadas.get(pos).add(i);
 		}
-		
+
 		for (Integer pos : casillasOcupadas.keySet()) {
 			java.util.List<Integer> ocupantes = casillasOcupadas.get(pos);
 			int numOcupantes = ocupantes.size();
-			
+
 			for (int ocupanteIndex = 0; ocupanteIndex < numOcupantes; ocupanteIndex++) {
 				int playerIndex = ocupantes.get(ocupanteIndex);
 				StackPane ficha = getFicha(playerIndex);
-				
+
 				if (numOcupantes == 1) {
 					ficha.setTranslateX(0);
 					ficha.setTranslateY(0);
@@ -2091,21 +2210,21 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  EVENTOS LOG
+	// EVENTOS LOG
 	// =========================================
-	
+
 	private void registrarEventosCasilla(Jugador jugador, int posicion, int dado, int[] diffInv) {
 		Tablero t = gestorPartida.getPartida().getTablero();
-		
+
 		agregarEvento("───────────────────────");
 		if (dado > 0) {
 			agregarEvento("🎲 " + jugador.getNombre() + " avanza " + dado + " casillas.");
 		}
-		
+
 		if (posicion >= 0 && posicion < t.getListaCasillas().size()) {
 			Casilla casilla = t.getListaCasillas().get(posicion);
 			String tipoCasilla = casilla.getClass().getSimpleName();
-			
+
 			switch (tipoCasilla) {
 				case "Normal":
 					agregarEvento("📍 Cae en casilla " + posicion + " (Normal). No pasa nada.");
@@ -2125,7 +2244,7 @@ public class PantallaJuego {
 				case "SueloQuebradizo":
 					agregarEvento("🧊 ¡Pisa SUELO QUEBRADIZO en la casilla " + posicion + "!");
 					if (jugador.getPosicion() == 0) {
-					agregarEvento("   ↪ ¡El hielo se rompe! Vuelve a Inicio.");
+						agregarEvento("   ↪ ¡El hielo se rompe! Vuelve a Inicio.");
 					} else if (jugador.getTurnosPerdidos() > 0) {
 						agregarEvento("   ↪ Se queda atascado. Pierde 1 turno.");
 					} else {
@@ -2158,13 +2277,19 @@ public class PantallaJuego {
 					agregarEvento("❓ ¡CASILLA SORPRESA en la casilla " + posicion + "!");
 					if (jugador instanceof Pinguino) {
 						Pinguino p = (Pinguino) jugador;
-						if (diffInv != null && (diffInv[0]>0 || diffInv[1]>0 || diffInv[2]>0 || diffInv[3]>0 || diffInv[4]>0)) {
+						if (diffInv != null && (diffInv[0] > 0 || diffInv[1] > 0 || diffInv[2] > 0 || diffInv[3] > 0
+								|| diffInv[4] > 0)) {
 							// Caso Items
-							if (diffInv[3] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡DADO RÁPIDO! 🎲⚡");
-							else if (diffInv[4] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡DADO LENTO! 🎲🐢");
-							else if (diffInv[0] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡Pez! 🐟");
-							else if (diffInv[1] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡" + diffInv[1] + " Bola(s) de Nieve! ❄️");
-							else if (diffInv[2] > 0) agregarEvento("   ↪ ¡Sorpresa! ¡Moto de Nieve! 🏍️");
+							if (diffInv[3] > 0)
+								agregarEvento("   ↪ ¡Sorpresa! ¡DADO RÁPIDO! 🎲⚡");
+							else if (diffInv[4] > 0)
+								agregarEvento("   ↪ ¡Sorpresa! ¡DADO LENTO! 🎲🐢");
+							else if (diffInv[0] > 0)
+								agregarEvento("   ↪ ¡Sorpresa! ¡Pez! 🐟");
+							else if (diffInv[1] > 0)
+								agregarEvento("   ↪ ¡Sorpresa! ¡" + diffInv[1] + " Bola(s) de Nieve! ❄️");
+							else if (diffInv[2] > 0)
+								agregarEvento("   ↪ ¡Sorpresa! ¡Moto de Nieve! 🏍️");
 						} else if (p.getPosicion() > posicion) {
 							agregarEvento("   ↪ ¡Sorpresa! ¡Has encontrado un TRINEO! 🛷");
 							agregarEvento("      ↪ Avanza hasta la casilla " + p.getPosicion());
@@ -2172,11 +2297,12 @@ public class PantallaJuego {
 							if (p.getPosicion() == 0)
 								agregarEvento("   ↪ ¡Sorpresa! ¡Un OSO! 🐻 Vuelve a Inicio.");
 							else
-								agregarEvento("   ↪ ¡Sorpresa! ¡Un AGUJERO! 🕳️ Retrocede a la casilla " + p.getPosicion());
+								agregarEvento(
+										"   ↪ ¡Sorpresa! ¡Un AGUJERO! 🕳️ Retrocede a la casilla " + p.getPosicion());
 						} else if (p.getTurnosPerdidos() > 0) {
 							agregarEvento("   ↪ ¡Sorpresa! ¡Resbalón! 🧊");
 							agregarEvento("      ↪ Te has quedado atascado. Pierdes 1 turno.");
-						} else if (diffInv != null && (diffInv[0]<0 || diffInv[1]<0 || diffInv[2]<0)) {
+						} else if (diffInv != null && (diffInv[0] < 0 || diffInv[1] < 0 || diffInv[2] < 0)) {
 							agregarEvento("   ↪ ¡Sorpresa! ¡Mala suerte! 📉");
 							agregarEvento("      ↪ Se te ha caído un objeto del inventario.");
 						} else {
@@ -2186,7 +2312,8 @@ public class PantallaJuego {
 						if (jugador.getPosicion() == 0 && posicion != 0) {
 							agregarEvento("   ↪ 🐻 ¡Un Oso asusta a la Foca! Vuelve a Inicio.");
 						} else {
-							// Para foca, no tenemos diffInv de items, asique miramos diferencias de posicion u otros efectos
+							// Para foca, no tenemos diffInv de items, asique miramos diferencias de
+							// posicion u otros efectos
 							// pero por simplicidad mostramos mensaje generico o el resultado directo
 							agregarEvento("   ↪ ¡La foca experimenta un evento inesperado!");
 						}
@@ -2196,7 +2323,7 @@ public class PantallaJuego {
 					agregarEvento("📍 " + jugador.getNombre() + " está en la casilla " + posicion + ".");
 			}
 		}
-		
+
 		agregarEvento("📌 Posición final: casilla " + jugador.getPosicion());
 	}
 
@@ -2205,7 +2332,7 @@ public class PantallaJuego {
 	}
 
 	// =========================================
-	//  CARGAR PARTIDA GUARDADA
+	// CARGAR PARTIDA GUARDADA
 	// =========================================
 
 	/**

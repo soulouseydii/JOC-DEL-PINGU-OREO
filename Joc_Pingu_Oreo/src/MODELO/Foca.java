@@ -36,7 +36,7 @@ public class Foca extends Jugador {
     // Golpear jugador: la foca le pega con la cola (usado cuando coinciden en casilla final)
     public void golpearJugador(Pinguino p) {
         System.out.println("¡La foca golpea a " + p.getNombre() + " con la cola!");
-        p.perderMitadInventario();
+        // No pierde inventario al coincidir en la misma casilla (según nuevas instrucciones)
     }
     
     // Este metodo sustituye a esSobornado

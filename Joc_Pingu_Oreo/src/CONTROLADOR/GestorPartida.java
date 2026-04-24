@@ -9,15 +9,15 @@ import java.sql.Connection;
 import java.util.LinkedHashMap;
 
 public class GestorPartida {
-	
-    // Atributos 
+
+    // Atributos
     private Partida partida;
     private GestorTablero gestorTablero;
     private GestorJugador gestorJugador;
     private Random random = new Random();
     private Connection conexion;
     private GestorBBDD gestorBBDD;
-    
+
     // Guarda la posición donde cayó el jugador ANTES del efecto de casilla
     // para que la Vista sepa qué tipo de casilla pisó
     private int ultimaCasillaPisada = -1;
@@ -32,11 +32,12 @@ public class GestorPartida {
         this.gestorJugador = new GestorJugador();
         this.gestorBBDD = new GestorBBDD();
     }
-    
+
     /**
      * Guarda la partida actual en la BD.
      * Si ya tiene ID (fue guardada antes), hace UPDATE.
      * Si es nueva, hace INSERT.
+     * 
      * @return ID de la partida guardada, o -1 si fallo
      */
     public int guardarPartida() {
@@ -61,80 +62,78 @@ public class GestorPartida {
     public GestorBBDD getGestorBBDD() {
         return gestorBBDD;
     }
-    
+
     /* Gestiona las reglas específicas según el tipo de jugador, Pingüino o Foca */
     public void procesarTurnoJugador(Jugador j) {
-        
+
         // Si el jugador es una Foca
         if (j instanceof Foca) {
             Foca f = (Foca) j; // Hacemos que jugador sea foca para ver sus datos, ahora se llamara f
-            
+
             // Regla: Si tiene turnos de bloqueo (por el pez), los reducimos y no mueve
             if (f.getTurnosBloqueada() > 0) {
                 System.out.println("La foca está bloqueada. Turnos restantes: " + f.getTurnosBloqueada());
-                f.reducirBloqueo(); 
+                f.reducirBloqueo();
             } else {
                 // Si no esta bloqueada, la foca tira el dado y se mueve
                 int pasos = tirarDado(f, null);
                 gestorJugador.jugadorSeMueve(f, pasos, partida.getTablero());
             }
-        } 
-        
+        }
+
         // Si el jugador es un Pingüino
         else if (j instanceof Pinguino) {
             int pasos = tirarDado(j, null);
             gestorJugador.jugadorSeMueve(j, pasos, partida.getTablero());
         }
     }
-    
+
     public void ejecutarTurnoCompleto(Dado dadoEspecial) {
         // Para saber quien es el jugador que tiene que mover ficha
         Jugador jActual = partida.getJugadorActual();
-        
+
         System.out.println("--- COMIENZA EL TURNO DE: " + jActual.getNombre() + " ---");
 
         // 1. Comprobacion de turnos perdidos (SueloQuebradizo)
         if (jActual.getTurnosPerdidos() > 0) {
             jActual.setTurnosPerdidos(jActual.getTurnosPerdidos() - 1);
-            System.out.println(jActual.getNombre() + " pierde este turno. Turnos perdidos restantes: " + jActual.getTurnosPerdidos());
-            
+            System.out.println(jActual.getNombre() + " pierde este turno. Turnos perdidos restantes: "
+                    + jActual.getTurnosPerdidos());
+
             // RESETEAR variables de movimiento para que la vista no haga nada
             ultimoResultadoDado = 0;
             ultimaCasillaPisada = jActual.getPosicion();
-            
+
             siguienteTurno();
-        } 
-        else {
+        } else {
             // El jugador puede realizar su turno
             boolean haGanado = false;
 
             // CASO FOCA
             if (jActual instanceof Foca) {
                 Foca f = (Foca) jActual;
-                
+
                 if (f.getTurnosBloqueada() > 0) {
                     System.out.println("La foca está bloqueada (" + f.getTurnosBloqueada() + " turnos)");
                     f.reducirBloqueo();
                     ultimoResultadoDado = 0;
                     ultimaCasillaPisada = f.getPosicion();
                     siguienteTurno();
-                } 
-                else {
+                } else {
                     int posicionAnterior = f.getPosicion();
                     int pasosFoca = tirarDado(f, dadoEspecial);
                     ultimoResultadoDado = pasosFoca;
                     gestorJugador.jugadorSeMueve(f, pasosFoca, partida.getTablero());
                     ultimaCasillaPisada = f.getPosicion();
-                    
+
                     int casillaFinalFoca = partida.getTablero().getListaCasillas().size() - 1;
                     if (f.getPosicion() >= casillaFinalFoca) {
                         haGanado = true;
-                    } 
-                    else {
+                    } else {
                         // Acción de casilla
                         Casilla c = partida.getTablero().getListaCasillas().get(f.getPosicion());
                         c.realizarAccion(partida, f);
-                        
+
                         // Detectar aplastados si avanzó
                         ultimosPinguinosAplastados.clear();
                         if (f.getPosicion() > posicionAnterior) {
@@ -151,19 +150,18 @@ public class GestorPartida {
                         }
                     }
                 }
-            } 
+            }
             // CASO PINGÜINO
             else if (jActual instanceof Pinguino) {
                 int pasos = tirarDado(jActual, dadoEspecial);
                 ultimoResultadoDado = pasos;
                 gestorJugador.jugadorSeMueve(jActual, pasos, partida.getTablero());
                 ultimaCasillaPisada = jActual.getPosicion();
-                
+
                 int casillaFinal = partida.getTablero().getListaCasillas().size() - 1;
                 if (jActual.getPosicion() >= casillaFinal) {
                     haGanado = true;
-                } 
-                else {
+                } else {
                     Casilla c = partida.getTablero().getListaCasillas().get(jActual.getPosicion());
                     c.realizarAccion(partida, jActual);
                 }
@@ -174,119 +172,126 @@ public class GestorPartida {
                 partida.setFinalizada(true);
                 partida.setGanador(jActual);
                 System.out.println("¡TENEMOS UN GANADOR: " + jActual.getNombre() + "!");
-            } 
-            else {
-                // Solo pasamos turno si no ha ganado y si no era una foca bloqueada (que ya llamó a siguienteTurno arriba)
+            } else {
+                // Solo pasamos turno si no ha ganado y si no era una foca bloqueada (que ya
+                // llamó a siguienteTurno arriba)
                 // Para simplificar, si no ha ganado y el método no ha terminado, pasamos turno.
                 // Pero cuidado con la Foca que ya lo llama. Rediseño:
-                if (!(jActual instanceof Foca && ((Foca)jActual).getTurnosBloqueada() + 1 > 0 && ultimoResultadoDado == 0)) {
-                   // Si el resultado dado es > 0 significa que ha movido, si es 0 y no estaba en "turnos perdidos"
-                   // es que era una foca bloqueada.
-                   // Vamos a hacerlo más simple: si no es el bloqueado de arriba, pasa turno.
-                   siguienteTurno();
+                if (!(jActual instanceof Foca && ((Foca) jActual).getTurnosBloqueada() + 1 > 0
+                        && ultimoResultadoDado == 0)) {
+                    // Si el resultado dado es > 0 significa que ha movido, si es 0 y no estaba en
+                    // "turnos perdidos"
+                    // es que era una foca bloqueada.
+                    // Vamos a hacerlo más simple: si no es el bloqueado de arriba, pasa turno.
+                    siguienteTurno();
                 }
             }
         }
     }
-    
+
     public void siguienteTurno() {
         // Ponemos los jugadores totales en totalJugadores para operar luego
         int totalJugadores = this.partida.getJugadores().size();
-        
+
         // para saber quien esta jugando actualmente
         int indiceActual = this.partida.getJugadorActualIndice();
-        
-        // sumamos el indice mas 1 y si es divisible entre total de jugadores se repite el orden de tiradas entre jugadores
+
+        // sumamos el indice mas 1 y si es divisible entre total de jugadores se repite
+        // el orden de tiradas entre jugadores
         int siguienteIndice = (indiceActual + 1) % totalJugadores;
-        
+
         // El jugadoractual pasa a ser 0
         this.partida.setJugadorActualIndice(siguienteIndice);
-        
+
         // Sumamos 1 al contador para saber cuantos turnos lleva la partida
         this.partida.setTurnos(this.partida.getTurnos() + 1);
     }
-    
+
     /* Crea una nueva instancia de Partida y configura los elementos iniciales. */
     public void nuevaPartida(ArrayList<Jugador> listaJugadores) {
-        // Creamos el objeto Partida 
+        // Creamos el objeto Partida
         this.partida = new Partida();
-        
+
         // Asignamos la lista de jugadores que nos pasa la Vista.
         this.partida.setJugadores(listaJugadores);
-        
+
         // Valores de inicio de partida a 0
-        this.partida.setTurnos(0);              // Contador de turnos totales a 0
+        this.partida.setTurnos(0); // Contador de turnos totales a 0
         this.partida.setJugadorActualIndice(0); // Primer jugador de la lista
-        this.partida.setFinalizada(false);      // Partida acabada sera false
-        this.partida.setGanador(null);          // Ganador nulo
-        
+        this.partida.setFinalizada(false); // Partida acabada sera false
+        this.partida.setGanador(null); // Ganador nulo
+
         System.out.println("Nueva partida creada con " + listaJugadores.size() + " jugadores.");
     }
-    
-    /* Sobrecarga sin parámetros: crea una nueva partida con lista de jugadores vacía */
+
+    /*
+     * Sobrecarga sin parámetros: crea una nueva partida con lista de jugadores
+     * vacía
+     */
     public void nuevaPartida() {
         nuevaPartida(new ArrayList<Jugador>());
     }
-    
+
     /* Getter de Partida */
     public Partida getPartida() {
         return partida;
     }
-    
+
     /* Getter de la última casilla pisada (antes del efecto) */
     public int getUltimaCasillaPisada() {
         return ultimaCasillaPisada;
     }
-    
+
     /* Getter del último resultado del dado */
     public int getUltimoResultadoDado() {
         return ultimoResultadoDado;
     }
-    
+
     /* Método en GestorPartida */
     public int tirarDado(Jugador j, Dado dadoSeleccionado) {
         // Si el jugador no ha elegido un dado especial, creamos uno normal
         if (dadoSeleccionado == null) {
-            dadoSeleccionado = new Dado("Normal"); 
+            dadoSeleccionado = new Dado("Normal");
         }
-        
+
         // Llamamos al método tirar() que ya tienes en la clase Dado
         return dadoSeleccionado.tirar();
     }
-	
+
     /*
      * INTERACCIÓN FOCA-PINGÜINO (casilla final)
      * 
      * Si el pingüino TIENE pez: gasta 1 pez, la foca queda bloqueada 2 turnos.
      * Si el pingüino NO tiene pez: la foca le golpea (pierde mitad inventario)
-     *   y lo envía al agujero anterior más cercano (o casilla 1).
+     * y lo envía al agujero anterior más cercano (o casilla 1).
      */
     public void interaccionFocaPinguino(Foca foca, Pinguino pinguino, Tablero tablero) {
-		  
+
         // Comprobamos si coinciden en la misma casilla
         if (foca.getPosicion() == pinguino.getPosicion()) {
-			  
+
             // Resolución según las reglas usando los nuevos métodos de Pinguino
             if (pinguino.tieneItem("Pez")) {
                 // Le damos el pez a la foca (gasta 1 unidad)
                 pinguino.gastarItem("Pez", 1);
-                
+
                 // Aplicamos el bloqueo de 2 turnos
-                foca.setTurnosBloqueada(2); 
-                
-                System.out.println(pinguino.getNombre() + " ha alimentado a la foca con un pez. ¡La foca queda bloqueada 2 turnos!");
+                foca.setTurnosBloqueada(2);
+
+                System.out.println(pinguino.getNombre()
+                        + " ha alimentado a la foca con un pez. ¡La foca queda bloqueada 2 turnos!");
             } else {
                 // Si no tiene pez, la foca lo golpea (pierde mitad inventario)
                 foca.golpearJugador(pinguino);
-			  
+
                 // GestorTablero busca donde lo tiene que enviar (agujero anterior o casilla 1)
                 int nuevaPosicion = tablero.buscarAgujeroAnterior(pinguino.getPosicion());
-                
+
                 // Si no hay agujero anterior, vuelve a la casilla 1
                 if (nuevaPosicion == -1) {
                     nuevaPosicion = 0;
                 }
-                
+
                 // Movemos el pinguino a la posicion
                 pinguino.setPosicion(nuevaPosicion);
                 System.out.println(pinguino.getNombre() + " ha sido enviado a la casilla " + nuevaPosicion);
@@ -331,11 +336,11 @@ public class GestorPartida {
             ganador = -1; // empate
         }
 
-        return new int[]{ganador, diferencia, bolasAtacante, bolasDefensor};
+        return new int[] { ganador, diferencia, bolasAtacante, bolasDefensor };
     }
 
     // =========================================
-    //  ENCUENTRO CON FOCA — Detección y resolución
+    // ENCUENTRO CON FOCA — Detección y resolución
     // =========================================
 
     /**
@@ -373,18 +378,21 @@ public class GestorPartida {
     }
 
     /**
-     * Resuelve el soborno: el pingüino gasta 1 pez y la foca queda bloqueada 2 turnos.
+     * Resuelve el soborno: el pingüino gasta 1 pez y la foca queda bloqueada 2
+     * turnos.
      * El pingüino permanece en su casilla actual.
      */
     public void resolverSobornoFoca(Foca foca, Pinguino pinguino) {
         pinguino.gastarItem("Pez", 1);
         foca.setTurnosBloqueada(2);
-        System.out.println(pinguino.getNombre() + " ha sobornado a la foca con un pez. ¡La foca queda bloqueada 2 turnos!");
+        System.out.println(
+                pinguino.getNombre() + " ha sobornado a la foca con un pez. ¡La foca queda bloqueada 2 turnos!");
     }
 
     /**
      * Resuelve el golpe de la foca: golpea al pingüino y lo envía
      * al agujero anterior más cercano (o casilla 0 si no hay).
+     * 
      * @return la nueva posición del pingüino tras el golpe
      */
     public int resolverGolpeFoca(Foca foca, Pinguino pinguino) {
@@ -399,7 +407,7 @@ public class GestorPartida {
     }
 
     // =========================================
-    //  APLASTAMIENTO — Foca pasa por encima
+    // APLASTAMIENTO — Foca pasa por encima
     // =========================================
 
     /**
@@ -411,10 +419,10 @@ public class GestorPartida {
     }
 
     /**
-     * Aplica el efecto de aplastamiento: el pingüino pierde TODO el inventario.
+     * Aplica el efecto de aplastamiento: el pingüino pierde LA MITAD del inventario.
      */
     public void aplicarAplastamiento(Pinguino p) {
-        p.perderTodoInventario();
-        System.out.println("Una foca ha aplastado a " + p.getNombre() + " y ha perdido todos sus objetos.");
+        p.perderMitadInventario();
+        System.out.println("Una foca ha aplastado a " + p.getNombre() + " y ha perdido la mitad de sus objetos.");
     }
 }

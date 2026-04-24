@@ -193,16 +193,29 @@ public class Pinguino extends Jugador {
 	
 	/**
 	 * Pierde la mitad del inventario total (redondeado hacia abajo).
-	 * Quita objetos empezando por el final de la lista.
+	 * Incluye items de la lista y dados especiales.
+	 * Quita objetos empezando por los dados especiales y luego por el final de la lista.
 	 */
 	public void perderMitadInventario() {
-		int total = contarTotalObjetos();
-		int aQuitar = total / 2;
+		int totalItems = contarTotalObjetos();
+		int totalDados = getInventario().getTotalDadosEspeciales();
+		int totalEntidades = totalItems + totalDados;
+		int aQuitar = totalEntidades / 2;
 		int quitados = 0;
 		
-		System.out.println(getNombre() + " tiene " + total + " objetos. Pierde " + aQuitar + ".");
+		System.out.println(getNombre() + " tiene " + totalEntidades + " entidades en el inventario. Pierde " + aQuitar + ".");
 		
-		// Recorremos la lista de items del final al principio
+		// 1. Quitar dados especiales primero (unidades individuales)
+		while (quitados < aQuitar && getInventario().getDadosRapidos() > 0) {
+			getInventario().usarDadoRapido();
+			quitados++;
+		}
+		while (quitados < aQuitar && getInventario().getDadosLentos() > 0) {
+			getInventario().usarDadoLento();
+			quitados++;
+		}
+
+		// 2. Quitar items de la lista del final al principio
 		for (int i = getInventario().getlista().size() - 1; i >= 0 && quitados < aQuitar; i--) {
 			Item item = getInventario().getlista().get(i);
 			int puedeQuitar = Math.min(item.getCantidad(), aQuitar - quitados);
@@ -215,7 +228,7 @@ public class Pinguino extends Jugador {
 			}
 		}
 		
-		System.out.println(getNombre() + " ha perdido " + quitados + " objetos.");
+		System.out.println(getNombre() + " ha perdido " + quitados + " objetos/dados.");
 	}
 	
 	/**
