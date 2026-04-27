@@ -328,7 +328,7 @@ public class PantallaConfiguracionPartida {
 
     @FXML
     public void initialize() {
-        comboNumJugadores.getItems().addAll(2, 3, 4);
+        comboNumJugadores.getItems().addAll(2, 3, 4, 5);
         comboNumJugadores.setValue(2);
         
         btnEmpezar.sceneProperty().addListener((obs, oldScene, newScene) -> {

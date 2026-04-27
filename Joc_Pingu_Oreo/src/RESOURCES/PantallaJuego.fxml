@@ -68,6 +68,7 @@
                         <StackPane fx:id="P2" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <StackPane fx:id="P3" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <StackPane fx:id="P4" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <StackPane fx:id="P5" styleClass="player" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                     </children>
                 </GridPane>
 
@@ -205,6 +206,7 @@
              </HBox>
         </bottom>
     </BorderPane>
+
 
     <!-- Overlay Container -->
     <VBox fx:id="menuOverlay" alignment="CENTER" maxHeight="450.0" maxWidth="400.0" mouseTransparent="false" spacing="15.0" styleClass="overlay-menu" visible="false" StackPane.alignment="CENTER">

@@ -180,9 +180,11 @@ public class PantallaJuego {
 	private StackPane P3;
 	@FXML
 	private StackPane P4;
+	@FXML
+	private StackPane P5;
 
 	private GestorPartida gestorPartida;
-	private int[] posiciones = new int[] { -1, -1, -1, -1 };
+	private int[] posiciones = new int[] { -1, -1, -1, -1, -1 };
 	private boolean isPaused = false;
 	private PauseTransition cpuPauseTransition;
 	private List<Animation> currentAnimations = new ArrayList<>();
@@ -321,8 +323,9 @@ public class PantallaJuego {
 		P2.setVisible(false);
 		P3.setVisible(false);
 		P4.setVisible(false);
+		P5.setVisible(false);
 
-		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+		for (int i = 0; i < jugadores.size() && i < 5; i++) {
 			StackPane ficha = getFicha(i);
 			ficha.setVisible(true);
 			asignarImagenFicha(i, jugadores.get(i));
@@ -600,6 +603,7 @@ public class PantallaJuego {
 		P2.toFront();
 		P3.toFront();
 		P4.toFront();
+		P5.toFront();
 	}
 
 	// =========================================
@@ -2135,12 +2139,19 @@ public class PantallaJuego {
 	}
 
 	private StackPane getFicha(int index) {
-		return (index == 0) ? P1 : (index == 1) ? P2 : (index == 2) ? P3 : P4;
+		switch (index) {
+			case 0: return P1;
+			case 1: return P2;
+			case 2: return P3;
+			case 3: return P4;
+			case 4: return P5;
+			default: return P1;
+		}
 	}
 
 	private void actualizarTodasLasFichas() {
 		ArrayList<Jugador> jugadores = gestorPartida.getPartida().getJugadores();
-		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+		for (int i = 0; i < jugadores.size() && i < 5; i++) {
 			Jugador j = jugadores.get(i);
 			int posVisual = Math.max(0, Math.min(j.getPosicion(), 49));
 			if (posiciones[i] != posVisual) {
@@ -2156,7 +2167,7 @@ public class PantallaJuego {
 
 		// Recalcular posiciones (TranslateX, Y) para evitar que se pisen
 		java.util.Map<Integer, java.util.List<Integer>> casillasOcupadas = new java.util.HashMap<>();
-		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+		for (int i = 0; i < jugadores.size() && i < 5; i++) {
 			int pos = posiciones[i];
 			if (!casillasOcupadas.containsKey(pos)) {
 				casillasOcupadas.put(pos, new java.util.ArrayList<>());
@@ -2188,10 +2199,15 @@ public class PantallaJuego {
 						ficha.setTranslateX(ocupanteIndex == 1 ? -16 : 16);
 						ficha.setTranslateY(16);
 					}
-				} else {
+				} else if (numOcupantes == 4) {
 					// 4 ocupantes: cuadrado
 					ficha.setTranslateX(ocupanteIndex % 2 == 0 ? -16 : 16);
 					ficha.setTranslateY(ocupanteIndex < 2 ? -16 : 16);
+				} else {
+					// 5 ocupantes: pentágono
+					double[][] offsets = {{0, -18}, {-18, -6}, {18, -6}, {-12, 14}, {12, 14}};
+					ficha.setTranslateX(offsets[ocupanteIndex][0]);
+					ficha.setTranslateY(offsets[ocupanteIndex][1]);
 				}
 			}
 		}
@@ -2333,10 +2349,11 @@ public class PantallaJuego {
 		P2.setVisible(false);
 		P3.setVisible(false);
 		P4.setVisible(false);
+		P5.setVisible(false);
 
 		// Mostrar, asignar imagen y posicionar fichas activas
 		ArrayList<Jugador> jugadores = partida.getJugadores();
-		for (int i = 0; i < jugadores.size() && i < 4; i++) {
+		for (int i = 0; i < jugadores.size() && i < 5; i++) {
 			StackPane ficha = getFicha(i);
 			ficha.setVisible(true);
 			asignarImagenFicha(i, jugadores.get(i));
