@@ -368,7 +368,7 @@
 
 /* CUSTOM CONTROLS FOR OPTIONS */
 .slider .track {
-    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-color: rgba(94, 207, 255, 0.15);
     -fx-background-radius: 5;
     -fx-pref-height: 8;
 }
@@ -380,7 +380,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 
-.custom-checkbox .box {
+.casilla-polar .box {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 5;
     -fx-border-color: rgba(130, 210, 255, 0.7);
@@ -389,13 +389,13 @@
     -fx-padding: 3;
 }
 
-.custom-checkbox:selected .mark {
+.casilla-polar:selected .mark {
     -fx-background-color: #74d7ff;
 }
 
-.custom-checkbox .label {
+.casilla-polar {
     -fx-text-fill: #c8eeff;
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
 

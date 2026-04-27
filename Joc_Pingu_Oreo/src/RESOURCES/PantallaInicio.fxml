@@ -201,12 +201,12 @@
             <VBox alignment="CENTER_LEFT" spacing="12">
                 <Label text="A U D I O" styleClass="side-card-title" />
                 <HBox alignment="CENTER_LEFT" spacing="20">
-                    <CheckBox fx:id="chkMusica" onAction="#handleChkMusica" selected="true" styleClass="stat-val" text="Música Ambiental" />
+                    <CheckBox fx:id="chkMusica" onAction="#handleChkMusica" selected="true" styleClass="casilla-polar" text="Música Ambiental" />
                     <Region HBox.hgrow="ALWAYS" />
                     <Slider fx:id="sliderMusica" max="100" onMouseReleased="#handleSliderMusica" prefWidth="180" value="50" styleClass="polar-slider" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="20">
-                    <CheckBox fx:id="chkSonido" onAction="#handleChkSonido" selected="true" styleClass="stat-val" text="Efectos de Sonido" />
+                    <CheckBox fx:id="chkSonido" onAction="#handleChkSonido" selected="true" styleClass="casilla-polar" text="Efectos de Sonido" />
                     <Region HBox.hgrow="ALWAYS" />
                     <Slider fx:id="sliderSonido" max="100" onMouseReleased="#handleSliderSonido" prefWidth="180" value="50" styleClass="polar-slider" />
                 </HBox>
@@ -214,8 +214,8 @@
 
             <VBox alignment="CENTER_LEFT" spacing="12">
                 <Label text="V I S U A L" styleClass="side-card-title" />
-                <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" styleClass="stat-val" text="Animaciones y Partículas" />
-                <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="stat-val" text="Pantalla Completa" />
+                <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" styleClass="casilla-polar" text="Animaciones y Partículas" />
+                <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="casilla-polar" text="Pantalla Completa" />
             </VBox>
             
             <Region prefHeight="15" />
