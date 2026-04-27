@@ -54,62 +54,8 @@
                 <Insets left="50" right="50" />
             </padding>
             
-            <!-- COLUMNA IZQUIERDA (Jugadores y Stats) -->
+            <!-- COLUMNA IZQUIERDA (Vacía para balance) -->
             <VBox spacing="10" alignment="CENTER_LEFT" prefWidth="250" HBox.hgrow="NEVER">
-                <!-- Tarjeta Jugadores -->
-                <VBox styleClass="side-card">
-                    <Label styleClass="side-card-title" text="J U G A D O R E S" />
-                    
-                    <HBox styleClass="player-token">
-                        <StackPane styleClass="token-circle, token-cpu">
-                            <Label text="🦭" style="-fx-font-size: 14px;" />
-                        </StackPane>
-                        <VBox>
-                            <Label text="CPU Ártica" styleClass="token-name" />
-                            <Label text="Foca / IA" styleClass="token-type" />
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="player-token">
-                        <StackPane styleClass="token-circle, token-p1">
-                            <Label text="🐧" style="-fx-font-size: 14px;" />
-                        </StackPane>
-                        <VBox>
-                            <Label text="Jugador 1" styleClass="token-name" />
-                            <Label text="Pingüino" styleClass="token-type" />
-                        </VBox>
-                    </HBox>
-
-                    <HBox styleClass="player-token">
-                        <StackPane styleClass="token-circle, token-p2">
-                            <Label text="🐧" style="-fx-font-size: 14px;" />
-                        </StackPane>
-                        <VBox>
-                            <Label text="Jugador 2" styleClass="token-name" />
-                            <Label text="Pingüino" styleClass="token-type" />
-                        </VBox>
-                    </HBox>
-                </VBox>
-
-                <!-- Tarjeta Partida Rápida -->
-                <VBox styleClass="side-card">
-                    <Label styleClass="side-card-title" text="P A R T I D A   R Á P I D A" />
-                    <HBox styleClass="stat-row">
-                        <Label text="C A S I L L A S" styleClass="stat-label" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label text="50" styleClass="stat-val" />
-                    </HBox>
-                    <HBox styleClass="stat-row">
-                        <Label text="M O D O" styleClass="stat-label" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label text="Clásico" styleClass="stat-val" style="-fx-text-fill: #a78bff;" />
-                    </HBox>
-                    <HBox styleClass="stat-row">
-                        <Label text="V E L O C I D A D" styleClass="stat-label" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label text="Normal" styleClass="stat-val" style="-fx-text-fill: #ffb74d;" />
-                    </HBox>
-                </VBox>
             </VBox>
 
             <!-- ESPACIO FLEXIBLE -->
@@ -146,7 +92,7 @@
             <!-- COLUMNA DERECHA (Récords y Noticias) -->
             <VBox spacing="10" alignment="CENTER_RIGHT" prefWidth="250" HBox.hgrow="NEVER">
                 <VBox styleClass="side-card">
-                    <Label styleClass="side-card-title" text="R É C O R D S   G L O B A L E S" />
+                    <Label styleClass="side-card-title" text="T O P   V I C T O R I A S" />
                     <HBox styleClass="stat-row">
                         <Label text="# 1" styleClass="stat-label" style="-fx-text-fill: rgba(255,210,100,0.6);" />
                         <Region HBox.hgrow="ALWAYS" />
@@ -164,25 +110,7 @@
                     </HBox>
                 </VBox>
 
-                <VBox styleClass="side-card">
-                    <Label styleClass="side-card-title" text="N O V E D A D E S" />
-                    <Label text="v0.9.2 — Nuevas casillas de&#10;tormenta" styleClass="news-text" />
-                    <Label text="Modo torneo próximamente" styleClass="news-text, news-text-cyan" />
-                </VBox>
 
-                <VBox styleClass="side-card">
-                    <Label styleClass="side-card-title" text="P R Ó X I M O   T O R N E O" />
-                    <HBox styleClass="stat-row">
-                        <Label text="J U G A D O R E S" styleClass="stat-label" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label text="128" styleClass="stat-val" />
-                    </HBox>
-                    <HBox styleClass="stat-row">
-                        <Label text="I N I C I O" styleClass="stat-label" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label text="Viernes" styleClass="stat-val" style="-fx-text-fill: #a78bff;" />
-                    </HBox>
-                </VBox>
             </VBox>
 
         </HBox>

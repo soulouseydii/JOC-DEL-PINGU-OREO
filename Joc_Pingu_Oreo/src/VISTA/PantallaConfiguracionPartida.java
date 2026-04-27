@@ -40,17 +40,15 @@ public class PantallaConfiguracionPartida {
     private List<TarjetaJugador> tarjetasActivas = new ArrayList<>();
 
     private boolean isSkinUnica(String skin) {
-        // Solo el pingüino default y la foca default se pueden repetir
         return !skin.equals("pinguino.png") && !skin.equals("foca_default.png");
     }
 
     private void notificarNuevasSkins() {
         for (TarjetaJugador tj : tarjetasActivas) {
             if (!tj.estaListo) {
-                // Si su skin actual acaba de ser ocupada por otro, la movemos a la siguiente disponible
                 String skinActual = tj.getCurrentSkin();
                 if (skinsSeleccionadas.contains(skinActual) && isSkinUnica(skinActual)) {
-                    tj.cambiarSkin(1); // cambiarSkin ya gestiona la animación interna
+                    tj.cambiarSkin(1);
                 }
             }
         }
@@ -61,10 +59,18 @@ public class PantallaConfiguracionPartida {
         VBox content;
         javafx.scene.image.ImageView bgImage;
         Label lblSelloListo;
+        
         ComboBox<String> comboTipo;
+        ComboBox<String> comboAuthMode;
+        
         VBox cajaLogin;
         TextField txtUsuario;
         PasswordField txtPassword;
+        PasswordField txtConfirmPassword;
+        Button btnComprobar;
+        Label lblAuthError;
+        boolean registroAprobado = false;
+        
         Button btnListo;
         Label lblEstado;
         boolean estaListo = false;
@@ -107,34 +113,71 @@ public class PantallaConfiguracionPartida {
             Label lblTitulo = new Label("Jugador " + numero);
             lblTitulo.setStyle("-fx-font-weight: 900; -fx-font-size: 17px; -fx-text-fill: #d0f0ff;");
 
+            // --- Estilos ComboBox ---
+            String comboStyle = "-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.35); -fx-text-fill: white;";
+            
             comboTipo = new ComboBox<>();
             comboTipo.getItems().addAll("Humano (Pingüino)", "CPU (Foca)");
             comboTipo.setValue("Humano (Pingüino)");
-            comboTipo.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.35); -fx-text-fill: #d0f0ff;");
+            comboTipo.setStyle(comboStyle);
             comboTipo.setMaxWidth(Double.MAX_VALUE);
+            // Aseguramos texto blanco en la celda del botón
+            comboTipo.setButtonCell(new ListCell<String>() {
+                @Override protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) setText(null);
+                    else { setText(item); setStyle("-fx-text-fill: white;"); }
+                }
+            });
+
+            comboAuthMode = new ComboBox<>();
+            comboAuthMode.getItems().addAll("Iniciar Sesión", "Registrarse");
+            comboAuthMode.setValue("Iniciar Sesión");
+            comboAuthMode.setStyle(comboStyle);
+            comboAuthMode.setMaxWidth(Double.MAX_VALUE);
+            comboAuthMode.setButtonCell(new ListCell<String>() {
+                @Override protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) setText(null);
+                    else { setText(item); setStyle("-fx-text-fill: white;"); }
+                }
+            });
 
             cajaLogin = new VBox(5);
             cajaLogin.setAlignment(Pos.CENTER);
 
             txtUsuario = new TextField();
             txtUsuario.setPromptText("Usuario...");
-            txtUsuario.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-text-fill: #d0f0ff;");
+            txtUsuario.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-text-fill: white;");
 
             txtPassword = new PasswordField();
             txtPassword.setPromptText("Contraseña...");
-            txtPassword.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-text-fill: #d0f0ff;");
+            txtPassword.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-text-fill: white;");
+            
+            txtConfirmPassword = new PasswordField();
+            txtConfirmPassword.setPromptText("Confirmar...");
+            txtConfirmPassword.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.3); -fx-text-fill: white;");
+
+            btnComprobar = new Button("Verificar Usuario");
+            btnComprobar.setStyle("-fx-background-color: rgba(140,80,200,0.5); -fx-background-radius: 8; -fx-border-color: rgba(130,210,255,0.5); -fx-text-fill: #e0c0ff; -fx-font-weight: bold; -fx-cursor: hand;");
+            btnComprobar.setMaxWidth(Double.MAX_VALUE);
+            btnComprobar.setOnAction(e -> {
+                String u = txtUsuario.getText() == null ? "" : txtUsuario.getText().trim();
+                if (u.equalsIgnoreCase("admin")) { lblAuthError.setText("Ya existe"); return; }
+                if (u.isEmpty()) { lblAuthError.setText("Escribe un nombre"); return; }
+                registroAprobado = true;
+                actualizarModoAuth();
+            });
+
+            lblAuthError = new Label("");
+            lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
 
             btnListo = new Button("✓  Listo");
             btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.6); -fx-text-fill: #d0f0ff; -fx-font-weight: 900; -fx-cursor: hand;");
             btnListo.setMaxWidth(Double.MAX_VALUE);
 
-            lblEstado = new Label("Esperando login...");
-            lblEstado.setStyle("-fx-text-fill: rgba(255,100,100,0.9); -fx-font-weight: bold;");
-
-            cajaLogin.getChildren().addAll(new Label("Usuario:"), txtUsuario, new Label("Contraseña:"), txtPassword);
-            for (Node n : cajaLogin.getChildren()) {
-                if (n instanceof Label) ((Label) n).setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px;");
-            }
+            lblEstado = new Label("Esperando...");
+            lblEstado.setStyle("-fx-text-fill: #ff6e6e; -fx-font-weight: bold;");
 
             cajaCarousel = new VBox(6);
             cajaCarousel.setAlignment(Pos.CENTER);
@@ -145,93 +188,38 @@ public class PantallaConfiguracionPartida {
             btnLeft.setStyle("-fx-cursor: hand; -fx-font-weight: 900; -fx-font-size: 18px; -fx-text-fill: #d0f0ff; -fx-background-color: transparent;");
             btnRight = new Button("›");
             btnRight.setStyle("-fx-cursor: hand; -fx-font-weight: 900; -fx-font-size: 18px; -fx-text-fill: #d0f0ff; -fx-background-color: transparent;");
-            
             lblSkinActual = new Label("");
             lblSkinActual.setStyle("-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-color: rgba(100,180,255,0.15); -fx-background-radius: 6; -fx-border-color: rgba(130,210,255,0.25); -fx-border-radius: 6; -fx-border-width: 1; -fx-text-fill: #c8eeff; -fx-font-size: 12px; -fx-min-width: 180; -fx-min-height: 160; -fx-alignment: center;");
-            
             carouselNav.getChildren().addAll(btnLeft, lblSkinActual, btnRight);
             cajaCarousel.getChildren().addAll(new Label("SKIN:"), carouselNav);
-
+            
             btnLeft.setOnAction(e -> cambiarSkin(-1));
             btnRight.setOnAction(e -> cambiarSkin(1));
 
-            comboTipo.setOnAction(e -> {
-                boolean isCpu = comboTipo.getValue().equals("CPU (Foca)");
-                cajaLogin.setVisible(!isCpu);
-                cajaLogin.setManaged(!isCpu);
-                currentSkinType = isCpu ? "Foca" : "Pinguino";
-                currentSkinIndex = 0;
-                actualizarSkinDisplay();
-                
-                if (isCpu) {
-                    estaListo = true;
-                    btnListo.setDisable(true);
-                    lblEstado.setText("CPU LISTA");
-                    lblEstado.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
-                } else {
-                    estaListo = false;
-                    btnListo.setDisable(false);
-                    lblEstado.setText("Esperando login...");
-                    lblEstado.setStyle("-fx-text-fill: rgba(255,100,100,0.9); -fx-font-weight: bold;");
-                }
-                verificarTodosListos();
-            });
+            comboTipo.setOnAction(e -> handleTipoChange());
+            comboAuthMode.setOnAction(e -> { registroAprobado = false; actualizarModoAuth(); });
 
             btnListo.setOnAction(e -> {
                 if (!estaListo) {
-                    // Lógica para ponerse LISTO
-                    String user = txtUsuario.getText();
-                    String pass = txtPassword.getText();
-                    boolean esCpu = comboTipo.getValue().equals("CPU (Foca)");
-                    
-                    if (esCpu || (user != null && !user.trim().isEmpty() && pass != null && !pass.trim().isEmpty())) {
-                        estaListo = true;
-                        btnListo.setText("✎  Modificar");
-                        btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(200,80,80,0.6), rgba(140,30,30,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(255,130,130,0.6); -fx-text-fill: #ffd0d0; -fx-font-weight: 900; -fx-cursor: hand;");
-                        
-                        txtUsuario.setDisable(true);
-                        txtPassword.setDisable(true);
-                        comboTipo.setDisable(true);
-                        cajaCarousel.setDisable(true);
-                        
-                        // Registrar skin ocupada
-                        if (isSkinUnica(getCurrentSkin())) {
-                            skinsSeleccionadas.add(getCurrentSkin());
-                        }
-                        lblSelloListo.setVisible(true);
-                        
-                        // Animación de impacto
-                        javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(300), lblSelloListo);
-                        st.setFromX(2.5); st.setFromY(2.5);
-                        st.setToX(1.0); st.setToY(1.0);
-                        st.play();
-                        
-                        notificarNuevasSkins();
-                        lblEstado.setText("✓ LISTO");
-                        lblEstado.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
-                        verificarTodosListos();
+                    if (currentSkinType.equals("Foca")) {
+                        // En foca no debería ni verse el botón, pero por seguridad:
+                        this.estaListo = true;
                     } else {
-                        lblEstado.setText("Faltan datos");
+                        String u = txtUsuario.getText() == null ? "" : txtUsuario.getText().trim();
+                        String p = txtPassword.getText() == null ? "" : txtPassword.getText().trim();
+                        boolean esLogin = comboAuthMode.getValue().equals("Iniciar Sesión");
+                        if (esLogin) {
+                            if (!u.isEmpty() && !p.isEmpty()) setListo(true); else lblEstado.setText("Faltan datos");
+                        } else {
+                            if (registroAprobado) {
+                                String cp = txtConfirmPassword.getText() == null ? "" : txtConfirmPassword.getText().trim();
+                                if (p.isEmpty()) lblAuthError.setText("Falta clave");
+                                else if (!p.equals(cp)) lblAuthError.setText("No coinciden");
+                                else setListo(true);
+                            } else lblAuthError.setText("Verifica registro");
+                        }
                     }
-                } else {
-                    // Lógica para volver a MODIFICAR
-                    estaListo = false;
-                    btnListo.setText("✓  Listo");
-                    btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.6); -fx-text-fill: #d0f0ff; -fx-font-weight: 900; -fx-cursor: hand;");
-                    
-                    txtUsuario.setDisable(false);
-                    txtPassword.setDisable(false);
-                    comboTipo.setDisable(false);
-                    cajaCarousel.setDisable(false);
-                    
-                    // Liberar skin
-                    skinsSeleccionadas.remove(getCurrentSkin());
-                    lblSelloListo.setVisible(false);
-                    
-                    lblEstado.setText("Modificando...");
-                    lblEstado.setStyle("-fx-text-fill: rgba(255,200,100,0.9); -fx-font-weight: bold;");
-                    verificarTodosListos();
-                }
+                } else setListo(false);
             });
 
             lblSelloListo = new Label("LISTO");
@@ -239,55 +227,113 @@ public class PantallaConfiguracionPartida {
             lblSelloListo.setRotate(-20);
             lblSelloListo.setVisible(false);
 
+            actualizarModoAuth();
             content.getChildren().addAll(lblTitulo, comboTipo, cajaCarousel, cajaLogin, btnListo, lblEstado);
             root.getChildren().addAll(bgContainer, content, lblSelloListo);
-            
             actualizarSkinDisplay();
         }
 
-        private String[] getSkinArray() {
-            return currentSkinType.equals("Pinguino") ? SKINS_PINGUINO : SKINS_FOCA;
+        private void setListo(boolean listo) {
+            if (currentSkinType.equals("Foca")) {
+                this.estaListo = true;
+                lblSelloListo.setVisible(false);
+                btnListo.setVisible(false);
+                btnListo.setManaged(false);
+                // Aseguramos que nada esté bloqueado
+                comboTipo.setDisable(false);
+                comboAuthMode.setDisable(false);
+                cajaCarousel.setDisable(false);
+                txtUsuario.setDisable(false);
+                txtPassword.setDisable(false);
+                txtConfirmPassword.setDisable(false);
+                return;
+            }
+
+            this.estaListo = listo;
+            if (listo) {
+                btnListo.setText("✎  Modificar");
+                btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(200,80,80,0.6), rgba(140,30,30,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(255,130,130,0.6); -fx-text-fill: #ffd0d0; -fx-font-weight: 900; -fx-cursor: hand;");
+                txtUsuario.setDisable(true); txtPassword.setDisable(true); txtConfirmPassword.setDisable(true);
+                comboTipo.setDisable(true); comboAuthMode.setDisable(true); cajaCarousel.setDisable(true);
+                if (isSkinUnica(getCurrentSkin())) skinsSeleccionadas.add(getCurrentSkin());
+                lblSelloListo.setVisible(true);
+                lblEstado.setText("✓ LISTO");
+                lblEstado.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold;");
+            } else {
+                btnListo.setText("✓  Listo");
+                btnListo.setStyle("-fx-background-color: linear-gradient(to bottom right, rgba(30,100,200,0.6), rgba(10,60,140,0.8)); -fx-background-radius: 10; -fx-border-color: rgba(130,210,255,0.6); -fx-text-fill: #d0f0ff; -fx-font-weight: 900; -fx-cursor: hand;");
+                txtUsuario.setDisable(false); txtPassword.setDisable(false); txtConfirmPassword.setDisable(false);
+                comboTipo.setDisable(false); comboAuthMode.setDisable(false); cajaCarousel.setDisable(false);
+                skinsSeleccionadas.remove(getCurrentSkin());
+                lblSelloListo.setVisible(false);
+                lblEstado.setText("Modificando...");
+                lblEstado.setStyle("-fx-text-fill: #ffb74d; -fx-font-weight: bold;");
+            }
+            notificarNuevasSkins();
+            verificarTodosListos();
         }
 
-        private void actualizarSkinDisplay() {
-            String skin = getCurrentSkin();
-            animarCambioSkin(skin);
+        private void handleTipoChange() {
+            boolean isCpu = comboTipo.getValue().equals("CPU (Foca)");
+            cajaLogin.setVisible(!isCpu); cajaLogin.setManaged(!isCpu);
+            currentSkinType = isCpu ? "Foca" : "Pinguino";
+            currentSkinIndex = 0;
+            actualizarSkinDisplay();
+            
+            if (isCpu) {
+                setListo(true); // Se encargará de ocultar botón y sello y no bloquear
+                lblEstado.setText("Foca seleccionada");
+                lblEstado.setStyle("-fx-text-fill: #22c55e;");
+            } else {
+                setListo(false);
+                lblEstado.setText("Esperando login...");
+                lblEstado.setStyle("-fx-text-fill: #ff6e6e; -fx-font-weight: bold;");
+                btnListo.setVisible(true);
+                btnListo.setManaged(true);
+            }
+            verificarTodosListos();
         }
 
-        public String getCurrentSkin() {
-            return getSkinArray()[currentSkinIndex];
+        private void actualizarModoAuth() {
+            cajaLogin.getChildren().clear();
+            lblAuthError.setText("");
+            boolean esLogin = comboAuthMode.getValue().equals("Iniciar Sesión");
+            cajaLogin.getChildren().addAll(comboAuthMode, new Label("Usuario:"), txtUsuario);
+            if (esLogin) {
+                registroAprobado = false; txtUsuario.setDisable(false);
+                cajaLogin.getChildren().addAll(new Label("Contraseña:"), txtPassword);
+            } else {
+                if (!registroAprobado) {
+                    txtUsuario.setDisable(false);
+                    cajaLogin.getChildren().addAll(btnComprobar, lblAuthError);
+                } else {
+                    txtUsuario.setDisable(true);
+                    cajaLogin.getChildren().addAll(new Label("Clave:"), txtPassword, new Label("Confirmar:"), txtConfirmPassword, lblAuthError);
+                }
+            }
+            for (Node n : cajaLogin.getChildren()) if (n instanceof Label && n != lblAuthError) ((Label) n).setStyle("-fx-text-fill: rgba(130,210,255,0.7); -fx-font-size: 11px;");
         }
+
+        private String[] getSkinArray() { return currentSkinType.equals("Pinguino") ? SKINS_PINGUINO : SKINS_FOCA; }
+        public String getCurrentSkin() { return getSkinArray()[currentSkinIndex]; }
+        private void actualizarSkinDisplay() { animarCambioSkin(getCurrentSkin()); }
 
         private void animarCambioSkin(String nuevaSkin) {
             javafx.animation.ScaleTransition st = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(100), lblSkinActual);
             st.setToX(0);
             st.setOnFinished(e -> {
-                if (nuevaSkin.endsWith(".png")) {
-                    try {
-                        String ruta = currentSkinType.equals("Pinguino") ? "/imagenes/pinguino/" + nuevaSkin : "/imagenes/foca/" + nuevaSkin;
-                        javafx.scene.image.Image img = new javafx.scene.image.Image(getClass().getResourceAsStream(ruta));
-                        javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(img);
-                        iv.setFitWidth(150);
-                        iv.setFitHeight(150);
-                        iv.setPreserveRatio(true);
-                        lblSkinActual.setGraphic(iv);
-                        lblSkinActual.setText("");
-                        
-                        bgImage.setImage(img);
-                    } catch (Exception ex) {
-                        lblSkinActual.setText(nuevaSkin);
-                        lblSkinActual.setGraphic(null);
-                        bgImage.setImage(null);
-                    }
-                } else {
-                    lblSkinActual.setText(nuevaSkin);
-                    lblSkinActual.setGraphic(null);
-                    bgImage.setImage(null);
+                try {
+                    String ruta = currentSkinType.equals("Pinguino") ? "/imagenes/pinguino/" + nuevaSkin : "/imagenes/foca/" + nuevaSkin;
+                    javafx.scene.image.Image img = new javafx.scene.image.Image(getClass().getResourceAsStream(ruta));
+                    javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView(img);
+                    iv.setFitWidth(150); iv.setFitHeight(150); iv.setPreserveRatio(true);
+                    lblSkinActual.setGraphic(iv); lblSkinActual.setText("");
+                    bgImage.setImage(img);
+                } catch (Exception ex) {
+                    lblSkinActual.setText(nuevaSkin); lblSkinActual.setGraphic(null); bgImage.setImage(null);
                 }
-
                 javafx.animation.ScaleTransition st2 = new javafx.animation.ScaleTransition(javafx.util.Duration.millis(100), lblSkinActual);
-                st2.setToX(1.0);
-                st2.play();
+                st2.setToX(1.0); st2.play();
             });
             st.play();
         }
@@ -297,32 +343,25 @@ public class PantallaConfiguracionPartida {
             String[] skins = getSkinArray();
             int n = skins.length;
             int offset = currentSkinIndex;
-            
             for (int i = 0; i < n; i++) {
                 offset = (offset + delta + n) % n;
                 if (!skinsSeleccionadas.contains(skins[offset]) || !isSkinUnica(skins[offset])) {
                     if (estaListo) {
                         skinsSeleccionadas.remove(oldSkin);
-                        if (isSkinUnica(skins[offset])) {
-                            skinsSeleccionadas.add(skins[offset]);
-                        }
+                        if (isSkinUnica(skins[offset])) skinsSeleccionadas.add(skins[offset]);
                         notificarNuevasSkins();
                     }
                     currentSkinIndex = offset;
-                    animarCambioSkin(skins[currentSkinIndex]);
+                    actualizarSkinDisplay();
                     return;
                 }
             }
         }
 
         public void actualizarSkinLibre() {
-            if (estaListo) return; // Si ya estaba listo, no cambia
-            String skin = getCurrentSkin();
-            if (skinsSeleccionadas.contains(skin) && isSkinUnica(skin)) {
-                cambiarSkin(1); // Mover al siguiente libre
-            } else {
-                animarCambioSkin(skin);
-            }
+            if (estaListo) return;
+            if (skinsSeleccionadas.contains(getCurrentSkin()) && isSkinUnica(getCurrentSkin())) cambiarSkin(1);
+            else actualizarSkinDisplay();
         }
     }
 
@@ -330,22 +369,15 @@ public class PantallaConfiguracionPartida {
     public void initialize() {
         comboNumJugadores.getItems().addAll(2, 3, 4, 5);
         comboNumJugadores.setValue(2);
-        
         btnEmpezar.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 CONTROLADOR.GestorAudio.aplicarEfectosATodosLosBotones(newScene.getRoot());
                 newScene.setOnKeyPressed(event -> {
-                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
-                        handleVolver(null);
-                    }
+                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) handleVolver(null);
                 });
             }
         });
-
-        txtNombrePartida.textProperty().addListener((obs, oldVal, newVal) -> {
-            verificarTodosListos();
-        });
-        
+        txtNombrePartida.textProperty().addListener((obs, oldVal, newVal) -> verificarTodosListos());
         generarTarjetas();
     }
 
@@ -360,7 +392,6 @@ public class PantallaConfiguracionPartida {
         skinsSeleccionadas.clear();
         contenedorJugadores.getChildren().clear();
         tarjetasActivas.clear();
-
         for (int i = 1; i <= numJugadores; i++) {
             TarjetaJugador tj = new TarjetaJugador(i);
             tarjetasActivas.add(tj);
@@ -373,13 +404,9 @@ public class PantallaConfiguracionPartida {
         boolean nameEmpty = txtNombrePartida.getText().trim().isEmpty();
         lblErrorNombre.setVisible(nameEmpty);
         lblErrorNombre.setManaged(nameEmpty);
-        
         boolean todosListos = true;
         for (TarjetaJugador tj : tarjetasActivas) {
-            if (!tj.estaListo) {
-                todosListos = false;
-                break;
-            }
+            if (!tj.estaListo) { todosListos = false; break; }
         }
         btnEmpezar.setDisable(nameEmpty || !todosListos);
     }
@@ -391,7 +418,6 @@ public class PantallaConfiguracionPartida {
             TarjetaJugador tj = tarjetasActivas.get(i);
             String tipo = tj.comboTipo.getValue();
             String color = tj.getCurrentSkin(); 
-            
             if (tipo.equals("CPU (Foca)")) {
                 jugadoresConfigurados.add(new Foca("Jugador " + (i + 1) + " (Foca)", color, 0));
             } else {
@@ -402,14 +428,12 @@ public class PantallaConfiguracionPartida {
                 jugadoresConfigurados.add(new Pinguino(nombre, color, 0, inv));
             }
         }
-        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaJuego.fxml"));
             Parent root = loader.load();
             PantallaJuego controller = loader.getController();
             controller.iniciarConJugadores(jugadoresConfigurados);
             controller.setNombrePartida(txtNombrePartida.getText().trim());
-            
             Scene scene = ((Node) event.getSource()).getScene();
             scene.setRoot(root);
         } catch (Exception e) {
@@ -422,7 +446,9 @@ public class PantallaConfiguracionPartida {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
             Parent root = loader.load();
-            Scene scene = ((Node) event.getSource()).getScene();
+            Scene scene;
+            if (event != null) scene = ((Node) event.getSource()).getScene();
+            else scene = contenedorJugadores.getScene();
             scene.setRoot(root);
         } catch (Exception e) {
             e.printStackTrace();
