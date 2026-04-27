@@ -380,3 +380,23 @@
     -fx-effect: dropshadow(gaussian, #ffffff, 3, 1.0, 0, 0) dropshadow(gaussian, #0088cc, 8, 1.0, 0, 4) dropshadow(gaussian, #002244, 15, 0.6, 0, 8);
     -fx-letter-spacing: -2px;
 }
+
+/* CASILLA POLAR (Adaptado a la temática) */
+.casilla-polar .box {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 5;
+    -fx-border-color: rgba(130, 210, 255, 0.7);
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-padding: 3;
+}
+
+.casilla-polar:selected .mark {
+    -fx-background-color: #74d7ff;
+}
+
+.casilla-polar {
+    -fx-text-fill: #c8eeff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
