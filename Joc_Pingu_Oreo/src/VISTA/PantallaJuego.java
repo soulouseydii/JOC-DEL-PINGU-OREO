@@ -333,7 +333,7 @@ public class PantallaJuego {
 		actualizarInventarioUI();
 
 		Jugador j1 = gestorPartida.getPartida().getJugadorActual();
-		agregarEvento("🎮 ¡El juego ha comenzado! Turno de " + j1.getNombre());
+		agregarEvento("¡El juego ha comenzado! Turno de " + j1.getNombre());
 
 		if (j1 instanceof Foca) {
 			dado.setDisable(true);
@@ -615,16 +615,14 @@ public class PantallaJuego {
 	@FXML
 	private void handleSaveGame() {
 		if (gestorPartida.getPartida() == null) {
-			agregarEvento("⚠️ No hay partida activa para guardar.");
+			agregarEvento("No hay partida activa para guardar.");
 			return;
 		}
 
 		int idGuardado = gestorPartida.guardarPartida();
 
 		if (idGuardado > 0) {
-			agregarEvento("═══════════════════════");
-			agregarEvento("💾 Partida guardada correctamente! (ID: " + idGuardado + ")");
-			agregarEvento("═══════════════════════");
+			agregarEvento("Partida guardada correctamente. (ID: " + idGuardado + ")");
 
 			// Si estamos en la pantalla de fin de partida, ocultarla temporalmente
 			if (gameEndOverlay.isVisible()) {
@@ -640,7 +638,7 @@ public class PantallaJuego {
 				mainContainer.getStyleClass().add("main-container-disabled");
 			}
 		} else {
-			agregarEvento("❌ Error al guardar la partida.");
+			agregarEvento("Error al guardar la partida.");
 
 			// Si estamos en la pantalla de fin de partida, ocultarla temporalmente
 			if (gameEndOverlay.isVisible()) {
@@ -873,7 +871,7 @@ public class PantallaJuego {
 
 		if (resultadoDado == 0) {
 			dadoResultText.setText(jugadorActual.getNombre() + " ha perdido el turno.");
-			agregarEvento("🚫 " + jugadorActual.getNombre() + " no puede mover este turno.");
+			agregarEvento(jugadorActual.getNombre() + " no puede mover este turno.");
 		} else {
 			dadoResultText.setText(jugadorActual.getNombre() + " ha sacado: " + resultadoDado);
 			registrarEventosCasilla(jugadorActual, casillaPisada, resultadoDado, diffInv);
@@ -896,17 +894,17 @@ public class PantallaJuego {
 					if (diffInv != null && (diffInv[0] > 0 || diffInv[1] > 0 || diffInv[2] > 0 || diffInv[3] > 0
 							|| diffInv[4] > 0)) {
 						if (diffInv[3] > 0)
-							itemObtenido = "🎲⚡ ¡Dado Rápido!";
+							itemObtenido = "Dado Rápido";
 						else if (diffInv[4] > 0)
-							itemObtenido = "🎲🐢 ¡Dado Lento!";
+							itemObtenido = "Dado Lento";
 						else if (diffInv[0] > 0)
-							itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+							itemObtenido = diffInv[0] + " Pez";
 						else if (diffInv[1] > 0)
-							itemObtenido = "❄️ ¡" + diffInv[1] + " Bola de Nieve!";
+							itemObtenido = diffInv[1] + " Bola de Nieve";
 						else if (diffInv[2] > 0)
-							itemObtenido = "🏍️ ¡Moto de Nieve!";
+							itemObtenido = "Moto de Nieve";
 					} else {
-						itemObtenido = "📦 Inventario lleno";
+						itemObtenido = "Inventario lleno";
 					}
 				} else if (casillaObj instanceof Sorpresa) {
 					// Lógica para SORPRESA (Pinguino o Foca)
@@ -916,41 +914,41 @@ public class PantallaJuego {
 						if (diffInv != null && (diffInv[0] > 0 || diffInv[1] > 0 || diffInv[2] > 0 || diffInv[3] > 0
 								|| diffInv[4] > 0)) {
 							if (diffInv[3] > 0)
-								itemObtenido = "🎲⚡ ¡Dado Rápido!";
+								itemObtenido = "Dado Rápido";
 							else if (diffInv[4] > 0)
-								itemObtenido = "🎲🐢 ¡Dado Lento!";
+								itemObtenido = "Dado Lento";
 							else if (diffInv[0] > 0)
-								itemObtenido = "🐟 ¡" + diffInv[0] + " Pez!";
+								itemObtenido = "Pez";
 							else if (diffInv[1] > 0)
-								itemObtenido = "❄️ ¡" + diffInv[1] + " Bola(s) de Nieve!";
+								itemObtenido = diffInv[1] + " Bola(s) de Nieve";
 							else if (diffInv[2] > 0)
-								itemObtenido = "🏍️ ¡Moto de Nieve!";
+								itemObtenido = "Moto de Nieve";
 						} else if (diffInv != null && (diffInv[0] < 0 || diffInv[1] < 0 || diffInv[2] < 0
 								|| diffInv[3] < 0 || diffInv[4] < 0)) {
-							itemObtenido = "📉 ¡Objeto perdido!";
+							itemObtenido = "Objeto perdido";
 						} else if (jugadorActual.getPosicion() > casillaPisada) {
-							itemObtenido = "🛷 ¡Un Trineo!";
+							itemObtenido = "Trineo";
 						} else if (jugadorActual.getPosicion() < casillaPisada) {
 							if (jugadorActual.getPosicion() == 0)
-								itemObtenido = "🐻 ¡El OSO!";
+								itemObtenido = "Oso";
 							else
-								itemObtenido = "🕳️ ¡Un Agujero!";
+								itemObtenido = "Agujero";
 						} else if (jugadorActual.getTurnosPerdidos() > 0) {
-							itemObtenido = "🧊 ¡Atascado / Resbalón!";
+							itemObtenido = "Atascado / Resbalón";
 						} else {
-							itemObtenido = "❓ ¡Nada!";
+							itemObtenido = "Nada";
 						}
 					} else if (jugadorActual instanceof Foca) {
 						Foca f = (Foca) jugadorActual;
 						if (f.getPosicion() > casillaPisada) {
-							itemObtenido = "🛷 ¡Trineo!";
+							itemObtenido = "Trineo";
 						} else if (f.getPosicion() < casillaPisada) {
 							if (f.getPosicion() == 0)
-								itemObtenido = "🐻 ¡Oso!";
+								itemObtenido = "Oso";
 							else
-								itemObtenido = "🕳️ ¡Agujero!";
+								itemObtenido = "Agujero";
 						} else {
-							itemObtenido = "❓ ¡Nada!";
+							itemObtenido = "Nada";
 						}
 					}
 				}
@@ -1302,11 +1300,9 @@ public class PantallaJuego {
 			crushImage.setTranslateY(0);
 
 			// Registrar en el log
-			agregarEvento("═══════════════════════");
 			for (Pinguino p : aplastados) {
-				agregarEvento("💥 Una foca ha aplastado a " + p.getNombre() + " y ha perdido la mitad de sus objetos.");
+				agregarEvento("Una foca ha aplastado a " + p.getNombre() + " y ha perdido la mitad de sus objetos.");
 			}
-			agregarEvento("═══════════════════════");
 
 			actualizarInventarioUI();
 			actualizarTodasLasFichas();
@@ -1519,9 +1515,8 @@ public class PantallaJuego {
 				sealEncounterPinguino = pActual;
 				sealEncounterPinguinoIndice = indiceActual;
 
-				agregarEvento("═══════════════════════");
-				agregarEvento("🦭 ¡" + pActual.getNombre() + " se encuentra con la foca en la casilla "
-						+ pActual.getPosicion() + "!");
+				agregarEvento(pActual.getNombre() + " se encuentra con la foca en la casilla "
+						+ pActual.getPosicion());
 
 				// Lanzar la secuencia visual del encuentro con foca
 				mostrarEventoEncuentroFoca();
@@ -1549,8 +1544,7 @@ public class PantallaJuego {
 				sealEncounterPinguino = pEncontrado;
 				sealEncounterPinguinoIndice = getIndiceJugador(pEncontrado);
 
-				agregarEvento("═══════════════════════");
-				agregarEvento("🦭 ¡La foca se encuentra con " + pEncontrado.getNombre() + "!");
+				agregarEvento("La foca se encuentra con " + pEncontrado.getNombre());
 
 				// Lanzar la secuencia visual del encuentro con foca
 				mostrarEventoEncuentroFoca();
@@ -1586,9 +1580,8 @@ public class PantallaJuego {
 				pvpDefensor = defensor;
 				pvpIndiceAtacante = indiceActual;
 
-				agregarEvento("═══════════════════════");
-				agregarEvento("⚔️ ¡" + atacante.getNombre() + " y " + defensor.getNombre()
-						+ " se encuentran en la casilla " + atacante.getPosicion() + "!");
+				agregarEvento(atacante.getNombre() + " y " + defensor.getNombre()
+						+ " se encuentran en la casilla " + atacante.getPosicion());
 
 				// Lanzar la secuencia visual
 				mostrarEventoGuerraBolasNieve();
@@ -1684,12 +1677,12 @@ public class PantallaJuego {
 		int bolasAtacante = resultado[2];
 		int bolasDefensor = resultado[3];
 
-		agregarEvento("🎯 " + pvpAtacante.getNombre() + " (" + bolasAtacante + " bolas) vs " + pvpDefensor.getNombre()
+		agregarEvento(pvpAtacante.getNombre() + " (" + bolasAtacante + " bolas) vs " + pvpDefensor.getNombre()
 				+ " (" + bolasDefensor + " bolas)");
 
 		if (ganador == 0) {
 			// Atacante gana → defensor retrocede
-			agregarEvento("🏆 ¡" + pvpAtacante.getNombre() + " gana la guerra de bolas de nieve!");
+			agregarEvento(pvpAtacante.getNombre() + " gana la guerra de bolas de nieve");
 			agregarEvento("   ↪ " + pvpDefensor.getNombre() + " retrocede " + diferencia + " casillas");
 
 			// Animar el retroceso del defensor
@@ -1703,7 +1696,7 @@ public class PantallaJuego {
 
 		} else if (ganador == 1) {
 			// Defensor gana → atacante retrocede
-			agregarEvento("🏆 ¡" + pvpDefensor.getNombre() + " gana la guerra de bolas de nieve!");
+			agregarEvento(pvpDefensor.getNombre() + " gana la guerra de bolas de nieve");
 			agregarEvento("   ↪ " + pvpAtacante.getNombre() + " retrocede " + diferencia + " casillas");
 
 			// Animar el retroceso del atacante
@@ -1716,12 +1709,12 @@ public class PantallaJuego {
 
 		} else {
 			// Empate → nadie se mueve, pero ambos pierden todas sus bolas
-			agregarEvento("🤝 ¡Empate! Ambos pierden todas sus bolas de nieve. Nadie se mueve.");
+			agregarEvento("Empate. Ambos pierden sus bolas de nieve. Nadie se mueve.");
 			actualizarInventarioUI();
 			finalizarTurnoVisual();
 		}
 
-		agregarEvento("═══════════════════════");
+
 
 		// Limpiar estado PvP
 		pvpAtacante = null;
@@ -1733,8 +1726,7 @@ public class PantallaJuego {
 		snowballDecisionOverlay.setVisible(false);
 
 		agregarEvento(
-				"🕊️ " + pvpDefensor.getNombre() + " decide ignorar a " + pvpAtacante.getNombre() + ". No pasa nada.");
-		agregarEvento("═══════════════════════");
+				pvpDefensor.getNombre() + " decide ignorar a " + pvpAtacante.getNombre() + ". No pasa nada.");
 
 		// Limpiar estado PvP
 		pvpAtacante = null;
@@ -1845,10 +1837,9 @@ public class PantallaJuego {
 		// Resolver el soborno en el controlador
 		gestorPartida.resolverSobornoFoca(sealEncounterFoca, sealEncounterPinguino);
 
-		agregarEvento("🐟 " + sealEncounterPinguino.getNombre() + " soborna a la foca con un pez.");
-		agregarEvento("   ↪ La foca queda bloqueada 2 turnos. ¡" + sealEncounterPinguino.getNombre()
-				+ " se queda en su casilla!");
-		agregarEvento("═══════════════════════");
+		agregarEvento(sealEncounterPinguino.getNombre() + " soborna a la foca con un pez.");
+		agregarEvento("La foca queda bloqueada 2 turnos. " + sealEncounterPinguino.getNombre()
+				+ " se queda en su casilla.");
 
 		actualizarInventarioUI();
 
@@ -1873,9 +1864,8 @@ public class PantallaJuego {
 		int posAnterior = sealEncounterPinguino.getPosicion();
 		int nuevaPos = gestorPartida.resolverGolpeFoca(sealEncounterFoca, sealEncounterPinguino);
 
-		agregarEvento("💥 ¡La foca golpea a " + sealEncounterPinguino.getNombre() + "!");
-		agregarEvento("   ↪ Enviado al agujero más cercano: casilla " + nuevaPos);
-		agregarEvento("═══════════════════════");
+		agregarEvento("La foca golpea a " + sealEncounterPinguino.getNombre());
+		agregarEvento("Enviado al agujero más cercano: casilla " + nuevaPos);
 
 		// Pequeña animación de impacto (temblor) antes de mover
 		StackPane fichaPinguino = getFicha(sealEncounterPinguinoIndice);
@@ -1954,8 +1944,8 @@ public class PantallaJuego {
 		p.setPosicion(siguienteTrineo);
 
 		agregarEvento("───────────────────────");
-		agregarEvento("🏍️ " + p.getNombre() + " usa la Moto de Nieve!");
-		agregarEvento("   ↪ Avanza de casilla " + posAnterior + " a casilla " + siguienteTrineo + " (Trineo)");
+		agregarEvento(p.getNombre() + " usa la Moto de Nieve.");
+		agregarEvento("Avanza de casilla " + posAnterior + " a casilla " + siguienteTrineo + " (Trineo)");
 
 		// Animar el movimiento
 		dado.setDisable(true);
@@ -1971,7 +1961,7 @@ public class PantallaJuego {
 			int posTrasTrineoEfecto = p.getPosicion();
 			if (posTrasTrineoEfecto != siguienteTrineo) {
 				int posVisualTrineo = Math.max(0, Math.min(posTrasTrineoEfecto, 49));
-				agregarEvento("🛷 ¡El trineo lo lleva hasta la casilla " + posTrasTrineoEfecto + "!");
+				agregarEvento("El trineo lo lleva hasta la casilla " + posTrasTrineoEfecto);
 
 				PauseTransition pausa = new PauseTransition(Duration.millis(300));
 				pausa.setOnFinished(e2 -> {
@@ -2064,9 +2054,7 @@ public class PantallaJuego {
 
 	private void finalizarTurnoVisual() {
 		if (gestorPartida.getPartida().isFinalizada()) {
-			agregarEvento("═══════════════════════");
-			agregarEvento("🏆 ¡" + gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA!");
-			agregarEvento("═══════════════════════");
+			agregarEvento(gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA");
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
 			mostrarVentanaFinPartida();
@@ -2074,7 +2062,7 @@ public class PantallaJuego {
 			// Actualizar inventario para el SIGUIENTE jugador
 			actualizarInventarioUI();
 			Jugador sigJ = gestorPartida.getPartida().getJugadorActual();
-			agregarEvento("▶ Turno de " + sigJ.getNombre());
+			agregarEvento("Turno de " + sigJ.getNombre());
 
 			if (sigJ instanceof Foca) {
 				dado.setDisable(true);
@@ -2218,7 +2206,7 @@ public class PantallaJuego {
 
 		agregarEvento("───────────────────────");
 		if (dado > 0) {
-			agregarEvento("🎲 " + jugador.getNombre() + " avanza " + dado + " casillas.");
+			agregarEvento(jugador.getNombre() + " avanza " + dado + " casillas.");
 		}
 
 		if (posicion >= 0 && posicion < t.getListaCasillas().size()) {
@@ -2227,104 +2215,101 @@ public class PantallaJuego {
 
 			switch (tipoCasilla) {
 				case "Normal":
-					agregarEvento("📍 Cae en casilla " + posicion + " (Normal). No pasa nada.");
+					agregarEvento("Cae en casilla " + posicion + " (Normal). No pasa nada.");
 					break;
 				case "Agujero":
-					agregarEvento("🕳️ ¡Cae en un AGUJERO en la casilla " + posicion + "!");
-					agregarEvento("   ↪ Retrocede a la casilla " + jugador.getPosicion());
+					agregarEvento("Cae en un AGUJERO en la casilla " + posicion);
+					agregarEvento("Retrocede a la casilla " + jugador.getPosicion());
 					break;
 				case "Trineo":
-					agregarEvento("🛷 ¡Encuentra un TRINEO en la casilla " + posicion + "!");
+					agregarEvento("Encuentra un TRINEO en la casilla " + posicion);
 					if (jugador.getPosicion() != posicion) {
-						agregarEvento("   ↪ Avanza hasta la casilla " + jugador.getPosicion());
+						agregarEvento("Avanza hasta la casilla " + jugador.getPosicion());
 					} else {
-						agregarEvento("   ↪ No hay más trineos adelante. Se queda aquí.");
+						agregarEvento("No hay más trineos adelante. Se queda aquí.");
 					}
 					break;
 				case "SueloQuebradizo":
-					agregarEvento("🧊 ¡Pisa SUELO QUEBRADIZO en la casilla " + posicion + "!");
+					agregarEvento("Pisa SUELO QUEBRADIZO en la casilla " + posicion);
 					if (jugador.getPosicion() == 0) {
-						agregarEvento("   ↪ ¡El hielo se rompe! Vuelve a Inicio.");
+						agregarEvento("¡El hielo se rompe! Vuelve a Inicio.");
 					} else if (jugador.getTurnosPerdidos() > 0) {
-						agregarEvento("   ↪ Se queda atascado. Pierde 1 turno.");
+						agregarEvento("Se queda atascado. Pierde 1 turno.");
 					} else {
-						agregarEvento("   ↪ No lleva peso, pasa sin problema.");
+						agregarEvento("No lleva peso, pasa sin problema.");
 					}
 					break;
 				case "Oso":
-					agregarEvento("🐻 ¡Un OSO atrapa a " + jugador.getNombre() + " en la casilla " + posicion + "!");
-					agregarEvento("   ↪ Vuelve a Inicio (casilla 0)");
+					agregarEvento("Un OSO atrapa a " + jugador.getNombre() + " en la casilla " + posicion);
+					agregarEvento("Vuelve a Inicio (casilla 0)");
 					break;
 				case "Evento":
-					agregarEvento("🎁 ¡EVENTO en la casilla " + posicion + "!");
+					agregarEvento("EVENTO en la casilla " + posicion);
 					if (diffInv != null) {
 						// diffInv: [0]=peces, [1]=bolas, [2]=motos, [3]=dadosRapidos, [4]=dadosLentos
 						if (diffInv[3] > 0)
-							agregarEvento("   ↪ ¡Ha encontrado un DADO RÁPIDO! 🎲⚡");
+							agregarEvento("Ha encontrado un DADO RÁPIDO");
 						else if (diffInv[4] > 0)
-							agregarEvento("   ↪ ¡Ha encontrado un DADO LENTO! 🎲🐢");
+							agregarEvento("Ha encontrado un DADO LENTO");
 						else if (diffInv[0] > 0)
-							agregarEvento("   ↪ ¡Ha encontrado " + diffInv[0] + " Pez(ces)! 🐟");
+							agregarEvento("Ha encontrado " + diffInv[0] + " Pez(ces)");
 						else if (diffInv[1] > 0)
-							agregarEvento("   ↪ ¡Ha encontrado " + diffInv[1] + " Bola(s) de Nieve! ❄️");
+							agregarEvento("Ha encontrado " + diffInv[1] + " Bola(s) de Nieve");
 						else if (diffInv[2] > 0)
-							agregarEvento("   ↪ ¡Ha encontrado una Moto de Nieve! 🏍️");
+							agregarEvento("Ha encontrado una Moto de Nieve");
 						else
-							agregarEvento("   ↪ El inventario está lleno, no cabe nada.");
+							agregarEvento("El inventario está lleno, no cabe nada.");
 					}
 					break;
 				case "Sorpresa":
-					agregarEvento("❓ ¡CASILLA SORPRESA en la casilla " + posicion + "!");
+					agregarEvento("CASILLA SORPRESA en la casilla " + posicion);
 					if (jugador instanceof Pinguino) {
 						Pinguino p = (Pinguino) jugador;
 						if (diffInv != null && (diffInv[0] > 0 || diffInv[1] > 0 || diffInv[2] > 0 || diffInv[3] > 0
 								|| diffInv[4] > 0)) {
 							// Caso Items
 							if (diffInv[3] > 0)
-								agregarEvento("   ↪ ¡Sorpresa! ¡DADO RÁPIDO! 🎲⚡");
+								agregarEvento("Sorpresa: Dado Rápido");
 							else if (diffInv[4] > 0)
-								agregarEvento("   ↪ ¡Sorpresa! ¡DADO LENTO! 🎲🐢");
+								agregarEvento("Sorpresa: Dado Lento");
 							else if (diffInv[0] > 0)
-								agregarEvento("   ↪ ¡Sorpresa! ¡Pez! 🐟");
+								agregarEvento("Sorpresa: Pez");
 							else if (diffInv[1] > 0)
-								agregarEvento("   ↪ ¡Sorpresa! ¡" + diffInv[1] + " Bola(s) de Nieve! ❄️");
+								agregarEvento("Sorpresa: " + diffInv[1] + " Bola(s) de Nieve");
 							else if (diffInv[2] > 0)
-								agregarEvento("   ↪ ¡Sorpresa! ¡Moto de Nieve! 🏍️");
+								agregarEvento("Sorpresa: Moto de Nieve");
 						} else if (p.getPosicion() > posicion) {
-							agregarEvento("   ↪ ¡Sorpresa! ¡Has encontrado un TRINEO! 🛷");
-							agregarEvento("      ↪ Avanza hasta la casilla " + p.getPosicion());
+							agregarEvento("Sorpresa: Trineo");
+							agregarEvento("Avanza hasta la casilla " + p.getPosicion());
 						} else if (p.getPosicion() < posicion && p.getPosicion() >= 0) {
 							if (p.getPosicion() == 0)
-								agregarEvento("   ↪ ¡Sorpresa! ¡Un OSO! 🐻 Vuelve a Inicio.");
+								agregarEvento("Sorpresa: Un OSO. Vuelve a Inicio.");
 							else
 								agregarEvento(
-										"   ↪ ¡Sorpresa! ¡Un AGUJERO! 🕳️ Retrocede a la casilla " + p.getPosicion());
+										"Sorpresa: Un AGUJERO. Retrocede a la casilla " + p.getPosicion());
 						} else if (p.getTurnosPerdidos() > 0) {
-							agregarEvento("   ↪ ¡Sorpresa! ¡Resbalón! 🧊");
-							agregarEvento("      ↪ Te has quedado atascado. Pierdes 1 turno.");
+							agregarEvento("Sorpresa: Resbalón");
+							agregarEvento("Te has quedado atascado. Pierdes 1 turno.");
 						} else if (diffInv != null && (diffInv[0] < 0 || diffInv[1] < 0 || diffInv[2] < 0)) {
-							agregarEvento("   ↪ ¡Sorpresa! ¡Mala suerte! 📉");
-							agregarEvento("      ↪ Se te ha caído un objeto del inventario.");
+							agregarEvento("Sorpresa: Mala suerte");
+							agregarEvento("Se te ha caído un objeto del inventario.");
 						} else {
-							agregarEvento("   ↪ ¡Sorpresa! ...pero no pasa nada. Es una casilla normal. 🧊");
+							agregarEvento("Sorpresa: Casilla normal.");
 						}
 					} else if (jugador instanceof Foca) {
 						if (jugador.getPosicion() == 0 && posicion != 0) {
-							agregarEvento("   ↪ 🐻 ¡Un Oso asusta a la Foca! Vuelve a Inicio.");
+							agregarEvento("Un Oso asusta a la Foca! Vuelve a Inicio.");
 						} else {
-							// Para foca, no tenemos diffInv de items, asique miramos diferencias de
-							// posicion u otros efectos
-							// pero por simplicidad mostramos mensaje generico o el resultado directo
-							agregarEvento("   ↪ ¡La foca experimenta un evento inesperado!");
+							agregarEvento("La foca experimenta un evento inesperado");
 						}
 					}
 					break;
 				default:
-					agregarEvento("📍 " + jugador.getNombre() + " está en la casilla " + posicion + ".");
+					agregarEvento(jugador.getNombre() + " está en la casilla " + posicion + ".");
 			}
 		}
 
-		agregarEvento("📌 Posición final: casilla " + jugador.getPosicion());
+		agregarEvento("Posición final: casilla " + jugador.getPosicion());
 	}
 
 	public void setGestorPartida(GestorPartida gestorPartida) {
@@ -2372,8 +2357,8 @@ public class PantallaJuego {
 
 		Jugador jActual = partida.getJugadorActual();
 		String nombreP = partida.getNombrePartida() != null ? partida.getNombrePartida() : "Sin nombre";
-		agregarEvento("💾 Partida \"" + nombreP + "\" cargada! Turno de " + jActual.getNombre());
-		agregarEvento("📌 Turno numero: " + partida.getTurnos());
+		agregarEvento("Partida \"" + nombreP + "\" cargada. Turno de " + jActual.getNombre());
+		agregarEvento("Turno numero: " + partida.getTurnos());
 
 		// Mostrar posiciones de todos los jugadores
 		for (Jugador j : jugadores) {
