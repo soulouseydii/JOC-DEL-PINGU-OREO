@@ -2058,7 +2058,27 @@ public class PantallaJuego {
 
 	private void finalizarTurnoVisual() {
 		if (gestorPartida.getPartida().isFinalizada()) {
-			agregarEvento(gestorPartida.getPartida().getGanador().getNombre() + " HA GANADO LA PARTIDA");
+			// Asegurar que haya un ganador asignado
+			Jugador ganador = gestorPartida.getPartida().getGanador();
+			if (ganador == null) {
+				// Intentar determinar el ganador: buscar quién llegó a la última casilla
+				int ultimaCasilla = gestorPartida.getPartida().getTablero().getListaCasillas().size() - 1;
+				for (Jugador j : gestorPartida.getPartida().getJugadores()) {
+					if (j.getPosicion() >= ultimaCasilla) {
+						ganador = j;
+						gestorPartida.getPartida().setGanador(j);
+						break;
+					}
+				}
+			}
+
+			agregarEvento("═══════════════════════");
+			if (ganador != null) {
+				agregarEvento("🏆 ¡" + ganador.getNombre() + " HA GANADO LA PARTIDA!");
+			} else {
+				agregarEvento("🏆 ¡LA PARTIDA HA TERMINADO!");
+			}
+			agregarEvento("═══════════════════════");
 			dado.setDisable(true);
 			btnMoto.setDisable(true);
 			mostrarVentanaFinPartida();

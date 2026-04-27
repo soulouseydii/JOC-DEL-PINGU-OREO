@@ -133,7 +133,7 @@
                 </VBox>
 
                 <!-- Boton Settings siempre en la capa mas alta -->
-                <Button fx:id="btnSettings" onAction="#handleSettingsClick" styleClass="settings-button" StackPane.alignment="TOP_RIGHT" translateY="-40" translateX="20">
+                <Button fx:id="btnSettings" onAction="#handleSettingsClick" styleClass="settings-button" StackPane.alignment="TOP_RIGHT" translateY="-10" translateX="0">
                     <graphic>
                         <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -229,17 +229,17 @@
                 <Label styleClass="section-title" text="AUDIO" />
                 
                 <VBox spacing="8.0">
-                    <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Música de fondo" />
+                    <Label style="-fx-text-fill: #c8eeff; -fx-font-weight: bold;" text="Música de fondo" />
                     <HBox alignment="CENTER_LEFT" spacing="10.0">
-                         <CheckBox fx:id="checkMusica" selected="true" styleClass="custom-checkbox" text="Activada" />
+                         <CheckBox fx:id="checkMusica" selected="true" styleClass="casilla-polar" text="Activada" />
                          <Slider fx:id="sliderVolumen" HBox.hgrow="ALWAYS" showTickLabels="false" value="50.0" />
                     </HBox>
                 </VBox>
                 
                 <VBox spacing="8.0">
-                    <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Efectos de sonido" />
+                    <Label style="-fx-text-fill: #c8eeff; -fx-font-weight: bold;" text="Efectos de sonido" />
                     <HBox alignment="CENTER_LEFT" spacing="10.0">
-                         <CheckBox fx:id="checkSonidos" selected="true" styleClass="custom-checkbox" text="Activados" />
+                         <CheckBox fx:id="checkSonidos" selected="true" styleClass="casilla-polar" text="Activados" />
                          <Slider fx:id="sliderSonidos" HBox.hgrow="ALWAYS" showTickLabels="false" value="100.0" />
                     </HBox>
                 </VBox>
@@ -247,7 +247,7 @@
             
             <VBox prefWidth="350.0" spacing="15.0" styleClass="options-section">
                 <Label styleClass="section-title" text="VISUAL" />
-                <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="custom-checkbox" text="Pantalla Completa" />
+                <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="casilla-polar" text="Pantalla Completa" />
             </VBox>
             
             <Button maxWidth="250.0" onAction="#handleBackFromOptions" styleClass="menu-button-alt" text="Volver al Menú" />
