@@ -114,7 +114,7 @@ public class PantallaCargarPartida {
             PantallaJuego controller = loader.getController();
             controller.cargarPartidaGuardada(partidaCargada);
 
-            Scene scene = ((Node) event.getSource()).getScene();
+            Scene scene = panelCargar.getScene();
             scene.setRoot(root);
             
             Stage stage = (Stage) scene.getWindow();
@@ -174,7 +174,7 @@ public class PantallaCargarPartida {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
             Parent root = loader.load();
-            Scene scene = ((Node) event.getSource()).getScene();
+            Scene scene = panelCargar.getScene();
             scene.setRoot(root);
             
             Stage stage = (Stage) scene.getWindow();

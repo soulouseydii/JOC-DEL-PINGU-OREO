@@ -198,6 +198,16 @@ public class GestorBBDD {
                     }
                 }
             }
+            
+            // De esta manera fueza que la primera y la última casilla del tablero cargado sean NORMALES
+            
+            if (casillas.size() >= 2) {
+                Casilla primera = casillas.get(0);
+                Casilla ultima = casillas.get(casillas.size() - 1);
+                
+                casillas.set(0, new Normal(primera.getPosicion()));
+                casillas.set(casillas.size() - 1, new Normal(ultima.getPosicion()));
+            }
 
             ArrayList<Jugador> jugadores = new ArrayList<>();
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM JUGADOR WHERE ID_PARTIDA = ? ORDER BY INDICE_ORDEN")) {
