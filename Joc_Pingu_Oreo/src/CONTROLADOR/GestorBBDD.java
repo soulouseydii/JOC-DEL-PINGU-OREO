@@ -332,4 +332,133 @@ public class GestorBBDD {
             default:                return null;
         }
     }
+
+    // =========================================================
+    //  MÉTODOS DE AUTENTICACIÓN DE USUARIOS
+    // =========================================================
+
+    /**
+     * Crea la tabla USUARIOS en Oracle si no existe.
+     * Se llama una vez al arrancar el juego desde Main.
+     */
+    public void crearTablaUsuarios() {
+        try (Connection con = getConexion()) {
+            // Comprobar si la tabla ya existe consultando USER_TABLES
+            boolean existe = false;
+            try (PreparedStatement ps = con.prepareStatement(
+                    "SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'USUARIOS'")) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        existe = true;
+                    }
+                }
+            }
+
+            if (!existe) {
+                String sql = "CREATE TABLE USUARIOS (" +
+                        "ID_USUARIO NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
+                        "USERNAME VARCHAR2(50) UNIQUE NOT NULL, " +
+                        "PASSWORD_HASH VARCHAR2(255) NOT NULL, " +
+                        "FECHA_REGISTRO TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                try (Statement st = con.createStatement()) {
+                    st.executeUpdate(sql);
+                    System.out.println("Tabla USUARIOS creada correctamente.");
+                }
+            } else {
+                System.out.println("Tabla USUARIOS ya existe.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al crear tabla USUARIOS: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Comprueba si un nombre de usuario ya existe en la BBDD.
+     * @return true si el usuario ya está registrado.
+     */
+    public boolean existeUsuario(String username) {
+        try (Connection con = getConexion()) {
+            String sql = "SELECT COUNT(*) FROM USUARIOS WHERE UPPER(USERNAME) = UPPER(?)";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, username);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt(1) > 0;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al comprobar usuario: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Registra un nuevo usuario en la BBDD con la contraseña cifrada.
+     * @return 1 = Éxito, -1 = Ya existe, 0 = Error BBDD
+     */
+    public int registrarUsuario(String username, String password) {
+        if (existeUsuario(username)) {
+            return -1; // Ya existe
+        }
+        try (Connection con = getConexion()) {
+            String sql = "INSERT INTO USUARIOS (USERNAME, PASSWORD_HASH) VALUES (?, ?)";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, username);
+                ps.setString(2, CifradoBBDD.encriptarTexto(password));
+                ps.executeUpdate();
+                System.out.println("Usuario '" + username + "' registrado correctamente.");
+                return 1; // Éxito
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al registrar usuario: " + e.getMessage());
+            return 0; // Error BBDD
+        }
+    }
+
+    /**
+     * Valida las credenciales de un usuario contra la BBDD.
+     * @return true si el usuario existe y la contraseña coincide.
+     */
+    public boolean iniciarSesion(String username, String password) {
+        try (Connection con = getConexion()) {
+            String sql = "SELECT PASSWORD_HASH FROM USUARIOS WHERE UPPER(USERNAME) = UPPER(?)";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, username);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String hashGuardado = rs.getString("PASSWORD_HASH");
+                        String hashIntroducido = CifradoBBDD.encriptarTexto(password);
+                        return hashGuardado.equals(hashIntroducido);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al iniciar sesión: " + e.getMessage());
+        }
+        return false; // Usuario no encontrado o error
+    }
+
+    /**
+     * Obtiene los nombres de los jugadores de tipo PINGUINO de una partida guardada.
+     * Sirve para saber qué usuarios deben autenticarse al cargar la partida.
+     * @return Lista de nombres de usuario (pingüinos) de esa partida.
+     */
+    public ArrayList<String> obtenerNombresPinguinosPartida(int idPartida) {
+        ArrayList<String> nombres = new ArrayList<>();
+        try (Connection con = getConexion()) {
+            String sql = "SELECT NOMBRE FROM JUGADOR WHERE ID_PARTIDA = ? AND TIPO = 'PINGUINO' ORDER BY INDICE_ORDEN";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, idPartida);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        nombres.add(rs.getString("NOMBRE"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener pingüinos de la partida: " + e.getMessage());
+        }
+        return nombres;
+    }
 }
