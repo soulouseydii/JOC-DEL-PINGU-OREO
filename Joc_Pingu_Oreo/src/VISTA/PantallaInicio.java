@@ -25,6 +25,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import java.util.Random;
+import java.util.ArrayList;
+import CONTROLADOR.GestorBBDD;
 
 public class PantallaInicio extends Application {
 
@@ -48,6 +50,15 @@ public class PantallaInicio extends Application {
     @FXML private Slider sliderSonido;
 
     @FXML private CheckBox chkPantallaCompleta;
+
+    @FXML private Label lblRanking1;
+    @FXML private Label lblRanking2;
+    @FXML private Label lblRanking3;
+    @FXML private Label lblVictorias1;
+    @FXML private Label lblVictorias2;
+    @FXML private Label lblVictorias3;
+
+    private GestorBBDD gestorBBDD = new GestorBBDD();
 
     @Override
     public void start(Stage primaryStage) {
@@ -153,6 +164,30 @@ public class PantallaInicio extends Application {
         if(chkSonido != null) chkSonido.setSelected(gestorAudio.isSonidoHabilitado());
         if(sliderSonido != null) {
             sliderSonido.setValue(100);
+        }
+
+        cargarRanking();
+    }
+
+    private void cargarRanking() {
+        ArrayList<String[]> ranking = gestorBBDD.obtenerRanking();
+        
+        // Reset default labels
+        lblRanking1.setText("---"); lblVictorias1.setText("");
+        lblRanking2.setText("---"); lblVictorias2.setText("");
+        lblRanking3.setText("---"); lblVictorias3.setText("");
+
+        if (ranking.size() >= 1) {
+            lblRanking1.setText(ranking.get(0)[0]);
+            lblVictorias1.setText(ranking.get(0)[1] + " v");
+        }
+        if (ranking.size() >= 2) {
+            lblRanking2.setText(ranking.get(1)[0]);
+            lblVictorias2.setText(ranking.get(1)[1] + " v");
+        }
+        if (ranking.size() >= 3) {
+            lblRanking3.setText(ranking.get(2)[0]);
+            lblVictorias3.setText(ranking.get(2)[1] + " v");
         }
     }
 

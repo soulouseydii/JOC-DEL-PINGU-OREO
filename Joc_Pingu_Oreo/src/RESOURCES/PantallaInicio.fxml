@@ -96,17 +96,20 @@
                     <HBox styleClass="stat-row">
                         <Label text="# 1" styleClass="stat-label" style="-fx-text-fill: rgba(255,210,100,0.6);" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label text="IceMaster99" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                        <Label fx:id="lblRanking1" text="---" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                        <Label fx:id="lblVictorias1" text="" styleClass="stat-val" style="-fx-font-size: 10px; -fx-text-fill: #5ecfff; -fx-padding: 0 0 0 5;" />
                     </HBox>
                     <HBox styleClass="stat-row">
                         <Label text="# 2" styleClass="stat-label" style="-fx-text-fill: rgba(180,180,180,0.6);" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label text="PolarKing" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                        <Label fx:id="lblRanking2" text="---" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                        <Label fx:id="lblVictorias2" text="" styleClass="stat-val" style="-fx-font-size: 10px; -fx-text-fill: #5ecfff; -fx-padding: 0 0 0 5;" />
                     </HBox>
                     <HBox styleClass="stat-row">
                         <Label text="# 3" styleClass="stat-label" style="-fx-text-fill: rgba(200,140,80,0.6);" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label text="Blizzard_7" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                        <Label fx:id="lblRanking3" text="---" styleClass="stat-val" style="-fx-font-size: 11px;" />
+                        <Label fx:id="lblVictorias3" text="" styleClass="stat-val" style="-fx-font-size: 10px; -fx-text-fill: #5ecfff; -fx-padding: 0 0 0 5;" />
                     </HBox>
                 </VBox>
 

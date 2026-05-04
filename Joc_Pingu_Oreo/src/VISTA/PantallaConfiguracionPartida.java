@@ -347,7 +347,7 @@ public class PantallaConfiguracionPartida {
             cajaLogin.getChildren().addAll(comboAuthMode, new Label("Usuario:"), txtUsuario);
             if (esLogin) {
                 registroAprobado = false; txtUsuario.setDisable(false);
-                cajaLogin.getChildren().addAll(new Label("Contraseña:"), txtPassword);
+                cajaLogin.getChildren().addAll(new Label("Contraseña:"), txtPassword, lblAuthError);
             } else {
                 if (!registroAprobado) {
                     txtUsuario.setDisable(false);

@@ -69,6 +69,12 @@ public class GestorBBDD {
 
                 con.commit();
                 p.setId(idPartida);
+                
+                // Si la partida se guarda como finalizada, sumamos la victoria al ganador
+                if (p.isFinalizada() && p.getGanador() != null && p.getGanador() instanceof Pinguino) {
+                    incrementarVictoria(p.getGanador().getNombre());
+                }
+                
                 return idPartida;
             } catch (SQLException e) {
                 con.rollback();
@@ -109,6 +115,12 @@ public class GestorBBDD {
                 insertarCasillas(con, p, idPartida);
 
                 con.commit();
+                
+                // Si la partida se guarda como finalizada, sumamos la victoria al ganador
+                if (p.isFinalizada() && p.getGanador() != null && p.getGanador() instanceof Pinguino) {
+                    incrementarVictoria(p.getGanador().getNombre());
+                }
+                
                 return idPartida;
             } catch (SQLException e) {
                 con.rollback();
@@ -343,32 +355,44 @@ public class GestorBBDD {
      */
     public void crearTablaUsuarios() {
         try (Connection con = getConexion()) {
-            // Comprobar si la tabla ya existe consultando USER_TABLES
-            boolean existe = false;
-            try (PreparedStatement ps = con.prepareStatement(
-                    "SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'USUARIOS'")) {
+            // 1. Comprobar si la tabla ya existe
+            boolean existeTabla = false;
+            try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM USER_TABLES WHERE TABLE_NAME = 'USUARIOS'")) {
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) > 0) {
-                        existe = true;
-                    }
+                    if (rs.next() && rs.getInt(1) > 0) existeTabla = true;
                 }
             }
 
-            if (!existe) {
+            if (!existeTabla) {
+                // Crear tabla desde cero
                 String sql = "CREATE TABLE USUARIOS (" +
                         "ID_USUARIO NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
                         "USERNAME VARCHAR2(50) UNIQUE NOT NULL, " +
                         "PASSWORD_HASH VARCHAR2(255) NOT NULL, " +
+                        "PARTIDAS_GANADAS NUMBER DEFAULT 0, " +
                         "FECHA_REGISTRO TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
                 try (Statement st = con.createStatement()) {
                     st.executeUpdate(sql);
-                    System.out.println("Tabla USUARIOS creada correctamente.");
+                    System.out.println("[BBDD] Tabla USUARIOS creada.");
                 }
             } else {
-                System.out.println("Tabla USUARIOS ya existe.");
+                // La tabla existe, pero vamos a comprobar si le falta la columna PARTIDAS_GANADAS
+                boolean existeColumna = false;
+                try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'USUARIOS' AND COLUMN_NAME = 'PARTIDAS_GANADAS'")) {
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next() && rs.getInt(1) > 0) existeColumna = true;
+                    }
+                }
+
+                if (!existeColumna) {
+                    try (Statement st = con.createStatement()) {
+                        st.executeUpdate("ALTER TABLE USUARIOS ADD (PARTIDAS_GANADAS NUMBER DEFAULT 0)");
+                        System.out.println("[BBDD] Columna PARTIDAS_GANADAS añadida a USUARIOS.");
+                    }
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Error al crear tabla USUARIOS: " + e.getMessage());
+            System.out.println("[BBDD] Error en verificación de tablas: " + e.getMessage());
         }
     }
 
@@ -460,5 +484,44 @@ public class GestorBBDD {
             System.out.println("Error al obtener pingüinos de la partida: " + e.getMessage());
         }
         return nombres;
+    }
+
+    /**
+     * Incrementa en 1 el contador de partidas ganadas de un usuario.
+     */
+    public void incrementarVictoria(String username) {
+        try (Connection con = getConexion()) {
+            String sql = "UPDATE USUARIOS SET PARTIDAS_GANADAS = PARTIDAS_GANADAS + 1 WHERE UPPER(USERNAME) = UPPER(?)";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, username);
+                int rows = ps.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("Victoria sumada a: " + username);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al incrementar victoria: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Obtiene el ranking de los 3 jugadores con más victorias.
+     * @return Lista de arrays [username, victorias]
+     */
+    public ArrayList<String[]> obtenerRanking() {
+        ArrayList<String[]> ranking = new ArrayList<>();
+        try (Connection con = getConexion()) {
+            String sql = "SELECT USERNAME, PARTIDAS_GANADAS FROM (SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS ORDER BY PARTIDAS_GANADAS DESC) WHERE ROWNUM <= 3";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        ranking.add(new String[]{rs.getString("USERNAME"), String.valueOf(rs.getInt("PARTIDAS_GANADAS"))});
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener ranking: " + e.getMessage());
+        }
+        return ranking;
     }
 }
