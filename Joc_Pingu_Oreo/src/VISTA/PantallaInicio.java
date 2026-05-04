@@ -46,7 +46,7 @@ public class PantallaInicio extends Application {
     @FXML private Slider sliderMusica;
     @FXML private CheckBox chkSonido;
     @FXML private Slider sliderSonido;
-    @FXML private CheckBox chkAnimaciones;
+
     @FXML private CheckBox chkPantallaCompleta;
 
     @Override
@@ -278,9 +278,7 @@ public class PantallaInicio extends Application {
         }
     }
 
-    @FXML
-    private void handleChkAnimaciones(ActionEvent event) {
-    }
+
 
     @FXML
     private void handleChkPantallaCompleta(ActionEvent event) {

@@ -142,7 +142,7 @@
 
             <VBox alignment="CENTER_LEFT" spacing="12">
                 <Label text="V I S U A L" styleClass="side-card-title" />
-                <CheckBox fx:id="chkAnimaciones" onAction="#handleChkAnimaciones" selected="true" styleClass="casilla-polar" text="Animaciones y Partículas" />
+
                 <CheckBox fx:id="chkPantallaCompleta" onAction="#handleChkPantallaCompleta" selected="true" styleClass="casilla-polar" text="Pantalla Completa" />
             </VBox>
             
