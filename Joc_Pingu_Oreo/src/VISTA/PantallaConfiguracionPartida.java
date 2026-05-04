@@ -19,8 +19,11 @@ import java.util.Set;
 import java.util.HashSet;
 import MODELO.*;
 import CONTROLADOR.GestorAnimacionesVistas;
+import CONTROLADOR.GestorBBDD;
 
 public class PantallaConfiguracionPartida {
+
+    private GestorBBDD gestorBBDD = new GestorBBDD();
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -163,9 +166,16 @@ public class PantallaConfiguracionPartida {
             btnComprobar.setMaxWidth(Double.MAX_VALUE);
             btnComprobar.setOnAction(e -> {
                 String u = txtUsuario.getText() == null ? "" : txtUsuario.getText().trim();
-                if (u.equalsIgnoreCase("admin")) { lblAuthError.setText("Ya existe"); return; }
                 if (u.isEmpty()) { lblAuthError.setText("Escribe un nombre"); return; }
+                // Comprobar en la BBDD real si el usuario ya existe
+                if (gestorBBDD.existeUsuario(u)) {
+                    lblAuthError.setText("\u274c Usuario ya registrado");
+                    lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                    return;
+                }
                 registroAprobado = true;
+                lblAuthError.setText("\u2714 Disponible");
+                lblAuthError.setStyle("-fx-text-fill: #22c55e; -fx-font-size: 11px; -fx-font-weight: bold;");
                 actualizarModoAuth();
             });
 
@@ -202,21 +212,57 @@ public class PantallaConfiguracionPartida {
             btnListo.setOnAction(e -> {
                 if (!estaListo) {
                     if (currentSkinType.equals("Foca")) {
-                        // En foca no debería ni verse el botón, pero por seguridad:
                         this.estaListo = true;
                     } else {
                         String u = txtUsuario.getText() == null ? "" : txtUsuario.getText().trim();
                         String p = txtPassword.getText() == null ? "" : txtPassword.getText().trim();
-                        boolean esLogin = comboAuthMode.getValue().equals("Iniciar Sesión");
+
+                        if (u.isEmpty() || p.isEmpty()) {
+                            lblEstado.setText("Faltan datos");
+                            lblEstado.setStyle("-fx-text-fill: #ff6e6e; -fx-font-weight: bold;");
+                            return;
+                        }
+
+                        // --- Anti-duplicados: comprobar que no haya otro jugador con el mismo usuario ---
+                        if (estaUsuarioYaSeleccionado(u, this)) {
+                            lblAuthError.setText("\u274c Ya en la partida");
+                            lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                            return;
+                        }
+
+                        boolean esLogin = comboAuthMode.getValue().equals("Iniciar Sesi\u00f3n");
                         if (esLogin) {
-                            if (!u.isEmpty() && !p.isEmpty()) setListo(true); else lblEstado.setText("Faltan datos");
+                            // --- Iniciar sesión contra la BBDD ---
+                            if (!gestorBBDD.existeUsuario(u)) {
+                                lblAuthError.setText("\u274c Usuario no existe");
+                                lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                            } else if (gestorBBDD.iniciarSesion(u, p)) {
+                                setListo(true);
+                            } else {
+                                lblAuthError.setText("\u274c Contraseña incorrecta");
+                                lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                            }
                         } else {
-                            if (registroAprobado) {
-                                String cp = txtConfirmPassword.getText() == null ? "" : txtConfirmPassword.getText().trim();
-                                if (p.isEmpty()) lblAuthError.setText("Falta clave");
-                                else if (!p.equals(cp)) lblAuthError.setText("No coinciden");
-                                else setListo(true);
-                            } else lblAuthError.setText("Verifica registro");
+                            // --- Registro ---
+                            if (!registroAprobado) {
+                                lblAuthError.setText("Verifica el nombre primero");
+                                lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                                return;
+                            }
+                            String cp = txtConfirmPassword.getText() == null ? "" : txtConfirmPassword.getText().trim();
+                            if (p.isEmpty()) { lblAuthError.setText("Falta clave"); return; }
+                            if (!p.equals(cp)) { lblAuthError.setText("No coinciden"); return; }
+
+                            int resultado = gestorBBDD.registrarUsuario(u, p);
+                            if (resultado == 1) {
+                                setListo(true);
+                            } else if (resultado == -1) {
+                                lblAuthError.setText("\u274c Usuario ya existe");
+                                lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                            } else {
+                                lblAuthError.setText("\u274c Error de BBDD");
+                                lblAuthError.setStyle("-fx-text-fill: #ff6e6e; -fx-font-size: 11px; -fx-font-weight: bold;");
+                            }
                         }
                     }
                 } else setListo(false);
@@ -409,6 +455,23 @@ public class PantallaConfiguracionPartida {
             if (!tj.estaListo) { todosListos = false; break; }
         }
         btnEmpezar.setDisable(nameEmpty || !todosListos);
+    }
+
+    /**
+     * Comprueba si el username ya está siendo usado por otra tarjeta en esta partida.
+     * Ignora la tarjeta que está haciendo la comprobación (excluida).
+     */
+    private boolean estaUsuarioYaSeleccionado(String username, TarjetaJugador excluida) {
+        for (TarjetaJugador tj : tarjetasActivas) {
+            if (tj == excluida) continue;
+            if (!tj.estaListo) continue;
+            if (tj.currentSkinType.equals("Foca")) continue; // Las focas no tienen usuario
+            String otroUsuario = tj.txtUsuario.getText() == null ? "" : tj.txtUsuario.getText().trim();
+            if (otroUsuario.equalsIgnoreCase(username)) {
+                return true; // Ya está en la partida
+            }
+        }
+        return false;
     }
 
     @FXML

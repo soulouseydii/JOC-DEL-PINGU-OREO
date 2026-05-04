@@ -27,6 +27,9 @@ public class Main {
         // Comprobar que la conexion a Oracle funciona antes de arrancar el juego
         gestorBD.testConexion();
         
+        // Crear la tabla USUARIOS si no existe (necesaria para login/registro)
+        gestorBD.crearTablaUsuarios();
+        
         // Arrancar la interfaz gráfica de JavaFX
         System.out.println("Cargando la interfaz grafica...");
         Application.launch(PantallaInicio.class, args);
