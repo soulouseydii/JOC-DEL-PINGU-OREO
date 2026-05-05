@@ -82,50 +82,52 @@
                     </VBox>
                 </VBox>
 
-                <VBox alignment="CENTER" maxWidth="250" pickOnBounds="false" StackPane.alignment="CENTER_LEFT" translateY="55" translateX="15">
+                <VBox alignment="CENTER" maxWidth="280" pickOnBounds="false" StackPane.alignment="CENTER_LEFT" translateY="55" translateX="15">
                     <padding>
-                        <Insets left="20" right="20" />
+                        <Insets left="15" right="15" />
                     </padding>
-                    <VBox spacing="15" alignment="CENTER" styleClass="side-card">
-                        <Label text="INVENTARIO POLAR" styleClass="side-card-title" style="-fx-font-size: 10px; -fx-text-fill: #4a9bbf; -fx-letter-spacing: 3px;" />
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED">
+                    <VBox spacing="20" alignment="CENTER" styleClass="side-card">
+                        <Label text="INVENTARIO POLAR" styleClass="side-card-title" style="-fx-font-size: 11px; -fx-text-fill: #4a9bbf; -fx-letter-spacing: 3px;" />
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="objects-scroll" vbarPolicy="AS_NEEDED" minHeight="450">
                             <content>
-                                <VBox spacing="10" alignment="CENTER">
+                                <VBox spacing="15" alignment="CENTER">
                                     <padding>
-                                        <Insets bottom="5" left="5" right="5" top="5" />
+                                        <Insets bottom="10" left="10" right="10" top="10" />
                                     </padding>
-
-                                    <VBox alignment="CENTER" spacing="0" styleClass="inventory-item-row">
-                                        <ImageView fitWidth="180" preserveRatio="true">
+                                    
+                                    <!-- Peces -->
+                                    <VBox alignment="CENTER" spacing="5" styleClass="inventory-item-row">
+                                        <ImageView fitWidth="190" preserveRatio="true">
                                             <image>
                                                 <Image url="@../imagenes/Peces.png" />
                                             </image>
                                         </ImageView>
-                                        <Text fx:id="peces_t" style="-fx-font-size: 30px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
+                                        <Text fx:id="peces_t" style="-fx-font-size: 32px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
                                     </VBox>
 
-                                    <VBox alignment="CENTER" spacing="0" styleClass="inventory-item-row">
-                                        <ImageView fitWidth="180" preserveRatio="true">
+                                    <!-- Bolas de Nieve -->
+                                    <VBox alignment="CENTER" spacing="5" styleClass="inventory-item-row">
+                                        <ImageView fitWidth="190" preserveRatio="true">
                                             <image>
                                                 <Image url="@../imagenes/Botón bolas de nieve.png" />
                                             </image>
                                         </ImageView>
-                                        <Text fx:id="nieve_t" style="-fx-font-size: 30px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
+                                        <Text fx:id="nieve_t" style="-fx-font-size: 32px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
                                     </VBox>
 
-                                    <VBox alignment="CENTER" spacing="0" styleClass="inventory-item-row">
-                                        <Button fx:id="btnMoto" onAction="#handleUsarMoto" styleClass="inventory-action-button">
+                                    <!-- Moto de Nieve (Botón) -->
+                                    <VBox alignment="CENTER" spacing="5" styleClass="inventory-item-row">
+                                        <Button fx:id="btnMoto" onAction="#handleUsarMoto" styleClass="inventory-action-button" alignment="CENTER">
                                             <graphic>
-                                                <ImageView fitWidth="180" preserveRatio="true">
+                                                <ImageView fitWidth="190" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../imagenes/Botón motos de nieve.png" />
                                                     </image>
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Text fx:id="moto_t" style="-fx-font-size: 30px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
+                                        <Text fx:id="moto_t" style="-fx-font-size: 32px; -fx-font-weight: 900; -fx-fill: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 5, 0.5, 0, 2);" text="x 0" />
                                     </VBox>
-
                                 </VBox>
                             </content>
                         </ScrollPane>
@@ -146,60 +148,60 @@
         </center>
         <bottom>
              <!-- Barra Inferior de dados -->
-             <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER" minHeight="160" prefHeight="160">
+             <HBox spacing="16" styleClass="bottom-bar" alignment="CENTER" minHeight="220" prefHeight="220">
                  <BorderPane.margin>
-                     <Insets bottom="60" />
+                     <Insets bottom="40" />
                  </BorderPane.margin>
                  <padding>
-                     <Insets bottom="10" left="16" right="16" top="10" />
+                     <Insets bottom="15" left="20" right="20" top="10" />
                  </padding>
-                 <HBox spacing="70" styleClass="bottom-panel" alignment="CENTER">
+                 <HBox spacing="90" styleClass="bottom-panel" alignment="CENTER">
                      <padding>
-                         <Insets bottom="10" left="50" right="50" top="10" />
+                         <Insets bottom="10" left="60" right="60" top="10" />
                      </padding>
                      <!-- Dado Lento -->
-                     <VBox alignment="CENTER" spacing="0">
+                     <VBox alignment="CENTER" spacing="5">
                          <Button fx:id="btnDadoLento" onAction="#handleDadoLento" styleClass="dice-button">
                              <graphic>
-                                 <ImageView fitWidth="200" preserveRatio="true">
+                                 <ImageView fitWidth="240" preserveRatio="true">
                                      <image>
                                          <Image url="@../imagenes/Dado lento.png" />
                                      </image>
                                  </ImageView>
                              </graphic>
                          </Button>
-                         <VBox alignment="TOP_CENTER" minHeight="40">
-                             <Label fx:id="lblCantLento" styleClass="stat" style="-fx-font-size: 18px;" text="Lentos: 0" />
+                         <VBox alignment="TOP_CENTER" minHeight="50">
+                             <Label fx:id="lblCantLento" styleClass="stat" style="-fx-font-size: 22px;" text="Lentos: 0" />
                          </VBox>
                      </VBox>
                      <!-- Dado Normal -->
-                     <VBox alignment="CENTER" spacing="0">
+                     <VBox alignment="CENTER" spacing="5">
                          <Button fx:id="dado" onAction="#handleDado" styleClass="dice-button">
                              <graphic>
-                                 <ImageView fitWidth="250" preserveRatio="true">
+                                 <ImageView fitWidth="310" preserveRatio="true">
                                      <image>
                                          <Image url="@../imagenes/Botón de tirar dado congelado.png" />
                                      </image>
                                  </ImageView>
                              </graphic>
                          </Button>
-                         <VBox alignment="TOP_CENTER" minHeight="40">
-                             <Text fx:id="dadoResultText" styleClass="stat" style="-fx-font-size: 18px;" text="Ha salido: -" textAlignment="CENTER" wrappingWidth="200" />
+                         <VBox alignment="TOP_CENTER" minHeight="50">
+                             <Text fx:id="dadoResultText" styleClass="stat" style="-fx-font-size: 22px;" text="Ha salido: -" textAlignment="CENTER" wrappingWidth="250" />
                          </VBox>
                      </VBox>
                      <!-- Dado Rápido -->
-                     <VBox alignment="CENTER" spacing="0">
+                     <VBox alignment="CENTER" spacing="5">
                          <Button fx:id="btnDadoRapido" onAction="#handleDadoRapido" styleClass="dice-button">
                              <graphic>
-                                 <ImageView fitWidth="200" preserveRatio="true">
+                                 <ImageView fitWidth="240" preserveRatio="true">
                                      <image>
                                          <Image url="@../imagenes/Dado rápido.png" />
                                      </image>
                                  </ImageView>
                              </graphic>
                          </Button>
-                         <VBox alignment="TOP_CENTER" minHeight="40">
-                             <Label fx:id="lblCantRapido" styleClass="stat" style="-fx-font-size: 18px;" text="Rapidos: 0" />
+                         <VBox alignment="TOP_CENTER" minHeight="50">
+                             <Label fx:id="lblCantRapido" styleClass="stat" style="-fx-font-size: 22px;" text="Rapidos: 0" />
                          </VBox>
                      </VBox>
                  </HBox>
