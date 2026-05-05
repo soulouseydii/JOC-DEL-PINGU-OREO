@@ -400,3 +400,124 @@
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
+
+/* ==================== PANTALLA ESTADÍSTIQUES ==================== */
+
+.stats-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #5ecfff;
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.5), 10, 0.4, 0, 0);
+}
+
+.stats-conexion {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(94, 207, 255, 0.6);
+}
+
+.stats-estado {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(150, 200, 230, 0.45);
+}
+
+.stats-section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #c8eeff;
+}
+
+.stats-subtitle {
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(94, 207, 255, 0.5);
+    -fx-font-style: italic;
+}
+
+.stats-big-number {
+    -fx-font-size: 92px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #5ecfff;
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.8), 30, 0.5, 0, 0);
+}
+
+.stats-big-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(200, 238, 255, 0.55);
+}
+
+.stats-query-hint {
+    -fx-font-size: 11px;
+    -fx-font-family: 'Courier New';
+    -fx-text-fill: rgba(94, 207, 255, 0.35);
+    -fx-padding: 8 22;
+    -fx-background-color: rgba(94, 207, 255, 0.05);
+    -fx-background-radius: 4;
+    -fx-border-color: rgba(94, 207, 255, 0.12);
+    -fx-border-radius: 4;
+}
+
+.stats-progress {
+    -fx-progress-color: #5ecfff;
+    -fx-max-width: 50;
+    -fx-max-height: 50;
+}
+
+.stats-list {
+    -fx-pref-height: 350;
+}
+
+.tab-content-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+/* ==================== TABPANE ARCTIC THEME ==================== */
+
+.stats-tabs {
+    -fx-background-color: rgba(2, 8, 16, 0.7);
+    -fx-background-radius: 4;
+    -fx-border-color: rgba(94, 207, 255, 0.18);
+    -fx-border-radius: 4;
+}
+
+.stats-tabs .tab-header-area {
+    -fx-padding: 0;
+}
+
+.stats-tabs .tab-header-background {
+    -fx-background-color: rgba(5, 15, 35, 0.85);
+    -fx-border-color: transparent transparent rgba(94, 207, 255, 0.2) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.stats-tabs .tab {
+    -fx-background-color: rgba(5, 15, 35, 0.5);
+    -fx-padding: 10 18;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.stats-tabs .tab .tab-label {
+    -fx-text-fill: rgba(200, 238, 255, 0.5);
+    -fx-font-family: 'Verdana';
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.stats-tabs .tab:hover .tab-label {
+    -fx-text-fill: #c8eeff;
+}
+
+.stats-tabs .tab:selected {
+    -fx-background-color: rgba(10, 40, 80, 0.9);
+}
+
+.stats-tabs .tab:selected .tab-label {
+    -fx-text-fill: #5ecfff;
+    -fx-effect: dropshadow(gaussian, rgba(94, 207, 255, 0.6), 8, 0.3, 0, 0);
+}
+
+.stats-tabs .tab-content-area {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}

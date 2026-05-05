@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1123.0" styleClass="screen"
+            stylesheets="@PantallaMenu.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="VISTA.PantallaEstadisticas">
+
+    <!-- AURORA BOREAL -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" prefHeight="350">
+        <Region styleClass="aurora-path-1" />
+        <Region styleClass="aurora-path-2" />
+        <Region styleClass="aurora-path-3" />
+        <Region styleClass="aurora-path-4" />
+    </StackPane>
+
+    <!-- HIELO INFERIOR -->
+    <StackPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" prefHeight="120">
+        <Region styleClass="ice-poly-1" />
+        <Region styleClass="ice-poly-2" />
+    </StackPane>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <VBox AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40"
+          AnchorPane.topAnchor="25" AnchorPane.bottomAnchor="25"
+          spacing="14">
+
+        <!-- CABECERA -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Button onAction="#handleVolver" styleClass="menu-btn"
+                    prefHeight="42" prefWidth="150" text="VOLVER" />
+            <Region HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" spacing="4">
+                <Label text="E S T A D I S T I C A S" styleClass="stats-title" />
+                <Label fx:id="lblConexion" text="Conectando..." styleClass="stats-conexion" />
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#handleRefrescar" styleClass="menu-btn, primary"
+                    prefHeight="42" prefWidth="175" text="ACTUALIZAR" />
+        </HBox>
+
+        <!-- BARRA DE ESTADO -->
+        <Label fx:id="lblEstado" text="Cargando datos desde Oracle..." styleClass="stats-estado" />
+
+        <!-- PESTANAS -->
+        <TabPane fx:id="tabPane" styleClass="stats-tabs" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+
+            <!-- PESTANA 1: RECORD -->
+            <Tab text="RECORD">
+                <VBox alignment="CENTER" spacing="22" styleClass="tab-content-pane">
+                    <padding><Insets top="35" /></padding>
+                    <Label text="MAXIMO DE PARTIDAS GANADAS" styleClass="stats-section-title" />
+                    <Label text="Resultado de llamar a la funcion:  MAX_PARTIDASGANADAS()" styleClass="stats-subtitle" />
+                    <ProgressIndicator fx:id="progressRecord" styleClass="stats-progress" prefWidth="48" prefHeight="48" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label fx:id="lblRecord" text="--" styleClass="stats-big-number" />
+                        <Label text="V I C T O R I A S" styleClass="stats-big-label" />
+                    </VBox>
+                    <Label text="SELECT MAX_PARTIDASGANADAS() FROM DUAL" styleClass="stats-query-hint" />
+                </VBox>
+            </Tab>
+
+            <!-- PESTANA 2: JUGADORES CON RECORD -->
+            <Tab text="JUGADORES CON RECORD">
+                <VBox spacing="14" styleClass="tab-content-pane">
+                    <padding><Insets top="25" left="25" right="25" bottom="10" /></padding>
+                    <Label text="JUGADORES CON EL MAXIMO DE VICTORIAS" styleClass="stats-section-title" />
+                    <Label text="Equivalente al procedimiento:  OBTENIR_JUGADORS_RECORD" styleClass="stats-subtitle" />
+                    <ProgressIndicator fx:id="progressRecord2" styleClass="stats-progress" prefWidth="38" prefHeight="38" />
+                    <ListView fx:id="listJugadoresRecord" styleClass="polar-list, stats-list" VBox.vgrow="ALWAYS" />
+                </VBox>
+            </Tab>
+
+            <!-- PESTANA 3: MEDIA -->
+            <Tab text="MEDIA DE VICTORIAS">
+                <VBox alignment="CENTER" spacing="22" styleClass="tab-content-pane">
+                    <padding><Insets top="35" /></padding>
+                    <Label text="MEDIA DE PARTIDAS GANADAS" styleClass="stats-section-title" />
+                    <Label text="Resultado de llamar a la funcion:  avg_partides_guanyades()" styleClass="stats-subtitle" />
+                    <ProgressIndicator fx:id="progressMedia" styleClass="stats-progress" prefWidth="48" prefHeight="48" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label fx:id="lblMedia" text="--" styleClass="stats-big-number" />
+                        <Label text="V I C T O R I A S   D E   M E D I A" styleClass="stats-big-label" />
+                    </VBox>
+                    <Label text="SELECT avg_partides_guanyades() FROM DUAL" styleClass="stats-query-hint" />
+                </VBox>
+            </Tab>
+
+            <!-- PESTANA 4: POR ENCIMA DE LA MEDIA -->
+            <Tab text="POR ENCIMA DE LA MEDIA">
+                <VBox spacing="14" styleClass="tab-content-pane">
+                    <padding><Insets top="25" left="25" right="25" bottom="10" /></padding>
+                    <Label text="JUGADORES POR ENCIMA DE LA MEDIA" styleClass="stats-section-title" />
+                    <Label text="Equivalente al procedimiento:  LISTA_JGANADORES" styleClass="stats-subtitle" />
+                    <ProgressIndicator fx:id="progressMedia2" styleClass="stats-progress" prefWidth="38" prefHeight="38" />
+                    <ListView fx:id="listEncimaMed" styleClass="polar-list, stats-list" VBox.vgrow="ALWAYS" />
+                </VBox>
+            </Tab>
+
+            <!-- PESTANA 5: RANKING -->
+            <Tab text="R A N K I N G">
+                <VBox spacing="14" styleClass="tab-content-pane">
+                    <padding><Insets top="25" left="25" right="25" bottom="10" /></padding>
+                    <Label text="RANKING GLOBAL DE JUGADORES" styleClass="stats-section-title" />
+                    <Label text="Ordenado por partidas ganadas (de mayor a menor)" styleClass="stats-subtitle" />
+                    <ProgressIndicator fx:id="progressRanking" styleClass="stats-progress" prefWidth="38" prefHeight="38" />
+                    <ListView fx:id="listRanking" styleClass="polar-list, stats-list" VBox.vgrow="ALWAYS" />
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </VBox>
+
+</AnchorPane>

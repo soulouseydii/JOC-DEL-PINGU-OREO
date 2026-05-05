@@ -33,6 +33,7 @@ public class PantallaInicio extends Application {
 
     @FXML private Button btnNuevaPartida;
     @FXML private Button btnCargarPartida;
+    @FXML private Button btnEstadisticas;
     @FXML private Button btnOpciones;
     @FXML private Button btnCreditos;
     @FXML private Button btnSalir;
@@ -235,7 +236,7 @@ public class PantallaInicio extends Application {
 
     @FXML
     private void handleNuevaPartida(ActionEvent event) {
-        System.out.println("Nueva Partida clicked");
+        System.out.println("Entrando a nueva partida...");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaConfiguracionPartida.fxml"));
             Parent root = loader.load();
@@ -252,8 +253,24 @@ public class PantallaInicio extends Application {
     }
 
     @FXML
+    private void handleEstadisticas(ActionEvent event) {
+        System.out.println("Entrando a estadisticas...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaEstadisticas.fxml"));
+            Parent root = loader.load();
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+            Stage stage = (Stage) scene.getWindow();
+            stage.setTitle("Estadístiques - Pingu Oreo");
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar PantallaEstadisticas.fxml");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleCargarPartida(ActionEvent event) {
-        System.out.println("Cargar Partida clicked");
+        System.out.println("Entrando a cargar partida...");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaCargarPartida.fxml"));
             Parent root = loader.load();
@@ -271,7 +288,7 @@ public class PantallaInicio extends Application {
 
     @FXML
     private void handleOpciones(ActionEvent event) {
-        System.out.println("Opciones clicked");
+        System.out.println("Entrando a ajustes...");
         menuPrincipal.setVisible(false);
         paneOpciones.setVisible(true);
         GestorAnimacionesVistas.animarAparicionOverlay(paneOpciones);

@@ -81,9 +81,11 @@
                 <VBox alignment="CENTER" spacing="12" styleClass="menu-list">
                     <Button fx:id="btnNuevaPartida" onAction="#handleNuevaPartida" styleClass="menu-btn, primary" prefWidth="380" prefHeight="55" text="▶   N U E V A   P A R T I D A" />
                     <Button fx:id="btnCargarPartida" onAction="#handleCargarPartida" styleClass="menu-btn" prefWidth="380" prefHeight="55" text="C A R G A R   P A R T I D A" />
+                    <Button fx:id="btnEstadisticas" onAction="#handleEstadisticas" styleClass="menu-btn" prefWidth="380" prefHeight="55" text="E S T A D Í S T I C A S" />
                     <Button fx:id="btnOpciones" onAction="#handleOpciones" styleClass="menu-btn, text-muted" prefWidth="380" prefHeight="55" text="A J U S T E S" />
                     <Button fx:id="btnSalir" onAction="#handleSalir" styleClass="menu-btn, text-muted" prefWidth="380" prefHeight="55" text="S A L I R" />
                 </VBox>
+
             </VBox>
 
             <!-- ESPACIO FLEXIBLE -->
