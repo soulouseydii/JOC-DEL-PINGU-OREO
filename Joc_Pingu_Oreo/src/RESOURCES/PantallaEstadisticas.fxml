@@ -69,7 +69,6 @@
                         <Label fx:id="lblRecord" text="--" styleClass="stats-big-number" />
                         <Label text="V I C T O R I A S" styleClass="stats-big-label" />
                     </VBox>
-                    <Label text="SELECT MAX_PARTIDASGANADAS() FROM DUAL" styleClass="stats-query-hint" />
                 </VBox>
             </Tab>
 
@@ -95,7 +94,6 @@
                         <Label fx:id="lblMedia" text="--" styleClass="stats-big-number" />
                         <Label text="V I C T O R I A S   D E   M E D I A" styleClass="stats-big-label" />
                     </VBox>
-                    <Label text="SELECT avg_partides_guanyades() FROM DUAL" styleClass="stats-query-hint" />
                 </VBox>
             </Tab>
 
