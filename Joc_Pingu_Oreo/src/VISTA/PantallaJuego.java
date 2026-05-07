@@ -975,18 +975,6 @@ public class PantallaJuego {
 						.getSimpleName().equals("Agujero") ||
 						(itemObtenido != null && itemObtenido.contains("Agujero"))));
 
-		// Determinar si hay encuentro con foca en la casilla de aterrizaje (landing)
-		Pinguino pEncLanding = null;
-		boolean esRetrocesoFoca = false;
-		if (jugadorActual instanceof Foca) {
-			pEncLanding = gestorPartida.detectarPinguinoEnPosicion(casillaPisada);
-			if (posNueva < casillaPisada) {
-				esRetrocesoFoca = true;
-			}
-		}
-
-		final Pinguino finalPEncLanding = pEncLanding;
-		final boolean finalEsRetrocesoFoca = esRetrocesoFoca;
 
 		// Animación del movimiento del jugador (saltos parabólicos)
 		int posVisualCasilla = Math.max(0, Math.min(casillaPisada, 49));
@@ -998,12 +986,10 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de animar el efecto de casilla
 				Runnable continuarConEfecto = () -> {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual,
-								finalPEncLanding, finalEsRetrocesoFoca);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
 					} else if (esAgujeroFinal) {
 						animarCaidaYSalidaAgujero(indiceActual, casillaPisada, posVisualFinal, () -> {
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
-									finalEsRetrocesoFoca);
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 						});
 					} else {
 						PauseTransition pausaEfecto = new PauseTransition(Duration.millis(400));
@@ -1011,8 +997,7 @@ public class PantallaJuego {
 							currentAnimations.remove(pausaEfecto);
 							animarMovimiento(indiceActual, posVisualFinal, () -> {
 								actualizarTodasLasFichas();
-								comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
-										finalEsRetrocesoFoca);
+								comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 							});
 						});
 						currentAnimations.add(pausaEfecto);
@@ -1034,34 +1019,28 @@ public class PantallaJuego {
 				// Si es evento, mostrar cofre antes de continuar
 				if (esEventoFinal) {
 					mostrarEventoCofre(itemObtenidoFinal, () -> {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
-								finalEsRetrocesoFoca);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 					});
 				} else if (esSorpresaFinal) {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual,
-								finalPEncLanding, finalEsRetrocesoFoca);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
 					} else {
 						mostrarEventoSorpresa(itemObtenidoFinal, () -> {
-							comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
-									finalEsRetrocesoFoca);
+							comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 						});
 					}
 				} else {
 					if (esOsoFinal) {
-						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual,
-								finalPEncLanding, finalEsRetrocesoFoca);
+						animarAtaqueOsoYContinuar(casillaPisada, indiceActual, posVisualFinal, jugadorActual);
 					} else {
-						comprobarAplastamientoYContinuar(jugadorActual, indiceActual, finalPEncLanding,
-								finalEsRetrocesoFoca);
+						comprobarAplastamientoYContinuar(jugadorActual, indiceActual);
 					}
 				}
 			});
 		}
 	}
 
-	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual,
-			Pinguino pEncLanding, boolean esRetrocesoFoca) {
+	private void animarAtaqueOsoYContinuar(int indiceCasilla, int indiceJugador, int posFinal, Jugador jugadorActual) {
 		ImageView imgViewCasilla = getImageViewCasilla(indiceCasilla);
 		Image imgOsoAntigua = null;
 		StackPane ficha = getFicha(indiceJugador);
@@ -1123,7 +1102,7 @@ public class PantallaJuego {
 				ParallelTransition aterrizaje = new ParallelTransition(stLand, ftLand);
 				aterrizaje.setOnFinished(e3 -> {
 					actualizarTodasLasFichas();
-					comprobarAplastamientoYContinuar(jugadorActual, indiceJugador, pEncLanding, esRetrocesoFoca);
+					comprobarAplastamientoYContinuar(jugadorActual, indiceJugador);
 				});
 				aterrizaje.play();
 			});
@@ -1215,12 +1194,11 @@ public class PantallaJuego {
 	 * Si hay aplastados, muestra la animación y aplica el efecto.
 	 * Si no, continúa con comprobarFocaYFinalizar.
 	 */
-	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding,
-			boolean esRetrocesoFoca) {
+	private void comprobarAplastamientoYContinuar(Jugador jugadorActual, int indiceActual) {
 		if (!(jugadorActual instanceof Foca)) {
 			// Un pingüino nunca aplasta empujando por el tablero
 			gestorPartida.getUltimosPinguinosAplastados().clear();
-			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
+			comprobarFocaYFinalizar(jugadorActual, indiceActual);
 			return;
 		}
 
@@ -1233,10 +1211,10 @@ public class PantallaJuego {
 			}
 
 			// Mostrar la animación visual, después continuar
-			mostrarEventoAplastamiento(aplastados, jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
+			mostrarEventoAplastamiento(aplastados, jugadorActual, indiceActual);
 		} else {
 			// No hay aplastados → continuar con el check de foca en casilla final
-			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
+			comprobarFocaYFinalizar(jugadorActual, indiceActual);
 		}
 	}
 
@@ -1245,8 +1223,7 @@ public class PantallaJuego {
 	 * (squash + shake). Después de ~1.5s, registra los eventos en el log
 	 * y continúa con el flujo normal.
 	 */
-	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual,
-			Pinguino pEncLanding, boolean esRetrocesoFoca) {
+	private void mostrarEventoAplastamiento(ArrayList<Pinguino> aplastados, Jugador jugadorActual, int indiceActual) {
 		// Preparar la imagen para la animación
 		crushImage.setOpacity(0);
 		crushImage.setScaleX(1.3);
@@ -1312,7 +1289,7 @@ public class PantallaJuego {
 			actualizarTodasLasFichas();
 
 			// Continuar con el flujo normal: check foca en casilla final
-			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
+			comprobarFocaYFinalizar(jugadorActual, indiceActual);
 		});
 
 		currentAnimations.add(secuencia);
@@ -1503,8 +1480,7 @@ public class PantallaJuego {
 	 * Si es así, lanza la secuencia visual de guerra de bolas de nieve.
 	 * Si no, finaliza el turno normalmente.
 	 */
-	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual, Pinguino pEncLanding,
-			boolean esRetrocesoFoca) {
+	private void comprobarFocaYFinalizar(Jugador jugadorActual, int indiceActual) {
 		// ── CASO 1: El jugador actual es un Pingüino → comprobar si hay foca ──
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino pActual = (Pinguino) jugadorActual;
@@ -1532,12 +1508,8 @@ public class PantallaJuego {
 		if (jugadorActual instanceof Foca) {
 			Foca fActual = (Foca) jugadorActual;
 
-			// REGLA: Solo trigger si hubo encuentro en el landing o si no fue un retroceso
-			Pinguino pEncontrado = pEncLanding;
-
-			if (pEncontrado == null && !esRetrocesoFoca) {
-				pEncontrado = gestorPartida.detectarPinguinoEnCasillaFoca(fActual);
-			}
+			// Ahora el encuentro solo se dispara si terminan en la misma casilla final
+			Pinguino pEncontrado = gestorPartida.detectarPinguinoEnCasillaFoca(fActual);
 
 			// Solo hay encuentro si se encontró un pingüino Y no es la casilla 0 Y el
 			// pingüino tiene algo que perder o dar
