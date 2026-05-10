@@ -164,7 +164,8 @@ public class Pinguino extends Jugador {
 	 * Si la cantidad llega a 0 o menos, elimina el item de la lista.
 	 */
 	public void gastarItem(String nombre, int cantidadAGastar) {
-		for (int i = getInventario().getlista().size() - 1; i >= 0; i--) {
+		boolean encontrado = false;
+		for (int i = getInventario().getlista().size() - 1; i >= 0 && !encontrado; i--) {
 			Item item = getInventario().getlista().get(i);
 			if (item.getNombre().equalsIgnoreCase(nombre)) {
 				int nuevaCantidad = item.getCantidad() - cantidadAGastar;
@@ -173,7 +174,7 @@ public class Pinguino extends Jugador {
 				} else {
 					item.setCantidad(nuevaCantidad);
 				}
-				break; // Ya lo hemos encontrado, dejamos de buscar
+				encontrado = true; // Ya lo hemos encontrado, dejamos de buscar
 			}
 		}
 	}
@@ -183,10 +184,11 @@ public class Pinguino extends Jugador {
 	 * Usado para gastar todas las bolas de nieve tras un PvP.
 	 */
 	public void gastarTodoItem(String nombre) {
-		for (int i = getInventario().getlista().size() - 1; i >= 0; i--) {
+		boolean encontrado = false;
+		for (int i = getInventario().getlista().size() - 1; i >= 0 && !encontrado; i--) {
 			if (getInventario().getlista().get(i).getNombre().equalsIgnoreCase(nombre)) {
 				getInventario().getlista().remove(i);
-				break; // Ya lo hemos encontrado, dejamos de buscar
+				encontrado = true; // Ya lo hemos encontrado, dejamos de buscar
 			}
 		}
 	}

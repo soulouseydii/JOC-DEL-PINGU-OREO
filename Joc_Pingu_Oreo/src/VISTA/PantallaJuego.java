@@ -409,20 +409,20 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleDadoRapido(ActionEvent event) {
-		if (isPaused)
-			return;
+		if (!isPaused) {
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoRapido();
 		ejecutarAnimacionDado(new Dado("Rapido"), btnDadoRapido);
+		}
 	}
 
 	@FXML
 	private void handleDadoLento(ActionEvent event) {
-		if (isPaused)
-			return;
+		if (!isPaused) {
 		Jugador j = gestorPartida.getPartida().getJugadorActual();
 		j.getInventario().usarDadoLento();
 		ejecutarAnimacionDado(new Dado("Lento"), btnDadoLento);
+		}
 	}
 
 	private void ejecutarAnimacionDado(Dado dadoEspecial, Button botonAAnimar) {
@@ -620,8 +620,7 @@ public class PantallaJuego {
 	private void handleSaveGame() {
 		if (gestorPartida.getPartida() == null) {
 			agregarEvento("No hay partida activa para guardar.");
-			return;
-		}
+		} else {
 
 		int idGuardado = gestorPartida.guardarPartida();
 
@@ -652,6 +651,7 @@ public class PantallaJuego {
 			saveMessageLabel.setText("Error: No se pudo guardar la partida.\nComprueba la base de datos.");
 			saveSuccessOverlay.setVisible(true);
 			GestorAnimacionesVistas.animarAparicionOverlay(saveSuccessOverlay);
+		}
 		}
 	}
 
@@ -831,9 +831,9 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleDado(ActionEvent event) {
-		if (isPaused)
-			return;
+		if (!isPaused) {
 		ejecutarAnimacionDado(null, dado);
+		}
 	}
 
 	private void continuarTurnoTrasAnimacion(Dado dadoEspecial) {
@@ -1221,8 +1221,7 @@ public class PantallaJuego {
 			// Un pingüino nunca aplasta empujando por el tablero
 			gestorPartida.getUltimosPinguinosAplastados().clear();
 			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
-			return;
-		}
+		} else {
 
 		ArrayList<Pinguino> aplastados = gestorPartida.getUltimosPinguinosAplastados();
 
@@ -1237,6 +1236,7 @@ public class PantallaJuego {
 		} else {
 			// No hay aplastados → continuar con el check de foca en casilla final
 			comprobarFocaYFinalizar(jugadorActual, indiceActual, pEncLanding, esRetrocesoFoca);
+		}
 		}
 	}
 
@@ -1524,12 +1524,10 @@ public class PantallaJuego {
 
 				// Lanzar la secuencia visual del encuentro con foca
 				mostrarEventoEncuentroFoca();
-				return;
+			} else {
+				comprobarPvPYFinalizar(jugadorActual, indiceActual);
 			}
-		}
-
-		// ── CASO 2: El jugador actual es una Foca → comprobar si hay pingüino ──
-		if (jugadorActual instanceof Foca) {
+		} else if (jugadorActual instanceof Foca) {
 			Foca fActual = (Foca) jugadorActual;
 
 			// REGLA: Solo trigger si hubo encuentro en el landing o si no fue un retroceso
@@ -1552,12 +1550,13 @@ public class PantallaJuego {
 
 				// Lanzar la secuencia visual del encuentro con foca
 				mostrarEventoEncuentroFoca();
-				return;
+			} else {
+				comprobarPvPYFinalizar(jugadorActual, indiceActual);
 			}
+		} else {
+			// No hay encuentro con foca → comprobar PvP
+			comprobarPvPYFinalizar(jugadorActual, indiceActual);
 		}
-
-		// No hay encuentro con foca → comprobar PvP
-		comprobarPvPYFinalizar(jugadorActual, indiceActual);
 	}
 
 	/**
@@ -1567,14 +1566,12 @@ public class PantallaJuego {
 	 * Si no, finaliza el turno normalmente.
 	 */
 	private void comprobarPvPYFinalizar(Jugador jugadorActual, int indiceActual) {
+		boolean pvpIniciado = false;
 		if (jugadorActual instanceof Pinguino) {
 			Pinguino atacante = (Pinguino) jugadorActual;
 
 			// En la primera casilla (inicio) no hay guerra de bolas de nieve
-			if (atacante.getPosicion() == 0) {
-				finalizarTurnoVisual();
-				return;
-			}
+			if (atacante.getPosicion() != 0) {
 
 			Pinguino defensor = gestorPartida.detectarPvP(atacante);
 
@@ -1589,11 +1586,14 @@ public class PantallaJuego {
 
 				// Lanzar la secuencia visual
 				mostrarEventoGuerraBolasNieve();
-				return;
+				pvpIniciado = true;
+			}
 			}
 		}
 		// No hay PvP → finalizar turno normalmente
-		finalizarTurnoVisual();
+		if (!pvpIniciado) {
+			finalizarTurnoVisual();
+		}
 	}
 
 	/**
@@ -1650,8 +1650,7 @@ public class PantallaJuego {
 		// auto-ignoramos
 		if (pvpDefensor == null || !(pvpDefensor instanceof Pinguino)) {
 			finalizarTurnoVisual();
-			return;
-		}
+		} else {
 
 		int bolasAtacante = pvpAtacante.contarItem("Bola de Nieve");
 		int bolasDefensor = pvpDefensor.contarItem("Bola de Nieve");
@@ -1663,6 +1662,7 @@ public class PantallaJuego {
 						"Bolas de " + pvpAtacante.getNombre() + ": " + bolasAtacante);
 
 		snowballDecisionOverlay.setVisible(true);
+		}
 	}
 
 	@FXML
@@ -1671,8 +1671,7 @@ public class PantallaJuego {
 
 		if (pvpAtacante == null || pvpDefensor == null) {
 			finalizarTurnoVisual();
-			return;
-		}
+		} else {
 
 		// Ejecutar la pelea y obtener resultado
 		int[] resultado = gestorPartida.ejecutarPelea(pvpAtacante, pvpDefensor);
@@ -1697,7 +1696,8 @@ public class PantallaJuego {
 				actualizarInventarioUI();
 				finalizarTurnoVisual();
 			});
-
+		}
+	}
 		} else if (ganador == 1) {
 			// Defensor gana → atacante retrocede
 			agregarEvento(pvpDefensor.getNombre() + " gana la guerra de bolas de nieve");
@@ -1807,8 +1807,7 @@ public class PantallaJuego {
 	private void mostrarDecisionEncuentroFoca() {
 		if (sealEncounterPinguino == null || sealEncounterFoca == null) {
 			finalizarTurnoVisual();
-			return;
-		}
+		} else {
 
 		boolean tienePez = sealEncounterPinguino.tieneItem("Pez");
 		int cantPeces = sealEncounterPinguino.contarItem("Pez");
@@ -1827,6 +1826,7 @@ public class PantallaJuego {
 						"¿Qué quieres hacer?");
 
 		sealEncounterDecisionOverlay.setVisible(true);
+		}
 	}
 
 	@FXML
@@ -1835,8 +1835,7 @@ public class PantallaJuego {
 
 		if (sealEncounterFoca == null || sealEncounterPinguino == null) {
 			finalizarTurnoVisual();
-			return;
-		}
+		} else {
 
 		// Resolver el soborno en el controlador
 		gestorPartida.resolverSobornoFoca(sealEncounterFoca, sealEncounterPinguino);
@@ -1853,6 +1852,7 @@ public class PantallaJuego {
 
 		// Evento finalizado → devolver control al flujo del juego
 		finalizarTurnoVisual();
+		}
 	}
 
 	@FXML
@@ -1861,8 +1861,7 @@ public class PantallaJuego {
 
 		if (sealEncounterFoca == null || sealEncounterPinguino == null) {
 			finalizarTurnoVisual();
-			return;
-		}
+		} else {
 
 		// Resolver el golpe en el controlador
 		int posAnterior = sealEncounterPinguino.getPosicion();
@@ -1906,6 +1905,7 @@ public class PantallaJuego {
 
 		currentAnimations.add(impacto);
 		impacto.play();
+		}
 	}
 
 	// =========================================
@@ -1914,29 +1914,25 @@ public class PantallaJuego {
 
 	@FXML
 	private void handleUsarMoto() {
-		if (isPaused)
-			return;
+		if (!isPaused) {
 
 		Jugador jugadorActual = gestorPartida.getPartida().getJugadorActual();
 		int indiceActual = gestorPartida.getPartida().getJugadorActualIndice();
 
-		if (!(jugadorActual instanceof Pinguino))
-			return;
+		if (jugadorActual instanceof Pinguino) {
 		Pinguino p = (Pinguino) jugadorActual;
 
 		// Verificar que tiene Moto de Nieve
 		if (!p.tieneItem("Moto de Nieve")) {
 			agregarEvento("⚠️ " + p.getNombre() + " no tiene Moto de Nieve.");
-			return;
-		}
+		} else {
 
 		// Buscar el siguiente trineo desde la posición actual
 		int siguienteTrineo = gestorPartida.getPartida().getTablero().buscarSiguienteTrineo(p.getPosicion());
 
 		if (siguienteTrineo == -1) {
 			agregarEvento("⚠️ No hay trineos más adelante. La Moto de Nieve no se puede usar ahora.");
-			return;
-		}
+		} else {
 
 		// Gastar la moto
 		p.gastarItem("Moto de Nieve", 1);
@@ -1980,6 +1976,10 @@ public class PantallaJuego {
 				dado.setDisable(false);
 			}
 		});
+		}
+		}
+		}
+		}
 	}
 
 	// =========================================
@@ -1993,8 +1993,7 @@ public class PantallaJuego {
 		if (oldPosition == targetPosition) {
 			if (alTerminar != null)
 				alTerminar.run();
-			return;
-		}
+		} else {
 
 		posiciones[playerIndex] = targetPosition;
 		double cellWidth = tablero.getWidth() / COLUMNS;
@@ -2054,6 +2053,7 @@ public class PantallaJuego {
 
 		currentAnimations.add(sequence);
 		sequence.play();
+		}
 	}
 
 	private void finalizarTurnoVisual() {
@@ -2063,11 +2063,12 @@ public class PantallaJuego {
 			if (ganador == null) {
 				// Intentar determinar el ganador: buscar quién llegó a la última casilla
 				int ultimaCasilla = gestorPartida.getPartida().getTablero().getListaCasillas().size() - 1;
+				boolean encontradoGanador = false;
 				for (Jugador j : gestorPartida.getPartida().getJugadores()) {
-					if (j.getPosicion() >= ultimaCasilla) {
+					if (!encontradoGanador && j.getPosicion() >= ultimaCasilla) {
 						ganador = j;
 						gestorPartida.getPartida().setGanador(j);
-						break;
+						encontradoGanador = true;
 					}
 				}
 			}

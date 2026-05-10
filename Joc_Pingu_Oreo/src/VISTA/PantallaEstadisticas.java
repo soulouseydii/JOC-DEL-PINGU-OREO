@@ -82,8 +82,7 @@ public class PantallaEstadisticas {
                     lblMedia.setText("—");
                     mostrarErrorEnListas();
                 });
-                return;
-            }
+            } else {
 
             // Llamamos a las funciones y procedimientos PL/SQL
             int maxRec                      = gestor.obtenerMaxPartidasGanadas();
@@ -137,6 +136,7 @@ public class PantallaEstadisticas {
                 }
                 listRanking.setItems(itemsRanking);
             });
+            }
         });
 
         thread.setDaemon(true);

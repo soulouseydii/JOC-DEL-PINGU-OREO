@@ -225,8 +225,7 @@ public class PantallaCargarPartida {
 
         if (!todoOK) {
             lblAuthGlobalError.setText(errores.toString().trim());
-            return;
-        }
+        } else {
 
         // ¡Todos verificados! Cerrar overlay y ejecutar la acción
         overlayAuth.setVisible(false);
@@ -234,6 +233,7 @@ public class PantallaCargarPartida {
             eliminarPartidaReal(idPartidaSeleccionada);
         } else {
             cargarPartidaReal(idPartidaSeleccionada);
+        }
         }
     }
 
@@ -261,8 +261,7 @@ public class PantallaCargarPartida {
 
         if (indiceSeleccionado < 0 || idsPartidas.isEmpty()) {
             System.out.println("Por favor, selecciona una partida para cargar.");
-            return;
-        }
+        } else {
 
         int idPartida = idsPartidas.get(indiceSeleccionado);
         System.out.println("Preparando carga de partida con ID: " + idPartida);
@@ -280,6 +279,7 @@ public class PantallaCargarPartida {
             construirFormularioAuth(nombresPinguinos, "AUTENTICACIÓN PARA CARGAR");
             overlayAuth.setVisible(true);
         }
+        }
     }
 
     /**
@@ -296,8 +296,7 @@ public class PantallaCargarPartida {
             alert.setHeaderText(null);
             alert.setContentText("No se pudo cargar la partida desde la base de datos.");
             alert.showAndWait();
-            return;
-        }
+        } else {
 
         // Abrir PantallaJuego con la partida cargada
         try {
@@ -317,6 +316,7 @@ public class PantallaCargarPartida {
             System.out.println("Error al abrir PantallaJuego: " + e.getMessage());
             e.printStackTrace();
         }
+        }
     }
 
     @FXML
@@ -325,8 +325,7 @@ public class PantallaCargarPartida {
 
         if (indiceSeleccionado < 0 || idsPartidas.isEmpty()) {
             System.out.println("Por favor, selecciona una partida para eliminar.");
-            return;
-        }
+        } else {
 
         int idPartida = idsPartidas.get(indiceSeleccionado);
 
@@ -342,6 +341,7 @@ public class PantallaCargarPartida {
             idPartidaSeleccionada = idPartida;
             construirFormularioAuth(nombresPinguinos, "AUTENTICACIÓN PARA ELIMINAR");
             overlayAuth.setVisible(true);
+        }
         }
     }
 

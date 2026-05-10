@@ -164,8 +164,7 @@ public class BBDD {
 	public static void print(Connection con, String sql, String[] listaElementosSeleccionados) {
 		if (con == null) {
 			System.out.println("No hay conexión. Llama antes a conectarBaseDatos().");
-			return;
-		}
+		} else {
 
 		try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
 
@@ -187,6 +186,7 @@ public class BBDD {
 
 		} catch (SQLException e) {
 			System.out.println("Error en SELECT: " + e.getMessage());
+		}
 		}
 	}
 	
