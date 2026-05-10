@@ -50,28 +50,27 @@ public class GestorEstadisticas {
     }
 
     // Equivalente al procedimiento OBTENIR_JUGADORS_RECORD
-    // Busca los usuarios que tienen el maximo de partidas ganadas
+    // Busca los usuarios que tienen el maximo de partidas ganadas usando la funcion PL/SQL
     public ArrayList<String[]> obtenerJugadoresConRecord() {
         ArrayList<String[]> lista = new ArrayList<>();
-        try (Connection con = getConexion()) {
-            // Primero obtenemos el record
-            int maxim = 0;
-            try (Statement st = con.createStatement();
-                 ResultSet rs = st.executeQuery("SELECT MAX_PARTIDASGANADAS() FROM DUAL")) {
-                if (rs.next()) maxim = rs.getInt(1);
-            } catch (SQLException e) {
-                System.out.println("[Estadisticas] Error MAX_PARTIDASGANADAS: " + e.getMessage());
-                // Fallback: SQL directo mientras no exista la funcion en Oracle
-                try (Statement st = con.createStatement();
-                     ResultSet rs = st.executeQuery("SELECT NVL(MAX(PARTIDAS_GANADAS), 0) FROM USUARIOS")) {
-                    if (rs.next()) maxim = rs.getInt(1);
+        // Intentamos usar la funcion PL/SQL en la clausula WHERE
+        String sql = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS WHERE PARTIDAS_GANADAS = (SELECT MAX_PARTIDASGANADAS() FROM DUAL)";
+        
+        try (Connection con = getConexion();
+             Statement st = con.createStatement()) {
+            
+            try (ResultSet rs = st.executeQuery(sql)) {
+                while (rs.next()) {
+                    lista.add(new String[]{
+                        rs.getString("USERNAME"),
+                        String.valueOf(rs.getInt("PARTIDAS_GANADAS"))
+                    });
                 }
-            }
-            // Despues buscamos quien lo tiene
-            String sql = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS WHERE PARTIDAS_GANADAS = ?";
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setInt(1, maxim);
-                try (ResultSet rs = ps.executeQuery()) {
+            } catch (SQLException e) {
+                System.out.println("[Estadisticas] Error al usar MAX_PARTIDASGANADAS(), usando fallback: " + e.getMessage());
+                // Fallback: SQL directo
+                String fallback = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS WHERE PARTIDAS_GANADAS = (SELECT NVL(MAX(PARTIDAS_GANADAS), 0) FROM USUARIOS)";
+                try (ResultSet rs = st.executeQuery(fallback)) {
                     while (rs.next()) {
                         lista.add(new String[]{
                             rs.getString("USERNAME"),
@@ -81,13 +80,12 @@ public class GestorEstadisticas {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("[Estadisticas] Error al obtener jugadores con record: " + e.getMessage());
+            System.out.println("[Estadisticas] Error critico en obtenerJugadoresConRecord: " + e.getMessage());
         }
         return lista;
     }
 
     // Llama a la funcion avg_partides_guanyades()
-    // Si no existe en Oracle, usa AVG() directamente
     public double obtenerMediaPartidasGanadas() {
         try (Connection con = getConexion();
              Statement st = con.createStatement();
@@ -95,47 +93,43 @@ public class GestorEstadisticas {
             if (rs.next()) return rs.getDouble(1);
         } catch (SQLException e) {
             System.out.println("[Estadisticas] Error avg_partides_guanyades: " + e.getMessage());
-            // Fallback: SQL directo mientras no exista la funcion en Oracle
+            // Fallback
             try (Connection con = getConexion();
                  Statement st = con.createStatement();
                  ResultSet rs = st.executeQuery("SELECT NVL(AVG(PARTIDAS_GANADAS), 0) FROM USUARIOS")) {
                 if (rs.next()) return rs.getDouble(1);
             } catch (SQLException ex) {
-                System.out.println("[Estadisticas] Error al obtener la media: " + ex.getMessage());
+                System.out.println("[Estadisticas] Error en fallback de media: " + ex.getMessage());
             }
         }
         return -1;
     }
 
     // Equivalente al procedimiento LISTA_JGANADORES
-    // Devuelve los jugadores con mas victorias que la media
+    // Devuelve los jugadores con mas victorias que la media usando la funcion PL/SQL
     public ArrayList<String[]> obtenerJugadoresPorEncimaMedia() {
         ArrayList<String[]> lista = new ArrayList<>();
-        // Intentamos con la funcion PL/SQL, si falla usamos AVG directo
-        String sql;
-        try (Connection con = getConexion()) {
-            try {
-                sql = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS " +
-                      "WHERE PARTIDAS_GANADAS > (SELECT avg_partides_guanyades() FROM DUAL) " +
-                      "ORDER BY PARTIDAS_GANADAS DESC";
-                try (Statement st = con.createStatement();
-                     ResultSet rs = st.executeQuery(sql)) {
-                    while (rs.next()) {
-                        lista.add(new String[]{
-                            rs.getString("USERNAME"),
-                            String.valueOf(rs.getInt("PARTIDAS_GANADAS"))
-                        });
-                    }
-                    return lista;
+        String sql = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS " +
+                     "WHERE PARTIDAS_GANADAS > (SELECT avg_partides_guanyades() FROM DUAL) " +
+                     "ORDER BY PARTIDAS_GANADAS DESC";
+        
+        try (Connection con = getConexion();
+             Statement st = con.createStatement()) {
+            
+            try (ResultSet rs = st.executeQuery(sql)) {
+                while (rs.next()) {
+                    lista.add(new String[]{
+                        rs.getString("USERNAME"),
+                        String.valueOf(rs.getInt("PARTIDAS_GANADAS"))
+                    });
                 }
             } catch (SQLException e) {
-                System.out.println("[Estadisticas] Error avg_partides_guanyades: " + e.getMessage());
-                // Fallback: SQL directo mientras no exista la funcion en Oracle
-                sql = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS " +
-                      "WHERE PARTIDAS_GANADAS > (SELECT NVL(AVG(PARTIDAS_GANADAS), 0) FROM USUARIOS) " +
-                      "ORDER BY PARTIDAS_GANADAS DESC";
-                try (Statement st = con.createStatement();
-                     ResultSet rs = st.executeQuery(sql)) {
+                System.out.println("[Estadisticas] Error al usar avg_partides_guanyades(), usando fallback: " + e.getMessage());
+                // Fallback: SQL directo
+                String fallback = "SELECT USERNAME, PARTIDAS_GANADAS FROM USUARIOS " +
+                                 "WHERE PARTIDAS_GANADAS > (SELECT NVL(AVG(PARTIDAS_GANADAS), 0) FROM USUARIOS) " +
+                                 "ORDER BY PARTIDAS_GANADAS DESC";
+                try (ResultSet rs = st.executeQuery(fallback)) {
                     while (rs.next()) {
                         lista.add(new String[]{
                             rs.getString("USERNAME"),
@@ -145,7 +139,7 @@ public class GestorEstadisticas {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("[Estadisticas] Error al obtener jugadores por encima de la media: " + e.getMessage());
+            System.out.println("[Estadisticas] Error critico en obtenerJugadoresPorEncimaMedia: " + e.getMessage());
         }
         return lista;
     }
