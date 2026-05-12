@@ -2102,6 +2102,11 @@ public class PantallaJuego {
 		if (!mainContainer.getStyleClass().contains("main-container-disabled")) {
 			mainContainer.getStyleClass().add("main-container-disabled");
 		}
+		
+		// AUTO-GUARDADO: Guardamos la partida automáticamente para registrar la victoria
+		Platform.runLater(() -> {
+			handleSaveGame();
+		});
 	}
 
 	/**

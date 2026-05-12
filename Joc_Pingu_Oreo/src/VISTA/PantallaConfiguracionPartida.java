@@ -509,10 +509,22 @@ public class PantallaConfiguracionPartida {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/RESOURCES/PantallaInicio.fxml"));
             Parent root = loader.load();
-            Scene scene;
-            if (event != null) scene = ((Node) event.getSource()).getScene();
-            else scene = contenedorJugadores.getScene();
-            scene.setRoot(root);
+            Scene scene = null;
+
+            if (event != null) {
+                scene = ((Node) event.getSource()).getScene();
+            } else {
+                // Si el evento es null (tecla ESC), buscamos la escena en los componentes disponibles
+                if (btnEmpezar != null && btnEmpezar.getScene() != null) {
+                    scene = btnEmpezar.getScene();
+                } else if (contenedorJugadores != null && contenedorJugadores.getScene() != null) {
+                    scene = contenedorJugadores.getScene();
+                }
+            }
+
+            if (scene != null) {
+                scene.setRoot(root);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -91,6 +91,18 @@ public class GestorBBDD {
             con.setAutoCommit(false);
             try {
                 int idPartida = p.getId();
+
+                // Verificamos si ya estaba finalizada en la base de datos antes de actualizar
+                boolean yaEstabaFinalizada = false;
+                try (PreparedStatement psCheck = con.prepareStatement("SELECT FINALIZADA FROM PARTIDA WHERE ID_PARTIDA = ?")) {
+                    psCheck.setInt(1, idPartida);
+                    try (ResultSet rs = psCheck.executeQuery()) {
+                        if (rs.next()) {
+                            yaEstabaFinalizada = rs.getInt(1) == 1;
+                        }
+                    }
+                }
+
                 String sqlUpdate = "UPDATE PARTIDA SET TURNOS = ?, JUGADOR_ACTUAL = ?, FINALIZADA = ?, NOMBRE_PARTIDA = ?, FECHA_GUARDADO = CURRENT_TIMESTAMP WHERE ID_PARTIDA = ?";
                 try (PreparedStatement ps = con.prepareStatement(sqlUpdate)) {
                     ps.setInt(1, CifradoBBDD.encriptarNumero(p.getTurnos()));
@@ -115,12 +127,12 @@ public class GestorBBDD {
                 insertarCasillas(con, p, idPartida);
 
                 con.commit();
-                
+
                 // Si la partida se guarda como finalizada, sumamos la victoria al ganador
-                if (p.isFinalizada() && p.getGanador() != null && p.getGanador() instanceof Pinguino) {
+                if (p.isFinalizada() && !yaEstabaFinalizada && p.getGanador() != null && p.getGanador() instanceof Pinguino) {
                     incrementarVictoria(p.getGanador().getNombre());
                 }
-                
+
                 return idPartida;
             } catch (SQLException e) {
                 con.rollback();
@@ -487,20 +499,25 @@ public class GestorBBDD {
     }
 
     /**
-     * Incrementa en 1 el contador de partidas ganadas de un usuario.
+     * Incrementa en 1 el contador de partidas ganadas de un usuario y obtiene su percentil.
+     * Utiliza un procedimiento almacenado para evitar errores de tabla mutante.
      */
     public void incrementarVictoria(String username) {
-        try (Connection con = getConexion()) {
-            String sql = "UPDATE USUARIOS SET PARTIDAS_GANADAS = PARTIDAS_GANADAS + 1 WHERE UPPER(USERNAME) = UPPER(?)";
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setString(1, username);
-                int rows = ps.executeUpdate();
-                if (rows > 0) {
-                    System.out.println("Victoria sumada a: " + username);
-                }
-            }
+        String sql = "{call ACTUALIZAR_VICTORIA_Y_PERCENTIL(?, ?)}";
+        try (Connection con = getConexion();
+             CallableStatement cs = con.prepareCall(sql)) {
+            
+            cs.setString(1, username);
+            cs.registerOutParameter(2, java.sql.Types.NUMERIC);
+            
+            cs.execute();
+            
+            double percentil = cs.getDouble(2);
+            System.out.println("✓ Victoria registrada para: " + username);
+            System.out.printf("📊 Nuevo percentil respecto al resto de jugadores: %.2f%%\n", percentil);
+            
         } catch (SQLException e) {
-            System.out.println("Error al incrementar victoria: " + e.getMessage());
+            System.out.println("Error al incrementar victoria mediante Procedure: " + e.getMessage());
         }
     }
 

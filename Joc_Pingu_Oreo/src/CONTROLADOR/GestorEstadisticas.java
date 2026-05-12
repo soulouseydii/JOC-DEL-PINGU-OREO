@@ -45,6 +45,7 @@ public class GestorEstadisticas {
             } catch (SQLException ex) {
                 System.out.println("[Estadisticas] Error al obtener el record: " + ex.getMessage());
             }
+            
         }
         return -1;
     }
