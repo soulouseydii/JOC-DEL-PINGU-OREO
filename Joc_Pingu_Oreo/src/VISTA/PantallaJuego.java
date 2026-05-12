@@ -1696,8 +1696,6 @@ public class PantallaJuego {
 				actualizarInventarioUI();
 				finalizarTurnoVisual();
 			});
-		}
-	}
 		} else if (ganador == 1) {
 			// Defensor gana → atacante retrocede
 			agregarEvento(pvpDefensor.getNombre() + " gana la guerra de bolas de nieve");
@@ -1718,11 +1716,10 @@ public class PantallaJuego {
 			finalizarTurnoVisual();
 		}
 
-
-
 		// Limpiar estado PvP
 		pvpAtacante = null;
 		pvpDefensor = null;
+		}
 	}
 
 	@FXML
